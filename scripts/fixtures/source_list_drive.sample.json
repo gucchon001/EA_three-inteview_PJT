@@ -1,0 +1,17 @@
+{
+  "status": "success",
+  "drive_sources": [
+    {
+      "title": "Sample learning plan (Sheets)",
+      "type": "google_sheets",
+      "drive_doc_id": "1AbCdEfGhIjKlMnOpQrStUvWxYz",
+      "stale": false
+    },
+    {
+      "title": "Sample MTG memo (Docs)",
+      "type": "google_docs",
+      "drive_doc_id": "1DocIdExample000000000000000",
+      "stale": false
+    }
+  ]
+}

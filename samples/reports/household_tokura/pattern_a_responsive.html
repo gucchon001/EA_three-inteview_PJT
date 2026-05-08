@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>十倉家 Math AA SL — 学習状況分析レポート（Pattern A）</title>
+    <style>
+        /* リセットと基本設定 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        /* ヘッダー */
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        
+        .report-title {
+            font-size: 28px;
+            font-weight: 300;
+            margin: 15px 0;
+        }
+        
+        .report-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        /* メタ情報 */
+        .meta-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 25px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .meta-label {
+            font-size: 12px;
+            color: #495057;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+        
+        .meta-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        /* KPI サマリーバー */
+        .kpi-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background: #2c3e50;
+            color: white;
+        }
+
+        .kpi-item {
+            padding: 20px 24px;
+            border-right: 1px solid rgba(255,255,255,0.12);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .kpi-item:last-child { border-right: none; }
+
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1;
+            color: #7eb8f7;
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            opacity: 0.75;
+            letter-spacing: 0.4px;
+        }
+
+        .kpi-delta {
+            font-size: 13px;
+            font-weight: 600;
+            color: #5de0a0;
+        }
+
+        @media (max-width: 768px) {
+            .kpi-bar { grid-template-columns: repeat(2, 1fr); }
+            .kpi-item { border-bottom: 1px solid rgba(255,255,255,0.12); }
+        }
+
+        /* セクション */
+        .section {
+            padding: 30px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .section-number {
+            display: none;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #2c3e50;
+            font-weight: 700;
+            padding-left: 14px;
+            border-left: 4px solid #4a6491;
+            line-height: 1.3;
+        }
+        
+        /* 進捗バー */
+        .progress-container {
+            margin: 20px 0;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4a6491, #6a8bc5);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        /* カードレイアウト */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        /* 表 */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        /* 時系列グラフエリア */
+        .timeline-container {
+            position: relative;
+            height: 200px;
+            margin: 30px 0;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .timeline-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #495057;
+            font-style: italic;
+        }
+        
+        /* 提案プラン */
+        .plan-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .plan-option {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 25px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .plan-option.recommended {
+            border-color: #4a6491;
+            box-shadow: 0 4px 12px rgba(74, 100, 145, 0.15);
+        }
+        
+        .plan-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: #4a6491;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .plan-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .plan-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 15px 0;
+        }
+        
+        .plan-features {
+            list-style: none;
+            margin: 15px 0;
+        }
+        
+        .plan-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f8f9fa;
+        }
+        
+        .plan-features li:before {
+            content: "✓";
+            color: #4a6491;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .btn-cta {
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            padding: 14px 0;
+            background: #4a6491;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: background 0.2s;
+        }
+
+        .btn-cta:hover { background: #3a5280; }
+
+        .btn-cta-outline {
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px 0;
+            background: transparent;
+            color: #4a6491;
+            font-size: 14px;
+            font-weight: 600;
+            border: 2px solid #4a6491;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cta-outline:hover { background: #f0f4f9; }
+        
+        /* 認証エリア */
+        .auth-notice {
+            background-color: #f0f4f9;
+            border: 1px solid #c8d8ed;
+            border-left: 4px solid #4a6491;
+            border-radius: 0 6px 6px 0;
+            padding: 14px 20px;
+            margin: 0;
+            text-align: center;
+            font-size: 13px;
+            color: #495057;
+        }
+        
+        .auth-code {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 24px;
+            letter-spacing: 5px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        /* フッター */
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .contact-info {
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 0;
+                box-shadow: none;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .report-title {
+                font-size: 22px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .meta-info {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .card-grid, .plan-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 20px;
+            }
+        }
+        
+        @media print {
+            .container {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            
+            .auth-notice {
+                display: none;
+            }
+        }
+        /* グラフキャンバス */
+        .chart-wrapper {
+            position: relative;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        .chart-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #495057;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .charts-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .charts-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ファクトチェック表 */
+        .factcheck-section {
+            padding: 28px 30px 10px;
+            background: #f4f7fb;
+            border-top: 2px solid #c8d8ed;
+        }
+        .factcheck-section .section-header {
+            border-bottom: none;
+            padding-bottom: 8px;
+        }
+        .factcheck-intro {
+            font-size: 13px;
+            color: #495057;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+        .factcheck-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .factcheck-table th,
+        .factcheck-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e9ecef;
+            text-align: left;
+            vertical-align: top;
+        }
+        .factcheck-table th {
+            background: #e8eef5;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        .factcheck-table tr:last-child td {
+            border-bottom: none;
+        }
+        .factcheck-table a {
+            color: #2c5aa0;
+            word-break: break-all;
+        }
+        .fc-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+        .fc-ok { background: #d4edda; color: #155724; }
+        .fc-demo { background: #fff3cd; color: #856404; }
+        .fc-tpl { background: #e2e3e5; color: #383d41; }
+        .fc-review { background: #f8d7da; color: #721c24; }
+
+        /* レビュー用：対応メール（本文根拠外） */
+        .review-mail-section {
+            padding: 24px 30px;
+            background: #eef6ff;
+            border-bottom: 1px solid #c5d9f0;
+        }
+        .review-mail-section .section-title {
+            border-left-color: #1a5fb4;
+        }
+        .review-mail-banner {
+            font-size: 13px;
+            color: #1a3a5c;
+            background: #dbeafe;
+            border: 1px solid #93c5fd;
+            border-radius: 6px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            line-height: 1.55;
+        }
+        .review-mail-banner strong { color: #0c4a6e; }
+        .review-mail-frame {
+            width: 100%;
+            min-height: 220px;
+            border: 1px solid #94a3b8;
+            border-radius: 6px;
+            background: #fff;
+        }
+        .review-mail-links {
+            font-size: 13px;
+            margin-top: 10px;
+            color: #475569;
+        }
+        @media print {
+            .review-mail-section {
+                border: 1px dashed #64748b;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 認証通知（開発用） -->
+        <div class="auth-notice">
+            <p>このレポートは認証コードで保護されています。本番環境では、認証コードの入力後に表示されます。</p>
+            <div class="auth-code">4A9B2C</div>
+            <p>有効期限: 2026年4月9日 23:59</p>
+        </div>
+        <div style="background:#fff9e6;border:1px solid #e6d39a;padding:14px 20px;margin:0;font-size:13px;color:#3d3518;line-height:1.55;">
+            <strong>十倉家・Pattern A</strong> — 本文根拠は <code>sources/01〜03</code>（<strong>数値の正は 03 最新スナップショット</strong>、01・02は時系列参考）。メールは <a href="#review-mail" style="color:#2c5aa0;">レビュー用</a> のみ。一次情報の <code>.md</code> をブラウザで開くときは <code>python scripts/serve_project.py</code> を使うと UTF-8 で文字化けしません（素の <code>http.server</code> は不可）。<a href="#factcheck" style="color:#2c5aa0;">ファクトチェック</a> · <a href="#graph-requirements" style="color:#2c5aa0;">グラフに必要な情報</a> · <a href="#references" style="color:#2c5aa0;">参照一覧</a>
+        </div>
+        
+        <!-- KPI サマリーバー -->
+        <div class="kpi-bar">
+            <div class="kpi-item">
+                <span class="kpi-value">—</span>
+                <span class="kpi-label">Calculus 演習正答率（2/25 MTG）</span>
+                <span class="kpi-delta">弱点単元は Trig / Geometry</span>
+            </div>
+            <div class="kpi-item">
+                <span class="kpi-value">5→6</span>
+                <span class="kpi-label">見立て / 目標（SL）</span>
+                <span class="kpi-delta">03 学習計画表</span>
+            </div>
+            <div class="kpi-item">
+                <span class="kpi-value">8月</span>
+                <span class="kpi-label">Mock 試験（計画表）</span>
+                <span class="kpi-delta">最終試験 2026年11月</span>
+            </div>
+            <div class="kpi-item">
+                <span class="kpi-value">要確認</span>
+                <span class="kpi-label">不足コマ（計画表）</span>
+                <span class="kpi-delta" style="color:#f9a825;">03 実シートで確認</span>
+            </div>
+        </div>
+
+        <!-- ヘッダー -->
+        <header class="header">
+            <div class="logo">EDUBAL Academy</div>
+            <h1 class="report-title">学習状況分析レポート</h1>
+            <p class="report-subtitle">月次学習進捗と今後の学習計画</p>
+        </header>
+        
+        <!-- メタ情報 -->
+        <div class="meta-info">
+            <div class="meta-item">
+                <span class="meta-label">生徒名</span>
+                <span class="meta-value">十倉 様（Math AA SL・生徒番号 61630）</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">対象期間（レポート月）</span>
+                <span class="meta-value">2026年3月1日 - 2026年3月31日</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">数値・目標の正（最新）</span>
+                <span class="meta-value">学習計画表 2026/3/31 時点</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">担当教師</span>
+                <span class="meta-value">Kim 先生</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">担当CA</span>
+                <span class="meta-value">（担当CA・要確認）</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">レポート発行日</span>
+                <span class="meta-value">2026年4月9日</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">レポートID</span>
+                <span class="meta-value">RPT-202603-61630</span>
+            </div>
+        </div>
+
+        <div style="padding:18px 30px;background:#e8f4fc;border-bottom:1px solid #b6d4ee;font-size:14px;color:#1e3a4c;line-height:1.55;">
+            <strong>本レポートの主眼（最新出力の扱い）</strong>
+            <ul style="margin:10px 0 0;padding-left:1.3em;">
+                <li><strong>最新のレポート本文・KPI・分析表</strong>は、<a target="_blank" rel="noopener noreferrer" href="sources/03_学習計画表_プレースホルダー.md">03_学習計画表（3/31）</a>と、対象月に近い記録（<a target="_blank" rel="noopener noreferrer" href="sources/00_260319_時系列まとめ_NotebookLM.md">02 ご家庭への提案 1/27</a>）を中心に構成しています。</li>
+                <li><a target="_blank" rel="noopener noreferrer" href="sources/00_260319_時系列まとめ_NotebookLM.md">01 教師MTG（2/25）</a>は<strong>直近の指導所見・弱点</strong>を補う<strong>時系列参考</strong>です。数値の食い違いは<strong>常に 03 を優先</strong>します。</li>
+            </ul>
+        </div>
+        
+        <!-- セクション1: 今月の学習成果 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <h2 class="section-title">今月の学習成果（肯定的フィードバック）</h2>
+            </div>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <h3 class="card-title">📈 正答率・演習</h3>
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Calculus（2/25 MTG）</span>
+                            <span>（要確認）</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <p><strong>一次情報</strong>は <code>sources/00_260319_時系列まとめ_NotebookLM.md</code> と <code>sources/03_学習計画表_プレースホルダー.md</code>（実シートに差し替え）を優先し、教師MTG・ご家庭の個別ソースは NotebookLM から追記してください。</p>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">🎯 着手・優先単元</h3>
+                    <ul>
+                        <li>Trigonometry・Geometry の反復（角度を含む問題）</li>
+                        <li>解き直しの習慣づくり（誤答の再演習）</li>
+                        <li>Calculus は弱点単元の反復後に前進（01・計画表）</li>
+                    </ul>
+                    <p>全単元完了は <strong>5月中旬頃</strong>の見込み（01・02・03 を整合）。</p>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">🌟 特筆すべき点</h3>
+                    <p>学習意欲が高く、旅行中も授業参加など前向きな取り組みがある点が共有されています（時系列メモ）。試験後はペースアップし、<strong>Mock（8月）・最終試験（11月）</strong>から逆算した計画を継続します。</p>
+                </div>
+            </div>
+            
+            <!-- グラフエリア -->
+            <div class="charts-row">
+                <div class="chart-wrapper">
+                    <div class="chart-title">正答率の推移（過去6ヶ月）</div>
+                    <canvas id="chartAccuracy" height="200"></canvas>
+                </div>
+                <div class="chart-wrapper">
+                    <div class="chart-title">単元修得数（累積）</div>
+                    <canvas id="chartUnits" height="200"></canvas>
+                </div>
+            </div>
+        </section>
+        
+        <!-- セクション2: 現状の課題と分析 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <h2 class="section-title">現状の課題と分析（逆算データ）</h2>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>指標</th>
+                            <th>目標値</th>
+                            <th>現状値</th>
+                            <th>達成度</th>
+                            <th>分析</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>目標スコア / 見立て</td>
+                            <td>6（学習計画表）</td>
+                            <td>5（見立て）</td>
+                            <td>—</td>
+                            <td>03 を正とする</td>
+                        </tr>
+                        <tr>
+                            <td>Mock / 最終試験</td>
+                            <td>Mock 2026年8月</td>
+                            <td>最終 2026年11月</td>
+                            <td>-</td>
+                            <td>03・02 に基づくマイルストーン</td>
+                        </tr>
+                        <tr>
+                            <td>不足コマ</td>
+                            <td>（計画表の欄を転記）</td>
+                            <td>要確認</td>
+                            <td>-</td>
+                            <td>実シート未反映のため「要確認」</td>
+                        </tr>
+                        <tr>
+                            <td>ボトルネック単元</td>
+                            <td>-</td>
+                            <td>Trig / Geometry（角度）</td>
+                            <td>-</td>
+                            <td>01 MTG・解き直しの習慣</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title">🔍 詳細分析（記録との対応）</h3>
+                <p><strong>学習計画表（03）:</strong> 目標スコア6・Mock（8月）・全単元完了（5/11前後）を起点に逆算します。不足コマは実シート確認後に更新してください。</p>
+                <p><strong>教師MTG（2/25）:</strong> Calculus の正答率は良好だが、苦手単元の反復と「解き直し」が課題。<strong>ご家庭への提案（1/27）</strong>では Calculus 前半の概念理解と 2月末テストに向けた復習を共有済みです。</p>
+            </div>
+        </section>
+        
+        <!-- セクション3: 今後の学習計画案 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">3</div>
+                <h2 class="section-title">今後の学習計画案</h2>
+            </div>
+            
+            <div class="plan-options">
+                <!-- A案 -->
+                <div class="plan-option">
+                    <div class="plan-title">A案：現状維持</div>
+                    <p>週次の授業ペースを維持し、宿題・自学で Trig/Geometry の反復と解き直しを徹底します。</p>
+                    <div class="plan-price">追加費用なし</div>
+                    <ul class="plan-features">
+                        <li>週1回授業の継続（時間は現行のまま）</li>
+                        <li>誤答問題の再演習を週次で可視化</li>
+                        <li>03 の不足コマが出た場合は計画を再点検</li>
+                    </ul>
+                    <p><strong>リスク:</strong> 解き直しが弱いままだと弱点単元が先送りになりやすいです。</p>
+                    <button class="btn-cta-outline">この案について相談する</button>
+                </div>
+                
+                <!-- B案（推奨） -->
+                <div class="plan-option recommended">
+                    <div class="plan-badge">推奨</div>
+                    <div class="plan-title">B案：指導延長または回数補填</div>
+                    <p>03 で不足コマが示された場合、延長・追加枠で Trig/Geometry と Past Paper 演習を厚くします。</p>
+                    <div class="plan-price">別紙料金表に準拠（例）</div>
+                    <ul class="plan-features">
+                        <li>週1回・90分化など時間の確保（要相談）</li>
+                        <li>角度問題・長文の時間配分ドリル</li>
+                        <li>Mock 前の演習量を計画表に同期</li>
+                    </ul>
+                    <p><strong>メリット:</strong> 目標スコア6に向けた演習密度を確保しやすいです。</p>
+                    <button class="btn-cta">この案で申し込む →</button>
+                </div>
+                
+                <!-- C案 -->
+                <div class="plan-option">
+                    <div class="plan-title">C案：長期休暇の集中ブロック</div>
+                    <p>時系列メモにある集中講義・週2回ペース等の選択肢を、家庭の都合と 03 を見ながら検討します。</p>
+                    <div class="plan-price">別途お見積り</div>
+                    <ul class="plan-features">
+                        <li>弱点単元（Trig/Geometry）を連続で補強</li>
+                        <li>Mock 直前の演習ブロックを確保</li>
+                        <li>終了後に学習計画表へ反映</li>
+                    </ul>
+                    <p><strong>メリット:</strong> 短い期間で演習量を一気に増やせます。</p>
+                    <button class="btn-cta-outline">この案について相談する</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- セクション4: ご家庭へのお願い -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">4</div>
+                <h2 class="section-title">ご家庭へのお願い・共有事項</h2>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title">📝 情報提供のお願い</h3>
+                <p>より精度の高い学習計画のため、以下の情報のご提供をお願いいたします：</p>
+                <ul>
+                    <li>学校のシラバス（授業計画）</li>
+                    <li>直近の試験・模試の答案用紙</li>
+                    <li>今後の試験日程（学校発表分）</li>
+                </ul>
+                <p>Google Driveの専用フォルダにアップロードいただけますと幸いです。</p>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title">🗓️ 三者面談のご案内</h3>
+                <p>今後の学習計画について、ご家庭・教師・弊アカデミーで方向性を一致させるため、三者面談の実施をご提案いたします。</p>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>候補日時</th>
+                                <th>形式</th>
+                                <th>所要時間</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2026年4月10日（木）18:00〜</td>
+                                <td>オンライン（Zoom）</td>
+                                <td>60分</td>
+                            </tr>
+                            <tr>
+                                <td>2026年4月12日（土）10:00〜</td>
+                                <td>オンライン（Zoom）</td>
+                                <td>60分</td>
+                            </tr>
+                            <tr>
+                                <td>2026年4月13日（日）14:00〜</td>
+                                <td>対面（弊アカデミー）</td>
+                                <td>60分</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>ご都合の良い日時を1つお選びいただき、返信フォームよりご連絡ください。</p>
+            </div>
+        </section>
+
+        <!-- レビュー用：対応メール（本文根拠外・メール→レポート移行の比較） -->
+        <section class="section review-mail-section" id="review-mail">
+            <div class="section-header">
+                <h2 class="section-title">レビュー用：対応メール（品質比較）</h2>
+            </div>
+            <div class="review-mail-banner">
+                <strong>位置づけ:</strong> このブロックは<strong>保護者向けレポートの一次根拠ではありません</strong>（ファクトチェック対象は <code>sources/01〜03</code>）。メール中心運用からレポートへ移行する際の<strong>受け入れ条件</strong>として、「旧メールと比べてレポートの方が構造化・数値・追跡性が上回ること」を確認するための<strong>社内・レビュアー向け</strong>です。保護者配布用ビルドでは本セクションを削除するか、別URLに分離してください。
+            </div>
+            <details open>
+                <summary style="cursor:pointer;font-weight:600;color:#1e40af;margin-bottom:10px;">対応メール本文を表示（同一内容をファイルでも開けます）</summary>
+                <p class="small" style="margin:0 0 0.5rem 0;color:#555;">iframe 内は Markdown の生表示です（YAML 先頭を含む）。</p>
+                <iframe class="review-mail-frame" title="参照メール（Markdown）" src="sources/04_参照メール_プレースホルダー.md"></iframe>
+                <div class="review-mail-links">
+                    別タブで開く: <a target="_blank" rel="noopener noreferrer" href="sources/04_参照メール_プレースホルダー.md">sources/04_参照メール_プレースホルダー.md</a>
+                    · Gmail 等に保存している場合は、社内ポリシーに従い <strong>閲覧専用リンク</strong> をここに追記してください（本デモはローカル .md）。
+                </div>
+            </details>
+        </section>
+
+        <!-- セクション5: ファクトチェック（根拠対照） -->
+        <section class="section factcheck-section" id="factcheck">
+            <div class="section-header">
+                <h2 class="section-title">ファクトチェック（根拠対照表）</h2>
+            </div>
+            <p class="factcheck-intro">
+                本レポートの記載と、一次情報の対応を示します。相対リンクの基準は <a href="#references">参照一覧</a> と同じです（プロジェクトルートを <code>python scripts/serve_project.py</code> で配信すること）。<a target="_blank" rel="noopener noreferrer" href="sources/">sources/</a> 内 Markdown を開くとファイル名で照合できます。<strong>メール本文は根拠に含めません</strong>（比較用は <a href="#review-mail">レビュー用セクション</a> と <a target="_blank" rel="noopener noreferrer" href="sources/04_参照メール_プレースホルダー.md">04_参照メール_レビュー用.md</a>）。
+            </p>
+            <div class="table-container">
+                <table class="factcheck-table">
+                    <thead>
+                        <tr>
+                            <th style="width:26%">レポート上の主な記載</th>
+                            <th style="width:24%">根拠ソース</th>
+                            <th style="width:14%">照合</th>
+                            <th style="width:36%">メモ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Calculus 正答率 （要確認）、Paper1・2 演習</td>
+                            <td><a target="_blank" rel="noopener noreferrer" href="sources/00_260319_時系列まとめ_NotebookLM.md">01</a>（2/25）／<a target="_blank" rel="noopener noreferrer" href="sources/03_学習計画表_プレースホルダー.md">03</a></td>
+                            <td><span class="fc-badge fc-ok">照合済</span></td>
+                            <td>01 の記述と 03 の進捗欄を突合。矛盾時は03優先。</td>
+                        </tr>
+                        <tr>
+                            <td>Trig/Geometry 弱点、解き直しの課題</td>
+                            <td><a target="_blank" rel="noopener noreferrer" href="sources/00_260319_時系列まとめ_NotebookLM.md">01</a></td>
+                            <td><span class="fc-badge fc-ok">照合済</span></td>
+                            <td>本文の課題記述は01と整合。</td>
+                        </tr>
+                        <tr>
+                            <td>目標6・見立て5、Mock8月・最終11月・5/11全単元目安</td>
+                            <td><a target="_blank" rel="noopener noreferrer" href="sources/03_学習計画表_プレースホルダー.md">03_学習計画表_20260331.md</a>／<a target="_blank" rel="noopener noreferrer" href="sources/00_260319_時系列まとめ_NotebookLM.md">02</a></td>
+                            <td><span class="fc-badge fc-ok">照合済</span></td>
+                            <td>マイルストーンは02・03に基づく。実シート更新時は再照合。</td>
+                        </tr>
+                        <tr>
+                            <td>不足コマ「要確認」</td>
+                            <td><a target="_blank" rel="noopener noreferrer" href="sources/03_学習計画表_プレースホルダー.md">03</a></td>
+                            <td><span class="fc-badge fc-review">要確認</span></td>
+                            <td>スナップショットに具体値未記入。実表で更新後に照合済にできる。</td>
+                        </tr>
+                        <tr>
+                            <td>正答率・単元の<strong>6ヶ月グラフ</strong>（数値系列）</td>
+                            <td>（該当なし）</td>
+                            <td><span class="fc-badge fc-demo">デモ</span></td>
+                            <td>ソースに月次系列なし。表示はイメージ用。本番は実データまたは削除。</td>
+                        </tr>
+                        <tr>
+                            <td>三者面談の<strong>具体候補日時</strong></td>
+                            <td>03 備考（3案提示の運用）のみ</td>
+                            <td><span class="fc-badge fc-tpl">テンプレ</span></td>
+                            <td>表内の日付はテンプレ残存。確定日程は別途。</td>
+                        </tr>
+                        <tr>
+                            <td>認証コード表示、フッター住所・電話・メール</td>
+                            <td>（該当なし）</td>
+                            <td><span class="fc-badge fc-tpl">テンプレ</span></td>
+                            <td>体裁用ダミー。配布前に差し替え。</td>
+                        </tr>
+                        <tr>
+                            <td>担当CA 氏名</td>
+                            <td>（ソースに氏名なし）</td>
+                            <td><span class="fc-badge fc-review">要確認</span></td>
+                            <td>実名は運用データで上書き。</td>
+                        </tr>
+                        <tr>
+                            <td>A/B/C 案の金額例</td>
+                            <td>（該当なし）</td>
+                            <td><span class="fc-badge fc-demo">デモ</span></td>
+                            <td>面談で「別紙料金表」とあるが具体額はソース未記載。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="factcheck-intro" style="margin-top:14px;margin-bottom:0;">
+                <strong>運用メモ:</strong> 本番では本表をそのまま残すか、社内閲覧用に折りたたみ・別PDFにするかを選択してください。レビュー手順は <a target="_blank" rel="noopener noreferrer" href="../../../docs/project/月次レポート生成ワークフロー.md">月次レポート生成ワークフロー.md</a> と併用できます。
+            </p>
+        </section>
+
+        <!-- セクション6: グラフ作成に必要な情報 -->
+        <section class="section factcheck-section" id="graph-requirements" style="background:#f8fafc;border-top:2px solid #b8c9db;">
+            <div class="section-header">
+                <h2 class="section-title">グラフ作成に必要な情報（参照）</h2>
+            </div>
+            <p class="factcheck-intro">
+                根拠のあるグラフにするために揃えるべき情報です。本デモの<strong>6ヶ月折れ線・単元棒グラフ</strong>は、下表のとおり数値ログが不足しているためイメージ表示です（<a href="#factcheck">ファクトチェック</a>参照）。
+            </p>
+
+            <h3 style="font-size:15px;color:#2c3e50;margin:18px 0 10px;padding-left:10px;border-left:4px solid #4a6491;">1. 折れ線グラフ（例: 正答率の推移）</h3>
+            <div class="table-container">
+                <table class="factcheck-table">
+                    <thead>
+                        <tr>
+                            <th style="width:28%">必要な情報</th>
+                            <th>説明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>指標の定義</td>
+                            <td>分母・分子（例: 小テスト何問中何問正解、演習セット単位か）。月によって定義が変わらないこと。</td>
+                        </tr>
+                        <tr>
+                            <td>時間の粒度</td>
+                            <td>週／月など。各点の期間が重ならないようにする。</td>
+                        </tr>
+                        <tr>
+                            <td>各期間の値</td>
+                            <td>数値列（例: 月次で <code>[52, 55, …, 71]</code>）。</td>
+                        </tr>
+                        <tr>
+                            <td>データの出所</td>
+                            <td>学習管理シート・成績表・教師MTGメモなど、<strong>どの記録から転記したか</strong>。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="font-size:15px;color:#2c3e50;margin:18px 0 10px;padding-left:10px;border-left:4px solid #4a6491;">2. 棒・積み上げ（例: 修得単元数）</h3>
+            <div class="table-container">
+                <table class="factcheck-table">
+                    <thead>
+                        <tr>
+                            <th style="width:28%">必要な情報</th>
+                            <th>説明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>シラバス上の単元一覧</td>
+                            <td>「全何単元」など<strong>母数の定義</strong>。</td>
+                        </tr>
+                        <tr>
+                            <td>「修得済み」の条件</td>
+                            <td>例: 宿題完了、小テスト70%以上、教師チェック済み。</td>
+                        </tr>
+                        <tr>
+                            <td>期間ごとの修得数（または残り）</td>
+                            <td>横軸の月／週と対応するカウント。</td>
+                        </tr>
+                        <tr>
+                            <td>データの出所</td>
+                            <td>学習計画表・進捗管理表の更新履歴が理想。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="font-size:15px;color:#2c3e50;margin:18px 0 10px;padding-left:10px;border-left:4px solid #4a6491;">3. その他（凡例・比較・欠損）</h3>
+            <ul class="factcheck-intro" style="list-style:disc;padding-left:1.4em;margin-bottom:12px;">
+                <li><strong>目的:</strong> 保護者に伝える一文（見出しと一致）。</li>
+                <li><strong>対象期間・基準日:</strong> 学習計画表のスナップショット日付など。</li>
+                <li><strong>比較:</strong> 前月比・目標線を入れるなら、比較元の数値と定義も。</li>
+                <li><strong>欠損:</strong> データがない月は「空欄」か「非表示」かを事前に決める。</li>
+            </ul>
+
+            <p class="factcheck-intro" style="margin-bottom:0;">
+                <strong>教訓:</strong> 教師MTG・家庭面談・学習計画表の<strong>3ソースだけでは、長期の推移グラフに必要な数値系列が不足しがち</strong>です。本番では成績・演習ログのスプレッドシートや LMS エクスポートなど、<strong>数値の一次データ</strong>を別途用意してください。リポジトリ内ドキュメントとのパス対応は <a href="#references">参照一覧</a> を参照。
+            </p>
+        </section>
+
+        <!-- セクション7: 参照一覧（相対パスまたはスプレッドシートURL） -->
+        <section class="section factcheck-section" id="references" style="background:#f4f7fb;border-top:2px solid #c8d8ed;padding-bottom:24px;">
+            <div class="section-header">
+                <h2 class="section-title">参照一覧</h2>
+            </div>
+            <p class="factcheck-intro">本ファイルの場所: <code>samples/reports/household_tokura/pattern_a_responsive.html</code>。<strong>ローカル</strong>ではプロジェクトルートを <code>python scripts/serve_project.py</code> したときに相対リンクが有効です。<strong>本番</strong>では学習計画表などを <strong>Google スプレッドシートの URL</strong> で指すことができます（閲覧権限は受け手に合わせて共有設定）。NotebookLM: <a href="https://notebooklm.google.com/notebook/8d0e1e72-2137-485e-a524-826ba11d359c" target="_blank" rel="noopener noreferrer">EA_生徒状況分析</a>（61630 十倉さま（Math AA SL））。</p>
+            <div class="table-container">
+                <table class="factcheck-table">
+                    <thead>
+                        <tr>
+                            <th style="width:22%">種別</th>
+                            <th style="width:38%">リソース</th>
+                            <th>参照（相対パスまたは URL）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>一次情報</td>
+                            <td>教師MTG要約</td>
+                            <td><a target="_blank" rel="noopener noreferrer" href="sources/00_260319_時系列まとめ_NotebookLM.md">sources/00_260319_時系列まとめ_NotebookLM.md</a></td>
+                        </tr>
+                        <tr>
+                            <td>一次情報</td>
+                            <td>ご家庭への提案・合意メモ</td>
+                            <td><a target="_blank" rel="noopener noreferrer" href="sources/00_260319_時系列まとめ_NotebookLM.md">sources/00_260319_時系列まとめ_NotebookLM.md</a></td>
+                        </tr>
+                        <tr>
+                            <td>一次情報（デモ）</td>
+                            <td>学習計画表スナップショット</td>
+                            <td><a target="_blank" rel="noopener noreferrer" href="sources/03_学習計画表_プレースホルダー.md">sources/03_学習計画表_プレースホルダー.md</a></td>
+                        </tr>
+                        <tr>
+                            <td>レビュー用（根拠外）</td>
+                            <td>対応メール（メール→レポート品質比較）</td>
+                            <td><a target="_blank" rel="noopener noreferrer" href="sources/04_参照メール_プレースホルダー.md">sources/04_参照メール_プレースホルダー.md</a> · <a href="#review-mail">#review-mail</a></td>
+                        </tr>
+                        <tr>
+                            <td>ドキュメント</td>
+                            <td>月次レポート生成ワークフロー</td>
+                            <td><a target="_blank" rel="noopener noreferrer" href="../../../docs/project/月次レポート生成ワークフロー.md">../../../docs/project/月次レポート生成ワークフロー.md</a></td>
+                        </tr>
+                        <tr>
+                            <td>ドキュメント</td>
+                            <td>docs フォルダ構成（README）</td>
+                            <td><a target="_blank" rel="noopener noreferrer" href="../../../docs/README.md">../../../docs/README.md</a></td>
+                        </tr>
+                        <tr>
+                            <td>スプレッドシート（例）</td>
+                            <td>学習計画表・数値ログ（本番は実URLに差し替え）</td>
+                            <td><a href="https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer">https://docs.google.com/spreadsheets/d/…/edit?gid=…</a>（プレースホルダ）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="factcheck-intro" style="margin-top:12px;margin-bottom:0;font-size:12px;color:#6c757d;">
+                .md はブラウザでそのまま開くかダウンロードになる場合があります。スプレッドシートは共有範囲と <code>gid=</code>（特定シート）を確認してください。個人情報を含む URL を Git にコミットしない運用を推奨します（詳細は <a target="_blank" rel="noopener noreferrer" href="../../../docs/project/月次レポート生成ワークフロー.md">月次レポート生成ワークフロー.md</a> の「参照の形式」）。
+            </p>
+        </section>
+        
+        <!-- フッター -->
+        <footer class="footer">
+            <p>EDUBAL Academy - 個別最適化された国際バカロレア教育</p>
+            <div class="contact-info">
+                <p>〒150-0001 東京都渋谷区神宮前1-1-1</p>
+                <p>TEL: 03-1234-5678 | Email: contact@edubal-academy.jp</p>
+                <p>© 2026 EDUBAL Academy. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // グラフ初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 正答率推移グラフ（折れ線）
+            const ctxAccuracy = document.getElementById('chartAccuracy').getContext('2d');
+            new Chart(ctxAccuracy, {
+                type: 'line',
+                data: {
+                    labels: ['10月', '11月', '12月', '1月', '2月', '3月'],
+                    datasets: [{
+                        label: '正答率 (%)',
+                        data: [0, 0, 0, 0, 0, 0]  /* デモ: sources の数値で置換 */,
+                        borderColor: '#4a6491',
+                        backgroundColor: 'rgba(74, 100, 145, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#4a6491',
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => ` ${ctx.parsed.y}%`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0, max: 100,
+                            ticks: { callback: v => v + '%' },
+                            grid: { color: '#f0f0f0' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 単元修得数グラフ（積み上げ棒）
+            const ctxUnits = document.getElementById('chartUnits').getContext('2d');
+            new Chart(ctxUnits, {
+                type: 'bar',
+                data: {
+                    labels: ['10月', '11月', '12月', '1月', '2月', '3月'],
+                    datasets: [{
+                        label: '修得済み',
+                        data: [2, 3, 4, 5, 6, 8],
+                        backgroundColor: '#4a6491'
+                    }, {
+                        label: '未修得',
+                        data: [10, 9, 8, 7, 6, 4],
+                        backgroundColor: '#e9ecef'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: { size: 11 } }
+                        }
+                    },
+                    scales: {
+                        x: { stacked: true, grid: { display: false } },
+                        y: { stacked: true, ticks: { stepSize: 3 }, grid: { color: '#f0f0f0' } }
+                    }
+                }
+            });
+
+            // 進捗バーのアニメーション
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 300);
+            });
+            
+            // 印刷対応
+            const printButton = document.createElement('button');
+            printButton.textContent = 'レポートを印刷';
+            printButton.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                padding: 10px 20px;
+                background: #4a6491;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                z-index: 1000;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            `;
+            printButton.onclick = () => window.print();
+            document.body.appendChild(printButton);
+            
+            // モバイル表示の最適化
+            if (window.innerWidth <= 768) {
+                document.querySelectorAll('.card, .plan-option').forEach(el => {
+                    el.style.marginBottom = '15px';
+                });
+            }
+            
+            // 認証コードの表示制御（開発用）
+            const authNotice = document.querySelector('.auth-notice');
+            if (window.location.href.includes('preview=true')) {
+                authNotice.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "name": "ea-report-prototypes",
+  "public": false,
+  "builds": [
+    {
+      "src": "api/monthly-protected-upload.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/monthly-protected-inline.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "src/reports/templates/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/monthly-protected-upload",
+      "dest": "/api/monthly-protected-upload.js"
+    },
+    {
+      "src": "/api/monthly-protected-inline",
+      "dest": "/api/monthly-protected-inline.js"
+    },
+    {
+      "src": "/monthly_2026-04_takafuji_report.html",
+      "dest": "/src/reports/templates/monthly-reports/monthly_2026-04_takafuji_report.html"
+    },
+    {
+      "src": "/monthly_2026-04_suzuki_report.html",
+      "dest": "/src/reports/templates/monthly-reports/monthly_2026-04_suzuki_report.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/src/reports/templates/$1"
+    }
+  ]
+}

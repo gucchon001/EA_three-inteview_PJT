@@ -1,0 +1,329 @@
+{
+  "majorDimension": "ROWS",
+  "range": "'lesson plan'!A1:H45",
+  "values": [
+    [
+      "Topic A.  Space, time and motion"
+    ],
+    [
+      "No",
+      "Subtopic",
+      "学校",
+      "進捗",
+      "授業日",
+      "授業日",
+      "授業日",
+      "授業日"
+    ],
+    [
+      "1",
+      "A.1 Kinematics 1",
+      "済",
+      "済",
+      "2025/12/28",
+      "2026/03/15",
+      "2026/03/22",
+      "2026/03/29"
+    ],
+    [
+      "2",
+      "A.1 Kinematics 2",
+      "済",
+      "済",
+      "2025/12/28",
+      "2026/03/15",
+      "2026/03/22",
+      "2026/03/29"
+    ],
+    [
+      "3",
+      "A.2 Forces and momentum 1",
+      "済",
+      "済",
+      "2026/01/07",
+      "",
+      "",
+      "2026/03/29"
+    ],
+    [
+      "4",
+      "A.2 Forces and momentum 2",
+      "済",
+      "済",
+      "2026/01/07",
+      "",
+      "",
+      "2026/03/29"
+    ],
+    [
+      "5",
+      "A.2 Forces and momentum 3",
+      "済",
+      "済",
+      "2026/01/07",
+      "",
+      "",
+      "2026/03/29"
+    ],
+    [
+      "6",
+      "A.3 Work, energy and power 1",
+      "済",
+      "済",
+      "2026/01/07",
+      "",
+      "",
+      "2026/03/29"
+    ],
+    [
+      "7",
+      "A.3 Work, energy and power 2",
+      "済",
+      "済",
+      "2026/01/07",
+      "",
+      "",
+      "2026/03/29"
+    ],
+    [
+      "8",
+      "A.3 Work, energy and power 3",
+      "済",
+      "済",
+      "2026/01/07",
+      "",
+      "",
+      "2026/03/29"
+    ],
+    [
+      "9",
+      "Review (practice test A.1-A3 )",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "2026/03/29"
+    ],
+    [
+      "10",
+      "Rigid body mechanics 1",
+      "",
+      "",
+      "2026/08/23"
+    ],
+    [
+      "11",
+      "Rigid body mechanics 2",
+      "",
+      "",
+      "2026/08/30"
+    ],
+    [
+      "12",
+      "Rigid body mechanics 3",
+      "",
+      "",
+      "2026/09/06"
+    ],
+    [
+      "13",
+      "Galilean and special relativity 1",
+      "",
+      "",
+      "2026/09/13"
+    ],
+    [
+      "14",
+      "Galilean and special relativity 2",
+      "",
+      "",
+      "2026/09/20"
+    ],
+    [
+      "15",
+      "Galilean and special relativity 3",
+      "",
+      "",
+      "2026/09/27"
+    ],
+    [
+      "16",
+      "Galilean and special relativity 4",
+      "",
+      "",
+      "2026/10/04"
+    ],
+    [
+      "17",
+      "Review (practice test A.4-A.5 )"
+    ],
+    [],
+    [
+      "Topic B. The particulate nature of matter"
+    ],
+    [
+      "No",
+      "Subtopic",
+      "学校",
+      "進捗",
+      "授業日",
+      "授業日",
+      "授業日"
+    ],
+    [
+      "1",
+      "B.1 Thermal energy transfers 1",
+      "済",
+      "済",
+      "2025/12/21",
+      "2026/03/15",
+      "2026/03/22"
+    ],
+    [
+      "2",
+      "B.1 Thermal energy transfers 2",
+      "済",
+      "済",
+      "2025/12/21",
+      "2026/03/15",
+      "2026/03/22"
+    ],
+    [
+      "3",
+      "B.2 Greenhouse effect",
+      "済",
+      "済",
+      "2025/12/21"
+    ],
+    [
+      "4",
+      "B.3 Gas laws",
+      "済",
+      "済",
+      "2025/12/22"
+    ],
+    [
+      "5",
+      "Review (practice test B.1-B.3)"
+    ],
+    [
+      "6",
+      "B.4 Thermodynamics 1",
+      "済",
+      "済",
+      "2026/01/25"
+    ],
+    [
+      "7",
+      "B.4 Thermodynamics 2",
+      "済",
+      "済",
+      "2026/02/01"
+    ],
+    [
+      "8",
+      "B.5 Current and circuits 1",
+      "済",
+      "済",
+      "2026/03/01",
+      "2026/03/15",
+      "2026/03/22"
+    ],
+    [
+      "9",
+      "B.5 Current and circuits 2",
+      "済",
+      "済",
+      "2026/03/08",
+      "2026/03/15",
+      "2026/03/22"
+    ],
+    [
+      "10",
+      "B.5 Current and circuits 3",
+      "済",
+      "済",
+      "2026/03/08",
+      "2026/03/15",
+      "2026/03/22"
+    ],
+    [
+      "11",
+      "Review (practice test B.4-B.5)"
+    ],
+    [],
+    [
+      "Topic C. Wave behaviour"
+    ],
+    [
+      "No",
+      "Subtopic",
+      "学校",
+      "進捗",
+      "授業日",
+      "授業日",
+      "配点"
+    ],
+    [
+      "1",
+      "C.1 Simple harmonic motion 1",
+      "済",
+      "済",
+      "2026/04/19"
+    ],
+    [
+      "2",
+      "C.1 Simple harmonic motion 2",
+      "済",
+      "",
+      "2026/04/26"
+    ],
+    [
+      "3",
+      "C.2 Wave model, Wave phenomena 1",
+      "",
+      "",
+      "2026/05/03"
+    ],
+    [
+      "4",
+      "C.3 Wave phenomena 2",
+      "",
+      "",
+      "2026/05/10"
+    ],
+    [
+      "5",
+      "C.3 Wave phenomena 3",
+      "",
+      "",
+      "2026/05/10"
+    ],
+    [
+      "6",
+      "Review (practice test C.1-C.3)"
+    ],
+    [
+      "7",
+      "C.4 Standing waves and resonance",
+      "",
+      "",
+      "2026/05/17"
+    ],
+    [
+      "8",
+      "C.5 Doppler effect  1",
+      "",
+      "",
+      "2026/05/17"
+    ],
+    [
+      "9",
+      "C.5 Doppler effect  2",
+      "",
+      "",
+      "2026/05/24"
+    ]
+  ]
+}

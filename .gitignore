@@ -1,0 +1,10 @@
+.vercel
+node_modules/
+
+# GCP サービスアカウント鍵（公開リポジトリに絶対にコミットしない）
+config/gen-lang-client-*.json
+
+# Claude Code ローカル許可リスト（パスが含まれることがある）
+.claude/settings.local.json
+# 月次エディタ・ローカル送付用（暗号化 HTML の一時公開。個人情報をコミットしない）
+docs/samples/monthly-reports/tools/_published/

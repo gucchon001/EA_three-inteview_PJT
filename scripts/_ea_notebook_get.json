@@ -1,0 +1,502 @@
+{
+  "value": {
+    "notebook_id": "8d0e1e72-2137-485e-a524-826ba11d359c",
+    "title": "EA_生徒状況分析",
+    "source_count": 123,
+    "url": "https://notebooklm.google.com/notebook/8d0e1e72-2137-485e-a524-826ba11d359c",
+    "sources": [
+      {
+        "id": "56112fee-ae3f-4187-b3ad-08665b4a266e",
+        "title": "260319_儀賀さま 面談・教師MTG 時系列まとめ"
+      },
+      {
+        "id": "4b6d2b1a-4d72-4278-b77c-1714ae654c39",
+        "title": "260319_十倉さま 面談・教師MTG 時系列まとめ"
+      },
+      {
+        "id": "2d87c779-1704-4759-b714-86756844fbe6",
+        "title": "260319_和佐田さま 面談・教師MTG 時系列まとめ"
+      },
+      {
+        "id": "97362767-1ee1-41d7-979b-6dbdea95722c",
+        "title": "260319_小林 慧さま 面談・教師MTG 時系列まとめ"
+      },
+      {
+        "id": "ce13a5f4-aa09-4c67-96b3-93ad39ab536b",
+        "title": "260319_川口さま 面談・教師MTG 時系列まとめ"
+      },
+      {
+        "id": "3fb4d01d-a654-4325-a927-ca02e5cde08d",
+        "title": "260319_武石さま 面談・教師MTG 時系列まとめ"
+      },
+      {
+        "id": "b05928d0-3ee9-4a6c-bb7f-49778409a9f4",
+        "title": "260319_高浜さま 面談・教師MTG 時系列まとめ"
+      },
+      {
+        "id": "383a365e-cc9e-4410-8c32-2de6b3bd9f3c",
+        "title": "260319_高藤さま 面談・教師MTG 時系列まとめ"
+      },
+      {
+        "id": "c364dee8-c85c-44e9-a85b-b8e674307c43",
+        "title": "260319_高藤さま 面談・教師MTG 時系列まとめ"
+      },
+      {
+        "id": "86850c27-4e35-43dc-8d15-956efee0b708",
+        "title": "56807 高浜さま (Math AA HL、Chemistry HL) - Google Drive"
+      },
+      {
+        "id": "dd5ea898-a6ba-4526-8e0a-7c52f55e4439",
+        "title": "57795 沢田さま(Chemistry(SL)) - Google Drive"
+      },
+      {
+        "id": "f9947101-2da7-4efb-a6d2-80ab5707c951",
+        "title": "60636 犬貝さま(Biology(HL)Math AA(SL)) - Google Drive"
+      },
+      {
+        "id": "3978cda0-6039-4344-879f-9a924389fc2e",
+        "title": "61118 後藤さま(Japanese A Literature) - Google Drive"
+      },
+      {
+        "id": "7d273c89-e371-4e17-a20f-26ec5e9a4dc5",
+        "title": "61630 十倉さま（Math AA SL） - Google Drive"
+      },
+      {
+        "id": "26796589-6f91-4ec6-b492-6c78debb8e60",
+        "title": "61776 値賀さま(Chemistry HL, Biology SL) - Google Drive"
+      },
+      {
+        "id": "687175f0-cd1a-4681-9479-f54c960b6f65",
+        "title": "63090 森さま(Japanese A Literature) - Google Drive"
+      },
+      {
+        "id": "048e55ff-d6be-4c3d-9000-78143735e2a5",
+        "title": "63652 本夛さま(Chemistry(HL)) - Google Drive"
+      },
+      {
+        "id": "c66c3614-c26c-49eb-b00f-d094a85e0c79",
+        "title": "67251 大塚さま(Economics(HL)) - Google Drive"
+      },
+      {
+        "id": "0369dfc3-0039-46fa-983c-b274258cd433",
+        "title": "67982 平林さま(Physics SL, Math AA HL, Biology HL, Economics SL) - Google Drive"
+      },
+      {
+        "id": "800642ba-deed-4848-901b-de0892e0f317",
+        "title": "68475 中野さま (Math AA HL) - Google Drive"
+      },
+      {
+        "id": "4ea6cc4f-4010-471e-8385-2f7d287d40c8",
+        "title": "68796 山口さま (Physics HL) - Google Drive"
+      },
+      {
+        "id": "4042099b-9380-4aac-b7a6-d94096ade9c4",
+        "title": "69018 濵田さま (Math AA HL) - Google Drive"
+      },
+      {
+        "id": "740324d1-a519-4021-b072-7be2a2c24b97",
+        "title": "69610 藤田 安優奈さま (Math AI(HL)) - Google Drive"
+      },
+      {
+        "id": "2dce4459-47ea-46aa-b2e5-aac0c8a8580c",
+        "title": "70128 逸見さま(Biology(HL)) - Google Drive"
+      },
+      {
+        "id": "83579450-4c62-407b-8d7a-a8ee64e18169",
+        "title": "70161 坂本さま (MathAA HL) - Google Drive"
+      },
+      {
+        "id": "cd68d82f-148f-48b2-ab0a-7896cc808d7e",
+        "title": "70469 和佐田さま (Math AA SL) - Google Drive"
+      },
+      {
+        "id": "1af7df61-fb7f-416a-a63b-7e49706927cb",
+        "title": "70569 儀賀さま(Math AA(SL)) - Google Drive"
+      },
+      {
+        "id": "548a8122-4eff-4e22-b8b0-6c23d2ab68e9",
+        "title": "70685 村上さま (Biology HL) - Google Drive"
+      },
+      {
+        "id": "8e8e3361-edf7-44ec-8784-453c161bbf97",
+        "title": "70887 北條さま (Math AA HL, Chemistry HL)※映像授業のみ提供 - Google Drive"
+      },
+      {
+        "id": "5cb508fc-f864-4ab0-b353-574ae03b9011",
+        "title": "70955 本間さま(Physics) - Google Drive"
+      },
+      {
+        "id": "f9b4194e-bfb0-4450-90b1-99f684cf8397",
+        "title": "71610 小林 俊太郎さま(Math AA(SL)) - Google Drive"
+      },
+      {
+        "id": "092240fe-a72d-496b-bcc0-2e1e7bc6af9f",
+        "title": "71640 安田さま(Economics(SL)) - Google Drive"
+      },
+      {
+        "id": "db183166-5cf3-4ef1-abf8-cdc07cdcb061",
+        "title": "71804 ラプトンさま(Math AA(HL)) - Google Drive"
+      },
+      {
+        "id": "11d0a19a-d8d0-4ffd-b9c3-a80222b089fa",
+        "title": "71810 小林さま(Physics(HL)) - Google Drive"
+      },
+      {
+        "id": "b9db3991-2085-496a-819c-5f2e08fef6fb",
+        "title": "71972 川口さま(Physics HL) - Google Drive"
+      },
+      {
+        "id": "b365667f-b60f-42c8-bc7d-93fd71214d7f",
+        "title": "72015 飯村さま(Economics(SL)) - Google Drive"
+      },
+      {
+        "id": "c821f3a5-01e0-45c1-baca-cbf381a7279d",
+        "title": "72179 中西さまMath AA(SL) - Google Drive"
+      },
+      {
+        "id": "7c80f7d2-c240-4e7b-935f-ec2f2dfff8f8",
+        "title": "72321 武石さま(Physics(HL)) - Google Drive"
+      },
+      {
+        "id": "fdfb00f5-bf2c-4fa1-876c-735a56d4e10a",
+        "title": "72324 高藤さま(Math AA SL) - Google Drive"
+      },
+      {
+        "id": "4a332796-e801-49e5-b6fd-f3303672429f",
+        "title": "72454 安藤さま(Math AA(HL)) - Google Drive"
+      },
+      {
+        "id": "2f8286b3-9bd6-4724-bdab-c5d73ba0d2dd",
+        "title": "72575 末吉さま(Math AA HL) - Google Drive"
+      },
+      {
+        "id": "2124f4d1-9635-4e9f-b17f-dcc4e44ee266",
+        "title": "72737 小林 桃華さま(Chemistry HL, Math AA HL) - Google Drive"
+      },
+      {
+        "id": "6b9fe254-f9de-4cee-bb8c-c6d58c9da5ef",
+        "title": "72769 三好さま(Math AA SL. Biology SL) - Google Drive"
+      },
+      {
+        "id": "773978c9-a232-4418-b475-7136e4c07909",
+        "title": "73594 鈴木さま(Physics HL, Math AI HL) - Google Drive"
+      },
+      {
+        "id": "8da12f23-6fee-4f2a-b9a4-54de021a0e5b",
+        "title": "73970 本池さま(Biology(HL)、Math AA(HL)) - Google Drive"
+      },
+      {
+        "id": "0b2c167e-24ce-4298-9953-fc57817ed351",
+        "title": "74143 青木さま(Physics SL) - Google Drive"
+      },
+      {
+        "id": "48675cda-315a-4db6-bbcf-cb9a8105e356",
+        "title": "74432 岩崎さま(Math AI SL) - Google Drive"
+      },
+      {
+        "id": "4d699cb0-6d04-4800-af31-e61777eb86f7",
+        "title": "AI文字起こしによる報告メール自動生成の実現可能性評価"
+      },
+      {
+        "id": "bf34728f-2d7a-4f02-8399-c4c0e1e23870",
+        "title": "SSST 遠藤さま - Google Drive"
+      },
+      {
+        "id": "7cbf6dfc-33f9-4574-ad46-7cfcdce64445",
+        "title": "SSST 髙橋さま - Google Drive"
+      },
+      {
+        "id": "a1863761-7112-44f8-8337-746cb26af849",
+        "title": "【ソース】サービス改善レポート用：満足度・課題・提供価値"
+      },
+      {
+        "id": "67a9a4dd-a153-4596-b77b-f08ecaa0c21f",
+        "title": "【ソース】新サービス提案レポート用：ニーズ・市場・提案の種"
+      },
+      {
+        "id": "eb6604bc-e39b-440e-b37e-08ef2d8db2d2",
+        "title": "【ソース】標準化DX改善レポート用：現状・課題・改善余地"
+      },
+      {
+        "id": "d86fcb04-2c5b-4c71-b046-ed59b64ff505",
+        "title": "ご家庭向け面談メモ（アジェンダ・要点・提案・課題と解決策）"
+      },
+      {
+        "id": "849d821d-5ffd-46da-9490-50b2cb0fd142",
+        "title": "ノウハウ可視化_汎用ユースケース・提案改善・アップセル"
+      },
+      {
+        "id": "0f63bfbf-7e70-40a2-8b50-10792f7b6d2e",
+        "title": "メールテンプレ"
+      },
+      {
+        "id": "ba009d24-e43a-4028-8c38-a2004faef74d",
+        "title": "ワークフロー_BeforeAfter.md"
+      },
+      {
+        "id": "ceeeba51-a294-404d-884b-6232d88c1f04",
+        "title": "儀賀さま_1/27　ご家庭に提案"
+      },
+      {
+        "id": "f4788587-c113-4222-b189-72e9f307fbc8",
+        "title": "儀賀さま_12/26　ご家庭に提案"
+      },
+      {
+        "id": "8514d752-3fc6-431f-97ab-7d7472bccd57",
+        "title": "儀賀さま_kim 2025/10/29教師MTG"
+      },
+      {
+        "id": "1489a6bc-c862-4981-bd68-f9805c40f6ed",
+        "title": "儀賀さま_kim 2025/11/28 教師MTG"
+      },
+      {
+        "id": "2a243dd7-9ed1-472d-a94d-a8c75d852380",
+        "title": "儀賀さま_kim 2025/12/26教師MTG"
+      },
+      {
+        "id": "098105da-9fe0-429b-b74d-3ed75d3a0917",
+        "title": "儀賀さま_kim 2026/02/25教師MTG"
+      },
+      {
+        "id": "ebcdc377-f9c9-4027-9b89-0d8514f90daf",
+        "title": "十倉さま_2025/09_二宮教師MTG"
+      },
+      {
+        "id": "c27f8c7d-8288-43db-b10a-3d3ca24a92a9",
+        "title": "十倉さま_2025/11_二宮教師MTG"
+      },
+      {
+        "id": "16bd4a9e-fac2-44b2-a76c-ee90db3a546c",
+        "title": "十倉さま_2025/12_ご家庭に報告"
+      },
+      {
+        "id": "29884263-7bf2-49bb-8971-7a5fbe48616b",
+        "title": "十倉さま_2025/9_ご家庭に報告"
+      },
+      {
+        "id": "34bfacda-4867-43a9-8392-3250872f1402",
+        "title": "十倉さま_2026/01_二宮教師MTG"
+      },
+      {
+        "id": "191470f4-b5f3-4829-9636-ad877e3a49de",
+        "title": "十倉さま_2026/02_二宮教師MTG"
+      },
+      {
+        "id": "8f654fab-feeb-4244-b771-f63796c94a75",
+        "title": "十倉さま_2026/1_ご家庭に報告"
+      },
+      {
+        "id": "2e37ba69-c573-472d-b18c-91babd3c96d2",
+        "title": "十倉さま_2026/2_ご家庭に報告"
+      },
+      {
+        "id": "77ba2e5a-ad5f-4074-b43d-269b27652468",
+        "title": "和佐田さま_2025/10_ご家庭に報告(追加提案有)"
+      },
+      {
+        "id": "6fd79225-38cb-4a98-8ca6-6df5caf5e41f",
+        "title": "和佐田さま_2025/11_堀江教師MTG"
+      },
+      {
+        "id": "ef2e0696-d390-4bf6-9f52-b140cd27bd45",
+        "title": "和佐田さま_2025/12_ご家庭に報告"
+      },
+      {
+        "id": "cdec14dc-cb09-4fd9-a711-b719f7f23e88",
+        "title": "和佐田さま_2025/12_堀江教師MTG"
+      },
+      {
+        "id": "927015d9-5d8f-4b95-a833-6ae0a7d7ed97",
+        "title": "和佐田さま_2025/8_ご家庭に報告"
+      },
+      {
+        "id": "a16a7720-0544-42b8-86d6-d4185e374d09",
+        "title": "和佐田さま_2026/01_堀江教師MTG"
+      },
+      {
+        "id": "a00f6a5f-c3e9-4752-8a40-23665e83323c",
+        "title": "和佐田さま_2026/02_堀江教師MTG"
+      },
+      {
+        "id": "a749af42-92fa-4661-a1f4-9eadd4b9b3e3",
+        "title": "和佐田さま_2026/03_堀江教師MTG"
+      },
+      {
+        "id": "f5164ffc-3e02-4f6d-a550-cb50341a3822",
+        "title": "和佐田さま_2026/1_ご家庭に報告"
+      },
+      {
+        "id": "159c2687-49f8-4dc1-82c5-92418495b7b1",
+        "title": "和佐田さま_2026/2_ご家庭に報告"
+      },
+      {
+        "id": "6b74f05b-7e1a-43b9-ba27-30c144b73152",
+        "title": "小林 慧さま_1/14　ご家庭に提案"
+      },
+      {
+        "id": "c1191862-7cb9-4f8c-8f7e-f5d7674db543",
+        "title": "小林 慧さま_10/31　ご家庭に提案"
+      },
+      {
+        "id": "87d7a45e-ec85-4445-896e-324f5b502150",
+        "title": "小林 慧さま_10/3　ご家庭に提案"
+      },
+      {
+        "id": "cc587162-a68f-4b6c-8e8e-ca61b566ed16",
+        "title": "小林 慧さま_12/1　ご家庭に提案"
+      },
+      {
+        "id": "b76a4f9d-a95d-458c-a8c2-4f512cfbad88",
+        "title": "小林 慧さま_2/6　ご家庭に提案"
+      },
+      {
+        "id": "e314a901-a201-45c1-99c5-3c979624f412",
+        "title": "小林 慧さま_中野2025/09/30教師MTG"
+      },
+      {
+        "id": "5976ede8-1e0e-4bea-880f-1e2bb2a9df87",
+        "title": "小林 慧さま_中野2025/10/31教師MTG"
+      },
+      {
+        "id": "0bb6769c-c055-4fc5-b5e0-5af6b8913fcc",
+        "title": "小林 慧さま_中野2025/11/21教師MTG"
+      },
+      {
+        "id": "eb6daa64-2c97-4e9b-ba31-38c1fe608ee6",
+        "title": "小林 慧さま_中野2026/01/08教師MTG"
+      },
+      {
+        "id": "e82960d5-0425-440a-8fc6-2129846c4c7c",
+        "title": "小林 慧さま_中野2026/02/05教師MTG"
+      },
+      {
+        "id": "7960c685-54c0-4fee-99d8-88850e9d84b2",
+        "title": "岩井 - Google Drive"
+      },
+      {
+        "id": "e86b7854-1727-4b51-abb6-2eb823ca87e9",
+        "title": "川口さま_2025/10_ご家庭に報告"
+      },
+      {
+        "id": "5502de21-97c6-4b2e-bf03-a79bdc295b07",
+        "title": "川口さま_2025/10_森田教師MTG"
+      },
+      {
+        "id": "122224c5-197d-4a2d-8a65-fb02814b26b3",
+        "title": "川口さま_2025/11_ご家庭に報告"
+      },
+      {
+        "id": "ccce33a9-a042-4119-a1ea-0ec9d10412cb",
+        "title": "川口さま_2025/11_森田教師MTG"
+      },
+      {
+        "id": "3c8fadd9-c44d-49e5-8224-7d571c22c5c4",
+        "title": "川口さま_2025/12_ご家庭に報告"
+      },
+      {
+        "id": "748c052d-32dd-4044-85db-1e0d85b942ce",
+        "title": "川口さま_2025/12_森田教師MTG"
+      },
+      {
+        "id": "b4278c5e-4671-4935-88ad-9a5725f68cc6",
+        "title": "川口さま_2025/8_ご家庭に報告"
+      },
+      {
+        "id": "41c2b9db-6ac0-4c07-9937-c21acc51ff5d",
+        "title": "川口さま_2025/9_ご家庭に報告"
+      },
+      {
+        "id": "18d7f744-712e-444b-89e6-e4c4e9febc8f",
+        "title": "川口さま_2026/01_森田教師MTG"
+      },
+      {
+        "id": "81707c92-3cc5-42ab-af96-451da49f85ff",
+        "title": "川口さま_2026/02_森田教師MTG"
+      },
+      {
+        "id": "d74d2330-780e-4042-9492-89b53068dace",
+        "title": "川口さま_2026/2_ご家庭に報告"
+      },
+      {
+        "id": "43a365c1-298f-4268-b27b-e04aa211b77b",
+        "title": "採用時にコピーして使用：学習計画表 - Google Drive"
+      },
+      {
+        "id": "2267ab14-41a1-4d9b-a046-5915842d0e21",
+        "title": "教師MTG整理メモ（アジェンダ・要点・提案・課題と解決策）"
+      },
+      {
+        "id": "3b600798-a7f5-4f90-a8db-0e0bcf0534e4",
+        "title": "教育現場のAI・人のハイブリッド運用フロー設計図"
+      },
+      {
+        "id": "c9939748-9134-47a0-a5d2-3351216726c8",
+        "title": "月次メール_提案タイミング・テンプレ・ご家庭別分析"
+      },
+      {
+        "id": "3740573b-9887-4c37-91dc-da2a959dff0b",
+        "title": "武石さま_2026/01_森田教師MTG"
+      },
+      {
+        "id": "1ea35bf0-1ba3-4051-a1ea-1696ba7f5496",
+        "title": "武石さま_2026/02_森田教師MTG"
+      },
+      {
+        "id": "fd492e54-0d3b-41d3-b0d3-55567ca0f1b0",
+        "title": "武石さま_2026/1_ご家庭に報告"
+      },
+      {
+        "id": "0cf2993b-e848-42ac-96a5-d351c13e9fec",
+        "title": "武石さま_2026/2_ご家庭に報告(追加提案有)"
+      },
+      {
+        "id": "7a963e1c-4e03-49ea-8894-9ce1a6fe23dd",
+        "title": "高浜さま_1/26　Math　ご家庭に提案"
+      },
+      {
+        "id": "1eb1f674-17db-4861-996d-651d55aa143c",
+        "title": "高浜さま_12/10　Mathご家庭に提案"
+      },
+      {
+        "id": "5e13942b-43a1-492d-a985-87fd696b7928",
+        "title": "高浜さま_広谷2025/10/20教師MTG"
+      },
+      {
+        "id": "59af9fa3-37ee-4d71-91ce-e55c2dc23f52",
+        "title": "高浜さま_広谷2025/11/10教師MTG"
+      },
+      {
+        "id": "9f5dc172-5dc6-4d3d-8e41-ebf3cbeadbcb",
+        "title": "高浜さま_広谷2025/12/09教師MTG"
+      },
+      {
+        "id": "7942204e-834a-48ef-8be6-66f5a05d0891",
+        "title": "高浜さま_広谷2026/01/19教師MTG"
+      },
+      {
+        "id": "a12e0be6-6190-4ab2-abe2-572caf81b4ec",
+        "title": "高藤さま_12/23　ご家庭に提案"
+      },
+      {
+        "id": "c12629c8-84a1-4737-b129-1ca778dfc9eb",
+        "title": "高藤さま_2/20　ご家庭に提案"
+      },
+      {
+        "id": "47aa68f7-3833-401a-afd4-566d48d5a542",
+        "title": "高藤さま_2/3　ご家庭に提案"
+      },
+      {
+        "id": "4d64d679-f397-42f2-a2b8-0f0c35721ab0",
+        "title": "高藤さま_池田2025/12/18教師MTG"
+      },
+      {
+        "id": "cc31e44b-aee9-47f3-a693-fdc63e43afa4",
+        "title": "高藤さま_池田2026/01/20教師MTG"
+      },
+      {
+        "id": "dd88c136-1721-4e81-85b8-9842017d487a",
+        "title": "高藤さま_池田2026/02/17教師MTG"
+      }
+    ]
+  }
+}

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>武石さま（たけいしさん）Physics HL — 学習レポート（Pattern C）</title>
+    <style>
+        /* 極限までシンプルなスタイル */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+        }
+        
+        /* ヘッダー */
+        .header {
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .title {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        
+        .meta {
+            font-size: 14px;
+            color: #666;
+            margin: 10px 0;
+        }
+        
+        /* セクション */
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #2c3e50;
+        }
+        
+        /* リスト */
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        /* 強調 */
+        .highlight {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #4a6491;
+        }
+        
+        /* 数値表示 */
+        .number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .change {
+            font-size: 14px;
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .change.negative {
+            color: #e74c3c;
+        }
+        
+        /* 表 */
+        .simple-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .simple-table th,
+        .simple-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .simple-table th {
+            font-weight: 600;
+            background-color: #f8f9fa;
+        }
+        
+        /* 提案プラン */
+        .plan {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .plan.recommended {
+            border-color: #4a6491;
+            background-color: #f8faff;
+        }
+        
+        .plan-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .plan-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+        
+        /* ボタン */
+        .button {
+            display: inline-block;
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            margin: 10px 5px 0 0;
+        }
+        
+        .button:hover {
+            background-color: #4a6491;
+        }
+        
+        /* フッター */
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            
+            .title {
+                font-size: 20px;
+            }
+            
+            .section-title {
+                font-size: 16px;
+            }
+            
+            .simple-table {
+                font-size: 14px;
+            }
+            
+            .simple-table th,
+            .simple-table td {
+                padding: 8px 5px;
+            }
+        }
+        
+        /* 印刷用 */
+        @media print {
+            .button {
+                display: none;
+            }
+            
+            body {
+                padding: 0;
+            }
+        }
+
+        /* Pattern A 準拠：運用バナー・分析・参照 */
+        .c-banner {
+            font-size: 13px;
+            color: #3d3518;
+            background: #fff9e6;
+            border: 1px solid #e6d39a;
+            padding: 12px 14px;
+            margin-bottom: 20px;
+            line-height: 1.55;
+        }
+        .c-banner a { color: #2c5aa0; }
+        .c-focus {
+            font-size: 14px;
+            background: #e8f4fc;
+            border: 1px solid #b6d4ee;
+            padding: 12px 14px;
+            margin-bottom: 24px;
+            line-height: 1.55;
+        }
+        .c-focus ul { margin: 8px 0 0; padding-left: 1.3em; }
+        .tail-section { margin-bottom: 28px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+        .tail-section h2 { font-size: 17px; margin-bottom: 10px; }
+        .review-note {
+            background: #eef6ff;
+            border: 1px solid #93c5fd;
+            padding: 12px 14px;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        .fc-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .fc-ok { background: #d4edda; color: #155724; }
+        .fc-demo { background: #fff3cd; color: #856404; }
+        .fc-tpl { background: #e2e3e5; color: #383d41; }
+        .fc-review { background: #f8d7da; color: #721c24; }
+        .tail-small { font-size: 13px; color: #555; line-height: 1.55; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <div class="header">
+        <div class="logo">EDUBAL Academy</div>
+        <h1 class="title">学習状況分析レポート（武石さま（たけいしさん））</h1>
+        <div class="meta">
+            <strong>生徒名:</strong> 武石 様（たけいしさん・72321・Physics HL） | 
+            <strong>対象期間:</strong> 2026年3月 | 
+            <strong>担当教師:</strong> Kim 先生
+        </div>
+        <div class="meta">
+            <strong>発行日:</strong> 2026年4月9日 | 
+            <strong>レポートID:</strong> RPT-202603-72321
+        </div>
+        <div class="meta">
+            <strong>数値・目標の正:</strong> 学習計画表 2026/3/31 時点（03）
+        </div>
+    </div>
+
+    <div class="c-banner">
+        <strong>武石さま（たけいしさん）・Pattern C</strong> — 本文根拠は <code>sources/01〜03</code>（数値の正は <strong>03</strong>）。一次情報の <code>.md</code> は <code>python scripts/serve_project.py</code> で配信推奨。
+        <a href="#factcheck">ファクトチェック</a> · <a href="#graph-requirements">グラフに必要な情報</a> · <a href="#references">参照一覧</a> · <a href="#review-mail">レビュー用</a>
+    </div>
+
+    <div class="c-focus">
+        <strong>本レポートの主眼（最新出力の扱い）</strong>
+        <ul>
+            <li>KPI・分析は <a href="sources/03_学習計画表_プレースホルダー.md">03_学習計画表（3/31）</a> と <a href="sources/00_260319_時系列まとめ_NotebookLM.md">02（1/27）</a> を中心に。</li>
+            <li><a href="sources/00_260319_時系列まとめ_NotebookLM.md">01 教師MTG（2/25）</a> は時系列参考。食い違いは<strong>03 優先</strong>。</li>
+        </ul>
+    </div>
+    
+    <!-- 認証通知（シンプル版） -->
+    <div class="highlight">
+        <p>🔒 このレポートは個人情報を含みます。認証コードが必要な場合はご連絡ください。</p>
+    </div>
+    
+    <!-- セクション1: 今月の成果 -->
+    <div class="section">
+        <h2 class="section-title">1. 今月の学習成果</h2>
+        
+        <div class="highlight">
+            <p><span class="number">—</span> <span class="change">（Calculus 演習・2/25 MTG）</span></p>
+            <p>Paper 1・2 演習を進め、Calculus は良好。Trig/Geometry（角度）は弱点として反復中です。</p>
+        </div>
+        
+        <h3>優先単元・習慣</h3>
+        <ul>
+            <li>Trigonometry・Geometry（角度問題を含む）</li>
+            <li>解き直し・再演習の習慣化</li>
+            <li>全単元完了 5月中旬頃 → Mock 8月 → 最終11月（03）</li>
+        </ul>
+        
+        <h3>特筆すべき点</h3>
+        <p>学習意欲が高く、旅行中も授業参加など前向きな取り組みがあります。一次情報は <code>sources/01〜03</code> を参照してください。</p>
+    </div>
+    
+    <!-- セクション2: 課題と分析 -->
+    <div class="section">
+        <h2 class="section-title">2. 現状の課題と分析</h2>
+        
+        <table class="simple-table">
+            <tr>
+                <th>指標</th>
+                <th>目標</th>
+                <th>現状</th>
+                <th>分析</th>
+            </tr>
+            <tr>
+                <td>目標 / 見立て</td>
+                <td>6</td>
+                <td>5</td>
+                <td>03 を正とする</td>
+            </tr>
+            <tr>
+                <td>Mock / 最終</td>
+                <td>2026年8月</td>
+                <td>2026年11月</td>
+                <td>02・03 のマイルストーン</td>
+            </tr>
+            <tr>
+                <td>不足コマ</td>
+                <td>（計画表）</td>
+                <td>要確認</td>
+                <td>実シートで更新</td>
+            </tr>
+            <tr>
+                <td>ボトルネック</td>
+                <td>-</td>
+                <td>Trig / Geometry</td>
+                <td>解き直し（01）</td>
+            </tr>
+        </table>
+        
+        <div class="highlight">
+            <h3>逆算スケジュール分析</h3>
+            <p>5月中旬の全単元完了、8月 Mock、11月最終試験に向け、不足コマは計画表で確認のうえ延長・集中枠を検討します。</p>
+        </div>
+    </div>
+    
+    <!-- セクション3: 学習計画案 -->
+    <div class="section">
+        <h2 class="section-title">3. 今後の学習計画案</h2>
+        
+        <!-- A案 -->
+        <div class="plan">
+            <div class="plan-title">A案：現状維持</div>
+            <p>週次ペースを維持し、Trig/Geometry の反復と解き直しを徹底します。</p>
+            <div class="plan-price">追加費用なし</div>
+            <ul>
+                <li>現行の授業頻度を継続</li>
+                <li>誤答の再演習を週次で可視化</li>
+                <li>03 の不足コマを再点検</li>
+            </ul>
+            <p><strong>リスク:</strong> 解き直しが弱いままだと弱点が先送りになりやすいです。</p>
+        </div>
+        
+        <!-- B案（推奨） -->
+        <div class="plan recommended">
+            <div class="plan-title">B案：指導延長・回数補填 ★推奨</div>
+            <p>03 で不足コマが示された場合、延長等で演習密度を上げます。</p>
+            <div class="plan-price">別紙料金表</div>
+            <ul>
+                <li>90分化など時間の確保（要相談）</li>
+                <li>Past Paper の前倒し</li>
+                <li>角度問題・長文の時間配分</li>
+            </ul>
+            <p><strong>メリット:</strong> 目標スコア6に向けた演習を確保しやすいです。</p>
+            <a href="#" class="button">このプランを選択</a>
+        </div>
+        
+        <!-- C案 -->
+        <div class="plan">
+            <div class="plan-title">C案：長期休暇集中</div>
+            <p>集中講義・週2回ペース等を家庭の都合と 03 で調整します。</p>
+            <div class="plan-price">別途お見積り</div>
+            <ul>
+                <li>弱点単元の連続補強</li>
+                <li>Mock 前の演習ブロック</li>
+                <li>終了後に計画表へ反映</li>
+            </ul>
+            <p><strong>メリット:</strong> 短期間で演習量を増やせます。</p>
+        </div>
+    </div>
+    
+    <!-- セクション4: お願いと次回面談 -->
+    <div class="section">
+        <h2 class="section-title">4. ご家庭へのお願い・次回面談</h2>
+        
+        <h3>情報提供のお願い</h3>
+        <p>より精度の高い学習計画のため、以下の情報のご提供をお願いいたします：</p>
+        <ul>
+            <li>学校のシラバス（授業計画）</li>
+            <li>直近の試験・模試の答案用紙</li>
+            <li>今後の試験日程</li>
+        </ul>
+        
+        <h3>三者面談のご案内</h3>
+        <p>今後の学習計画について、三者面談の実施をご提案いたします。</p>
+        
+        <table class="simple-table">
+            <tr>
+                <th>候補日時</th>
+                <th>形式</th>
+            </tr>
+            <tr>
+                <td>2026年4月10日（木）18:00〜</td>
+                <td>オンライン（Zoom）</td>
+            </tr>
+            <tr>
+                <td>2026年4月12日（土）10:00〜</td>
+                <td>オンライン（Zoom）</td>
+            </tr>
+            <tr>
+                <td>2026年4月13日（日）14:00〜</td>
+                <td>対面（弊アカデミー）</td>
+            </tr>
+        </table>
+        
+        <div style="margin-top: 20px;">
+            <a href="#" class="button">日時を選択</a>
+            <a href="#" class="button">質問・相談する</a>
+        </div>
+    </div>
+
+    <!-- レビュー用メール（根拠外） -->
+    <div class="section tail-section" id="review-mail">
+        <h2 class="section-title">レビュー用：対応メール（品質比較・本文根拠外）</h2>
+        <div class="review-note">
+            一次根拠ではありません（照合は sources/01〜03）。比較用: <a href="sources/04_参照メール_プレースホルダー.md">sources/04_参照メール_プレースホルダー.md</a>（iframe プレビューは Pattern A）
+        </div>
+    </div>
+
+    <!-- ファクトチェック -->
+    <div class="section tail-section" id="factcheck">
+        <h2 class="section-title">ファクトチェック（根拠対照表）</h2>
+        <p class="tail-small">記載と一次情報の対応。<a href="sources/">sources/</a> の Markdown で照合。</p>
+        <table class="simple-table">
+            <thead>
+                <tr>
+                    <th>主な記載</th>
+                    <th>根拠ソース</th>
+                    <th>照合</th>
+                    <th>メモ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Calculus （要確認）、Paper1・2</td>
+                    <td><a href="sources/00_260319_時系列まとめ_NotebookLM.md">01</a>／<a href="sources/03_学習計画表_プレースホルダー.md">03</a></td>
+                    <td><span class="fc-badge fc-ok">照合済</span></td>
+                    <td>矛盾時は03優先</td>
+                </tr>
+                <tr>
+                    <td>Trig/Geo 弱点・解き直し</td>
+                    <td><a href="sources/00_260319_時系列まとめ_NotebookLM.md">01</a></td>
+                    <td><span class="fc-badge fc-ok">照合済</span></td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td>目標6・Mock8月・最終11月</td>
+                    <td><a href="sources/03_学習計画表_プレースホルダー.md">03</a>／<a href="sources/00_260319_時系列まとめ_NotebookLM.md">02</a></td>
+                    <td><span class="fc-badge fc-ok">照合済</span></td>
+                    <td>更新時に再照合</td>
+                </tr>
+                <tr>
+                    <td>不足コマ</td>
+                    <td><a href="sources/03_学習計画表_プレースホルダー.md">03</a></td>
+                    <td><span class="fc-badge fc-review">要確認</span></td>
+                    <td>実シート反映後に更新</td>
+                </tr>
+                <tr>
+                    <td>6ヶ月グラフ系列</td>
+                    <td>（なし）</td>
+                    <td><span class="fc-badge fc-demo">デモ</span></td>
+                    <td>月次ログが必要</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="tail-small"><strong>運用:</strong> <a href="../../../docs/project/月次レポート生成ワークフロー.md">月次レポート生成ワークフロー.md</a></p>
+    </div>
+
+    <!-- グラフ要件 -->
+    <div class="section tail-section" id="graph-requirements">
+        <h2 class="section-title">グラフ作成に必要な情報（参照）</h2>
+        <p class="tail-small">指標定義・粒度・各期間の値・出所を揃えること。長期推移には3ソース以外の数値ログ（スプレッドシート等）が必要な場合があります。<a href="#factcheck">ファクトチェック</a>・<a href="#references">参照一覧</a> と併用。</p>
+    </div>
+
+    <!-- 参照一覧 -->
+    <div class="section tail-section" id="references">
+        <h2 class="section-title">参照一覧</h2>
+        <p class="tail-small">本ファイル: <code>samples/reports/household_takeishi/pattern_c_simple.html</code>。NotebookLM: <a href="https://notebooklm.google.com/notebook/8d0e1e72-2137-485e-a524-826ba11d359c" target="_blank" rel="noopener noreferrer">EA_生徒状況分析</a>。</p>
+        <table class="simple-table">
+            <thead>
+                <tr>
+                    <th>種別</th>
+                    <th>リソース</th>
+                    <th>パス／URL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>一次情報</td>
+                    <td>教師MTG</td>
+                    <td><a href="sources/00_260319_時系列まとめ_NotebookLM.md">sources/01_…</a></td>
+                </tr>
+                <tr>
+                    <td>一次情報</td>
+                    <td>ご家庭への提案</td>
+                    <td><a href="sources/00_260319_時系列まとめ_NotebookLM.md">sources/02_…</a></td>
+                </tr>
+                <tr>
+                    <td>一次情報</td>
+                    <td>学習計画表</td>
+                    <td><a href="sources/03_学習計画表_プレースホルダー.md">sources/03_…</a></td>
+                </tr>
+                <tr>
+                    <td>レビュー用</td>
+                    <td>対応メール</td>
+                    <td><a href="sources/04_参照メール_プレースホルダー.md">sources/04_…</a></td>
+                </tr>
+                <tr>
+                    <td>ドキュメント</td>
+                    <td>ワークフロー</td>
+                    <td><a href="../../../docs/project/月次レポート生成ワークフロー.md">月次レポート生成ワークフロー.md</a></td>
+                </tr>
+                <tr>
+                    <td>スプレッドシート</td>
+                    <td>学習計画表（03）</td>
+                    <td><a href="https://docs.google.com/spreadsheets/d/1t0adYWix8HzkpZHPSfjps2QKlu1H4r9ol97vhsshLBE/edit?gid=869629603#gid=869629603" target="_blank" rel="noopener noreferrer">Google スプレッドシート</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- フッター -->
+    <div class="footer">
+        <p>EDUBAL Academy - 個別最適化された国際バカロレア教育</p>
+        <p>〒150-0001 東京都渋谷区神宮前1-1-1 | TEL: 03-1234-5678</p>
+        <p>© 2026 EDUBAL Academy. All rights reserved.</p>
+    </div>
+    
+    <script>
+        // シンプルなインタラクション
+        document.addEventListener('DOMContentLoaded', function() {
+            // プラン選択ボタン
+            const planButtons = document.querySelectorAll('.button');
+            planButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (this.textContent.includes('選択')) {
+                        alert('選択ありがとうございます。担当者からご連絡いたします。');
+                        e.preventDefault();
+                    }
+                });
+            });
+            
+            // 印刷ボタン（必要に応じて追加）
+            const printButton = document.createElement('button');
+            printButton.textContent = '印刷する';
+            printButton.className = 'button';
+            printButton.style.marginTop = '20px';
+            printButton.onclick = () => window.print();
+            document.querySelector('.footer').insertBefore(printButton, document.querySelector('.footer p'));
+        });
+    </script>
+</body>
+</html>

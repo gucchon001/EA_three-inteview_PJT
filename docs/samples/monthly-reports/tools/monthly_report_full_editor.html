@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 送付用 URL 発行 API を上書きするときのみ指定（空＝同一オリジンの /api/monthly-protected-upload） -->
+    <meta name="ea-monthly-protected-upload" content="" />
+    <!-- サンプルレポートの正本パス・リビジョン: ../reports-manifest.json（リポジトリの正本） -->
+    <meta name="ea-monthly-reports-manifest" content="../reports-manifest.json" />
+    <title>月次レポート全文編集</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif; margin: 0; padding: 16px; background: #eef2f7; color: #1a1a1a; line-height: 1.5; }
+        .wrap { max-width: min(1120px, 100%); margin: 0 auto; }
+        .topbar { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+        .topbar a { color: #4a6491; text-decoration: none; font-size: 0.88rem; }
+        .topbar a:hover { text-decoration: underline; }
+        h1 { font-size: 1.2rem; color: #2c3e50; margin: 0; font-weight: 700; }
+        .tagline { font-size: 0.85rem; color: #5a6570; margin: 0 0 12px; }
+        details.help { margin-bottom: 12px; border: 1px solid #dde3ec; border-radius: 8px; background: #fff; font-size: 0.82rem; }
+        details.help > summary {
+            cursor: pointer;
+            padding: 10px 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        details.help > summary::-webkit-details-marker { display: none; }
+        details.help > summary::before { content: "ⓘ"; font-size: 1rem; opacity: 0.7; }
+        details.help[open] > summary { border-bottom: 1px solid #eef1f5; }
+        .help-body { padding: 12px 14px 14px; color: #444; }
+        .help-body ul { margin: 8px 0 0; padding-left: 1.2em; }
+        .help-body li { margin-bottom: 6px; }
+        .help-body a { color: #4a6491; }
+        .help-body code { font-size: 0.78em; background: #f4f6f9; padding: 1px 5px; border-radius: 3px; }
+        .panel {
+            background: #fff;
+            border: 1px solid #dde3ec;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 1px 2px rgba(0,0,0,.04);
+        }
+        .frame-wrap {
+            border: 1px solid #c5cdd8;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #e8e8e8;
+            margin-bottom: 12px;
+        }
+        #editorFrame {
+            width: 100%;
+            height: min(70vh, 800px);
+            min-height: 320px;
+            border: 0;
+            display: block;
+        }
+        .tb-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eef1f5;
+        }
+        .tb-group:last-of-type { border-bottom: none; padding-bottom: 0; }
+        .tb-group:first-of-type { padding-top: 0; }
+        .tb-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #7f8c9a;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            width: 100%;
+            margin-bottom: 2px;
+        }
+        .tb-title + * { margin-top: 0; }
+        button, .file-btn {
+            cursor: pointer;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: 1px solid #c5cdd8;
+            font-size: 0.84rem;
+            background: #f8fafc;
+            color: #2c3e50;
+            font-family: inherit;
+        }
+        button:hover, .file-btn:hover { background: #eef2f7; border-color: #aeb8c4; }
+        button:active, .file-btn:active { background: #e2e8f0; }
+        button.primary { background: #2c3e50; color: #fff; border-color: #2c3e50; font-weight: 600; }
+        button.primary:hover { background: #34495e; border-color: #34495e; }
+        button.ghost { background: transparent; border-color: transparent; color: #4a6491; text-decoration: underline; padding: 6px 8px; font-size: 0.8rem; }
+        button.ghost:hover { background: rgba(74,100,145,.08); }
+        button.icon-tight { padding: 8px 12px; min-width: 2.5em; font-weight: 700; }
+        .tb-icon-btn {
+            padding: 6px 8px;
+            min-width: 2.4rem;
+            min-height: 2.4rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .tb-svg {
+            width: 1.35rem;
+            height: 1.35rem;
+            display: block;
+            flex-shrink: 0;
+        }
+        .tb-hint-inline {
+            opacity: 0.48;
+            font-size: 0.72rem;
+            white-space: nowrap;
+        }
+        .tb-emoji-btn {
+            font-size: 1.25rem;
+            line-height: 1.15;
+            padding: 6px 10px;
+            min-width: 2.6rem;
+            min-height: 2.4rem;
+        }
+        .tb-emoji-custom { font-size: 0.8rem !important; }
+        .tb-edit-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 14px 22px;
+            width: 100%;
+        }
+        .tb-cluster {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+        }
+        .tb-cluster-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #334155;
+            line-height: 1.25;
+            letter-spacing: 0.02em;
+        }
+        .tb-cluster-btns {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+        }
+        .file-btn { display: inline-block; text-decoration: none; }
+        input[type="file"] { display: none; }
+        .grow { flex: 1; min-width: 8px; }
+        .status-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 12px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #eef1f5;
+            font-size: 0.78rem;
+            color: #6b7280;
+        }
+        .status-row .draft-pill {
+            padding: 3px 10px;
+            border-radius: 999px;
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+        .status-row .draft-pill.has-draft { background: #e0f2fe; color: #0369a1; font-weight: 600; }
+        .meta-count { font-variant-numeric: tabular-nums; }
+        details.source-details {
+            border: 1px solid #dde3ec;
+            border-radius: 8px;
+            background: #fafbfd;
+            margin-top: 12px;
+        }
+        details.source-details summary {
+            cursor: pointer;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #475569;
+        }
+        details.source-details[open] summary { border-bottom: 1px solid #eef1f5; }
+        .source-inner { padding: 12px 14px 14px; }
+        #source {
+            width: 100%;
+            min-height: 200px;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: ui-monospace, Consolas, monospace;
+            font-size: 0.78rem;
+            line-height: 1.45;
+            resize: vertical;
+            background: #fff;
+        }
+        .src-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+        .ok { color: #0d7a3e; font-size: 0.82rem; margin-top: 8px; display: none; }
+        .err { color: #c0392b; font-size: 0.82rem; margin-top: 8px; display: none; }
+        .pw-out-box { margin-top: 4px; padding: 12px 14px; border: 1px solid #bae6fd; border-radius: 8px; background: linear-gradient(180deg, #f0f9ff 0%, #f8fafc 100%); }
+        .pw-out-box:not([hidden]) {
+            position: sticky;
+            bottom: 12px;
+            z-index: 40;
+            box-shadow: 0 -6px 28px rgba(15, 23, 42, 0.1);
+            scroll-margin-top: 80px;
+            scroll-margin-bottom: 24px;
+        }
+        .pw-out-box[hidden] { display: none !important; }
+        .pw-out-heading { margin: 0 0 10px; font-size: 0.9rem; font-weight: 800; color: #0c4a6e; }
+        .pw-out-label { margin: 0 0 8px; font-size: 0.8rem; font-weight: 700; color: #0c4a6e; }
+        .pw-out-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
+        .pw-out-field {
+            flex: 1;
+            min-width: 220px;
+            padding: 10px 12px;
+            font-family: ui-monospace, Consolas, monospace;
+            font-size: 0.88rem;
+            border: 1px solid #7dd3fc;
+            border-radius: 6px;
+            background: #fff;
+            color: #0f172a;
+        }
+        .pw-out-hint { margin: 8px 0 0; font-size: 0.72rem; color: #475569; line-height: 1.45; }
+        .pw-out-gap { margin-top: 12px; }
+        .pw-out-url-section {
+            margin-top: 14px;
+            padding: 12px 14px;
+            background: #fff;
+            border: 1px solid #0ea5e9;
+            border-radius: 8px;
+            outline: 2px solid rgba(14, 165, 233, 0.2);
+        }
+        .pw-out-url-section .pw-out-label { color: #0369a1; margin-bottom: 6px; }
+        .pw-out-url-field {
+            min-height: 2.85rem;
+            border-color: #38bdf8;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="topbar">
+            <a href="../monthly-reports-index.html">← 一覧</a>
+        </div>
+        <h1>月次レポート · 編集</h1>
+        <p class="tagline">下の枠をクリックしてそのまま編集 → プレビュー・コピー・保存。</p>
+
+        <details class="help">
+            <summary>うまく動かないとき</summary>
+            <div class="help-body">
+                <ul>
+                    <li><strong>送付用 URL が空・HTTP 501</strong>：<code>python -m http.server</code> では POST がなく自動発行できません。必ず <code>python scripts/serve_project.py</code> で起動し、表示されたポートの URL からエディタを開き直してください。</li>
+                    <li><strong>サンプルが読めない</strong>：<code>file://</code> では fetch できません。<code>python scripts/serve_project.py</code> で起動した <code>http://127.0.0.1:…</code> から開くか、<strong>ファイルを開く</strong>で HTML を指定してください。</li>
+                    <li><strong>表示が古い／真っ白</strong>：ブラウザ下書きが優先されています。<strong>下書き削除</strong>または<strong>高藤でリセット</strong>を試してください。</li>
+                    <li><strong>正本とエディタの整合</strong>：サンプル（高藤・鈴木）の URL は <code>../reports-manifest.json</code> に一元化しています。正本 HTML を更新した人はマニフェストの <code>revision</code> も更新してください。下書き保持中に rev が変わると、起動時に緑メッセージで知らせます。</li>
+                    <li><strong>送付エクスポート</strong>：暗号化 HTML 保存後、<strong>送付用 URL を自動発行</strong>します（同一サイトへ <code>POST /api/monthly-protected-upload</code>）。<strong>ローカル</strong>は <code>serve_project.py</code> がディスクの <code>tools/_published/</code> に保存。<strong>Vercel</strong> は Blob ストア連携で <code>BLOB_READ_WRITE_TOKEN</code> が自動付与されれば追加設定なしで動作します（未連携時は相対パス目安のみ）。パスワードは別経路で伝えてください。詳細は <a href="../SECURE_DELIVERY_月次レポート_HTML.md">SECURE_DELIVERY</a>。</li>
+                    <li><strong>送付 API の上書き</strong>：別ドメインの受け口を使う場合のみ、<code>localStorage.setItem('ea_monthly_protected_upload_url', 'https://…')</code> または <code>meta name="ea-monthly-protected-upload"</code> を設定してください（応答は <code>{"ok":true,"url":"…"}</code>）。</li>
+                    <li><strong>別ブラウザ・他PCで続ける</strong>：下書き（ブラウザ内の自動保存）は共有されません。<strong>ファイルに保存</strong>で HTML を書き出し、続きからは<strong>ファイルから開く</strong>で同じファイルを選んでください。</li>
+                    <li><strong>絵文字</strong>：ツールバーの「絵文字挿入」で枠内のカーソル位置に入れられます（<strong>HTML を直接編集</strong>のソースにフォーカスがあるときはそちらに挿入）。修正は該当箇所を選択してからキーボードで打ち直しても構いません。</li>
+                </ul>
+            </div>
+        </details>
+
+        <div class="panel">
+            <div class="frame-wrap">
+                <iframe id="editorFrame" title="レポート編集"></iframe>
+            </div>
+
+            <div class="tb-group">
+                <span class="tb-title">レポートの編集</span>
+                <div class="tb-edit-row">
+                    <div class="tb-cluster">
+                        <span class="tb-cluster-label">表（行・列）の追加 / 削除</span>
+                        <div class="tb-cluster-btns">
+                            <button type="button" class="tb-icon-btn" id="tblRowAdd" title="選択セルの下に行を追加" aria-label="選択セルの下に行を追加">
+                                <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M3 5h18v5H3zM3 12h18v5H3z"/><path d="M12 20v4m-2-2h4"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="tb-icon-btn" id="tblRowDel" title="選択行を削除" aria-label="選択行を削除">
+                                <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M3 5h18v5H3zM3 12h18v5H3z"/><path d="M5 14.5h14"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="tb-icon-btn" id="tblColAdd" title="選択列の右に列を追加" aria-label="選択列の右に列を追加">
+                                <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M4 4h7v16H4zM13 4h7v16h-7z"/><path d="M21 11v4M19 13h4"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="tb-icon-btn" id="tblColDel" title="選択列を削除" aria-label="選択列を削除">
+                                <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M4 4h7v16H4zM13 4h7v16h-7z"/><path d="M16.5 4v16"/>
+                                </svg>
+                            </button>
+                            <span class="tb-hint-inline">※セル選択後</span>
+                        </div>
+                    </div>
+                    <div class="tb-cluster">
+                        <span class="tb-cluster-label">リンク挿入・解除</span>
+                        <div class="tb-cluster-btns">
+                            <button type="button" class="tb-icon-btn" id="linkApply" title="選択範囲にリンク（URL 入力）" aria-label="リンクを付与">
+                                <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M10 13a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1"/><path d="M14 11a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="tb-icon-btn" id="linkRemove" title="選択範囲のリンクを解除" aria-label="リンクを解除">
+                                <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M10 13a5 5 0 0 1 0-7l1-1"/><path d="M14 11a5 5 0 0 1 0 7l-1 1"/><path d="M5 5L19 19"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tb-cluster">
+                        <span class="tb-cluster-label">見出し 05</span>
+                        <div class="tb-cluster-btns">
+                            <button type="button" class="tb-icon-btn" id="removeSec05" title="見出し番号 05 のブロックを削除" aria-label="見出し05のセクションを削除">
+                                <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9.5 9.5 5 5"/><path d="m14.5 9.5-5 5"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tb-cluster">
+                        <span class="tb-cluster-label">絵文字挿入</span>
+                        <div class="tb-cluster-btns emoji-toolbar" role="group" aria-label="カーソル位置に絵文字を挿入（枠内または HTML ソース）">
+                            <button type="button" class="tb-emoji-btn" title="良い" data-emoji="😊" aria-label="絵文字 😊 を挿入">😊</button>
+                            <button type="button" class="tb-emoji-btn" title="まずまず" data-emoji="😐" aria-label="絵文字 😐 を挿入">😐</button>
+                            <button type="button" class="tb-emoji-btn" title="普通・要注意" data-emoji="🙂" aria-label="絵文字 🙂 を挿入">🙂</button>
+                            <button type="button" class="tb-emoji-btn" title="課題" data-emoji="😢" aria-label="絵文字 😢 を挿入">😢</button>
+                            <button type="button" class="tb-emoji-btn" title="チェック" data-emoji="✓" aria-label="記号 ✓ を挿入">✓</button>
+                            <button type="button" class="tb-emoji-btn" title="星" data-emoji="★" aria-label="記号 ★ を挿入">★</button>
+                            <button type="button" class="ghost tb-emoji-custom" id="emojiCustom" title="ほかの文字・絵文字を入力して挿入">その他…</button>
+                        </div>
+                    </div>
+                    <span class="grow"></span>
+                </div>
+            </div>
+
+            <div class="tb-group">
+                <span class="tb-title">読み込み · ファイル</span>
+                <button type="button" id="loadTakafuji">高藤</button>
+                <button type="button" id="loadSuzuki">鈴木</button>
+                <button type="button" class="file-btn" id="openFileBtn" title=".html を開く（別ブラウザで保存したファイルにも）">ファイルから開く</button>
+                <input type="file" id="fileIn" accept=".html,.htm,text/html" />
+                <button type="button" id="pasteFromClipboard" title="HTML をクリップボードから">貼り付け</button>
+            </div>
+
+            <div class="tb-group">
+                <span class="tb-title">出力</span>
+                <button type="button" class="primary" id="previewTab">プレビュー</button>
+                <button type="button" id="copy">コピー</button>
+                <button type="button" id="download" title="編集内容を .html ファイルに保存（別ブラウザ・他PCでも開けます）">ファイルに保存</button>
+                <button type="button" id="downloadProtected" title="暗号化HTMLを保存し、送付用パスワードとURLを表示">送付エクスポート</button>
+                <span class="grow"></span>
+                <button type="button" class="ghost" id="draftClear">下書き削除</button>
+                <button type="button" class="ghost" id="recoverSample">高藤でリセット</button>
+            </div>
+
+            <div class="pw-out-box" id="pwOutBox" hidden>
+                <p class="pw-out-heading">送付エクスポート — 宛先へ伝える情報</p>
+                <p class="pw-out-label">送付用パスワード（6 桁・英数字／HTML とは別経路で伝えてください）</p>
+                <div class="pw-out-row">
+                    <input type="text" class="pw-out-field" id="pwOut" readonly autocomplete="off" spellcheck="false" aria-label="送付用パスワード" />
+                    <button type="button" id="pwCopy">クリップボードにコピー</button>
+                    <button type="button" class="ghost" id="pwOutClear" title="画面から消す（ファイルの暗号化は変わりません）">表示を消す</button>
+                </div>
+                <p class="pw-out-hint">自動生成時は可能ならパスワードのコピーも実行済みです。ブロックされた場合は「クリップボードにコピー」から再実行してください。</p>
+                <div class="pw-out-gap">
+                    <div class="pw-out-url-section" id="deliveryUrlSection">
+                        <p class="pw-out-label">送付用 URL</p>
+                        <p class="pw-out-hint" style="margin:0 0 8px;"><strong>http(s)</strong> では完了時に <code>/api/monthly-protected-upload</code> へ送り、<strong>宛先がブラウザで開く公開 URL</strong> を入れます（ページ表示用。ファイル専用のダウンロード URL ではありません）。開くと<strong>先にパスワード入力</strong>が出て、正しいとレポート本文が表示されます。失敗時は欄を空にし、画面下の緑メッセージに手順が出ます。URL に <code>?download=1</code> を付けないでください（保存ダイアログになります）。</p>
+                        <div class="pw-out-row">
+                            <input type="text" class="pw-out-field pw-out-url-field" id="deliveryUrlOut" autocomplete="off" spellcheck="false" aria-label="送付用URL" placeholder="ここに URL が表示されます（エクスポート完了後）" />
+                            <button type="button" id="urlCopy">URL をコピー</button>
+                            <button type="button" class="ghost" id="deliveryUrlOpen" title="送付用 URL を新しいタブで開きます">ブラウザで開く</button>
+                        </div>
+                        <p class="pw-out-hint">自動発行に成功したときだけ URL が入ります。手動で配るときは、ダウンロードしたファイルを <code>docs/samples/monthly-reports/tools/</code> に置いたうえで、その http URL を入力してください。</p>
+                    </div>
+                    <div class="pw-out-row pw-out-gap">
+                        <button type="button" id="copyDeliveryPair">パスワード＋URL をまとめてコピー</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="status-row">
+                <span class="draft-pill" id="draftPill" aria-live="polite">下書き: —</span>
+                <span class="meta-count" id="meta">— 文字</span>
+                <span style="opacity:.75;">このブラウザへの自動下書き 30秒 · 共有は<strong style="font-weight:600;color:#374151;">ファイルに保存</strong> · Ctrl+Z</span>
+            </div>
+            <p class="err" id="err"></p>
+            <p class="ok" id="ok"></p>
+
+            <details class="source-details" id="htmlDetails">
+                <summary>HTML を直接編集</summary>
+                <div class="source-inner">
+                    <div class="src-actions">
+                        <button type="button" id="pullFromFrame">画面 → ソース</button>
+                        <button type="button" id="pushToFrame">ソース → 画面</button>
+                    </div>
+                    <textarea id="source" spellcheck="false" placeholder="読み込み後に HTML が入ります"></textarea>
+                </div>
+            </details>
+        </div>
+    </div>
+
+    <script>
+(function () {
+    const frame = document.getElementById('editorFrame');
+    const source = document.getElementById('source');
+    const details = document.getElementById('htmlDetails');
+    const errEl = document.getElementById('err');
+    const okEl = document.getElementById('ok');
+    const metaEl = document.getElementById('meta');
+    const draftPill = document.getElementById('draftPill');
+    const pwOutBox = document.getElementById('pwOutBox');
+    const pwOut = document.getElementById('pwOut');
+    const deliveryUrlOut = document.getElementById('deliveryUrlOut');
+    const STORAGE_KEY = 'ea_monthly_report_full_editor_draft_html_v4';
+    const STORAGE_META_KEY = 'ea_monthly_report_full_editor_draft_meta_v4';
+    const MANIFEST_REV_STORAGE_KEY = 'ea_monthly_report_manifest_revision_v1';
+    const AUTOSAVE_MS = 30000;
+    let monthlyManifestCache = null;
+
+    function getStoredManifestRevision() {
+        try { return localStorage.getItem(MANIFEST_REV_STORAGE_KEY) || ''; } catch (e0) { return ''; }
+    }
+    function setStoredManifestRevision(rev) {
+        try {
+            if (rev) localStorage.setItem(MANIFEST_REV_STORAGE_KEY, String(rev));
+        } catch (e0) {}
+    }
+
+    async function fetchMonthlyReportsManifest() {
+        if (monthlyManifestCache) return monthlyManifestCache;
+        var fallback = {
+            revision: 'fallback',
+            samples: {
+                takafuji: 'monthly_2026-04_takafuji_report.html',
+                suzuki: 'monthly_2026-04_suzuki_report.html'
+            }
+        };
+        if (isFileProtocol()) {
+            monthlyManifestCache = fallback;
+            return monthlyManifestCache;
+        }
+        try {
+            var meta = document.querySelector('meta[name="ea-monthly-reports-manifest"]');
+            var rel = (meta && meta.getAttribute('content')) ? String(meta.getAttribute('content')).trim() : '../reports-manifest.json';
+            var mu = new URL(rel, window.location.href);
+            mu.searchParams.set('_', String(Date.now()));
+            var res = await fetch(mu.href, { cache: 'no-store' });
+            if (!res.ok) throw new Error(String(res.status));
+            var data = await res.json();
+            if (!data || !data.samples || !data.samples.takafuji) throw new Error('invalid manifest');
+            monthlyManifestCache = data;
+        } catch (e1) {
+            monthlyManifestCache = fallback;
+        }
+        return monthlyManifestCache;
+    }
+
+    async function sampleReportUrl(key) {
+        var m = await fetchMonthlyReportsManifest();
+        var name = m.samples && m.samples[key];
+        if (!name) throw new Error('manifest samples.' + key);
+        return new URL(String(name), new URL('../', window.location.href)).href;
+    }
+
+    async function loadSampleReport(key) {
+        hideOk();
+        if (isFileProtocol()) {
+            showFileProtocolHelp();
+            return false;
+        }
+        try {
+            var url = await sampleReportUrl(key);
+            var ok = await loadUrl(url);
+            if (ok) {
+                var m = await fetchMonthlyReportsManifest();
+                if (m && m.revision) setStoredManifestRevision(m.revision);
+            }
+            return ok;
+        } catch (e2) {
+            showErr('サンプルの URL を解決できませんでした: ' + (e2.message || String(e2)));
+            return false;
+        }
+    }
+    try {
+        localStorage.removeItem('ea_monthly_report_full_editor_draft_html_v3');
+        localStorage.removeItem('ea_monthly_report_full_editor_draft_meta_v3');
+        localStorage.removeItem('ea_monthly_report_full_editor_draft_html_v2');
+        localStorage.removeItem('ea_monthly_report_full_editor_draft_meta_v2');
+        localStorage.removeItem('ea_monthly_report_full_editor_draft_html_v1');
+        localStorage.removeItem('ea_monthly_report_full_editor_draft_meta_v1');
+    } catch (e) {}
+    let lastPersisted = '';
+    let frameReady = false;
+
+    function showErr(msg) {
+        errEl.textContent = msg;
+        errEl.style.display = 'block';
+        okEl.style.display = 'none';
+    }
+    function hideErr() { errEl.style.display = 'none'; }
+    function showOk(msg) {
+        okEl.textContent = msg;
+        okEl.style.display = 'block';
+        hideErr();
+    }
+    function hideOk() { okEl.style.display = 'none'; }
+
+    function doctypeToString(d) {
+        if (!d) return '<!DOCTYPE html>\n';
+        let s = '<!DOCTYPE ' + d.name;
+        if (d.publicId) s += ' PUBLIC "' + d.publicId + '"';
+        else if (d.systemId) s += ' SYSTEM';
+        if (d.systemId) s += ' "' + d.systemId + '"';
+        return s + '>\n';
+    }
+
+    function getHtmlFromFrame() {
+        const doc = frame.contentDocument;
+        if (!doc || !doc.documentElement) return '';
+        return doctypeToString(doc.doctype) + doc.documentElement.outerHTML;
+    }
+
+    function syncFrameToSource(opts) {
+        opts = opts || {};
+        if (!frameReady) return false;
+        try {
+            var html = getHtmlFromFrame();
+            if (!html || html.length <= 20) {
+                if (opts.warn) showErr('枠内に読み取れる内容がありません。先に読み込んでください。');
+                return false;
+            }
+            if (!isPlausibleReportHtml(html)) {
+                if (opts.warn) {
+                    showErr('内容が空に近いためソースを更新しませんでした。「高藤でリセット」を試してください。');
+                }
+                return false;
+            }
+            source.value = html;
+            updateMeta();
+            return true;
+        } catch (e) {
+            if (opts.warn) showErr('取り込みに失敗しました。');
+            return false;
+        }
+    }
+
+    function enableDesignMode() {
+        try {
+            const doc = frame.contentDocument;
+            if (doc && doc.body) {
+                doc.designMode = 'on';
+                frameReady = true;
+            }
+        } catch (e) {}
+    }
+
+    function pushSourceToFrame() {
+        const html = source.value;
+        hideErr();
+        if (!html.trim()) {
+            frameReady = false;
+            frame.removeAttribute('srcdoc');
+            showErr('HTML が空です。');
+            return;
+        }
+        frameReady = false;
+        function onFrameReady() {
+            enableDesignMode();
+            frame.removeEventListener('load', onFrameReady);
+        }
+        frame.addEventListener('load', onFrameReady);
+        frame.srcdoc = html;
+        setTimeout(onFrameReady, 80);
+        setTimeout(onFrameReady, 400);
+    }
+
+    function updateMeta() {
+        metaEl.textContent = source.value.length.toLocaleString('ja-JP') + ' 文字';
+    }
+
+    function updateDraftStatus() {
+        if (!draftPill) return;
+        if (!localStorage.getItem(STORAGE_KEY)) {
+            draftPill.textContent = '下書き: なし';
+            draftPill.classList.remove('has-draft');
+            return;
+        }
+        try {
+            const meta = JSON.parse(localStorage.getItem(STORAGE_META_KEY) || '{}');
+            const t = meta.savedAt ? new Date(meta.savedAt) : null;
+            const kind = meta.kind === 'auto' ? '自動' : '手動';
+            draftPill.textContent = t
+                ? '下書き: ' + t.toLocaleString('ja-JP', { dateStyle: 'short', timeStyle: 'short' }) + '（' + kind + '）'
+                : '下書き: あり';
+            draftPill.classList.add('has-draft');
+        } catch (e) {
+            draftPill.textContent = '下書き: あり';
+            draftPill.classList.add('has-draft');
+        }
+    }
+
+    function persistDraft(opts) {
+        opts = opts || {};
+        syncFrameToSource();
+        var html = source.value;
+        if (!html.trim()) {
+            if (opts.showEmptyErr) showErr('保存する内容がありません。');
+            return false;
+        }
+        if (!isPlausibleReportHtml(html)) {
+            if (opts.auto) return false;
+            if (opts.showEmptyErr) showErr('内容が空に近いため保存できません。');
+            return false;
+        }
+        if (opts.skipIfUnchanged && html === lastPersisted) return false;
+        try {
+            localStorage.setItem(STORAGE_KEY, html);
+            localStorage.setItem(STORAGE_META_KEY, JSON.stringify({
+                savedAt: Date.now(),
+                kind: opts.auto ? 'auto' : 'manual'
+            }));
+            lastPersisted = html;
+            updateDraftStatus();
+            return true;
+        } catch (e) {
+            if (e && (e.name === 'QuotaExceededError' || e.code === 22)) {
+                showErr('保存容量不足です。下書きを削除するか、ファイルに保存してください。');
+            } else {
+                showErr('下書き保存に失敗: ' + (e.message || String(e)));
+            }
+            return false;
+        }
+    }
+
+    function markContentBaselineFromSource() {
+        lastPersisted = source.value;
+    }
+
+    function roughVisibleTextLen(html) {
+        try {
+            var s = String(html)
+                .replace(/<script[\s\S]*?<\/script>/gi, '')
+                .replace(/<style[\s\S]*?<\/style>/gi, '');
+            var text = s.replace(/<[^>]+>/g, ' ');
+            return text.replace(/\s+/g, ' ').trim().length;
+        } catch (e) {
+            return 0;
+        }
+    }
+
+    function isPlausibleReportHtml(html) {
+        if (!html || typeof html !== 'string') return false;
+        var h = html.trim();
+        if (h.length < 500) return false;
+        var low = h.toLowerCase();
+        if (low.indexOf('<body') === -1) return false;
+        if (roughVisibleTextLen(h) < 50) return false;
+        return true;
+    }
+
+    /** 送付用：管理者向けセクション・印刷案内・印刷ボタンを HTML から落とす（ソース欄は書き換えない） */
+    function stripInternalChromeForDelivery(html) {
+        if (!html || typeof html !== 'string') return html;
+        try {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(html, 'text/html');
+            if (!doc.body) return html;
+            if (doc.querySelector('parsererror')) return html;
+            doc.querySelectorAll('section.admin-only, section[aria-label="管理者向け注意"]').forEach(function (el) {
+                el.remove();
+            });
+            doc.querySelectorAll('button.print-btn').forEach(function (el) {
+                el.remove();
+            });
+            doc.body.querySelectorAll(':scope > p.no-print').forEach(function (el) {
+                var tx = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+                if (tx.indexOf('管理者向け') !== -1 || tx.indexOf('印刷プレビュー') !== -1) {
+                    el.remove();
+                }
+            });
+            return '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+        } catch (e0) {
+            return html;
+        }
+    }
+
+    function discardBrowserDraftKeys() {
+        try {
+            localStorage.removeItem(STORAGE_KEY);
+            localStorage.removeItem(STORAGE_META_KEY);
+        } catch (e) {}
+        lastPersisted = '';
+    }
+
+    function isFileProtocol() {
+        return location.protocol === 'file:';
+    }
+
+    function showFileProtocolHelp() {
+        showErr('file:// ではサンプルを取得できません。serve_project で http から開くか、「ファイル…」で HTML を選んでください。');
+    }
+
+    /** パスワード付きエクスポート（PBKDF2 + AES-GCM・単一 HTML 自己完結） */
+    var PBKDF2_ITERATIONS = 150000;
+
+    function u8ToB64(u8) {
+        var s = '';
+        var chunk = 8192;
+        for (var i = 0; i < u8.length; i += chunk) {
+            s += String.fromCharCode.apply(null, u8.subarray(i, Math.min(i + chunk, u8.length)));
+        }
+        return btoa(s);
+    }
+
+    function generateSecurePassword() {
+        var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var u = new Uint8Array(6);
+        crypto.getRandomValues(u);
+        var s = '';
+        for (var i = 0; i < 6; i++) s += chars[u[i] % chars.length];
+        return s;
+    }
+
+    function buildProtectedHtmlShell(payloadJson) {
+        var scr = '(function(){' + "'use strict';" + 'var P=' + payloadJson + ';' +
+            'function b64ToU8(s){var b=atob(String(s).replace(/-/g,"+").replace(/_/g,"/"));var u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u;}' +
+            'function $(id){return document.getElementById(id);}' +
+            'async function go(){' +
+            'var pw=$("pw").value;$("pe").textContent="";' +
+            'if(!pw){$("pe").textContent="パスワードを入力してください。";return;}' +
+            'if(!window.crypto||!window.crypto.subtle){$("pe").textContent="このブラウザは復号に対応していません。";return;}' +
+            'try{' +
+            'var enc=new TextEncoder();' +
+            'var salt=b64ToU8(P.salt);var iv=b64ToU8(P.iv);' +
+            'var keyMaterial=await crypto.subtle.importKey("raw",enc.encode(pw),"PBKDF2",false,["deriveKey"]);' +
+            'var key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:salt,iterations:P.iterations,hash:P.hash},keyMaterial,{name:"AES-GCM",length:256},false,["decrypt"]);' +
+            'var plainBuf=await crypto.subtle.decrypt({name:"AES-GCM",iv:iv},key,b64ToU8(P.ct));' +
+            'var plain=new TextDecoder().decode(plainBuf);' +
+            'var blob=new Blob([plain],{type:"text/html;charset=utf-8"});' +
+            'var url=URL.createObjectURL(blob);' +
+            'location.replace(url);' +
+            '}catch(e){$("pe").textContent="パスワードが違うか、ファイルが壊れています。";}' +
+            '}' +
+            '$("pf").addEventListener("submit",function(e){e.preventDefault();go();});' +
+            '})();';
+        return '<!DOCTYPE html>\n<html lang="ja">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>保護されたレポート</title>\n</head>\n<body>\n' +
+            '<div id="gate" style="font-family:system-ui,-apple-system,sans-serif;max-width:380px;margin:4rem auto;padding:1.5rem;border:1px solid #c5cdd8;border-radius:10px;background:#fafbfd;box-shadow:0 2px 8px rgba(0,0,0,.06);">\n' +
+            '<p style="margin:0 0 1rem;font-size:0.95rem;color:#2c3e50;line-height:1.5;">月次レポートはパスワードで保護されています。<br><span style="font-size:0.8rem;color:#64748b;">別途お伝えしたパスワードを入力してください。</span></p>\n' +
+            '<form id="pf">\n<label for="pw" style="display:block;font-size:0.78rem;font-weight:600;color:#475569;margin-bottom:6px;">パスワード</label>\n' +
+            '<input type="password" id="pw" autocomplete="current-password" required style="width:100%;padding:10px 12px;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:6px;font-size:1rem;" />\n' +
+            '<p id="pe" style="color:#c0392b;font-size:0.82rem;margin:10px 0 0;min-height:1.3em;"></p>\n' +
+            '<button type="submit" style="margin-top:14px;width:100%;padding:11px;cursor:pointer;border:none;border-radius:6px;background:#2c3e50;color:#fff;font-size:0.95rem;font-weight:600;">レポートを表示</button>\n' +
+            '</form></div>\n<script>' + scr + '<\/script>\n</body>\n</html>';
+    }
+
+    async function encryptReportToPayload(plainText, password) {
+        var enc = new TextEncoder();
+        var salt = crypto.getRandomValues(new Uint8Array(16));
+        var iv = crypto.getRandomValues(new Uint8Array(12));
+        var keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+        var key = await crypto.subtle.deriveKey(
+            { name: 'PBKDF2', salt: salt, iterations: PBKDF2_ITERATIONS, hash: 'SHA-256' },
+            keyMaterial,
+            { name: 'AES-GCM', length: 256 },
+            false,
+            ['encrypt']
+        );
+        var ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, key, enc.encode(plainText));
+        return {
+            v: 1,
+            kdf: 'PBKDF2',
+            iterations: PBKDF2_ITERATIONS,
+            hash: 'SHA-256',
+            salt: u8ToB64(salt),
+            iv: u8ToB64(iv),
+            ct: u8ToB64(new Uint8Array(ct))
+        };
+    }
+
+    function hidePasswordOutput() {
+        if (!pwOut || !pwOutBox) return;
+        pwOut.value = '';
+        if (deliveryUrlOut) deliveryUrlOut.value = '';
+        pwOutBox.hidden = true;
+    }
+
+    function scrollPwOutBoxIntoView(preferUrlSection) {
+        if (!pwOutBox || pwOutBox.hidden) return;
+        requestAnimationFrame(function () {
+            try {
+                var target = preferUrlSection ? document.getElementById('deliveryUrlSection') : null;
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    pwOutBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            } catch (e) {}
+        });
+    }
+
+    async function revealPasswordOutput(password, tryAutoCopy) {
+        pwOut.value = password;
+        pwOutBox.hidden = false;
+        scrollPwOutBoxIntoView(false);
+        try {
+            pwOut.focus();
+            pwOut.select();
+        } catch (e) {}
+        if (tryAutoCopy) {
+            try {
+                await navigator.clipboard.writeText(password);
+                showOk('送付用パスワードを表示し、コピーしました。暗号化 HTML の保存が終わると送付用 URL も下に表示されます。');
+                return;
+            } catch (e0) {}
+        }
+        showOk('送付用パスワードを表示しました。「クリップボードにコピー」または保存後の「まとめてコピー」で共有できます。暗号化 HTML の保存完了後に URL も表示されます。');
+    }
+
+    function getProtectedUploadEndpoint() {
+        try {
+            var m = document.querySelector('meta[name="ea-monthly-protected-upload"]');
+            var c = m && m.getAttribute('content');
+            if (c && String(c).trim()) return String(c).trim();
+        } catch (e0) {}
+        try {
+            var ls = localStorage.getItem('ea_monthly_protected_upload_url');
+            if (ls && String(ls).trim()) return String(ls).trim();
+        } catch (e1) {}
+        try {
+            var u = new URL(location.href);
+            if (u.protocol === 'http:' || u.protocol === 'https:') {
+                return u.origin + '/api/monthly-protected-upload';
+            }
+        } catch (e2) {}
+        return '';
+    }
+
+    async function postProtectedHtmlForPublicUrl(htmlBody, filenameHint) {
+        var ep = getProtectedUploadEndpoint();
+        if (!ep) return { url: '', uploadAttempted: false };
+        try {
+            var res = await fetch(ep, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/html; charset=utf-8',
+                    'X-MR-Original-Name': encodeURIComponent(filenameHint || 'monthly_report_protected.html')
+                },
+                body: htmlBody
+            });
+            var j = null;
+            try {
+                j = await res.json();
+            } catch (eJ) {
+                j = null;
+            }
+            if (!res.ok) {
+                return {
+                    url: '',
+                    uploadAttempted: true,
+                    status: res.status,
+                    detail: (j && j.error) ? String(j.error) : ''
+                };
+            }
+            if (j && j.ok === false && j.error) {
+                return { url: '', uploadAttempted: true, status: res.status, detail: String(j.error) };
+            }
+            var u = (j && j.url) ? String(j.url) : '';
+            return { url: u, uploadAttempted: true };
+        } catch (e) {
+            return {
+                url: '',
+                uploadAttempted: true,
+                error: (e && e.message) ? e.message : String(e)
+            };
+        }
+    }
+
+    async function exportPasswordProtected() {
+        hideOk();
+        hidePasswordOutput();
+        syncFrameToSource();
+        var html = source.value;
+        if (!html.trim()) {
+            showErr('HTML が空です。');
+            return;
+        }
+        if (!isPlausibleReportHtml(html)) {
+            showErr('レポートとして成立する HTML を読み込んでから実行してください。');
+            return;
+        }
+        if (!window.crypto || !window.crypto.subtle) {
+            showErr('このブラウザは Web Crypto（暗号化）に対応していません。');
+            return;
+        }
+        var useGen = window.confirm('推奨：6桁の英数字パスワードを自動生成し、画面に表示してクリップボードへコピーします。\n\n「キャンセル」＝自分で6桁の英数字を設定します。');
+        var password;
+        var pwd6 = /^[A-Za-z0-9]{6}$/;
+        if (useGen) {
+            password = generateSecurePassword();
+            await revealPasswordOutput(password, true);
+        } else {
+            password = window.prompt('パスワード（6桁の英数字: A–Z a–z 0–9）');
+            if (password === null) return;
+            password = String(password);
+            if (!pwd6.test(password)) {
+                showErr('6桁の英数字（A–Z a–z 0–9）で入力してください。');
+                return;
+            }
+            var p2 = window.prompt('確認のためもう一度入力（6桁の英数字）');
+            if (p2 === null) return;
+            if (password !== String(p2)) {
+                showErr('パスワードが一致しません。');
+                return;
+            }
+            await revealPasswordOutput(password, true);
+        }
+        try {
+            html = stripInternalChromeForDelivery(html);
+            var payload = await encryptReportToPayload(html, password);
+            var wrapped = buildProtectedHtmlShell(JSON.stringify(payload));
+            var base = window.prompt('保存するファイル名', 'monthly_report_protected.html');
+            if (!base) return;
+            base = base.replace(/[/\\?%*:|"<>]/g, '_');
+            if (!/\.html?$/i.test(base)) base += '.html';
+            var blob = new Blob([wrapped], { type: 'text/html;charset=utf-8' });
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = base;
+            a.click();
+            URL.revokeObjectURL(a.href);
+            var fileNameOnly = base.replace(/^.*[/\\]/, '') || base;
+            var up = await postProtectedHtmlForPublicUrl(wrapped, fileNameOnly);
+            var deliveryUrl = up.url || '';
+            if (deliveryUrlOut) {
+                deliveryUrlOut.value = deliveryUrl;
+                try {
+                    deliveryUrlOut.focus();
+                } catch (e2) {}
+            }
+            scrollPwOutBoxIntoView(true);
+            if (up.url) {
+                showOk('送付エクスポートが完了しました。送付用 URL を自動発行しました。パスワードは別経路で伝えてください。');
+            } else if (up.uploadAttempted) {
+                var why = up.status ? ('HTTP ' + up.status) : (up.error || '通信エラー');
+                if (up.detail) why += ' — ' + up.detail;
+                var hint501 =
+                    up.status === 501
+                        ? ' **HTTP 501** は `python -m http.server` など **POST 非対応**の配信だと出ます。必ず **プロジェクトルート** で `python scripts/serve_project.py`（既定 8765）を使い、古いターミナルは止めてから起動し直してください。'
+                        : '';
+                showOk(
+                    '暗号化 HTML のダウンロードは完了しました。送付用 URL の自動発行に失敗しました（' + why + '）。' +
+                    hint501 +
+                    'ローカル（正しいサーバのとき）: `serve_project.py` を最新にして再起動。' +
+                    '手動公開: ダウンロードした「' + fileNameOnly + '」を `docs/samples/monthly-reports/tools/` に置くと、' +
+                    'http://127.0.0.1:（ポート）/docs/samples/monthly-reports/tools/' + fileNameOnly + ' で開けます。' +
+                    'Vercel: Blob 連携と BLOB_READ_WRITE_TOKEN を確認してください。'
+                );
+            } else {
+                showOk(
+                    '暗号化 HTML のダウンロードは完了しました。`file://` で開いているため自動 URL を発行できません。' +
+                    '`serve_project.py` の http から開き直すか、ホスト先の URL を送付用欄に入力してください。'
+                );
+            }
+        } catch (e) {
+            showErr('暗号化に失敗しました: ' + ((e && e.message) || String(e)));
+        }
+    }
+
+    source.addEventListener('input', updateMeta);
+
+    function openPreviewInNewTab() {
+        hideOk();
+        syncFrameToSource();
+        const html = source.value;
+        if (!html.trim()) {
+            showErr('HTML が空です。');
+            return;
+        }
+        hideErr();
+        const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const w = window.open(url, '_blank', 'noopener,noreferrer');
+        if (!w) {
+            URL.revokeObjectURL(url);
+            showErr('ポップアップがブロックされました。');
+            return;
+        }
+        setTimeout(function () { URL.revokeObjectURL(url); }, 120000);
+        showOk('プレビューを開きました。');
+    }
+
+    document.getElementById('previewTab').addEventListener('click', openPreviewInNewTab);
+
+    document.getElementById('pushToFrame').addEventListener('click', function () {
+        hideOk();
+        pushSourceToFrame();
+        showOk('画面に反映しました。');
+    });
+
+    document.getElementById('pullFromFrame').addEventListener('click', function () {
+        hideOk();
+        if (syncFrameToSource({ warn: true })) showOk('ソースに反映しました。');
+    });
+
+    function getEditorDoc() {
+        if (!frameReady) return null;
+        return frame.contentDocument || null;
+    }
+
+    function getSelectedCell() {
+        const doc = getEditorDoc();
+        if (!doc) return null;
+        const sel = doc.getSelection();
+        if (!sel || !sel.anchorNode) return null;
+        let n = sel.anchorNode;
+        if (n.nodeType === 3) n = n.parentElement;
+        if (!n) return null;
+        while (n && n !== doc.documentElement) {
+            if (n.nodeName === 'TD' || n.nodeName === 'TH') return n;
+            n = n.parentElement;
+        }
+        return null;
+    }
+
+    function decorateNewLinkFromSelection(doc) {
+        try {
+            const sel = doc.getSelection();
+            if (!sel || !sel.focusNode) return;
+            let n = sel.focusNode;
+            if (n.nodeType === 3) n = n.parentElement;
+            const link = n && n.closest && n.closest('a');
+            if (link) {
+                link.setAttribute('target', '_blank');
+                link.setAttribute('rel', 'noopener noreferrer');
+            }
+        } catch (e) {}
+    }
+
+    function applyHyperlink() {
+        hideOk();
+        const doc = getEditorDoc();
+        if (!doc || !doc.body) {
+            showErr('先に枠内をクリックし、レポートを表示してください。');
+            return;
+        }
+        try { if (frame.contentWindow) frame.contentWindow.focus(); } catch (e0) {}
+        const sel = doc.getSelection();
+        if (!sel || !sel.rangeCount || sel.isCollapsed) {
+            showErr('枠内で文字を選択してから「リンク付与」を押してください。');
+            return;
+        }
+        const url = window.prompt('URL（https://…）', 'https://');
+        if (url === null) return;
+        const u = String(url).trim();
+        if (!u) {
+            showErr('URL が空です。');
+            return;
+        }
+        try {
+            const cmdOk = doc.execCommand('createLink', false, u);
+            if (!cmdOk) {
+                showErr('ブラウザがリンク設定を拒否しました。下部の HTML から直接編集してください。');
+                return;
+            }
+        } catch (e1) {
+            showErr('リンク設定に失敗しました。');
+            return;
+        }
+        decorateNewLinkFromSelection(doc);
+        if (!syncFrameToSource()) {
+            showErr('リンクは付けましたがソースへの取り込みに失敗しました。');
+            return;
+        }
+        showOk('リンクを設定しました。');
+    }
+
+    function removeHyperlink() {
+        hideOk();
+        const doc = getEditorDoc();
+        if (!doc || !doc.body) {
+            showErr('先に枠内をクリックしてください。');
+            return;
+        }
+        try { if (frame.contentWindow) frame.contentWindow.focus(); } catch (e0) {}
+        const sel = doc.getSelection();
+        if (!sel || !sel.rangeCount) {
+            showErr('範囲を選択してください。');
+            return;
+        }
+        try {
+            doc.execCommand('unlink', false, null);
+        } catch (e1) {
+            showErr('リンク解除に失敗しました。');
+            return;
+        }
+        if (!syncFrameToSource()) {
+            showErr('ソースへの取り込みに失敗しました。');
+            return;
+        }
+        showOk('リンクを外しました。');
+    }
+
+    function insertEmojiInTextarea(ta, text) {
+        const start = ta.selectionStart;
+        const end = ta.selectionEnd;
+        const v = ta.value;
+        ta.value = v.slice(0, start) + text + v.slice(end);
+        const pos = start + text.length;
+        ta.selectionStart = ta.selectionEnd = pos;
+        try { ta.focus(); } catch (e0) {}
+        updateMeta();
+    }
+
+    function insertEmojiInFrameDocument(doc, win, text) {
+        try {
+            if (doc.execCommand('insertText', false, text)) return true;
+        } catch (e0) {}
+        try { win.focus(); } catch (e1) {}
+        const sel = win.getSelection();
+        if (!sel) return false;
+        if (sel.rangeCount === 0) {
+            try {
+                const range = doc.createRange();
+                range.selectNodeContents(doc.body);
+                range.collapse(false);
+                sel.addRange(range);
+            } catch (e2) {
+                return false;
+            }
+        }
+        const r = sel.getRangeAt(0);
+        r.deleteContents();
+        const tn = doc.createTextNode(text);
+        r.insertNode(tn);
+        r.setStartAfter(tn);
+        r.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(r);
+        return true;
+    }
+
+    function insertEmojiSymbol(emoji) {
+        hideOk();
+        const ch = String(emoji || '').trim();
+        if (!ch) return;
+        const graftMax = 16;
+        const slice = ch.length > graftMax ? ch.slice(0, graftMax) : ch;
+        if (document.activeElement === source) {
+            insertEmojiInTextarea(source, slice);
+            showOk('ソースに挿入しました。「ソース → 画面」で枠に反映できます。');
+            return;
+        }
+        const doc = getEditorDoc();
+        if (!doc || !doc.body) {
+            showErr('枠内をクリックするか、下部の HTML ソースを開いてからカーソルを置いてください。');
+            return;
+        }
+        try { frame.contentWindow.focus(); } catch (e0) {}
+        if (!insertEmojiInFrameDocument(doc, frame.contentWindow, slice)) {
+            showErr('挿入に失敗しました。HTML ソースから直接入力するか、別ブラウザでお試しください。');
+            return;
+        }
+        if (!syncFrameToSource()) {
+            showErr('挿入しましたがソースへの取り込みに失敗しました。');
+            return;
+        }
+        showOk('絵文字を挿入しました。');
+    }
+
+    function removeSection05() {
+        const doc = getEditorDoc();
+        if (!doc) {
+            showErr('先にレポートを読み込んでください。');
+            return;
+        }
+        const sections = doc.querySelectorAll('section.section');
+        for (let i = 0; i < sections.length; i++) {
+            const sec = sections[i];
+            const num = sec.querySelector('.sec-num');
+            if (num && num.textContent.replace(/\s/g, '') === '05') {
+                sec.remove();
+                if (!syncFrameToSource()) {
+                    showErr('削除しましたがソース取り込みに失敗しました。');
+                    return;
+                }
+                showOk('05 セクションを削除しました。');
+                return;
+            }
+        }
+        showErr('「05」のセクションが見つかりません。');
+    }
+
+    function colCountConsistent(table) {
+        if (!table.rows.length) return false;
+        const n = table.rows[0].cells.length;
+        if (n < 1) return false;
+        for (let r = 0; r < table.rows.length; r++) {
+            if (table.rows[r].cells.length !== n) return false;
+            for (let c = 0; c < table.rows[r].cells.length; c++) {
+                const cell = table.rows[r].cells[c];
+                if (cell.colSpan > 1 || cell.rowSpan > 1) return false;
+            }
+        }
+        return true;
+    }
+
+    function tableRowAdd() {
+        const doc = getEditorDoc();
+        const cell = getSelectedCell();
+        if (!cell || !doc) {
+            showErr('表のセルを選んでから操作してください。');
+            return;
+        }
+        const tr = cell.closest('tr');
+        if (!tr || tr.parentElement.tagName !== 'TBODY') {
+            showErr('tbody 内のセルを選んでください。');
+            return;
+        }
+        const newTr = doc.createElement('tr');
+        for (let i = 0; i < tr.cells.length; i++) {
+            const td = doc.createElement('td');
+            td.textContent = '—';
+            newTr.appendChild(td);
+        }
+        tr.parentNode.insertBefore(newTr, tr.nextSibling);
+        if (!syncFrameToSource()) showErr('行は追加しましたが取り込みに失敗しました。');
+        else showOk('行を追加しました。');
+    }
+
+    function tableRowDel() {
+        const doc = getEditorDoc();
+        const cell = getSelectedCell();
+        if (!cell || !doc) {
+            showErr('表のセルを選んでください。');
+            return;
+        }
+        const tr = cell.closest('tr');
+        if (!tr || tr.parentElement.tagName !== 'TBODY') {
+            showErr('tbody 内の行を選んでください。');
+            return;
+        }
+        const tbody = tr.parentElement;
+        if (tbody.rows.length <= 1) {
+            showErr('最後の1行は削除できません。');
+            return;
+        }
+        tr.remove();
+        if (!syncFrameToSource()) showErr('取り込みに失敗しました。');
+        else showOk('行を削除しました。');
+    }
+
+    function tableColAdd() {
+        const doc = getEditorDoc();
+        const cell = getSelectedCell();
+        if (!cell || !doc) {
+            showErr('表のセルを選んでください。');
+            return;
+        }
+        const table = cell.closest('table');
+        if (!table) return;
+        if (!colCountConsistent(table)) {
+            showErr('列数が不揃い・結合セルがある表には未対応です。');
+            return;
+        }
+        const idx = cell.cellIndex;
+        for (let r = 0; r < table.rows.length; r++) {
+            const row = table.rows[r];
+            const inThead = row.parentElement && row.parentElement.tagName === 'THEAD';
+            const tag = inThead ? 'th' : 'td';
+            const c = doc.createElement(tag);
+            c.textContent = inThead ? '（列）' : '—';
+            const refCell = row.cells[idx];
+            if (refCell && refCell.nextSibling) row.insertBefore(c, refCell.nextSibling);
+            else row.appendChild(c);
+        }
+        if (!syncFrameToSource()) showErr('取り込みに失敗しました。');
+        else showOk('列を追加しました。');
+    }
+
+    function tableColDel() {
+        const doc = getEditorDoc();
+        const cell = getSelectedCell();
+        if (!cell || !doc) {
+            showErr('表のセルを選んでください。');
+            return;
+        }
+        const table = cell.closest('table');
+        if (!table) return;
+        if (!colCountConsistent(table)) {
+            showErr('列数が不揃い・結合セルがある表には未対応です。');
+            return;
+        }
+        const idx = cell.cellIndex;
+        if (table.rows[0].cells.length <= 1) {
+            showErr('列が1つだけの表は削除できません。');
+            return;
+        }
+        for (let r = 0; r < table.rows.length; r++) {
+            const row = table.rows[r];
+            if (row.cells[idx]) row.cells[idx].remove();
+        }
+        if (!syncFrameToSource()) showErr('取り込みに失敗しました。');
+        else showOk('列を削除しました。');
+    }
+
+    document.getElementById('removeSec05').addEventListener('click', removeSection05);
+    document.getElementById('linkApply').addEventListener('click', applyHyperlink);
+    document.getElementById('linkRemove').addEventListener('click', removeHyperlink);
+    var emojiToolbar = document.querySelector('.emoji-toolbar');
+    if (emojiToolbar) {
+        emojiToolbar.addEventListener('click', function (ev) {
+            var btn = ev.target.closest('[data-emoji]');
+            if (!btn) return;
+            ev.preventDefault();
+            insertEmojiSymbol(btn.getAttribute('data-emoji'));
+        });
+    }
+    document.getElementById('emojiCustom').addEventListener('click', function () {
+        var s = window.prompt('挿入する絵文字や記号（短い文字列）', '🙂');
+        if (s === null) return;
+        s = String(s).trim();
+        if (!s) return;
+        insertEmojiSymbol(s);
+    });
+    document.getElementById('tblRowAdd').addEventListener('click', tableRowAdd);
+    document.getElementById('tblRowDel').addEventListener('click', tableRowDel);
+    document.getElementById('tblColAdd').addEventListener('click', tableColAdd);
+    document.getElementById('tblColDel').addEventListener('click', tableColDel);
+
+    async function loadUrl(url) {
+        hideOk();
+        if (isFileProtocol()) {
+            showFileProtocolHelp();
+            return false;
+        }
+        try {
+            const res = await fetch(url, { cache: 'no-store' });
+            if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
+            const text = await res.text();
+            discardBrowserDraftKeys();
+            source.value = text;
+            updateMeta();
+            hideErr();
+            pushSourceToFrame();
+            showOk('読み込みました。');
+            markContentBaselineFromSource();
+            updateDraftStatus();
+            return true;
+        } catch (e) {
+            showErr('読み込み失敗: ' + (e.message || String(e)));
+            return false;
+        }
+    }
+
+    async function openHtmlFromFile() {
+        hideOk();
+        if (typeof window.showOpenFilePicker === 'function') {
+            try {
+                var handles = await window.showOpenFilePicker({
+                    types: [{
+                        description: 'HTML',
+                        accept: { 'text/html': ['.html', '.htm'] }
+                    }],
+                    multiple: false
+                });
+                var file = await handles[0].getFile();
+                var text = await file.text();
+                source.value = String(text);
+                updateMeta();
+                hideErr();
+                pushSourceToFrame();
+                showOk('ファイルから開きました。');
+                markContentBaselineFromSource();
+                updateDraftStatus();
+                return;
+            } catch (e) {
+                if (e && e.name === 'AbortError') return;
+            }
+        }
+        document.getElementById('fileIn').click();
+    }
+
+    async function saveHtmlToFile() {
+        hideOk();
+        syncFrameToSource();
+        var html = source.value;
+        if (!html.trim()) {
+            showErr('HTML が空です。');
+            return;
+        }
+        if (!isPlausibleReportHtml(html)) {
+            showErr('レポートとして成立する HTML を保存してください。');
+            return;
+        }
+        if (typeof window.showSaveFilePicker === 'function') {
+            try {
+                var handle = await window.showSaveFilePicker({
+                    suggestedName: 'monthly_report_edited.html',
+                    types: [{
+                        description: 'HTML',
+                        accept: { 'text/html': ['.html', '.htm'] }
+                    }]
+                });
+                var writable = await handle.createWritable();
+                await writable.write(new Blob([html], { type: 'text/html;charset=utf-8' }));
+                await writable.close();
+                hideErr();
+                persistDraft({ auto: false, skipIfUnchanged: false });
+                showOk('ファイルに保存しました。別ブラウザでは「ファイルから開く」でこのファイルを選んでください。');
+                return;
+            } catch (e) {
+                if (e && e.name === 'AbortError') return;
+            }
+        }
+        var name = window.prompt('ファイル名', 'monthly_report_edited.html');
+        if (!name) return;
+        var safe = name.replace(/[/\\?%*:|"<>]/g, '_');
+        if (!/\.html?$/i.test(safe)) safe += '.html';
+        var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = safe;
+        a.click();
+        URL.revokeObjectURL(a.href);
+        hideErr();
+        persistDraft({ auto: false, skipIfUnchanged: false });
+        showOk('ダウンロードを開始しました。別ブラウザでは保存した .html を「ファイルから開く」で選んでください。');
+    }
+
+    async function bootstrap() {
+        updateDraftStatus();
+        const manifest = await fetchMonthlyReportsManifest();
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved && saved.trim().length > 20) {
+            if (!isPlausibleReportHtml(saved)) {
+                discardBrowserDraftKeys();
+                updateDraftStatus();
+                hideErr();
+                var reloadedBad = await loadSampleReport('takafuji');
+                if (reloadedBad) showOk('壊れた下書きを破棄し、高藤を読み込みました。');
+                return;
+            }
+            var mRev = manifest && manifest.revision ? String(manifest.revision) : '';
+            var storedRev = getStoredManifestRevision();
+            hideOk();
+            source.value = saved;
+            updateMeta();
+            hideErr();
+            lastPersisted = saved;
+            pushSourceToFrame();
+            if (mRev && storedRev && mRev !== storedRev) {
+                showOk('ブラウザの下書きを表示しています。**リポジトリの正本が更新されています**（マニフェスト revision: ' + mRev + '）。最新 HTML を読むには「高藤」または「鈴木」をクリックするか、「下書き削除」後にサンプルを開き直してください。');
+            } else {
+                showOk('下書きを復元しました。');
+            }
+            updateDraftStatus();
+            return;
+        }
+        await loadSampleReport('takafuji');
+    }
+
+    document.getElementById('loadTakafuji').addEventListener('click', function () {
+        loadSampleReport('takafuji');
+    });
+    document.getElementById('loadSuzuki').addEventListener('click', function () {
+        loadSampleReport('suzuki');
+    });
+
+    document.getElementById('pasteFromClipboard').addEventListener('click', async function () {
+        hideOk();
+        try {
+            const text = await navigator.clipboard.readText();
+            if (!text || !String(text).trim()) {
+                showErr('クリップボードが空です。');
+                return;
+            }
+            source.value = String(text);
+            updateMeta();
+            hideErr();
+            pushSourceToFrame();
+            showOk('貼り付けて反映しました。');
+            markContentBaselineFromSource();
+            updateDraftStatus();
+        } catch (e) {
+            showErr('クリップボードを読めませんでした（https 接続・権限を確認）。');
+        }
+    });
+
+    document.getElementById('openFileBtn').addEventListener('click', function () {
+        openHtmlFromFile();
+    });
+
+    document.getElementById('fileIn').addEventListener('change', function (ev) {
+        const f = ev.target.files && ev.target.files[0];
+        ev.target.value = '';
+        if (!f) return;
+        const reader = new FileReader();
+        reader.onload = function () {
+            source.value = String(reader.result || '');
+            updateMeta();
+            hideErr();
+            pushSourceToFrame();
+            showOk('ファイルから開きました。');
+            markContentBaselineFromSource();
+            updateDraftStatus();
+        };
+        reader.onerror = function () { showErr('ファイルを読めませんでした。'); };
+        reader.readAsText(f, 'UTF-8');
+    });
+
+    document.getElementById('copy').addEventListener('click', async function () {
+        hideOk();
+        syncFrameToSource();
+        try {
+            await navigator.clipboard.writeText(source.value);
+            showOk('コピーしました。');
+        } catch (e) {
+            showErr('コピーに失敗しました。HTML ソースを手動選択してください。');
+        }
+    });
+
+    document.getElementById('download').addEventListener('click', function () {
+        saveHtmlToFile();
+    });
+
+    document.getElementById('downloadProtected').addEventListener('click', function () {
+        exportPasswordProtected();
+    });
+
+    document.getElementById('pwCopy').addEventListener('click', async function () {
+        if (!pwOut.value) return;
+        hideErr();
+        try {
+            await navigator.clipboard.writeText(pwOut.value);
+            showOk('パスワードをコピーしました。');
+        } catch (e) {
+            showErr('コピーに失敗しました。欄内を手動で選択してコピーしてください。');
+        }
+    });
+    document.getElementById('pwOutClear').addEventListener('click', function () {
+        hidePasswordOutput();
+    });
+    document.getElementById('urlCopy').addEventListener('click', async function () {
+        var u = (deliveryUrlOut && deliveryUrlOut.value) ? deliveryUrlOut.value.trim() : '';
+        if (!u) {
+            showErr('送付用 URL が空です。アップロード後の URL を入力するか、http(s) でエディタを開いて送付エクスポートしてください。');
+            return;
+        }
+        hideErr();
+        try {
+            await navigator.clipboard.writeText(u);
+            showOk('送付用 URL をコピーしました。');
+        } catch (e) {
+            showErr('コピーに失敗しました。欄内を手動で選択してコピーしてください。');
+        }
+    });
+    document.getElementById('deliveryUrlOpen').addEventListener('click', function () {
+        var u = (deliveryUrlOut && deliveryUrlOut.value) ? deliveryUrlOut.value.trim() : '';
+        if (!u) {
+            showErr('送付用 URL が空です。');
+            return;
+        }
+        if (!/^https?:\/\//i.test(u)) {
+            showErr('開けるのは http(s) の URL だけです。');
+            return;
+        }
+        hideErr();
+        var w = window.open(u, '_blank', 'noopener,noreferrer');
+        if (!w) {
+            showErr('ポップアップがブロックされました。ブラウザで許可するか、URL をアドレスバーに貼り付けて開いてください。');
+            return;
+        }
+        showOk('送付用 URL を新しいタブで開きました。');
+    });
+    document.getElementById('copyDeliveryPair').addEventListener('click', async function () {
+        var p = (pwOut && pwOut.value) ? pwOut.value : '';
+        if (!p) {
+            showErr('先に送付エクスポートを実行してください。');
+            return;
+        }
+        var u = (deliveryUrlOut && deliveryUrlOut.value) ? deliveryUrlOut.value.trim() : '';
+        var text = 'パスワード: ' + p + '\nURL: ' + (u || '（アップロード後に設定）');
+        hideErr();
+        try {
+            await navigator.clipboard.writeText(text);
+            showOk('パスワードと URL をまとめてコピーしました。');
+        } catch (e) {
+            showErr('コピーに失敗しました。各欄を手動で選択してコピーしてください。');
+        }
+    });
+
+    document.getElementById('draftClear').addEventListener('click', function () {
+        hideOk();
+        if (!localStorage.getItem(STORAGE_KEY)) {
+            showOk('下書きはありません。');
+            updateDraftStatus();
+            return;
+        }
+        if (!window.confirm('ブラウザに保存した下書きを削除しますか？（画面の内容は変わりません）')) return;
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(STORAGE_META_KEY);
+        syncFrameToSource();
+        markContentBaselineFromSource();
+        showOk('下書きを削除しました。');
+        updateDraftStatus();
+    });
+
+    document.getElementById('recoverSample').addEventListener('click', async function () {
+        hideOk();
+        if (!window.confirm('下書きを消して高藤サンプルから読み直しますか？')) return;
+        discardBrowserDraftKeys();
+        source.value = '';
+        updateMeta();
+        frameReady = false;
+        try { frame.removeAttribute('srcdoc'); } catch (e) {}
+        updateDraftStatus();
+        hideErr();
+        await loadSampleReport('takafuji');
+        showOk('リセットしました。');
+    });
+
+    setInterval(function () {
+        persistDraft({ auto: true, skipIfUnchanged: true });
+    }, AUTOSAVE_MS);
+
+    bootstrap();
+})();
+    </script>
+</body>
+</html>

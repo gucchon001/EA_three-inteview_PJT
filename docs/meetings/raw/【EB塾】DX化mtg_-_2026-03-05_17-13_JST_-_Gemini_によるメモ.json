@@ -1,0 +1,3916 @@
+{
+  "body": {
+    "content": [
+      {
+        "endIndex": 1,
+        "sectionBreak": {
+          "sectionStyle": {
+            "columnSeparatorStyle": "NONE",
+            "contentDirection": "LEFT_TO_RIGHT",
+            "sectionType": "CONTINUOUS"
+          }
+        }
+      },
+      {
+        "endIndex": 3,
+        "paragraph": {
+          "elements": [
+            {
+              "dateElement": {
+                "dateElementProperties": {
+                  "dateFormat": "DATE_FORMAT_MONTH_DAY_YEAR_ABBREVIATED",
+                  "displayText": "2026年3月5日",
+                  "locale": "ja-JP",
+                  "timeFormat": "TIME_FORMAT_DISABLED",
+                  "timestamp": "2026-03-05T17:13:31.822089Z"
+                },
+                "dateId": "kix.r8zfidbrxrkg",
+                "textStyle": {
+                  "backgroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 1,
+                        "green": 0.91764706,
+                        "red": 0.8392157
+                      }
+                    }
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.43529412,
+                        "green": 0.18039216,
+                        "red": 0.023529412
+                      }
+                    }
+                  }
+                }
+              },
+              "endIndex": 2,
+              "startIndex": 1
+            },
+            {
+              "endIndex": 3,
+              "startIndex": 2,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "backgroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 1,
+                        "green": 0.91764706,
+                        "red": 0.8392157
+                      }
+                    }
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.43529412,
+                        "green": 0.18039216,
+                        "red": 0.023529412
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1
+      },
+      {
+        "endIndex": 15,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 15,
+              "startIndex": 3,
+              "textRun": {
+                "content": "【EB塾】DX化mtg\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "headingId": "h.j2b0fr5sehq9",
+            "namedStyleType": "HEADING_2"
+          }
+        },
+        "startIndex": 3
+      },
+      {
+        "endIndex": 24,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 20,
+              "startIndex": 15,
+              "textRun": {
+                "content": "招待済み ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 21,
+              "person": {
+                "personId": "kix.bu89pbuylqsm",
+                "personProperties": {
+                  "email": "y-haraguchi@tomonokai-corp.com",
+                  "name": "原口陽一郎"
+                },
+                "textStyle": {}
+              },
+              "startIndex": 20
+            },
+            {
+              "endIndex": 22,
+              "startIndex": 21,
+              "textRun": {
+                "content": " ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 23,
+              "person": {
+                "personId": "kix.j3i8drnetny1",
+                "personProperties": {
+                  "email": "y-motoyama@tomonokai-corp.com",
+                  "name": "元山由美子"
+                },
+                "textStyle": {}
+              },
+              "startIndex": 22
+            },
+            {
+              "endIndex": 24,
+              "startIndex": 23,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 15
+      },
+      {
+        "endIndex": 34,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 31,
+              "startIndex": 24,
+              "textRun": {
+                "content": "添付ファイル ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 32,
+              "richLink": {
+                "richLinkId": "kix.zgaytag8datl",
+                "richLinkProperties": {
+                  "title": "【EB塾】DX化mtg",
+                  "uri": "https://www.google.com/calendar/event?eid=N2xxZDlsbDRnOXBlNjc0bXNiMm9sdTcxbm8geS1tb3RveWFtYUB0b21vbm9rYWktY29ycC5jb20"
+                },
+                "textStyle": {}
+              },
+              "startIndex": 31
+            },
+            {
+              "endIndex": 34,
+              "startIndex": 32,
+              "textRun": {
+                "content": " \n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 24
+      },
+      {
+        "endIndex": 43,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 40,
+              "startIndex": 34,
+              "textRun": {
+                "content": "会議の録画 ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 41,
+              "richLink": {
+                "richLinkId": "kix.io2hwmhf5kyx",
+                "richLinkProperties": {
+                  "mimeType": "application/vnd.google-apps.document",
+                  "title": "文字起こし",
+                  "uri": "?tab=t.qzfwejrhh9i"
+                },
+                "textStyle": {}
+              },
+              "startIndex": 40
+            },
+            {
+              "endIndex": 43,
+              "startIndex": 41,
+              "textRun": {
+                "content": " \n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 34
+      },
+      {
+        "endIndex": 44,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 44,
+              "startIndex": 43,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 43
+      },
+      {
+        "endIndex": 48,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 48,
+              "startIndex": 44,
+              "textRun": {
+                "content": "まとめ\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "headingId": "h.rk2oi67nkvug",
+            "namedStyleType": "HEADING_3"
+          }
+        },
+        "startIndex": 44
+      },
+      {
+        "endIndex": 525,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 120,
+              "startIndex": 48,
+              "textRun": {
+                "content": "教師管理システムの強化と指導報告書の合流が議論され、請求単価の上昇や指導の実行担保に関する課題が中心となり、開発スコープが決定されました。\u000b\u000b",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 134,
+              "startIndex": 120,
+              "textRun": {
+                "content": "教師管理システムと報告書統合",
+                "textStyle": {
+                  "bold": true,
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 244,
+              "startIndex": 134,
+              "textRun": {
+                "content": "\u000b教師管理システムの強化が検討されており、教材や研修動画の機能追加、指導報告書の文字起こし機能との統合の可能性が説明されました。指導の実行担保が現在の管理のずさんさから収益増加に繋がる可能性が高いと認識されています。\u000b\u000b",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 258,
+              "startIndex": 244,
+              "textRun": {
+                "content": "指導報告書とデータ連携の課題",
+                "textStyle": {
+                  "bold": true,
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 398,
+              "startIndex": 258,
+              "textRun": {
+                "content": "\u000b指導報告のデータは、毎月の請求書作成時に手動でファイルメーカーに取り込まれており、月末に処理が集中するという非効率なプロセスが確認されました。このプロセスを効率化するため、拡張機能を利用した指導報告書からのダウンロードとスプレッドシートへのID取得の自動化が提案されました。\u000b\u000b",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 412,
+              "startIndex": 398,
+              "textRun": {
+                "content": "システム構築とスコープの決定",
+                "textStyle": {
+                  "bold": true,
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 525,
+              "startIndex": 412,
+              "textRun": {
+                "content": "\u000b生徒の全体スケジュール管理の必要性が認識され、指導の文字起こしを活用した教師向け管理ページ構築が望ましいとされました。開発スコープは、社内管理システムと教師向け管理システムに絞り、進捗把握を容易にすることが決定されました。\n",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 48
+      },
+      {
+        "endIndex": 526,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 526,
+              "startIndex": 525,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 525
+      },
+      {
+        "endIndex": 554,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 537,
+              "startIndex": 526,
+              "textRun": {
+                "content": "この要約を評価する: ",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 542,
+              "startIndex": 537,
+              "textRun": {
+                "content": "役に立った",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "url": "https://google.qualtrics.com/jfe/form/SV_4YkxrBAaiTVqYCi?isGoogler=false&isHelpful=true"
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 547,
+              "startIndex": 542,
+              "textRun": {
+                "content": " または ",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 553,
+              "startIndex": 547,
+              "textRun": {
+                "content": "役に立たない",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "url": "https://google.qualtrics.com/jfe/form/SV_4YkxrBAaiTVqYCi?isGoogler=false&isHelpful=false"
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 554,
+              "startIndex": 553,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 526
+      },
+      {
+        "endIndex": 556,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 556,
+              "startIndex": 554,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 554
+      },
+      {
+        "endIndex": 559,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 559,
+              "startIndex": 556,
+              "textRun": {
+                "content": "詳細\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "headingId": "h.8jzuapgc9ob",
+            "namedStyleType": "HEADING_3"
+          }
+        },
+        "startIndex": 556
+      },
+      {
+        "endIndex": 771,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.68g3h93kqoj8",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 560,
+              "startIndex": 559,
+              "textRun": {
+                "content": "",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 580,
+              "startIndex": 560,
+              "textRun": {
+                "content": "教師管理システムの強化と指導報告書の合流",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 661,
+              "startIndex": 580,
+              "textRun": {
+                "content": ": 原口陽一郎は、高さんが教師管理の強化に取り組んでおり、教材や研修動画のアップロード、視聴管理、テスト結果の共有といった機能追加を検討していることを説明した (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 669,
+              "startIndex": 661,
+              "textRun": {
+                "content": "00:00:00",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.ta0327dtff46",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 760,
+              "startIndex": 669,
+              "textRun": {
+                "content": ")。このシステムは、指導報告などの文字起こしを蓄積し、指導報告書として提出できるようにする機能を持つ可能性があり、藤井さんが手動で行っている指導報告書の管理と合流する可能性がある (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 768,
+              "startIndex": 760,
+              "textRun": {
+                "content": "00:02:12",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.ito6aupa9dwq",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 771,
+              "startIndex": 768,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 559
+      },
+      {
+        "endIndex": 925,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.68g3h93kqoj8",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 781,
+              "startIndex": 771,
+              "textRun": {
+                "content": "請求単価と実行の担保",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 848,
+              "startIndex": 781,
+              "textRun": {
+                "content": ": 単価を上げるという目的は、1時間あたりの請求単価を上げること、指導時間を増やすこと、そして指導の実行を担保することの3点がある (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 856,
+              "startIndex": 848,
+              "textRun": {
+                "content": "00:04:00",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.3wqsl2scxerw",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 914,
+              "startIndex": 856,
+              "textRun": {
+                "content": ")。特に、指導の「実行の担保」が、現在の管理のずさんさから考えると、収益増加に繋がる可能性が高いと認識されている (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 922,
+              "startIndex": 914,
+              "textRun": {
+                "content": "00:05:41",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.sxr3mbhg6h7g",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 925,
+              "startIndex": 922,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 771
+      },
+      {
+        "endIndex": 1085,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.68g3h93kqoj8",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 937,
+              "startIndex": 925,
+              "textRun": {
+                "content": "代行手段の確保と優先順位",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 1074,
+              "startIndex": 937,
+              "textRun": {
+                "content": ": 指導が実施されない主な問題は、オペレーションコストの増加と、教室の都合による指導不能、特に代行手段がないことにある。最優先事項は、代行可能な教師の確保であり、教師が増えれば、特定の週に指導できない教師の代わりに誰かに入ってもらうという運用が可能になると考えられている (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1082,
+              "startIndex": 1074,
+              "textRun": {
+                "content": "00:05:41",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.sxr3mbhg6h7g",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1085,
+              "startIndex": 1082,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 925
+      },
+      {
+        "endIndex": 1322,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.68g3h93kqoj8",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 1099,
+              "startIndex": 1085,
+              "textRun": {
+                "content": "指導報告書の管理とデータ連携",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 1138,
+              "startIndex": 1099,
+              "textRun": {
+                "content": ": 指導報告書は、教師が提出し、それによって指導の実行状況が管理されている (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1146,
+              "startIndex": 1138,
+              "textRun": {
+                "content": "00:04:00",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.3wqsl2scxerw",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1216,
+              "startIndex": 1146,
+              "textRun": {
+                "content": ")。指導報告のデータは、毎月の請求書作成時に担当者がダウンロードし、ファイルメーカーに手動で取り込んでいるため、処理は月末に集中している (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1224,
+              "startIndex": 1216,
+              "textRun": {
+                "content": "00:07:23",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.4uk7azn5hknr",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1311,
+              "startIndex": 1224,
+              "textRun": {
+                "content": ")。このプロセスを効率化するため、拡張機能を利用して、指導報告書からのダウンロードとスプレッドシートへの必要なIDの取得を自動化し、指導管理の効率化を図る方向性が示された (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1319,
+              "startIndex": 1311,
+              "textRun": {
+                "content": "00:11:17",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.9ps6wemubtgi",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1322,
+              "startIndex": 1319,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 1085
+      },
+      {
+        "endIndex": 1518,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.68g3h93kqoj8",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 1332,
+              "startIndex": 1322,
+              "textRun": {
+                "content": "指導報告の内容と目的",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 1421,
+              "startIndex": 1332,
+              "textRun": {
+                "content": ": 指導報告には、毎回の授業後に出す報告と、月1回の報告の2種類がある。授業後の報告は、保護者へのタイムリーな進捗報告と安心感を提供し、進捗確認と問題の早期発見に役立っている (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1429,
+              "startIndex": 1421,
+              "textRun": {
+                "content": "00:12:47",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.ooh4y7e81y00",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1507,
+              "startIndex": 1429,
+              "textRun": {
+                "content": ")。しかし、この指導報告書だけでは、指導がどれだけうまくいっているかを詳細に把握するのは難しく、主に指導の回数と時間の担保に役立っていると認識されている (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1515,
+              "startIndex": 1507,
+              "textRun": {
+                "content": "00:14:45",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.nv02hkdq4vju",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1518,
+              "startIndex": 1515,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 1322
+      },
+      {
+        "endIndex": 1657,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.68g3h93kqoj8",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 1531,
+              "startIndex": 1518,
+              "textRun": {
+                "content": "指導の文字起こしと情報共有",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 1646,
+              "startIndex": 1531,
+              "textRun": {
+                "content": ": 指導内容を文字起こしする主な目的は、進捗を把握することと、顧客に対する追加提案の機会を得るためである。文字起こしにより、授業計画と実績を詳細に比較し、生徒のパフォーマンスに基づいて具体的な次の一手を計画することが可能になる (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1654,
+              "startIndex": 1646,
+              "textRun": {
+                "content": "00:16:14",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.fdli15u984g",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1657,
+              "startIndex": 1654,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 1518
+      },
+      {
+        "endIndex": 1847,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.68g3h93kqoj8",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 1670,
+              "startIndex": 1657,
+              "textRun": {
+                "content": "生徒の全体スケジュール管理",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 1771,
+              "startIndex": 1670,
+              "textRun": {
+                "content": ": 科目ごとの指導計画だけでなく、IB生が抱えるレポート課題や出願準備なども含めた、生徒の全体スケジュールを一元管理できる計画（WBSやマイルストーンのようなもの）が必要であるという課題が提起された (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1779,
+              "startIndex": 1771,
+              "textRun": {
+                "content": "00:18:04",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.gbwfzmm7god0",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1836,
+              "startIndex": 1779,
+              "textRun": {
+                "content": ")。生徒の主要な目標は学校のテストの結果にあり、そこに向けて具体的な点数目標を設定することが重要だとされている (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1844,
+              "startIndex": 1836,
+              "textRun": {
+                "content": "00:19:53",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.elnqlhfkzb6",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1847,
+              "startIndex": 1844,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 1657
+      },
+      {
+        "endIndex": 2033,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.68g3h93kqoj8",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 1866,
+              "startIndex": 1847,
+              "textRun": {
+                "content": "教師管理システムの構築とスコープの決定",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 1941,
+              "startIndex": 1866,
+              "textRun": {
+                "content": ": 現在の指導報告書の管理が非効率であるため、指導の文字起こしを活用し、教師向けの管理ページを構築して情報の一元化と把握を可能にすることが望ましい (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1949,
+              "startIndex": 1941,
+              "textRun": {
+                "content": "00:23:25",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.eftn51bvqhkw",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2022,
+              "startIndex": 1949,
+              "textRun": {
+                "content": ")。開発のスコープは、まずは社内管理システムと教師向けの管理システムに絞り、藤井さんなどが進捗を把握しやすい状態を作ることを優先すると決定した (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2030,
+              "startIndex": 2022,
+              "textRun": {
+                "content": "00:26:47",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.ngmy11fta1ql",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2033,
+              "startIndex": 2030,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 1847
+      },
+      {
+        "endIndex": 2230,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.68g3h93kqoj8",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 2057,
+              "startIndex": 2033,
+              "textRun": {
+                "content": "IB生を対象としたコミュニティと採用支援の可能性",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 2219,
+              "startIndex": 2057,
+              "textRun": {
+                "content": ": 質の高い教師供給を促進するため、IB生向けの就職活動支援コミュニティを構築する可能性について議論された。IB生はSPI試験などで苦労することが多く、IB教育への理解が不足している日本の文化を理解した上で優秀な人材が多い「IBの常項」の採用支援をすることで、エリバルがIBコミュニティの中心的な存在になれる可能性がある (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2227,
+              "startIndex": 2219,
+              "textRun": {
+                "content": "00:37:56",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.1ftmlfj6gf6",
+                      "tabId": "t.qzfwejrhh9i"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2230,
+              "startIndex": 2227,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2033
+      },
+      {
+        "endIndex": 2232,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 2232,
+              "startIndex": 2230,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2230
+      },
+      {
+        "endIndex": 2244,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 2244,
+              "startIndex": 2232,
+              "textRun": {
+                "content": "推奨される次のステップ\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "headingId": "h.fq9dlwl4x407",
+            "namedStyleType": "HEADING_3"
+          }
+        },
+        "startIndex": 2232
+      },
+      {
+        "endIndex": 2305,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.1pn4f0kr90rq",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 2305,
+              "startIndex": 2244,
+              "textRun": {
+                "content": "[原口陽一郎] 拡張機能試作: ダウンロード自動化機能の拡張機能を試作する。スプレッドシートから必要なIDを取得する。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 4,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2244
+      },
+      {
+        "endIndex": 2353,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.1pn4f0kr90rq",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 2353,
+              "startIndex": 2305,
+              "textRun": {
+                "content": "[原口陽一郎] 開発範囲確定: 文字起こし開発のスコープを絞り込む。システムの開発に着手する。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 4,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2305
+      },
+      {
+        "endIndex": 2408,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.1pn4f0kr90rq",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 2408,
+              "startIndex": 2353,
+              "textRun": {
+                "content": "[元山さん] 生徒情報提供: 現在の生徒管理データを提供する。ファイルメーカー、生徒ID、科目リストを含む。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 4,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2353
+      },
+      {
+        "endIndex": 2454,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.1pn4f0kr90rq",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 2454,
+              "startIndex": 2408,
+              "textRun": {
+                "content": "[池田] 会計修正管理: 12月の100万および1月の300万の計上漏れの管理を対応する。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 4,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2408
+      },
+      {
+        "endIndex": 2503,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.1pn4f0kr90rq",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 2503,
+              "startIndex": 2454,
+              "textRun": {
+                "content": "[原口陽一郎] 藤井氏に依頼: 藤井氏に教師ミーティングデータと提案メールを共有するよう伝える。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 4,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2454
+      },
+      {
+        "endIndex": 2546,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.1pn4f0kr90rq",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 2546,
+              "startIndex": 2503,
+              "textRun": {
+                "content": "[元山さん] IBチーム調査: IBチームメンバーに対し簡単なアンケートを実施する。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 4,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2503
+      },
+      {
+        "endIndex": 2548,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 2548,
+              "startIndex": 2546,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 4,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2546
+      },
+      {
+        "endIndex": 2602,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 2577,
+              "startIndex": 2548,
+              "textRun": {
+                "content": "Gemini のメモの内容が正確か確認する必要があります。",
+                "textStyle": {
+                  "backgroundColor": {},
+                  "baselineOffset": "NONE",
+                  "bold": false,
+                  "fontSize": {
+                    "magnitude": 12,
+                    "unit": "PT"
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.45882353,
+                        "green": 0.46666667,
+                        "red": 0.45490196
+                      }
+                    }
+                  },
+                  "italic": true,
+                  "smallCaps": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "weightedFontFamily": {
+                    "fontFamily": "Roboto",
+                    "weight": 400
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 2578,
+              "startIndex": 2577,
+              "textRun": {
+                "content": " ",
+                "textStyle": {
+                  "backgroundColor": {},
+                  "baselineOffset": "NONE",
+                  "bold": false,
+                  "fontSize": {
+                    "magnitude": 12,
+                    "unit": "PT"
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.45882353,
+                        "green": 0.46666667,
+                        "red": 0.45490196
+                      }
+                    }
+                  },
+                  "italic": true,
+                  "link": {
+                    "url": "https://support.google.com/meet/answer/14754931"
+                  },
+                  "smallCaps": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "weightedFontFamily": {
+                    "fontFamily": "Roboto",
+                    "weight": 400
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 2601,
+              "startIndex": 2578,
+              "textRun": {
+                "content": "Gemini がメモを取る方法のヒントや仕組み",
+                "textStyle": {
+                  "backgroundColor": {},
+                  "baselineOffset": "NONE",
+                  "bold": false,
+                  "fontSize": {
+                    "magnitude": 12,
+                    "unit": "PT"
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "italic": true,
+                  "link": {
+                    "url": "https://support.google.com/meet/answer/14754931"
+                  },
+                  "smallCaps": false,
+                  "strikethrough": false,
+                  "underline": true,
+                  "weightedFontFamily": {
+                    "fontFamily": "Roboto",
+                    "weight": 400
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 2602,
+              "startIndex": 2601,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "backgroundColor": {},
+                  "baselineOffset": "NONE",
+                  "bold": false,
+                  "fontSize": {
+                    "magnitude": 12,
+                    "unit": "PT"
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "italic": true,
+                  "smallCaps": false,
+                  "strikethrough": false,
+                  "underline": true,
+                  "weightedFontFamily": {
+                    "fontFamily": "Roboto",
+                    "weight": 400
+                  }
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 2548
+      },
+      {
+        "endIndex": 2642,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 2631,
+              "startIndex": 2602,
+              "textRun": {
+                "content": "Gemini を使用したメモの作成に関するフィードバックを",
+                "textStyle": {
+                  "backgroundColor": {},
+                  "baselineOffset": "NONE",
+                  "bold": false,
+                  "fontSize": {
+                    "magnitude": 12,
+                    "unit": "PT"
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.45882353,
+                        "green": 0.46666667,
+                        "red": 0.45490196
+                      }
+                    }
+                  },
+                  "italic": true,
+                  "smallCaps": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "weightedFontFamily": {
+                    "fontFamily": "Roboto",
+                    "weight": 400
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 2632,
+              "startIndex": 2631,
+              "textRun": {
+                "content": " ",
+                "textStyle": {
+                  "backgroundColor": {},
+                  "baselineOffset": "NONE",
+                  "bold": false,
+                  "fontSize": {
+                    "magnitude": 12,
+                    "unit": "PT"
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.45882353,
+                        "green": 0.46666667,
+                        "red": 0.45490196
+                      }
+                    }
+                  },
+                  "italic": true,
+                  "link": {
+                    "url": "https://google.qualtrics.com/jfe/form/SV_9vK3UZEaIQKKE7A?confid=1a42iefp51xiIjvh9_WVDxIQOAIIigIgABgECA&detailid=standard"
+                  },
+                  "smallCaps": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "weightedFontFamily": {
+                    "fontFamily": "Roboto",
+                    "weight": 400
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 2641,
+              "startIndex": 2632,
+              "textRun": {
+                "content": "簡単なアンケート。",
+                "textStyle": {
+                  "backgroundColor": {},
+                  "baselineOffset": "NONE",
+                  "bold": false,
+                  "fontSize": {
+                    "magnitude": 12,
+                    "unit": "PT"
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "italic": true,
+                  "link": {
+                    "url": "https://google.qualtrics.com/jfe/form/SV_9vK3UZEaIQKKE7A?confid=1a42iefp51xiIjvh9_WVDxIQOAIIigIgABgECA&detailid=standard"
+                  },
+                  "smallCaps": false,
+                  "strikethrough": false,
+                  "underline": true,
+                  "weightedFontFamily": {
+                    "fontFamily": "Roboto",
+                    "weight": 400
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 2642,
+              "startIndex": 2641,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 2602
+      }
+    ]
+  },
+  "documentId": "1-c7197pNzqsgqUcoLoTU9vLkQ66MWYEXceydf0t9Ch8",
+  "documentStyle": {
+    "background": {
+      "color": {
+        "color": {
+          "rgbColor": {
+            "blue": 1,
+            "green": 1,
+            "red": 1
+          }
+        }
+      }
+    },
+    "documentFormat": {
+      "documentMode": "PAGELESS"
+    },
+    "marginBottom": {
+      "magnitude": 56.69291338582678,
+      "unit": "PT"
+    },
+    "marginFooter": {
+      "magnitude": 36,
+      "unit": "PT"
+    },
+    "marginHeader": {
+      "magnitude": 36,
+      "unit": "PT"
+    },
+    "marginLeft": {
+      "magnitude": 85.03937007874016,
+      "unit": "PT"
+    },
+    "marginRight": {
+      "magnitude": 85.03937007874016,
+      "unit": "PT"
+    },
+    "marginTop": {
+      "magnitude": 85.03937007874016,
+      "unit": "PT"
+    },
+    "pageNumberStart": 1,
+    "pageSize": {
+      "height": {
+        "magnitude": 841.8897637795277,
+        "unit": "PT"
+      },
+      "width": {
+        "magnitude": 595.2755905511812,
+        "unit": "PT"
+      }
+    },
+    "useCustomHeaderFooterMargins": true
+  },
+  "lists": {
+    "kix.1pn4f0kr90rq": {
+      "listProperties": {
+        "nestingLevels": [
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%0",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%1",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 54,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 72,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%2",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 90,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 108,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%3",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 126,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 144,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%4",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 162,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 180,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%5",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 198,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 216,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%6",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 234,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 252,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%7",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 270,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 288,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%8",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 306,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 324,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          }
+        ]
+      }
+    },
+    "kix.522ugssseg5j": {
+      "listProperties": {
+        "nestingLevels": [
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 54,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 72,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 90,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 108,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 126,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 144,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 162,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 180,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 198,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 216,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 234,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 252,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 270,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 288,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 306,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 324,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          }
+        ]
+      }
+    },
+    "kix.63h8wtwrpe5": {
+      "listProperties": {
+        "nestingLevels": [
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 54,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 72,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 90,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 108,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 126,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 144,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 162,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 180,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 198,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 216,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 234,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 252,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 270,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 288,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 306,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 324,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          }
+        ]
+      }
+    },
+    "kix.68g3h93kqoj8": {
+      "listProperties": {
+        "nestingLevels": [
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%0",
+            "glyphSymbol": "●",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%1",
+            "glyphSymbol": "○",
+            "indentFirstLine": {
+              "magnitude": 54,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 72,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%2",
+            "glyphSymbol": "■",
+            "indentFirstLine": {
+              "magnitude": 90,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 108,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%3",
+            "glyphSymbol": "●",
+            "indentFirstLine": {
+              "magnitude": 126,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 144,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%4",
+            "glyphSymbol": "○",
+            "indentFirstLine": {
+              "magnitude": 162,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 180,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%5",
+            "glyphSymbol": "■",
+            "indentFirstLine": {
+              "magnitude": 198,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 216,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%6",
+            "glyphSymbol": "●",
+            "indentFirstLine": {
+              "magnitude": 234,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 252,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%7",
+            "glyphSymbol": "○",
+            "indentFirstLine": {
+              "magnitude": 270,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 288,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%8",
+            "glyphSymbol": "■",
+            "indentFirstLine": {
+              "magnitude": 306,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 324,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "namedRanges": {
+    "tnfm_content_actionitems": {
+      "name": "tnfm_content_actionitems",
+      "namedRanges": [
+        {
+          "name": "tnfm_content_actionitems",
+          "namedRangeId": "kix.lgr1etyzo7hx",
+          "ranges": [
+            {
+              "endIndex": 2547,
+              "startIndex": 2244
+            }
+          ]
+        }
+      ]
+    },
+    "tnfm_content_details": {
+      "name": "tnfm_content_details",
+      "namedRanges": [
+        {
+          "name": "tnfm_content_details",
+          "namedRangeId": "kix.a9hc5gh64xy6",
+          "ranges": [
+            {
+              "endIndex": 2231,
+              "startIndex": 559
+            }
+          ]
+        }
+      ]
+    },
+    "tnfm_content_summary": {
+      "name": "tnfm_content_summary",
+      "namedRanges": [
+        {
+          "name": "tnfm_content_summary",
+          "namedRangeId": "kix.lf59w9vklg26",
+          "ranges": [
+            {
+              "endIndex": 555,
+              "startIndex": 48
+            }
+          ]
+        }
+      ]
+    },
+    "tnfm_survey_Srsv8ics90iSFTCbiEB0UeTQsn3X": {
+      "name": "tnfm_survey_Srsv8ics90iSFTCbiEB0UeTQsn3X",
+      "namedRanges": [
+        {
+          "name": "tnfm_survey_Srsv8ics90iSFTCbiEB0UeTQsn3X",
+          "namedRangeId": "kix.4po69uei7b67",
+          "ranges": [
+            {
+              "endIndex": 2,
+              "startIndex": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "namedStyles": {
+    "styles": [
+      {
+        "namedStyleType": "NORMAL_TEXT",
+        "paragraphStyle": {
+          "alignment": "START",
+          "avoidWidowAndOrphan": true,
+          "borderBetween": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderBottom": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderLeft": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderRight": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderTop": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "direction": "LEFT_TO_RIGHT",
+          "indentEnd": {
+            "unit": "PT"
+          },
+          "indentFirstLine": {
+            "unit": "PT"
+          },
+          "indentStart": {
+            "unit": "PT"
+          },
+          "keepLinesTogether": false,
+          "keepWithNext": false,
+          "lineSpacing": 115,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "shading": {
+            "backgroundColor": {}
+          },
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 4,
+            "unit": "PT"
+          },
+          "spacingMode": "COLLAPSE_LISTS"
+        },
+        "textStyle": {
+          "backgroundColor": {},
+          "baselineOffset": "NONE",
+          "bold": false,
+          "fontSize": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.1882353,
+                "green": 0.1882353,
+                "red": 0.1882353
+              }
+            }
+          },
+          "italic": false,
+          "smallCaps": false,
+          "strikethrough": false,
+          "underline": false,
+          "weightedFontFamily": {
+            "fontFamily": "Roboto",
+            "weight": 400
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_1",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "lineSpacing": 115,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 20,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 6,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 30,
+            "unit": "PT"
+          },
+          "weightedFontFamily": {
+            "fontFamily": "Roboto",
+            "weight": 500
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_2",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "lineSpacing": 115,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 16,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "bold": false,
+          "fontSize": {
+            "magnitude": 28,
+            "unit": "PT"
+          },
+          "weightedFontFamily": {
+            "fontFamily": "Roboto",
+            "weight": 500
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_3",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "lineSpacing": 115,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 2,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "bold": false,
+          "fontSize": {
+            "magnitude": 16,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.12156863,
+                "green": 0.12156863,
+                "red": 0.12156863
+              }
+            }
+          },
+          "weightedFontFamily": {
+            "fontFamily": "Roboto",
+            "weight": 500
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_4",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "lineSpacing": 115,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 4,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 8,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 14,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.2627451,
+                "green": 0.2627451,
+                "red": 0.2627451
+              }
+            }
+          },
+          "weightedFontFamily": {
+            "fontFamily": "Roboto",
+            "weight": 500
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_5",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "lineSpacing": 115,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 4,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.12156863,
+                "green": 0.12156863,
+                "red": 0.12156863
+              }
+            }
+          },
+          "weightedFontFamily": {
+            "fontFamily": "Roboto",
+            "weight": 500
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_6",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 4,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 11,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.4,
+                "green": 0.4,
+                "red": 0.4
+              }
+            }
+          },
+          "italic": true
+        }
+      },
+      {
+        "namedStyleType": "TITLE",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "lineSpacing": 115,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 3,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 32,
+            "unit": "PT"
+          },
+          "weightedFontFamily": {
+            "fontFamily": "Roboto",
+            "weight": 500
+          }
+        }
+      },
+      {
+        "namedStyleType": "SUBTITLE",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "lineSpacing": 115,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 16,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 24,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.12156863,
+                "green": 0.12156863,
+                "red": 0.12156863
+              }
+            }
+          },
+          "italic": false,
+          "weightedFontFamily": {
+            "fontFamily": "Roboto",
+            "weight": 400
+          }
+        }
+      }
+    ]
+  },
+  "revisionId": "AIxLkStitTyUB3nvOfoSeCW60F-kJyOL0_sMx71JCoRioB0NWO8sXE-1D0Qk8prBktaA7DFHApeLwpIOb9350eKGuF5JSY6zVeJiR6bIKh4",
+  "suggestionsViewMode": "SUGGESTIONS_INLINE",
+  "title": "【EB塾】DX化mtg - 2026/03/05 17:13 JST - Gemini によるメモ"
+}

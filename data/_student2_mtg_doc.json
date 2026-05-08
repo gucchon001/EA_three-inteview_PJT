@@ -1,0 +1,4303 @@
+{
+  "body": {
+    "content": [
+      {
+        "endIndex": 1,
+        "sectionBreak": {
+          "sectionStyle": {
+            "columnSeparatorStyle": "NONE",
+            "contentDirection": "LEFT_TO_RIGHT",
+            "sectionType": "CONTINUOUS"
+          }
+        }
+      },
+      {
+        "endIndex": 3,
+        "paragraph": {
+          "elements": [
+            {
+              "dateElement": {
+                "dateElementProperties": {
+                  "dateFormat": "DATE_FORMAT_MONTH_DAY_YEAR_ABBREVIATED",
+                  "displayText": "4月 17, 2026",
+                  "locale": "ja",
+                  "timeFormat": "TIME_FORMAT_DISABLED",
+                  "timestamp": "2026-04-17T09:56:22.070481Z"
+                },
+                "dateId": "kix.a7rd46pd8w8d",
+                "textStyle": {
+                  "backgroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 1,
+                        "green": 0.91764706,
+                        "red": 0.8392157
+                      }
+                    }
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.43529412,
+                        "green": 0.18039216,
+                        "red": 0.023529412
+                      }
+                    }
+                  }
+                }
+              },
+              "endIndex": 2,
+              "startIndex": 1
+            },
+            {
+              "endIndex": 3,
+              "startIndex": 2,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "backgroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 1,
+                        "green": 0.91764706,
+                        "red": 0.8392157
+                      }
+                    }
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.43529412,
+                        "green": 0.18039216,
+                        "red": 0.023529412
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1
+      },
+      {
+        "endIndex": 24,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 24,
+              "startIndex": 3,
+              "textRun": {
+                "content": "教師MTG (Wakana Ikeda)\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "headingId": "h.tynee5t6wx3",
+            "namedStyleType": "HEADING_2"
+          }
+        },
+        "startIndex": 3
+      },
+      {
+        "endIndex": 33,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 29,
+              "startIndex": 24,
+              "textRun": {
+                "content": "招待済み ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 30,
+              "person": {
+                "personId": "kix.t6voualk72bg",
+                "personProperties": {
+                  "email": "h-fujii@tomonokai-corp.com",
+                  "name": "藤井葉奈"
+                },
+                "textStyle": {}
+              },
+              "startIndex": 29
+            },
+            {
+              "endIndex": 31,
+              "startIndex": 30,
+              "textRun": {
+                "content": " ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 32,
+              "person": {
+                "personId": "kix.94vb0a5tctb",
+                "personProperties": {
+                  "email": "wakana.nyq25@gmail.com",
+                  "name": "wakana.nyq25@gmail.com"
+                },
+                "textStyle": {}
+              },
+              "startIndex": 31
+            },
+            {
+              "endIndex": 33,
+              "startIndex": 32,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 24
+      },
+      {
+        "endIndex": 42,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 40,
+              "startIndex": 33,
+              "textRun": {
+                "content": "添付ファイル ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 41,
+              "richLink": {
+                "richLinkId": "kix.c4k9a7rdmltb",
+                "richLinkProperties": {
+                  "title": "教師MTG (Wakana Ikeda)",
+                  "uri": "https://calendar.google.com/calendar/event?eid=YWFxMmt2czNic2tpcm41ZWw3b3NiOTFlbG8gaC1mdWppaUB0b21vbm9rYWktY29ycC5jb20"
+                },
+                "textStyle": {}
+              },
+              "startIndex": 40
+            },
+            {
+              "endIndex": 42,
+              "startIndex": 41,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 33
+      },
+      {
+        "endIndex": 51,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 48,
+              "startIndex": 42,
+              "textRun": {
+                "content": "会議の記録 ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 49,
+              "richLink": {
+                "richLinkId": "kix.rvszbf315w9j",
+                "richLinkProperties": {
+                  "mimeType": "application/vnd.google-apps.document",
+                  "title": "文字起こし",
+                  "uri": "https://docs.google.com/document/d/13biNdCru3hg9VIqUn20WMpNQHn6S_6XGRnIHcAFEStU/edit?usp=drive_web&tab=t.bva57gs8u9oh"
+                },
+                "textStyle": {}
+              },
+              "startIndex": 48
+            },
+            {
+              "endIndex": 50,
+              "startIndex": 49,
+              "textRun": {
+                "content": " ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 51,
+              "startIndex": 50,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.45882353,
+                        "green": 0.46666667,
+                        "red": 0.45490196
+                      }
+                    }
+                  },
+                  "italic": true
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 42
+      },
+      {
+        "endIndex": 52,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 52,
+              "startIndex": 51,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 51
+      },
+      {
+        "endIndex": 53,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 53,
+              "startIndex": 52,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 52
+      },
+      {
+        "endIndex": 56,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 55,
+              "startIndex": 53,
+              "textRun": {
+                "content": "概要",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 56,
+              "startIndex": 55,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.1882353,
+                        "green": 0.1882353,
+                        "red": 0.1882353
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "headingId": "h.ynw8p4nqnar9",
+            "namedStyleType": "HEADING_3"
+          }
+        },
+        "startIndex": 53
+      },
+      {
+        "endIndex": 358,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 100,
+              "startIndex": 56,
+              "textRun": {
+                "content": "学習計画の修正と業務報告の運用変更を通じ生徒の試験対策および運営体制を強化しました。\u000b\u000b",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 110,
+              "startIndex": 100,
+              "textRun": {
+                "content": "学習進捗と計画見直し",
+                "textStyle": {
+                  "bold": true,
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 192,
+              "startIndex": 110,
+              "textRun": {
+                "content": "\u000b生徒のテスト結果分析に基づきアルジェブラなどの基礎固めを優先する学習計画へ変更しました。過去問演習よりも各単元の基礎徹底を7月までの最優先事項と決定しました。\u000b\u000b",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 199,
+              "startIndex": 192,
+              "textRun": {
+                "content": "学習課題と対策",
+                "textStyle": {
+                  "bold": true,
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 276,
+              "startIndex": 199,
+              "textRun": {
+                "content": "\u000bケアレスミスや問題の読み間違いによる失点が共通課題として特定されました。計算手順の正確な理解と問題を最後まで解き切る自信の醸成を指導方針としました。\u000b\u000b",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 283,
+              "startIndex": 276,
+              "textRun": {
+                "content": "運営体制の確認",
+                "textStyle": {
+                  "bold": true,
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 358,
+              "startIndex": 283,
+              "textRun": {
+                "content": "\u000b業務報告のプロジェクト名と部門名が変更され新しい名称での運用が確認されました。指導体制に問題がないことを共有し試験に向けた指導継続を確認しました。\n",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 56
+      },
+      {
+        "endIndex": 359,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 359,
+              "startIndex": 358,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 358
+      },
+      {
+        "endIndex": 387,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 370,
+              "startIndex": 359,
+              "textRun": {
+                "content": "この要約を評価する: ",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 375,
+              "startIndex": 370,
+              "textRun": {
+                "content": "役に立った",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "url": "https://google.qualtrics.com/jfe/form/SV_4YkxrBAaiTVqYCi?isGoogler=false&isHelpful=true"
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 380,
+              "startIndex": 375,
+              "textRun": {
+                "content": " または ",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 386,
+              "startIndex": 380,
+              "textRun": {
+                "content": "役に立たない",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  },
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "url": "https://google.qualtrics.com/jfe/form/SV_4YkxrBAaiTVqYCi?isGoogler=false&isHelpful=false"
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 387,
+              "startIndex": 386,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 14,
+                    "unit": "PT"
+                  }
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 359
+      },
+      {
+        "endIndex": 388,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 388,
+              "startIndex": 387,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 387
+      },
+      {
+        "endIndex": 389,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 389,
+              "startIndex": 388,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 388
+      },
+      {
+        "endIndex": 396,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 395,
+              "startIndex": 389,
+              "textRun": {
+                "content": "次のステップ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 396,
+              "startIndex": 395,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.1882353,
+                        "green": 0.1882353,
+                        "red": 0.1882353
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "headingId": "h.m5icumjnvrqg",
+            "namedStyleType": "HEADING_3"
+          }
+        },
+        "startIndex": 389
+      },
+      {
+        "endIndex": 436,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.2efe014q1d28",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 436,
+              "startIndex": 396,
+              "textRun": {
+                "content": "[Wakana Ikeda] 進捗確認: 明日、生徒の週間学習内容を確認する。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 4,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 396
+      },
+      {
+        "endIndex": 490,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.2efe014q1d28",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 490,
+              "startIndex": 436,
+              "textRun": {
+                "content": "[Wakana Ikeda] 関数演習実行: 今週土曜日の授業でファンクションズに特化した練習問題を行う。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 4,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 436
+      },
+      {
+        "endIndex": 532,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.2efe014q1d28",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 532,
+              "startIndex": 490,
+              "textRun": {
+                "content": "[藤井葉奈] 計画表送付: 高藤さんの2パターンの学習計画をお母様とお父様に送る。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 4,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 490
+      },
+      {
+        "endIndex": 585,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.2efe014q1d28",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 585,
+              "startIndex": 532,
+              "textRun": {
+                "content": "[Wakana Ikeda] 中野さんの進捗確認: 中野さんの授業で、今後の単元とテスト日程を確認する。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 4,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 532
+      },
+      {
+        "endIndex": 634,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.2efe014q1d28",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 634,
+              "startIndex": 585,
+              "textRun": {
+                "content": "[Wakana Ikeda] 5月の計画固め: 5月に向けて中野さんの学習計画を更新し、固める。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 4,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 585
+      },
+      {
+        "endIndex": 715,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.2efe014q1d28",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 715,
+              "startIndex": 634,
+              "textRun": {
+                "content": "[Wakana Ikeda] 業務報告更新: 今月以降の業務報告には、新しい部門名PE グローバルとプロジェクト名プロダクトチーム 教師ミーティングを使用する。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 4,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 634
+      },
+      {
+        "endIndex": 716,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 716,
+              "startIndex": 715,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 715
+      },
+      {
+        "endIndex": 717,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 717,
+              "startIndex": 716,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 716
+      },
+      {
+        "endIndex": 720,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 720,
+              "startIndex": 717,
+              "textRun": {
+                "content": "詳細\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "headingId": "h.32mum1erexfn",
+            "namedStyleType": "HEADING_3",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 717
+      },
+      {
+        "endIndex": 897,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 734,
+              "startIndex": 720,
+              "textRun": {
+                "content": "高藤さんの学習進捗と懸念事項",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 794,
+              "startIndex": 734,
+              "textRun": {
+                "content": ": 高藤さんは学校が始まったばかりで授業にはまだ入っておらず、現時点ではスタッツには進んでいないことが確認されました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 802,
+              "startIndex": 794,
+              "textRun": {
+                "content": "00:00:00",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.leoe5n5vxzit",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 886,
+              "startIndex": 802,
+              "textRun": {
+                "content": ")。Wakana Ikedaさんは、学校の進捗に合わせて問題練習を宿題にする予定でしたが、高藤さん本人からの要望でスタッツの練習問題が宿題として出されている状況です (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 894,
+              "startIndex": 886,
+              "textRun": {
+                "content": "00:02:45",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.vyho9z6um5df",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 897,
+              "startIndex": 894,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 720
+      },
+      {
+        "endIndex": 1048,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 914,
+              "startIndex": 897,
+              "textRun": {
+                "content": "高藤さんの学習状況と三者面談の影響",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 1037,
+              "startIndex": 914,
+              "textRun": {
+                "content": ": 高藤さんがスタッツの練習問題を要望した背景には、三者面談が影響している可能性があると藤井葉奈さんは推測しています。Wakana Ikedaさんは、高藤さんがまだIBへの意識が低い時期であると感じており、今後意識が変わることを期待しています (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1045,
+              "startIndex": 1037,
+              "textRun": {
+                "content": "00:03:55",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.ttt356wr91r4",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1048,
+              "startIndex": 1045,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 897
+      },
+      {
+        "endIndex": 1201,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 1062,
+              "startIndex": 1048,
+              "textRun": {
+                "content": "高藤さんの志望大学と目標点数",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 1121,
+              "startIndex": 1062,
+              "textRun": {
+                "content": ": 高藤さんの志望大学はオーストラリアの大学に変更され、オーストラリア国立大学やシドニー大学などが検討されています (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1129,
+              "startIndex": 1121,
+              "textRun": {
+                "content": "00:05:24",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.cpdqr12d7fr6",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1190,
+              "startIndex": 1129,
+              "textRun": {
+                "content": ")。目標点数は「5」としていますが、Wakana Ikedaさんは5に満足せず6を目指す姿勢が大事であると述べています (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1198,
+              "startIndex": 1190,
+              "textRun": {
+                "content": "00:06:42",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.unsiovmwenav",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1201,
+              "startIndex": 1198,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 1048
+      },
+      {
+        "endIndex": 1320,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 1211,
+              "startIndex": 1201,
+              "textRun": {
+                "content": "目標点数「5」の認識",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 1309,
+              "startIndex": 1211,
+              "textRun": {
+                "content": ": IBの目標点数「5」について、藤井葉奈さんは平均的な認識としています。Wakana Ikedaさんは、5は50%で取れる点数であり、軸が定まっているので確実に5は取ってほしいと考えています (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1317,
+              "startIndex": 1309,
+              "textRun": {
+                "content": "00:06:42",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.unsiovmwenav",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1320,
+              "startIndex": 1317,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 1201
+      },
+      {
+        "endIndex": 1484,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 1332,
+              "startIndex": 1320,
+              "textRun": {
+                "content": "トピック1と2の復習状況",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 1409,
+              "startIndex": 1332,
+              "textRun": {
+                "content": ": 高藤さんはトピック1の復習で、Wakana Ikedaさんが指導を始める前の内容であったため、初見の内容が多く、理解できていない部分が見られました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1417,
+              "startIndex": 1409,
+              "textRun": {
+                "content": "00:08:03",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.qdbvzbllzx94",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1473,
+              "startIndex": 1417,
+              "textRun": {
+                "content": ")。特にバイノミアルファンクションやアリスメティックのフォーミュラなど、忘れや初めて聞く内容があったようです (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1481,
+              "startIndex": 1473,
+              "textRun": {
+                "content": "00:09:16",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.2vlkksn8id1m",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1484,
+              "startIndex": 1481,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 1320
+      },
+      {
+        "endIndex": 1668,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 1498,
+              "startIndex": 1484,
+              "textRun": {
+                "content": "4月7日のユニットテスト結果",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 1593,
+              "startIndex": 1498,
+              "textRun": {
+                "content": ": 4月7日に実施されたユニットテスト2の結果は、30点中の27点中2点と振るわず、内容を理解できていても手順が分かっていなかったり、計算ミスが原因で問題を落としていることが判明しました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1601,
+              "startIndex": 1593,
+              "textRun": {
+                "content": "00:10:35",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.6d7v84w7pe1h",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1657,
+              "startIndex": 1601,
+              "textRun": {
+                "content": ")。特に、バイノミアルファンクションの使い方は理解しているものの、問題への適用方法が分かっていない様子でした (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1665,
+              "startIndex": 1657,
+              "textRun": {
+                "content": "00:13:31",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.xr5klnrouo3y",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1668,
+              "startIndex": 1665,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 1484
+      },
+      {
+        "endIndex": 1810,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 1677,
+              "startIndex": 1668,
+              "textRun": {
+                "content": "高藤さんの苦手分野",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 1736,
+              "startIndex": 1677,
+              "textRun": {
+                "content": ": テスト結果から、Wakana Ikedaさんは高藤さんが特にアルジェブラが苦手である可能性があると指摘しました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1744,
+              "startIndex": 1736,
+              "textRun": {
+                "content": "00:16:01",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.tj1z7g12ykiz",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1799,
+              "startIndex": 1744,
+              "textRun": {
+                "content": ")。ファンクションズは理解できているものの、アルジェブラは細かく基礎から見直す必要があると判断されています (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1807,
+              "startIndex": 1799,
+              "textRun": {
+                "content": "00:17:22",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.eyj2mgoxf39i",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1810,
+              "startIndex": 1807,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 1668
+      },
+      {
+        "endIndex": 2030,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 1823,
+              "startIndex": 1810,
+              "textRun": {
+                "content": "学習計画と基礎固めの重要性",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 1902,
+              "startIndex": 1823,
+              "textRun": {
+                "content": ": 高藤さんは現在IAで忙しい時期ですが、Wakana Ikedaさんと藤井葉奈さんはIAよりも筆記試験で点数を取れるようにすることの重要性を確認しました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1910,
+              "startIndex": 1902,
+              "textRun": {
+                "content": "00:21:33",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.effufg0m7am",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2019,
+              "startIndex": 1910,
+              "textRun": {
+                "content": ")。そのため、モック対策として過去問に取り組むよりも、7月までにナンバー、アルジェブラ、ファンクション、ジオメトリ、トリゴノメトリー、スタティスティック、カルキュラスの5つの基礎を徹底的に固める計画に変更されました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2027,
+              "startIndex": 2019,
+              "textRun": {
+                "content": "00:24:25",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.quwsdunjtyhj",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2030,
+              "startIndex": 2027,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 1810
+      },
+      {
+        "endIndex": 2222,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 2048,
+              "startIndex": 2030,
+              "textRun": {
+                "content": "今後の授業と宿題の進め方（高藤さん）",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 2134,
+              "startIndex": 2048,
+              "textRun": {
+                "content": ": 基礎固めのため、今後は授業でナンバーとアルジェブラを集中的に取り組み、ファンクションの練習も行いながら、ユニット1と2の練習問題を宿題として毎週出すことになりました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2142,
+              "startIndex": 2134,
+              "textRun": {
+                "content": "00:20:11",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.75nz1xtrz9cy",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2145,
+              "startIndex": 2142,
+              "textRun": {
+                "content": ") (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2153,
+              "startIndex": 2145,
+              "textRun": {
+                "content": "00:35:57",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.gs0ltexm84c2",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2200,
+              "startIndex": 2153,
+              "textRun": {
+                "content": ")。宿題は毎日30分程度行う分量に調整され、本人が自主的に取り組むことが重要視されています (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2208,
+              "startIndex": 2200,
+              "textRun": {
+                "content": "00:29:59",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.6oh9a68bf9ld",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2211,
+              "startIndex": 2208,
+              "textRun": {
+                "content": ") (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2219,
+              "startIndex": 2211,
+              "textRun": {
+                "content": "00:39:27",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.m9r40zxtlira",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2222,
+              "startIndex": 2219,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2030
+      },
+      {
+        "endIndex": 2314,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 2238,
+              "startIndex": 2222,
+              "textRun": {
+                "content": "中野さんの学習進捗とモックの結果",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 2303,
+              "startIndex": 2238,
+              "textRun": {
+                "content": ": 中野さんは学校が始まっており、カルキュラスの授業が進んでいます。春休み前のモックテストの結果は、まだ出ていないとのことです (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2311,
+              "startIndex": 2303,
+              "textRun": {
+                "content": "00:40:56",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.ugy3m8yw3joe",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2314,
+              "startIndex": 2311,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2222
+      },
+      {
+        "endIndex": 2435,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 2328,
+              "startIndex": 2314,
+              "textRun": {
+                "content": "中野さんのカルキュラスの進捗",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 2424,
+              "startIndex": 2328,
+              "textRun": {
+                "content": ": 中野さんはWakana Ikedaさんの授業でもカリキュラスは全て終わっており、現在は練習問題を毎週実施しています。学校の授業ではディファレンシエーションの練習問題を行っている段階です (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2432,
+              "startIndex": 2424,
+              "textRun": {
+                "content": "00:42:12",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.p4z318j57gjo",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2435,
+              "startIndex": 2432,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2314
+      },
+      {
+        "endIndex": 2628,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 2446,
+              "startIndex": 2435,
+              "textRun": {
+                "content": "今後の予習単元とテスト",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 2534,
+              "startIndex": 2446,
+              "textRun": {
+                "content": ": 1年生の範囲は一旦カバーできており、今後学校で新しい単元（コンプレックスナンバーなど）に入る場合は、Wakana Ikedaさんの授業でもカバーしていくことになりました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2542,
+              "startIndex": 2534,
+              "textRun": {
+                "content": "00:43:22",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.hdzagjc2e4i5",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2617,
+              "startIndex": 2542,
+              "textRun": {
+                "content": ")。ディファレンシエーションのユニットテストでは、36点中22点という結果で、ボンミスや問題の読み間違いが原因で満点を逃していることが分かりました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2625,
+              "startIndex": 2617,
+              "textRun": {
+                "content": "00:44:46",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.cwx871fp89f5",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2628,
+              "startIndex": 2625,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2435
+      },
+      {
+        "endIndex": 2807,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 2638,
+              "startIndex": 2628,
+              "textRun": {
+                "content": "中野さんの課題と対策",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 2716,
+              "startIndex": 2638,
+              "textRun": {
+                "content": ": 中野さんの課題は、ケアレスミスと問題の読み間違い（特にEquationを求める問題でGradientで満足してしまう傾向）であることが指摘されました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2724,
+              "startIndex": 2716,
+              "textRun": {
+                "content": "00:46:23",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.rqv6cr1w0bag",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2796,
+              "startIndex": 2724,
+              "textRun": {
+                "content": ")。対策として、Wakana Ikedaさんは焦らず落ち着いて解き、自分を信じて答えを最後まで出す自信をつけることが重要であると述べています (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2804,
+              "startIndex": 2796,
+              "textRun": {
+                "content": "00:48:35",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.dfewthtzkm1f",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2807,
+              "startIndex": 2804,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2628
+      },
+      {
+        "endIndex": 2997,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 2818,
+              "startIndex": 2807,
+              "textRun": {
+                "content": "中野さんの夏の学習計画",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 2900,
+              "startIndex": 2818,
+              "textRun": {
+                "content": ": 夏休みの学習計画について、過去問演習ではなく、予習と復習を50%ずつ行うことで、以前のように予習ばかり進めて過去の内容を忘れることを防ぐ方針が提案されました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2908,
+              "startIndex": 2900,
+              "textRun": {
+                "content": "00:51:07",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.8sbv1quag79h",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2975,
+              "startIndex": 2908,
+              "textRun": {
+                "content": ")。中野さんの夏の授業回数や学校の進捗がまだ不透明なため、具体的な計画は次回の授業で中野さんと直接話し合って決めることになりました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2983,
+              "startIndex": 2975,
+              "textRun": {
+                "content": "00:52:08",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.nl5tisolrsoy",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2986,
+              "startIndex": 2983,
+              "textRun": {
+                "content": ") (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2994,
+              "startIndex": 2986,
+              "textRun": {
+                "content": "00:54:27",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.75g10urz5n2v",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2997,
+              "startIndex": 2994,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2807
+      },
+      {
+        "endIndex": 3136,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 3008,
+              "startIndex": 2997,
+              "textRun": {
+                "content": "進行ペースの確認と感謝",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 3125,
+              "startIndex": 3008,
+              "textRun": {
+                "content": ": 藤井葉奈とWakana Ikedaは、現在の作業ペースを維持できることを望んでいると述べ、お互いに感謝の意を表明しました。藤井葉奈は、時間が差し迫っているため、最後に業務報告を提出するようWakana Ikedaに依頼しました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 3133,
+              "startIndex": 3125,
+              "textRun": {
+                "content": "00:55:45",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.sit7pga7h7l0",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 3136,
+              "startIndex": 3133,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 2997
+      },
+      {
+        "endIndex": 3335,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 3157,
+              "startIndex": 3136,
+              "textRun": {
+                "content": "業務報告の部門名およびプロジェクト名の変更",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 3324,
+              "startIndex": 3157,
+              "textRun": {
+                "content": ": 以前は「補助教育都市」または「チーチャー」として報告されていた部門名とプロジェクト名について、変更があったことが確認されました。部門名は「PEグローバル」に、プロジェクト名は「プロダクトチーム（教師ミーティング）」に今月から変わったため、Wakana Ikedaは今月以降はこの新しい名称で業務報告を提出するよう依頼されました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 3332,
+              "startIndex": 3324,
+              "textRun": {
+                "content": "00:55:45",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.sit7pga7h7l0",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 3335,
+              "startIndex": 3332,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 3136
+      },
+      {
+        "endIndex": 3480,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 3346,
+              "startIndex": 3335,
+              "textRun": {
+                "content": "指導に関する懸念の確認",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 3408,
+              "startIndex": 3346,
+              "textRun": {
+                "content": ": 藤井葉奈は、Wakana Ikedaの指導能力に信頼を置いており、特に指導に関する問題や困り事がないかを確認しました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 3416,
+              "startIndex": 3408,
+              "textRun": {
+                "content": "00:55:45",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.sit7pga7h7l0",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 3469,
+              "startIndex": 3416,
+              "textRun": {
+                "content": ")。Wakana Ikedaは、現時点では指導の進め方や悩んでいることなどは特にないことを確認しました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 3477,
+              "startIndex": 3469,
+              "textRun": {
+                "content": "00:57:33",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.qk1ty6gfj74z",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 3480,
+              "startIndex": 3477,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 3335
+      },
+      {
+        "endIndex": 3623,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.kar2zbp6z6mj",
+            "textStyle": {}
+          },
+          "elements": [
+            {
+              "endIndex": 3499,
+              "startIndex": 3480,
+              "textRun": {
+                "content": "時間の経過と生徒の試験に関するコメント",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 3612,
+              "startIndex": 3499,
+              "textRun": {
+                "content": ": 両者は、10月であることや、1年間が早く過ぎたことについて話し合いました。また、生徒たちの試験が近づいていることに言及し、藤井葉奈はWakana Ikedaに対し、体調に気をつけながら引き続き指導に励むよう依頼しました (",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 3620,
+              "startIndex": 3612,
+              "textRun": {
+                "content": "00:57:33",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "heading": {
+                      "id": "h.qk1ty6gfj74z",
+                      "tabId": "t.bva57gs8u9oh"
+                    }
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 3623,
+              "startIndex": 3620,
+              "textRun": {
+                "content": ")。\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "alignment": "START",
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spaceBelow": {
+              "magnitude": 8,
+              "unit": "PT"
+            },
+            "spacingMode": "NEVER_COLLAPSE"
+          }
+        },
+        "startIndex": 3480
+      },
+      {
+        "endIndex": 3624,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 3624,
+              "startIndex": 3623,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 3623
+      },
+      {
+        "endIndex": 3625,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 3625,
+              "startIndex": 3624,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 3624
+      },
+      {
+        "endIndex": 3679,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 3656,
+              "startIndex": 3625,
+              "textRun": {
+                "content": "Gemini が生成したメモの内容の正確性をご確認ください。 ",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.45882353,
+                        "green": 0.46666667,
+                        "red": 0.45490196
+                      }
+                    }
+                  },
+                  "italic": true
+                }
+              }
+            },
+            {
+              "endIndex": 3678,
+              "startIndex": 3656,
+              "textRun": {
+                "content": "Gemini によるメモ作成のヒントや仕組み",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "italic": true,
+                  "link": {
+                    "url": "https://support.google.com/meet/answer/14754931"
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 3679,
+              "startIndex": 3678,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.45882353,
+                        "green": 0.46666667,
+                        "red": 0.45490196
+                      }
+                    }
+                  },
+                  "italic": true
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 3625
+      },
+      {
+        "endIndex": 3743,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 3685,
+              "startIndex": 3679,
+              "textRun": {
+                "content": "これらのメモ",
+                "textStyle": {
+                  "bold": true,
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.45882353,
+                        "green": 0.46666667,
+                        "red": 0.45490196
+                      }
+                    }
+                  },
+                  "italic": true,
+                  "weightedFontFamily": {
+                    "fontFamily": "Roboto",
+                    "weight": 400
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 3697,
+              "startIndex": 3685,
+              "textRun": {
+                "content": "の品質はいかがでしたか？",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.45882353,
+                        "green": 0.46666667,
+                        "red": 0.45490196
+                      }
+                    }
+                  },
+                  "italic": true,
+                  "weightedFontFamily": {
+                    "fontFamily": "Roboto",
+                    "weight": 400
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 3705,
+              "startIndex": 3697,
+              "textRun": {
+                "content": "簡単なアンケート",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "italic": true,
+                  "link": {
+                    "url": "https://google.qualtrics.com/jfe/form/SV_9vK3UZEaIQKKE7A?confid=D8QCU3FSpLNGd5Lor3xEDxIWOAIIigIgABgECA&detailid=standard&screenshot=false"
+                  },
+                  "underline": true,
+                  "weightedFontFamily": {
+                    "fontFamily": "Roboto",
+                    "weight": 400
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 3743,
+              "startIndex": 3705,
+              "textRun": {
+                "content": "で、メモがニーズに合っていたかどうかなど、フィードバックをお寄せください。\n",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.45882353,
+                        "green": 0.46666667,
+                        "red": 0.45490196
+                      }
+                    }
+                  },
+                  "italic": true,
+                  "weightedFontFamily": {
+                    "fontFamily": "Roboto",
+                    "weight": 400
+                  }
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 3679
+      }
+    ]
+  },
+  "documentId": "13biNdCru3hg9VIqUn20WMpNQHn6S_6XGRnIHcAFEStU",
+  "documentStyle": {
+    "background": {
+      "color": {}
+    },
+    "documentFormat": {
+      "documentMode": "PAGELESS"
+    },
+    "marginBottom": {
+      "magnitude": 72,
+      "unit": "PT"
+    },
+    "marginFooter": {
+      "magnitude": 36,
+      "unit": "PT"
+    },
+    "marginHeader": {
+      "magnitude": 36,
+      "unit": "PT"
+    },
+    "marginLeft": {
+      "magnitude": 72,
+      "unit": "PT"
+    },
+    "marginRight": {
+      "magnitude": 72,
+      "unit": "PT"
+    },
+    "marginTop": {
+      "magnitude": 72,
+      "unit": "PT"
+    },
+    "pageNumberStart": 1,
+    "pageSize": {
+      "height": {
+        "magnitude": 841.8897637795277,
+        "unit": "PT"
+      },
+      "width": {
+        "magnitude": 595.2755905511812,
+        "unit": "PT"
+      }
+    },
+    "useCustomHeaderFooterMargins": true
+  },
+  "lists": {
+    "kix.2efe014q1d28": {
+      "listProperties": {
+        "nestingLevels": [
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%0",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%1",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 54,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 72,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%2",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 90,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 108,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%3",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 126,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 144,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%4",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 162,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 180,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%5",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 198,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 216,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%6",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 234,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 252,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%7",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 270,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 288,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%8",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 306,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 324,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          }
+        ]
+      }
+    },
+    "kix.kar2zbp6z6mj": {
+      "listProperties": {
+        "nestingLevels": [
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%0",
+            "glyphSymbol": "●",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%1",
+            "glyphSymbol": "○",
+            "indentFirstLine": {
+              "magnitude": 54,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 72,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%2",
+            "glyphSymbol": "■",
+            "indentFirstLine": {
+              "magnitude": 90,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 108,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%3",
+            "glyphSymbol": "●",
+            "indentFirstLine": {
+              "magnitude": 126,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 144,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%4",
+            "glyphSymbol": "○",
+            "indentFirstLine": {
+              "magnitude": 162,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 180,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%5",
+            "glyphSymbol": "■",
+            "indentFirstLine": {
+              "magnitude": 198,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 216,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%6",
+            "glyphSymbol": "●",
+            "indentFirstLine": {
+              "magnitude": 234,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 252,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%7",
+            "glyphSymbol": "○",
+            "indentFirstLine": {
+              "magnitude": 270,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 288,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%8",
+            "glyphSymbol": "■",
+            "indentFirstLine": {
+              "magnitude": 306,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 324,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "backgroundColor": {},
+              "baselineOffset": "NONE",
+              "bold": false,
+              "fontSize": {
+                "magnitude": 11,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {}
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "strikethrough": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "namedRanges": {
+    "tnfm_content_actionitems": {
+      "name": "tnfm_content_actionitems",
+      "namedRanges": [
+        {
+          "name": "tnfm_content_actionitems",
+          "namedRangeId": "kix.uhu82215ct8k",
+          "ranges": [
+            {
+              "endIndex": 715,
+              "startIndex": 395
+            }
+          ]
+        }
+      ]
+    },
+    "tnfm_content_details": {
+      "name": "tnfm_content_details",
+      "namedRanges": [
+        {
+          "name": "tnfm_content_details",
+          "namedRangeId": "kix.3qd43hjn9jmf",
+          "ranges": [
+            {
+              "endIndex": 3623,
+              "startIndex": 719
+            }
+          ]
+        }
+      ]
+    },
+    "tnfm_content_summary": {
+      "name": "tnfm_content_summary",
+      "namedRanges": [
+        {
+          "name": "tnfm_content_summary",
+          "namedRangeId": "kix.a7ik2k2h15h1",
+          "ranges": [
+            {
+              "endIndex": 387,
+              "startIndex": 55
+            }
+          ]
+        }
+      ]
+    },
+    "tnfm_doc_13biNdCru3hg9VIqUn20WMpNQHn6S_6XGRnIHcAFEStU": {
+      "name": "tnfm_doc_13biNdCru3hg9VIqUn20WMpNQHn6S_6XGRnIHcAFEStU",
+      "namedRanges": [
+        {
+          "name": "tnfm_doc_13biNdCru3hg9VIqUn20WMpNQHn6S_6XGRnIHcAFEStU",
+          "namedRangeId": "kix.7bwr17dvq9qu",
+          "ranges": [
+            {
+              "endIndex": 3743,
+              "startIndex": 0
+            }
+          ]
+        }
+      ]
+    },
+    "tnfm_meeting_records_placeholder": {
+      "name": "tnfm_meeting_records_placeholder",
+      "namedRanges": [
+        {
+          "name": "tnfm_meeting_records_placeholder",
+          "namedRangeId": "kix.fd58ektxjwcp",
+          "ranges": [
+            {
+              "endIndex": 49,
+              "startIndex": 42
+            }
+          ]
+        }
+      ]
+    },
+    "tnfm_survey_Srsv8ics90iSFTCbiEB0UeTQsn3X": {
+      "name": "tnfm_survey_Srsv8ics90iSFTCbiEB0UeTQsn3X",
+      "namedRanges": [
+        {
+          "name": "tnfm_survey_Srsv8ics90iSFTCbiEB0UeTQsn3X",
+          "namedRangeId": "kix.m1ttf4p8bn5z",
+          "ranges": [
+            {
+              "endIndex": 3743,
+              "startIndex": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "namedStyles": {
+    "styles": [
+      {
+        "namedStyleType": "NORMAL_TEXT",
+        "paragraphStyle": {
+          "alignment": "START",
+          "avoidWidowAndOrphan": true,
+          "borderBetween": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderBottom": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderLeft": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderRight": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderTop": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "direction": "LEFT_TO_RIGHT",
+          "indentEnd": {
+            "unit": "PT"
+          },
+          "indentFirstLine": {
+            "unit": "PT"
+          },
+          "indentStart": {
+            "unit": "PT"
+          },
+          "keepLinesTogether": false,
+          "keepWithNext": false,
+          "lineSpacing": 115,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "shading": {
+            "backgroundColor": {}
+          },
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 4,
+            "unit": "PT"
+          },
+          "spacingMode": "COLLAPSE_LISTS"
+        },
+        "textStyle": {
+          "backgroundColor": {},
+          "baselineOffset": "NONE",
+          "bold": false,
+          "fontSize": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.1882353,
+                "green": 0.1882353,
+                "red": 0.1882353
+              }
+            }
+          },
+          "italic": false,
+          "smallCaps": false,
+          "strikethrough": false,
+          "underline": false,
+          "weightedFontFamily": {
+            "fontFamily": "Roboto",
+            "weight": 400
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_1",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "lineSpacing": 150,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 8,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 20,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.12156863,
+                "green": 0.12156863,
+                "red": 0.12156863
+              }
+            }
+          },
+          "weightedFontFamily": {
+            "fontFamily": "Roboto",
+            "weight": 500
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_2",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "lineSpacing": 115,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 16,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "bold": false,
+          "fontSize": {
+            "magnitude": 32,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.12156863,
+                "green": 0.12156863,
+                "red": 0.12156863
+              }
+            }
+          },
+          "weightedFontFamily": {
+            "fontFamily": "Roboto",
+            "weight": 500
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_3",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "lineSpacing": 150,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 8,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "bold": false,
+          "fontSize": {
+            "magnitude": 20,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.12156863,
+                "green": 0.12156863,
+                "red": 0.12156863
+              }
+            }
+          },
+          "weightedFontFamily": {
+            "fontFamily": "Roboto",
+            "weight": 500
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_4",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "lineSpacing": 115,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 14,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.1882353,
+                "green": 0.1882353,
+                "red": 0.1882353
+              }
+            }
+          },
+          "weightedFontFamily": {
+            "fontFamily": "Roboto",
+            "weight": 400
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_5",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 4,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 11,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.4,
+                "green": 0.4,
+                "red": 0.4
+              }
+            }
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_6",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 4,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 11,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.4,
+                "green": 0.4,
+                "red": 0.4
+              }
+            }
+          },
+          "italic": true
+        }
+      },
+      {
+        "namedStyleType": "TITLE",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "lineSpacing": 115,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 16,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 32,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.12156863,
+                "green": 0.12156863,
+                "red": 0.12156863
+              }
+            }
+          },
+          "weightedFontFamily": {
+            "fontFamily": "Roboto",
+            "weight": 500
+          }
+        }
+      },
+      {
+        "namedStyleType": "SUBTITLE",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "lineSpacing": 115,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 14,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.1882353,
+                "green": 0.1882353,
+                "red": 0.1882353
+              }
+            }
+          },
+          "italic": false,
+          "weightedFontFamily": {
+            "fontFamily": "Roboto",
+            "weight": 600
+          }
+        }
+      }
+    ]
+  },
+  "suggestionsViewMode": "PREVIEW_WITHOUT_SUGGESTIONS",
+  "title": "教師MTG (Wakana Ikeda) - 2026/04/17 18:56 JST - Gemini によるメモ"
+}

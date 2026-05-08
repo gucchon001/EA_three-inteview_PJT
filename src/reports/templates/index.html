@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUBAL Academy レポートデザインパターン一覧</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+            background: #f4f6f9;
+            padding: 40px 20px;
+            color: #1a1a1a;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header .logo {
+            font-size: 13pt;
+            font-weight: 900;
+            color: #2c3e50;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .header h1 {
+            font-size: 20pt;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        .header p {
+            font-size: 10pt;
+            color: #666;
+        }
+        .badge-draft {
+            display: inline-block;
+            background: #e67e22;
+            color: #fff;
+            font-size: 8pt;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        .cards {
+            display: grid;
+            gap: 16px;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid #dde3ec;
+            border-left: 5px solid #4a6491;
+            border-radius: 4px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: inherit;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        .card-info .pattern-label {
+            font-size: 8.5pt;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .card-info h2 {
+            font-size: 13pt;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        .card-info p {
+            font-size: 9.5pt;
+            color: #555;
+        }
+        .card-arrow {
+            font-size: 18pt;
+            color: #4a6491;
+            font-weight: 300;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 8.5pt;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">EDUBAL Academy</div>
+            <h1>レポートデザインパターン<span class="badge-draft">プロトタイプ</span></h1>
+            <p>来週の会議用モック — 方式選定のための参考資料です</p>
+        </div>
+
+        <div class="cards">
+            <a class="card" href="pattern_a_responsive.html">
+                <div class="card-info">
+                    <div class="pattern-label">Pattern A</div>
+                    <h2>HTMLレスポンシブ（認証コード付き）</h2>
+                    <p>モダンでインタラクティブ。Chart.js グラフ・KPI サマリーバー搭載。PC・スマートフォン対応。</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+
+            <a class="card" href="pattern_b.html">
+                <div class="card-info">
+                    <div class="pattern-label">Pattern B</div>
+                    <h2>PDF形式（A4縦長・印刷対応）</h2>
+                    <p>A4レイアウト想定の従来型レポート。印刷・PDF保存ボタン付き。確実性重視。</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+
+            <a class="card" href="pattern_c_simple.html">
+                <div class="card-info">
+                    <div class="pattern-label">Pattern C</div>
+                    <h2>簡易HTML（メール埋め込み可能）</h2>
+                    <p>軽量・シンプル。メール本文への埋め込みや添付を想定した最小構成。</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+
+            <a class="card" href="pattern_d.html">
+                <div class="card-info">
+                    <div class="pattern-label">Pattern D</div>
+                    <h2>インタラクティブダッシュボード</h2>
+                    <p>グラフ・フィルター機能付き。データドリブンな可視化を重視した最先端型。</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+
+            <a class="card" href="monthly-reports/index.html" style="border-left-color:#27ae60;">
+                <div class="card-info">
+                    <div class="pattern-label">月次サンプル</div>
+                    <h2>月次レポート（Pattern B 系）</h2>
+                    <p>世帯別の配布用 HTML 一覧。鈴木・高藤のサンプル。更新は docs 正本から同期スクリプト実行後にデプロイ。</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 EDUBAL Academy — 社内検討用プロトタイプ。個人情報は仮データです。</p>
+        </div>
+    </div>
+</body>
+</html>

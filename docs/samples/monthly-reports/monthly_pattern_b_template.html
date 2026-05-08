@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUBAL Academy 月次学習レポート（レイアウトひな型）</title>
+    <style>
+        /* ===== リセット ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ===== 基本設定（A4想定） ===== */
+        body {
+            font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+            font-size: 10.5pt;
+            line-height: 1.7;
+            color: #1a1a1a;
+            background: #e8e8e8;
+            padding: 20px;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            background: #fff;
+            margin: 0 auto;
+            padding: 20mm 18mm 18mm;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+        }
+
+        /* ===== ヘッダー ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 16px;
+        }
+
+        .logo-block .logo-name {
+            font-size: 16pt;
+            font-weight: 900;
+            color: #2c3e50;
+            letter-spacing: 1px;
+        }
+
+        .logo-block .logo-sub {
+            font-size: 8pt;
+            color: #666;
+            letter-spacing: 0.5px;
+        }
+
+        .report-meta-header {
+            text-align: right;
+            font-size: 8pt;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .report-meta-header .report-id {
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        /* ===== タイトルブロック ===== */
+        .title-block {
+            background: #2c3e50;
+            color: #fff;
+            padding: 14px 20px;
+            margin-bottom: 14px;
+            border-radius: 2px;
+        }
+
+        .title-block h1 {
+            font-size: 15pt;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .title-block .title-period {
+            font-size: 9pt;
+            opacity: 0.85;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== 基本情報テーブル ===== */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 18px;
+            font-size: 9.5pt;
+        }
+
+        .info-table td {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+        }
+
+        .info-table td:nth-child(odd) {
+            background: #f5f5f5;
+            font-weight: 700;
+            color: #2c3e50;
+            width: 18%;
+            white-space: nowrap;
+        }
+
+        .info-table td:nth-child(even) {
+            width: 32%;
+        }
+
+        /* ===== KPIサマリー ===== */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .kpi-box {
+            border: 1px solid #c8d5e8;
+            border-top: 3px solid #4a6491;
+            padding: 10px 12px;
+            border-radius: 2px;
+            background: #f9fbff;
+        }
+
+        .kpi-box .kpi-val {
+            font-size: 18pt;
+            font-weight: 900;
+            color: #2c3e50;
+            line-height: 1.1;
+        }
+
+        .kpi-box .kpi-lbl {
+            font-size: 7.5pt;
+            color: #555;
+            margin-top: 2px;
+        }
+
+        .kpi-box .kpi-delta {
+            font-size: 8pt;
+            font-weight: 700;
+            color: #2e7d32;
+            margin-top: 3px;
+        }
+
+        .kpi-box .kpi-delta.warn { color: #c0392b; }
+
+        /* ===== セクション共通 ===== */
+        .section {
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #2c3e50;
+            color: #fff;
+            padding: 6px 12px;
+            margin-bottom: 12px;
+            border-radius: 2px;
+        }
+
+        .section-heading .sec-num {
+            font-size: 9pt;
+            background: #4a6491;
+            padding: 1px 7px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .section-heading h2 {
+            font-size: 11pt;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== 進捗テーブル ===== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 12px;
+        }
+
+        .data-table thead tr {
+            background: #2c3e50;
+            color: #fff;
+        }
+
+        .data-table thead th {
+            padding: 7px 10px;
+            font-weight: 700;
+            text-align: left;
+            font-size: 9pt;
+        }
+
+        .data-table tbody tr:nth-child(even) {
+            background: #f5f7fa;
+        }
+
+        .data-table tbody tr:hover {
+            background: #eef2f8;
+        }
+
+        .data-table tbody td {
+            padding: 7px 10px;
+            border-bottom: 1px solid #dde3ec;
+        }
+
+        /* ===== 02 mood 表（塾での様子） ===== */
+        .mood-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 12px;
+        }
+        .mood-table th, .mood-table td {
+            padding: 7px 10px;
+            border-bottom: 1px solid #dde3ec;
+            vertical-align: top;
+        }
+        .mood-table thead th { background: #2c3e50; color: #fff; font-weight: 700; font-size: 9pt; }
+        .mood-table tbody tr:nth-child(even) { background: #f5f7fa; }
+        .mood-icon { font-size: 14pt; margin-right: 4px; vertical-align: middle; }
+        .mood-legend {
+            font-size: 8.5pt;
+            color: #444;
+            margin-bottom: 10px;
+            padding: 8px 10px;
+            background: #f8f9fb;
+            border: 1px solid #dde3ec;
+            border-radius: 2px;
+            line-height: 1.45;
+        }
+        .mood-legend p { margin: 0 0 6px; }
+        .mood-legend p:last-child { margin-bottom: 0; }
+        .h3-monthly { font-size: 10.5pt; color: #2c3e50; margin: 0 0 10px; font-weight: 700; }
+
+        /* ===== バーゲージ ===== */
+        .bar-gauge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bar-track {
+            flex: 1;
+            height: 8px;
+            background: #e0e6f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: #4a6491;
+            border-radius: 4px;
+        }
+
+        .bar-fill.low { background: #e74c3c; }
+        .bar-fill.mid { background: #e6a817; }
+        .bar-fill.high { background: #2e7d32; }
+
+        .bar-pct {
+            font-weight: 700;
+            font-size: 9pt;
+            min-width: 32px;
+            text-align: right;
+        }
+
+        /* ===== 課題・分析ボックス ===== */
+        .analysis-box {
+            border: 1px solid #c8d5e8;
+            border-left: 4px solid #4a6491;
+            padding: 10px 14px;
+            margin-bottom: 10px;
+            background: #f9fbff;
+            border-radius: 0 2px 2px 0;
+            font-size: 9.5pt;
+        }
+
+        .analysis-box .box-label {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+
+        /* ===== 学習計画案テーブル ===== */
+        .plan-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 10px;
+        }
+
+        .plan-table th, .plan-table td {
+            border: 1px solid #ccc;
+            padding: 7px 10px;
+            vertical-align: top;
+        }
+
+        .plan-table thead th {
+            background: #2c3e50;
+            color: #fff;
+            font-weight: 700;
+            font-size: 9pt;
+        }
+
+        .plan-table tbody tr:nth-child(even) { background: #f5f7fa; }
+
+        /* v3: 05 進捗10マス（DATA_CONTRACT_05 準拠） */
+        .progress-05-block { margin: 14px 0 18px; font-size: 8.5pt; }
+        .progress-05-legend {
+            display: flex; flex-wrap: wrap; gap: 10px 18px; margin-bottom: 10px;
+            padding: 8px 10px; background: #f8f9fb; border: 1px solid #dde3ec; border-radius: 2px;
+        }
+        .progress-05-legend span { display: inline-flex; align-items: center; gap: 6px; }
+        .swatch { width: 14px; height: 14px; border-radius: 2px; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.06); }
+        .swatch.done { background: #2e7dd4; }
+        .swatch.planned { background: #e6c940; }
+        .swatch.pending { background: #c8ccd2; }
+        .prog-topic { margin-bottom: 12px; page-break-inside: avoid; }
+        .prog-topic-title { font-weight: 700; color: #2c3e50; margin-bottom: 6px; font-size: 9pt; line-height: 1.35; }
+        .prog-lane { display: grid; grid-template-columns: 4.5em 1fr; gap: 8px; align-items: center; margin-bottom: 4px; }
+        .prog-lane-label { font-size: 8.5pt; color: #555; white-space: nowrap; }
+        .prog-cells { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; min-height: 14px; }
+        .prog-cells .cell { border-radius: 1px; min-height: 14px; }
+        .prog-cells .cell.done { background: #2e7dd4; }
+        .prog-cells .cell.planned { background: #e6c940; }
+        .prog-cells .cell.pending { background: #c8ccd2; }
+        .progress-05-note { font-size: 8pt; color: #666; margin-top: 8px; line-height: 1.5; }
+        .prog-month-title { font-weight: 700; color: #2c3e50; font-size: 9.5pt; margin: 14px 0 6px; line-height: 1.35; }
+        .prog-bucket-labels {
+            display: grid;
+            grid-template-columns: 4.5em repeat(10, 1fr);
+            gap: 8px 2px;
+            font-size: 6.5pt;
+            color: #777;
+            line-height: 1.2;
+            margin-top: 2px;
+            margin-bottom: 14px;
+        }
+        .prog-bucket-labels span { text-align: center; }
+        .prog-topic-map { font-size: 7.5pt; color: #666; margin: -2px 0 8px; line-height: 1.45; }
+
+        /* ===== フッター ===== */
+        .page-footer {
+            margin-top: 24px;
+            padding-top: 10px;
+            border-top: 2px solid #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 8pt;
+            color: #555;
+        }
+
+        .page-footer .footer-contact { line-height: 1.8; }
+        .page-footer .footer-right { text-align: right; line-height: 1.8; }
+
+        /* ===== 印刷設定 ===== */
+        @media print {
+            body { background: none; padding: 0; }
+
+            .page {
+                width: 210mm;
+                padding: 18mm 16mm 16mm;
+                box-shadow: none;
+            }
+
+            .no-print { display: none; }
+        }
+
+        /* ===== 印刷ボタン（画面表示時のみ） ===== */
+        .print-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 10px 22px;
+            background: #2c3e50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 10pt;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+        }
+
+        .print-btn:hover { background: #4a6491; }
+    </style>
+</head>
+<body>
+    <div class="page">
+
+        <p class="no-print" style="font-size:8pt;color:#666;margin:-4px 0 10px;line-height:1.5;">
+            <strong>レイアウトひな型</strong>：番号は <code>monthly_pattern_b_content.template.md</code> に合わせる（基本は <strong>01→02（塾での様子）→03（授業内容）→04→05</strong>、必要に応じ <strong>07</strong>）。<strong>03a/03b は使わない</strong>。配布前に本行を削除。KPI がマップに無い場合は下の <code>.kpi-row</code> ブロックごと削除。
+        </p>
+
+        <header class="page-header">
+            <div class="logo-block">
+                <div class="logo-name">EDUBAL Academy</div>
+                <div class="logo-sub">個別最適化された国際バカロレア教育</div>
+            </div>
+            <div class="report-meta-header">
+                <div class="report-id">RPT-YYYYMM-_______</div>
+                <div>発行日：（転記）</div>
+                <div>対象期間：（転記）</div>
+            </div>
+        </header>
+
+        <div class="title-block">
+            <h1>月次学習レポート</h1>
+            <div class="title-period">学習状況の共有と今後の学習計画</div>
+        </div>
+
+        <!-- ========== 01 基本情報（MD ## 01 基本情報） ========== -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">01</span>
+                <h2>基本情報</h2>
+            </div>
+            <table class="info-table">
+                <tr>
+                    <td>生徒名</td>
+                    <td>（転記）</td>
+                    <td>生徒番号</td>
+                    <td>（転記）</td>
+                </tr>
+                <tr>
+                    <td>担当教師</td>
+                    <td>（転記）</td>
+                    <td>担当CA</td>
+                    <td>（転記）</td>
+                </tr>
+                <tr>
+                    <td>科目・コース</td>
+                    <td>（転記）</td>
+                    <td>志望大学</td>
+                    <td>（転記）</td>
+                </tr>
+                <tr>
+                    <td>IB 合計スコア</td>
+                    <td>目標: （転記） / 現状: （転記）</td>
+                    <td>科目スコア</td>
+                    <td>目標: （転記） / 現状: （転記）</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- KPI：月次マップで可の項目のみ残す。不要ならこの div ごと削除 -->
+        <div class="kpi-row">
+            <div class="kpi-box">
+                <div class="kpi-val">—</div>
+                <div class="kpi-lbl">（KPI 1 ラベル）</div>
+                <div class="kpi-delta">（補足）</div>
+            </div>
+            <div class="kpi-box">
+                <div class="kpi-val">—</div>
+                <div class="kpi-lbl">（KPI 2 ラベル）</div>
+                <div class="kpi-delta">（補足）</div>
+            </div>
+            <div class="kpi-box">
+                <div class="kpi-val">—</div>
+                <div class="kpi-lbl">（KPI 3 ラベル）</div>
+                <div class="kpi-delta">（補足）</div>
+            </div>
+            <div class="kpi-box">
+                <div class="kpi-val">—</div>
+                <div class="kpi-lbl">（KPI 4 ラベル）</div>
+                <div class="kpi-delta">（補足）</div>
+            </div>
+        </div>
+
+        <!-- 学校の試験：01 に mock/final・テスト案内を含める場合は本セクションごと削除 -->
+
+        <!-- ========== 02 塾での様子（MD ## 02 塾での様子）— mood 表は「学習意欲」「宿題の提出」の2行のみ ========== -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">02</span>
+                <h2>塾での様子</h2>
+            </div>
+            <div class="analysis-box">
+                <div class="box-label">良い点・成長がみられる点</div>
+                （転記：褒め中心。※進みの比較は 05、単元は 03 で書く）
+            </div>
+            <div class="analysis-box">
+                <div class="box-label">今後の計画方針（当塾）</div>
+                （転記：短く。詳細は 07 へ）
+            </div>
+            <h3 class="h3-monthly">今月の振り返りと次月の目標</h3>
+            <div class="mood-legend" role="note">
+                <p><strong>今月の学習状況と評価（顔アイコン）の目安</strong></p>
+                <p>😊（良）／🙂（普通）／😐（もう少し）／😢（要改善）— 配布 HTML に合わせ全文を書く。</p>
+            </div>
+            <table class="mood-table">
+                <thead>
+                    <tr><th>観点</th><th>今月の学習状況と評価</th><th>メモ（補足）</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>学習意欲</td><td>（アイコン＋一言）</td><td>（要確認）</td></tr>
+                    <tr><td>宿題の提出</td><td>（アイコン＋一言）</td><td>（要確認）</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ========== 03 授業内容（MD ## 03 授業内容） ========== -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">03</span>
+                <h2>授業内容</h2>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>授業日</th>
+                        <th>学習単元</th>
+                        <th>理解度</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>（転記）</td>
+                        <td>（転記）</td>
+                        <td>（転記）</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="section-body" style="font-size:9pt;color:#555;margin-bottom:10px;"><b>理解度（★）の目安：<br></b><span style="font-size: 9pt;">★☆☆＝基礎内容の定着が必要<br>★★☆＝基礎問題が解けるが応用問題に対応できない<br>★★★＝基礎に加え応用問題にも対応できている<br>※いずれも授業内の観察と演習の様子に基づきます。</span></p>
+            <div class="analysis-box">
+                <div class="box-label">当塾での所見</div>
+                （転記）
+            </div>
+        </section>
+
+        <!-- ========== 04 課題とアドバイス（MD ## 04） ========== -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">04</span>
+                <h2>課題とアドバイス</h2>
+            </div>
+            <div class="analysis-box">
+                <div class="box-label">ミスの傾向・課題・学習の工夫</div>
+                （転記）
+            </div>
+        </section>
+
+        <!-- ========== 05 学習の進捗（MD ## 05） ========== -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">05</span>
+                <h2>学習の進捗</h2>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Topic / 項目</th>
+                        <th>学校の進捗</th>
+                        <th>塾の進捗</th>
+                        <th>備考</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>（転記）</td>
+                        <td>（転記）</td>
+                        <td>（転記）</td>
+                        <td>（転記）</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="progress-05-block">
+                <div class="progress-05-legend">
+                    <span><span class="swatch done"></span> 済（青）</span>
+                    <span><span class="swatch planned"></span> 対象月内に予定あり（黄）</span>
+                    <span><span class="swatch pending"></span> 未（灰）</span>
+                </div>
+                <p style="font-size:9pt;color:#444;margin-bottom:10px;"><strong>トピックごと</strong>に <code>calendar_buckets_10</code> を繰り返す（各 <code>prog-topic</code>）。当塾は「そのトピックに割り当てた <strong>03</strong> の授業日」だけで青を付ける。</p>
+                <div class="prog-topic">
+                    <div class="prog-topic-title">（例）Topic A</div>
+                    <p class="prog-topic-map">当塾の該当（03）: …日付列挙…</p>
+                    <div class="prog-lane"><span class="prog-lane-label">学校</span><div class="prog-cells"><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span></div></div>
+                    <div class="prog-lane"><span class="prog-lane-label">当塾</span><div class="prog-cells"><span class="cell pending"></span><span class="cell done"></span><span class="cell done"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span></div></div>
+                    <div class="prog-bucket-labels"><span></span><span>1–3</span><span>4–6</span><span>7–9</span><span>10–12</span><span>13–15</span><span>16–18</span><span>19–21</span><span>22–24</span><span>25–27</span><span>28–30</span></div>
+                </div>
+                <div class="prog-topic">
+                    <div class="prog-topic-title">（例）Topic B</div>
+                    <p class="prog-topic-map">当塾の該当（03）: …</p>
+                    <div class="prog-lane"><span class="prog-lane-label">学校</span><div class="prog-cells"><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span></div></div>
+                    <div class="prog-lane"><span class="prog-lane-label">当塾</span><div class="prog-cells"><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell done"></span><span class="cell pending"></span><span class="cell pending"></span><span class="cell done"></span><span class="cell done"></span></div></div>
+                    <div class="prog-bucket-labels"><span></span><span>1–3</span><span>4–6</span><span>7–9</span><span>10–12</span><span>13–15</span><span>16–18</span><span>19–21</span><span>22–24</span><span>25–27</span><span>28–30</span></div>
+                </div>
+                <p class="progress-05-note">詳細は <code>DATA_CONTRACT_05_学習の進捗.md</code> セクション3.1（トピック別）。</p>
+            </div>
+        </section>
+
+        <!-- ========== 07 今後の授業計画（MD ## 07・sec-num は 07。06 は使わない） ========== -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">07</span>
+                <h2>今後の授業計画</h2>
+            </div>
+            <table class="plan-table">
+                <thead>
+                    <tr>
+                        <th style="width:22%">時期</th>
+                        <th>計画内容</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>（転記）</td>
+                        <td>（転記）</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="analysis-box">
+                <div class="box-label">方針・家庭でのサポートのお願い</div>
+                （転記：MTG で合意した内容に限定。）
+            </div>
+        </section>
+
+        <footer class="page-footer">
+            <div class="footer-contact">
+                <strong>EDUBAL Academy</strong><br>
+                （連絡先は運用の正に合わせて転記）
+            </div>
+            <div class="footer-right">
+                © 2026 EDUBAL Academy<br>
+                本レポートの内容は個人情報を含みます。<br>
+                取り扱いにご注意ください。
+            </div>
+        </footer>
+    </div>
+
+    <button class="print-btn no-print" onclick="window.print()">印刷 / PDF保存</button>
+</body>
+</html>

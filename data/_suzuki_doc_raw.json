@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": 400,
+    "message": "error: unexpected argument 'documentId\\:\\1l4QvdMRbyIQHH5q8_N8k7XTnxUU8jAmuCwQZwEflyds\\}' found\n\nUsage: gws documents get [OPTIONS]\n\nFor more information, try '--help'.\n",
+    "reason": "validationError"
+  }
+}

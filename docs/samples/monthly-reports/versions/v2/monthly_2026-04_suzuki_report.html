@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<!-- monthly-report-revision: v2 — ユーザーレビュー反映（2026-04-22）。v1 は versions/v1/ を参照 -->
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUBAL Academy 月次学習レポート（鈴木 謙吾 様）</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+            font-size: 10.5pt;
+            line-height: 1.75;
+            color: #1a1a1a;
+            background: #e8e8e8;
+            padding: 20px;
+        }
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            background: #fff;
+            margin: 0 auto;
+            padding: 20mm 18mm 18mm;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 16px;
+        }
+        .logo-block .logo-name { font-size: 16pt; font-weight: 900; color: #2c3e50; letter-spacing: 1px; }
+        .logo-block .logo-sub { font-size: 8pt; color: #666; letter-spacing: 0.5px; }
+        .report-meta-header { text-align: right; font-size: 8pt; color: #555; line-height: 1.8; }
+        .report-meta-header .report-id { font-weight: 700; color: #2c3e50; }
+        .title-block {
+            background: #2c3e50;
+            color: #fff;
+            padding: 14px 20px;
+            margin-bottom: 14px;
+            border-radius: 2px;
+        }
+        .title-block h1 { font-size: 15pt; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
+        .title-block .title-period { font-size: 9pt; opacity: 0.9; letter-spacing: 0.5px; }
+        .family-greeting {
+            font-size: 10.5pt;
+            color: #333;
+            margin-bottom: 18px;
+            line-height: 1.85;
+        }
+        .family-greeting p { margin-bottom: 10px; }
+        .family-greeting .honorific { margin-bottom: 4px; font-weight: 700; color: #2c3e50; }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 18px;
+            font-size: 9.5pt;
+        }
+        .info-table td {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+        }
+        .info-table td:nth-child(odd) {
+            background: #f5f5f5;
+            font-weight: 700;
+            color: #2c3e50;
+            width: 22%;
+            white-space: nowrap;
+        }
+        .info-table td:nth-child(even) { width: 28%; }
+        .section { margin-bottom: 22px; page-break-inside: avoid; }
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #2c3e50;
+            color: #fff;
+            padding: 6px 12px;
+            margin-bottom: 12px;
+            border-radius: 2px;
+        }
+        .section-heading .sec-num {
+            font-size: 9pt;
+            background: #4a6491;
+            padding: 1px 7px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+        .section-heading h2 { font-size: 11pt; font-weight: 700; letter-spacing: 0.5px; }
+        .section-body p { margin-bottom: 10px; font-size: 10.5pt; }
+        .section-body h3 {
+            font-size: 10.5pt;
+            color: #2c3e50;
+            margin: 14px 0 8px;
+            font-weight: 700;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 12px;
+        }
+        .data-table thead tr { background: #2c3e50; color: #fff; }
+        .data-table thead th {
+            padding: 7px 10px;
+            font-weight: 700;
+            text-align: left;
+            font-size: 9pt;
+        }
+        .data-table tbody tr:nth-child(even) { background: #f5f7fa; }
+        .data-table tbody td { padding: 7px 10px; border-bottom: 1px solid #dde3ec; vertical-align: top; }
+        .analysis-box {
+            border: 1px solid #c8d5e8;
+            border-left: 4px solid #4a6491;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            background: #f9fbff;
+            border-radius: 0 2px 2px 0;
+            font-size: 10.5pt;
+        }
+        .analysis-box .box-label { font-weight: 700; color: #2c3e50; margin-bottom: 8px; }
+        .analysis-box p { margin-bottom: 8px; }
+        .analysis-box ul { margin-left: 1.15em; }
+        .analysis-box li { margin-bottom: 6px; }
+        .plan-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 12px;
+        }
+        .plan-table th, .plan-table td {
+            border: 1px solid #ccc;
+            padding: 7px 10px;
+            vertical-align: top;
+        }
+        .plan-table thead th {
+            background: #2c3e50;
+            color: #fff;
+            font-weight: 700;
+            font-size: 9pt;
+        }
+        .plan-table tbody tr:nth-child(even) { background: #f5f7fa; }
+        .closing-line { margin-top: 14px; font-size: 10.5pt; }
+        .page-footer {
+            margin-top: 28px;
+            padding-top: 12px;
+            border-top: 2px solid #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 8pt;
+            color: #555;
+        }
+        /* 管理者向け：赤字は本ブロックのみ。印刷（ご家庭配布）時は非表示 */
+        .admin-only {
+            margin-top: 28px;
+            padding: 14px 16px;
+            border: 2px dashed #c0392b;
+            background: #fff8f8;
+            border-radius: 4px;
+        }
+        .admin-only h2 {
+            font-size: 10.5pt;
+            color: #c0392b;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .admin-only > p { font-size: 9pt; color: #c0392b; font-weight: 700; margin-bottom: 10px; }
+        .admin-only ul { margin-left: 1.1em; }
+        .admin-only li {
+            color: #c0392b;
+            font-weight: 700;
+            font-size: 9.5pt;
+            margin-bottom: 8px;
+            line-height: 1.55;
+        }
+        @media print {
+            body { background: none; padding: 0; }
+            .page { width: 210mm; padding: 18mm 16mm 16mm; box-shadow: none; }
+            .no-print { display: none !important; }
+        }
+        .print-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 10px 22px;
+            background: #2c3e50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 10pt;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+        }
+        .print-btn:hover { background: #4a6491; }
+        /* ユーザーレビュー②③：学校試験ミニ表・三段階（顔）・理解度★ */
+        .exam-mini-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 12px;
+        }
+        .exam-mini-table th, .exam-mini-table td {
+            border: 1px solid #ccc;
+            padding: 7px 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .exam-mini-table thead th { background: #2c3e50; color: #fff; font-weight: 700; }
+        .exam-mini-table tbody tr:nth-child(even) { background: #f5f7fa; }
+        .mood-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 14px;
+        }
+        .mood-table th, .mood-table td {
+            border: 1px solid #dde3ec;
+            padding: 8px 10px;
+            vertical-align: top;
+        }
+        .mood-table thead th { background: #2c3e50; color: #fff; font-weight: 700; font-size: 9pt; }
+        .mood-table tbody tr:nth-child(even) { background: #f5f7fa; }
+        .mood-icon { font-size: 14pt; margin-right: 4px; vertical-align: middle; }
+    </style>
+</head>
+<body>
+    <p class="no-print" style="max-width:210mm;margin:0 auto 10px;padding:8px 12px;background:#eef6ff;border:1px solid #90caf9;font-size:9pt;text-align:center;">
+        ご家庭へお送りする PDF を印刷するときは、この注意文と下の<strong>管理者向け</strong>の枠が印刷されないことをご確認ください（ブラウザの印刷プレビューで確認できます）。
+    </p>
+    <div class="page">
+
+        <header class="page-header">
+            <div class="logo-block">
+                <div class="logo-name">EDUBAL Academy</div>
+                <div class="logo-sub">個別最適化された国際バカロレア教育</div>
+            </div>
+            <div class="report-meta-header">
+                <div class="report-id">RPT-202604-73594</div>
+                <div>発行日：2026年4月21日</div>
+                <div>対象期間：2026年3月1日 ─ 3月31日</div>
+            </div>
+        </header>
+
+        <div class="title-block">
+            <h1>月次学習レポート</h1>
+            <div class="title-period">2026年3月の学習の様子と今後の予定</div>
+        </div>
+
+        <div class="family-greeting">
+            <p class="honorific">鈴木 謙吾 様<br>保護者の皆様</p>
+            <p>いつもお子さまの学習にご理解とご協力を賜り、ありがとうございます。</p>
+            <p>本書は、2026年3月1日から3月31日までの <strong>Physics（HL）</strong> 指導の様子と、今後の見通しをお届けするものです。内容についてご不明な点がございましたら、担当までお気軽にお問い合わせください。</p>
+        </div>
+
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">01</span>
+                <h2>基本情報</h2>
+            </div>
+            <table class="info-table">
+                <tr>
+                    <td>生徒番号</td>
+                    <td>73594</td>
+                    <td>お名前</td>
+                    <td>鈴木 謙吾 様</td>
+                </tr>
+                <tr>
+                    <td>担当教師</td>
+                    <td>森田 大翔</td>
+                    <td>担当CA</td>
+                    <td>藤井</td>
+                </tr>
+                <tr>
+                    <td>指導科目</td>
+                    <td>Physics（HL）</td>
+                    <td>ご志望の大学</td>
+                    <td>ミュンヘン工科大学（TUM）</td>
+                </tr>
+                <tr>
+                    <td>併願・関心校</td>
+                    <td colspan="3">カールスルーエ工科大学（KIT）、早稲田大学 理工学部（英語学位）</td>
+                </tr>
+                <tr>
+                    <td>IB 合計（目標）</td>
+                    <td>学習計画表の取得範囲では未確認</td>
+                    <td>IB 合計（現状）</td>
+                    <td>mid semester 29/42、合計欄 29/42（2026年3月時点）</td>
+                </tr>
+                <tr>
+                    <td>Physics（HL）目標</td>
+                    <td>学習計画表の取得範囲では未確認</td>
+                    <td>Physics（HL）現状</td>
+                    <td>5/7</td>
+                </tr>
+                <tr>
+                    <td>mock exam</td>
+                    <td>2027年1月（計画表）</td>
+                    <td>final exam</td>
+                    <td>2027年5月（計画表）</td>
+                </tr>
+                <tr>
+                    <td>学校 end of exam</td>
+                    <td colspan="3">2026年5月末（計画表見出し）</td>
+                </tr>
+            </table>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">02</span>
+                <h2>学校の試験について</h2>
+            </div>
+            <div class="section-body">
+                <p>学習計画表および指導モニタリング用の記録に基づき、<strong>日程と結果</strong>を次のとおり整理しております。未記入は「—」です。</p>
+            </div>
+            <table class="exam-mini-table">
+                <thead>
+                    <tr><th>試験・項目</th><th>日程</th><th>結果</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>学校 end of exam（計画表見出し）</td><td>2026年5月末頃</td><td>—</td></tr>
+                    <tr><td>mock exam（計画表見出し）</td><td>2027年1月</td><td>—</td></tr>
+                    <tr><td>final exam（計画表見出し）</td><td>2027年5月</td><td>—</td></tr>
+                    <tr><td>2026年3月実施の学校試験（詳細）</td><td>当レポート作成時点では特定できず</td><td>確定次第、ご連絡または次回レポートでお知らせします</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">02</span>
+                <h2>塾での様子</h2>
+            </div>
+            <div class="analysis-box">
+                <div class="box-label">学習の進み</div>
+                <p>Physics の授業は、<strong>お子さまお一人あたり合計 75 分</strong>の枠で実施しております。</p>
+                <p>単元の理解度については、<strong>Topic B は高い水準で安定している一方</strong>、<strong>Topic A は「理解は進んでいるが、難易度の高い問題では演習量が成果につながりやすい」</strong>という見立てです。春休みの授業では復習と予習の両方を組み合わせ、とくに Topic A に不安を感じやすいとの共有を踏まえ、<strong>3月29日および4月5日の授業では A2・A3 の復習を中心</strong>に進めてまいります（詳細な授業日と単元は <strong>03（授業内容）の表</strong> をご参照ください）。</p>
+            </div>
+            <table class="mood-table">
+                <thead>
+                    <tr><th>観点</th><th>今月の様子</th><th>メモ（褒め中心）</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>学習進捗</td>
+                        <td><span class="mood-icon" aria-hidden="true">😐</span>まずまず</td>
+                        <td>Topic B は安定。Topic A は発展問題で伸びしろがあります。</td>
+                    </tr>
+                    <tr>
+                        <td>学習意欲</td>
+                        <td><span class="mood-icon" aria-hidden="true">😊</span>良い</td>
+                        <td>当塾でおすすめしている練習サイトにも自主的に取り組まれています。</td>
+                    </tr>
+                    <tr>
+                        <td>宿題の提出</td>
+                        <td><span class="mood-icon" aria-hidden="true">😊</span>良い</td>
+                        <td>おおよそ <strong>7〜8 割程度の正答率</strong>。無理に量を増やす必要はない形で調整しています。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">03</span>
+                <h2>授業内容（3月）</h2>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr><th>授業日</th><th>学習単元（英語表記）</th><th>理解度</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>2026/03/01</td><td>B.5 Current and circuits 1</td><td>★★★</td></tr>
+                    <tr><td>2026/03/08</td><td>B.5 Current and circuits 2；B.5 Current and circuits 3</td><td>★★★</td></tr>
+                    <tr><td>2026/03/15</td><td>A.1 Kinematics 1〜2；B.1 Thermal energy transfers 1〜2；B.5 Current and circuits 1〜3</td><td>★★☆</td></tr>
+                    <tr><td>2026/03/22</td><td>A.1 Kinematics 1〜2；B.1 Thermal energy transfers 1〜2；B.5 Current and circuits 1〜3</td><td>★★☆</td></tr>
+                    <tr><td>2026/03/29</td><td>A.1 Kinematics 1〜2；A.2 Forces and momentum 1〜3；A.3 Work, energy and power 1〜3</td><td>★★☆</td></tr>
+                </tbody>
+            </table>
+            <p class="section-body" style="font-size:9pt;color:#555;margin-bottom:10px;">※理解度は授業内の観察と演習の様子に基づく三段階です。</p>
+            <div class="analysis-box">
+                <div class="box-label">当塾からのコメント</div>
+                <p>春休み中の授業は、<strong>復習を2回、予習を1回</strong>のペースで進めることで合意しております。<strong>4月12日の授業</strong>では、Topic C1 の最初の部分の予習に入る予定です。</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">04</span>
+                <h2>課題とアドバイス</h2>
+            </div>
+            <div class="section-body">
+                <p>春休みに向けて、<strong>当塾では Topic A の発展問題にも少しずつ慣れていくこと</strong>を大切にしたいと考えております。謙吾さんには、基本の定着に加え、<strong>ExamMate など試験に近い形式の問題</strong>にも触れていただきたいです。無理のない範囲で演習のリズムを保っていただけると、授業との相乗効果がより出やすくなります。</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">05</span>
+                <h2>学習の進捗（Physics HL）</h2>
+            </div>
+            <div class="section-body">
+                <p>03 と同じ期間について、<strong>学校での進みと当塾での進み</strong>を並べます（学習計画表の進捗列に基づく転記です）。</p>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr><th>単元（授業で扱った範囲）</th><th>学校での進み</th><th>当塾での進み</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>2026/03/01 — B.5 Current and circuits 1</td><td>済</td><td>済</td></tr>
+                    <tr><td>2026/03/08 — B.5 Current and circuits 2〜3</td><td>済</td><td>済</td></tr>
+                    <tr><td>2026/03/15 — A.1・B.1・B.5 各単元</td><td>済</td><td>済</td></tr>
+                    <tr><td>2026/03/22 — 同上の復習系</td><td>済</td><td>済</td></tr>
+                    <tr><td>2026/03/29 — A.1・A.2・A.3</td><td>済</td><td>済</td></tr>
+                </tbody>
+            </table>
+            <div class="section-body">
+                <p>謙吾さんのペースは計画とよく合っているように思います。Topic C に入るころは、<strong>森田の授業の中で</strong>理解の度合いに合わせて、改めて丁寧にご説明いたします。</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">06</span>
+                <h2>今後の授業計画</h2>
+            </div>
+            <table class="plan-table">
+                <thead>
+                    <tr><th style="width:24%">予定日</th><th>内容（学習計画表に基づく）</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>2026/04/19</td><td>C.1 Simple harmonic motion 1</td></tr>
+                    <tr><td>2026/04/26</td><td>C.1 Simple harmonic motion 2</td></tr>
+                    <tr><td>2026/05/03</td><td>C.2 Wave model, Wave phenomena 1</td></tr>
+                    <tr><td>2026/05/10</td><td>C.3 Wave phenomena 2；C.3 Wave phenomena 3（同日の予定列）</td></tr>
+                </tbody>
+            </table>
+            <div class="analysis-box">
+                <div class="box-label">今後の進め方・ご家庭へのお願い</div>
+                <ul>
+                    <li>学校のシラバスや今後の予定につきましては、<strong>ご家庭へメールでご相談のうえ、学校の先生経由で入手できるか</strong>確認いたします。</li>
+                    <li><strong>三者面談の後</strong>、進路や目標について担当CAの藤井がお伺いし、<strong>森田先生と情報共有</strong>いたします。</li>
+                </ul>
+            </div>
+            <p class="closing-line">ご不明点やご心配な点がございましたら、いつでも担当までお声がけください。</p>
+        </section>
+
+        <footer class="page-footer">
+            <div class="footer-contact">
+                <strong>EDUBAL Academy</strong><br>
+                お問い合わせは担当教師・担当CAまで<br>
+                （連絡先は運用に合わせて差し替え）
+            </div>
+            <div class="footer-right">
+                © 2026 EDUBAL Academy<br>
+                本レポートの内容は個人情報を含みます。<br>
+                取り扱いにご注意ください。
+            </div>
+        </footer>
+
+        <section class="admin-only no-print" aria-label="管理者向け注意">
+            <h2>【管理者・担当者向け】配布前チェック</h2>
+            <p>ご家庭へ送付する PDF では、本節が印刷されないことを確認してください。Markdown 版から配布する場合は本節を削除してください。</p>
+            <ul>
+                <li>本レポートの根拠の一部は、会議の自動要約（Gemini）です。配布前に音声・原記録と照合してください。</li>
+                <li>MTG 記録では「Taiga Morita」との表記がありますが、本文では学習計画表に合わせ「森田 大翔」に統一しています（同一人物として扱う運用）。</li>
+                <li>学習計画表の取得範囲では、IB 合計の「目標点」欄は確認できていません。必要ならスプレを追記取得してください。</li>
+                <li>3月の学校試験の日程・得点は表からは特定できていません。MTG 要約に「B5・火曜実施・結果未出」の言及あり。日付確定後に本文へ反映してください。</li>
+                <li>学校試験の得点表記が「B1・B3・B4 で得点7」と「A7取得」で食い違うため、原資料で確定してからご家庭向け文面に反映してください。</li>
+                <li>03 の理解度★は授業観察ベース。学習計画表に「理解度」列が無い場合は原資料と照合してください。</li>
+                <li>05 の「学校／当塾」は学習計画表の進捗列の転記です。</li>
+                <li>「Review (practice test A.1-A3 )」行は授業日セルが一部空欄のため、3/29 に Review のみが実施されたかは断定不可。</li>
+                <li>月次案の「ミスの種類と原因」は MTG 要約から抽出していません。</li>
+                <li>トピック C 付近はスプレの空欄が多く、未実施と未入力の区別不可。</li>
+            </ul>
+        </section>
+    </div>
+
+    <button class="print-btn no-print" onclick="window.print()">印刷 / PDF保存（管理者欄は非表示）</button>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>月次レポートサンプル一覧 — EDUBAL Academy</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+            background: #f4f6f9;
+            padding: 40px 20px;
+            color: #1a1a1a;
+        }
+        .container { max-width: 880px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 28px; }
+        .header .logo { font-size: 13pt; font-weight: 900; color: #2c3e50; letter-spacing: 1px; margin-bottom: 8px; }
+        .header h1 { font-size: 18pt; color: #2c3e50; margin-bottom: 8px; }
+        .header p { font-size: 9.5pt; color: #666; line-height: 1.6; }
+        .back { margin-bottom: 20px; }
+        .back a { font-size: 10pt; color: #4a6491; text-decoration: none; }
+        .back a:hover { text-decoration: underline; }
+        .ver-note {
+            background: #fff;
+            border: 1px solid #dde3ec;
+            border-radius: 4px;
+            padding: 14px 18px;
+            margin-bottom: 22px;
+            font-size: 9.5pt;
+            line-height: 1.65;
+        }
+        .ver-note code { font-size: 9pt; background: #f0f0f0; padding: 1px 5px; border-radius: 2px; }
+        .ver-note a { color: #4a6491; }
+        .section-title { font-size: 11pt; font-weight: 700; color: #2c3e50; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid #27ae60; }
+        .cards { display: grid; gap: 16px; }
+        .card {
+            background: #fff;
+            border: 1px solid #dde3ec;
+            border-left: 5px solid #27ae60;
+            border-radius: 4px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: inherit;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .card.muted { border-left-color: #95a5a6; }
+        .card-info .pattern-label { font-size: 8.5pt; color: #888; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .card-info h2 { font-size: 13pt; color: #2c3e50; margin-bottom: 4px; }
+        .card-info p { font-size: 9.5pt; color: #555; }
+        .card-arrow { font-size: 18pt; color: #27ae60; font-weight: 300; }
+        .card.muted .card-arrow { color: #95a5a6; }
+        .footer { text-align: center; margin-top: 36px; font-size: 8.5pt; color: #aaa; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p class="back"><a href="../index.html">← パターン一覧へ</a></p>
+        <div class="header">
+            <div class="logo">EDUBAL Academy</div>
+            <h1>月次レポート（Pattern B 系・サンプル）</h1>
+            <p>ご家庭向け HTML。正本はリポジトリの <code>docs/samples/monthly-reports/</code>。<br>更新後は <code>node scripts/sync_monthly_reports_to_vercel.mjs</code> を実行してからデプロイしてください。<br><a href="SECURE_DELIVERY_月次レポート_HTML.md">PDF にせず HTML のまま安全に送る（手順・T1-3 との関係）</a></p>
+        </div>
+
+        <div class="ver-note">
+            <strong>バージョン</strong>：HTML 先頭の <code>monthly-report-revision</code> を正とします。<strong>鈴木（73594）</strong>は <strong>v3.2</strong>。<strong>高藤（72324）</strong>は <strong>v3.5.1</strong>（<strong>01「学校のテスト状況」</strong>・05 に学習計画表リンク・採番 01・02–05・<a href="REVIEW_高藤_PDFコメント反映_v3.3.md">反映メモ</a>）。過去版は <code>versions/v1/</code>・<code>versions/v2/</code>・<code>versions/v3/</code> に凍結コピーを保持します（上書きしません）。方針は <a href="versions/README.md">versions/README.md</a> を参照してください。
+        </div>
+
+        <p class="section-title">社内向け · レポート微修正</p>
+        <div class="cards">
+            <a class="card" href="tools/monthly_report_full_editor.html" style="border-left-color:#4a6491;">
+                <div class="card-info">
+                    <div class="pattern-label">ブラウザのみ · 保存はコピーまたはダウンロード</div>
+                    <h2>月次レポート全文エディタ</h2>
+                    <p>枠内でインライン編集。別タブプレビュー。HTML は折りたたみ。サンプル・コピー・保存</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+        </div>
+
+        <p class="section-title">鈴木 謙吾（73594）</p>
+        <div class="cards">
+            <a class="card" href="monthly_2026-04_suzuki_report.html">
+                <div class="card-info">
+                    <div class="pattern-label">最新 URL（推奨）· v3.2 内容</div>
+                    <h2>monthly_2026-04_suzuki_report.html</h2>
+                    <p>Physics HL · 05 トピック別10区間（03・calendar_buckets_10）</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+            <a class="card" href="versions/v3/monthly_2026-04_suzuki_report.html">
+                <div class="card-info">
+                    <div class="pattern-label">凍結コピー v3</div>
+                    <h2>versions/v3/ 鈴木</h2>
+                    <p>v3.2 相当スナップショット（05 トピック別・MD 同梱）</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+            <a class="card muted" href="versions/v2/monthly_2026-04_suzuki_report.html">
+                <div class="card-info">
+                    <div class="pattern-label">凍結コピー v2</div>
+                    <h2>versions/v2/ 鈴木</h2>
+                    <p>v2 スナップショット（MD 同梱）</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+            <a class="card muted" href="versions/v1/monthly_2026-04_suzuki_legacy_full.html">
+                <div class="card-info">
+                    <div class="pattern-label">v1 参照（分割・レビュー前）</div>
+                    <h2>legacy 単体 HTML</h2>
+                    <p><code>monthly_2026-04_suzuki.html</code> 相当の凍結。現行レイアウトとは異なります。</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+        </div>
+
+        <p class="section-title">高藤 泰次郎（72324）</p>
+        <div class="cards">
+            <a class="card" href="monthly_2026-04_takafuji_report.html">
+                <div class="card-info">
+                    <div class="pattern-label">最新 URL（推奨）· v3.5.1 内容</div>
+                    <h2>monthly_2026-04_takafuji_report.html</h2>
+                    <p>Math AA SL · 05 トピック別10区間（03・calendar_buckets_10）</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+            <a class="card" href="versions/v3/monthly_2026-04_takafuji_report.html">
+                <div class="card-info">
+                    <div class="pattern-label">凍結コピー v3</div>
+                    <h2>versions/v3/ 高藤</h2>
+                    <p>v3.5.1 相当スナップショット（ルート HTML と同一）</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+            <a class="card muted" href="versions/v2/monthly_2026-04_takafuji_report.html">
+                <div class="card-info">
+                    <div class="pattern-label">凍結コピー v2</div>
+                    <h2>versions/v2/ 高藤</h2>
+                    <p>v2 スナップショット（MD 同梱）</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+            <a class="card muted" href="versions/v1/README.md">
+                <div class="card-info">
+                    <div class="pattern-label">v1</div>
+                    <h2>高藤 v1 について</h2>
+                    <p>初回から _report のみのため v1 HTML は未保管。README を参照。</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 EDUBAL Academy — 社内検討用。個人情報を含みます。取り扱いにご注意ください。</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUBAL Academy 学習状況分析レポート（PDF形式）</title>
+    <style>
+        /* ===== リセット ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ===== 基本設定（A4想定） ===== */
+        body {
+            font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+            font-size: 10.5pt;
+            line-height: 1.7;
+            color: #1a1a1a;
+            background: #e8e8e8;
+            padding: 20px;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            background: #fff;
+            margin: 0 auto;
+            padding: 20mm 18mm 18mm;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+        }
+
+        /* ===== ヘッダー ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 16px;
+        }
+
+        .logo-block .logo-name {
+            font-size: 16pt;
+            font-weight: 900;
+            color: #2c3e50;
+            letter-spacing: 1px;
+        }
+
+        .logo-block .logo-sub {
+            font-size: 8pt;
+            color: #666;
+            letter-spacing: 0.5px;
+        }
+
+        .report-meta-header {
+            text-align: right;
+            font-size: 8pt;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .report-meta-header .report-id {
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        /* ===== タイトルブロック ===== */
+        .title-block {
+            background: #2c3e50;
+            color: #fff;
+            padding: 14px 20px;
+            margin-bottom: 14px;
+            border-radius: 2px;
+        }
+
+        .title-block h1 {
+            font-size: 15pt;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .title-block .title-period {
+            font-size: 9pt;
+            opacity: 0.85;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== 基本情報テーブル ===== */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 18px;
+            font-size: 9.5pt;
+        }
+
+        .info-table td {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+        }
+
+        .info-table td:nth-child(odd) {
+            background: #f5f5f5;
+            font-weight: 700;
+            color: #2c3e50;
+            width: 18%;
+            white-space: nowrap;
+        }
+
+        .info-table td:nth-child(even) {
+            width: 32%;
+        }
+
+        /* ===== KPIサマリー ===== */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .kpi-box {
+            border: 1px solid #c8d5e8;
+            border-top: 3px solid #4a6491;
+            padding: 10px 12px;
+            border-radius: 2px;
+            background: #f9fbff;
+        }
+
+        .kpi-box .kpi-val {
+            font-size: 18pt;
+            font-weight: 900;
+            color: #2c3e50;
+            line-height: 1.1;
+        }
+
+        .kpi-box .kpi-lbl {
+            font-size: 7.5pt;
+            color: #555;
+            margin-top: 2px;
+        }
+
+        .kpi-box .kpi-delta {
+            font-size: 8pt;
+            font-weight: 700;
+            color: #2e7d32;
+            margin-top: 3px;
+        }
+
+        .kpi-box .kpi-delta.warn { color: #c0392b; }
+
+        /* ===== セクション共通 ===== */
+        .section {
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #2c3e50;
+            color: #fff;
+            padding: 6px 12px;
+            margin-bottom: 12px;
+            border-radius: 2px;
+        }
+
+        .section-heading .sec-num {
+            font-size: 9pt;
+            background: #4a6491;
+            padding: 1px 7px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .section-heading h2 {
+            font-size: 11pt;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== 進捗テーブル ===== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 12px;
+        }
+
+        .data-table thead tr {
+            background: #2c3e50;
+            color: #fff;
+        }
+
+        .data-table thead th {
+            padding: 7px 10px;
+            font-weight: 700;
+            text-align: left;
+            font-size: 9pt;
+        }
+
+        .data-table tbody tr:nth-child(even) {
+            background: #f5f7fa;
+        }
+
+        .data-table tbody tr:hover {
+            background: #eef2f8;
+        }
+
+        .data-table tbody td {
+            padding: 7px 10px;
+            border-bottom: 1px solid #dde3ec;
+        }
+
+        /* ===== バーゲージ ===== */
+        .bar-gauge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bar-track {
+            flex: 1;
+            height: 8px;
+            background: #e0e6f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: #4a6491;
+            border-radius: 4px;
+        }
+
+        .bar-fill.low { background: #e74c3c; }
+        .bar-fill.mid { background: #e6a817; }
+        .bar-fill.high { background: #2e7d32; }
+
+        .bar-pct {
+            font-weight: 700;
+            font-size: 9pt;
+            min-width: 32px;
+            text-align: right;
+        }
+
+        /* ===== 課題・分析ボックス ===== */
+        .analysis-box {
+            border: 1px solid #c8d5e8;
+            border-left: 4px solid #4a6491;
+            padding: 10px 14px;
+            margin-bottom: 10px;
+            background: #f9fbff;
+            border-radius: 0 2px 2px 0;
+            font-size: 9.5pt;
+        }
+
+        .analysis-box .box-label {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+
+        /* ===== 学習計画案テーブル ===== */
+        .plan-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 10px;
+        }
+
+        .plan-table th, .plan-table td {
+            border: 1px solid #ccc;
+            padding: 7px 10px;
+            vertical-align: top;
+        }
+
+        .plan-table thead th {
+            background: #2c3e50;
+            color: #fff;
+            font-weight: 700;
+            font-size: 9pt;
+        }
+
+        .plan-table tbody tr:nth-child(even) { background: #f5f7fa; }
+
+        .badge-recommended {
+            display: inline-block;
+            background: #4a6491;
+            color: #fff;
+            font-size: 7.5pt;
+            font-weight: 700;
+            padding: 1px 8px;
+            border-radius: 10px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        /* ===== お願い事項リスト ===== */
+        .checklist {
+            list-style: none;
+            font-size: 9.5pt;
+            margin-bottom: 10px;
+        }
+
+        .checklist li {
+            padding: 5px 0 5px 22px;
+            border-bottom: 1px dotted #dde3ec;
+            position: relative;
+        }
+
+        .checklist li::before {
+            content: "□";
+            position: absolute;
+            left: 0;
+            color: #4a6491;
+            font-weight: 700;
+        }
+
+        .checklist li:last-child { border-bottom: none; }
+
+        /* ===== 面談候補テーブル ===== */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+        }
+
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #ccc;
+            padding: 6px 10px;
+        }
+
+        .schedule-table thead th {
+            background: #f5f5f5;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        /* ===== フッター ===== */
+        .page-footer {
+            margin-top: 24px;
+            padding-top: 10px;
+            border-top: 2px solid #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 8pt;
+            color: #555;
+        }
+
+        .page-footer .footer-contact { line-height: 1.8; }
+        .page-footer .footer-right { text-align: right; line-height: 1.8; }
+
+        /* ===== 印刷設定 ===== */
+        @media print {
+            body { background: none; padding: 0; }
+
+            .page {
+                width: 210mm;
+                padding: 18mm 16mm 16mm;
+                box-shadow: none;
+            }
+
+            .no-print { display: none; }
+        }
+
+        /* ===== 印刷ボタン（画面表示時のみ） ===== */
+        .print-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 10px 22px;
+            background: #2c3e50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 10pt;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+        }
+
+        .print-btn:hover { background: #4a6491; }
+    </style>
+</head>
+<body>
+    <div class="page">
+
+        <!-- ヘッダー -->
+        <header class="page-header">
+            <div class="logo-block">
+                <div class="logo-name">EDUBAL Academy</div>
+                <div class="logo-sub">個別最適化された国際バカロレア教育</div>
+            </div>
+            <div class="report-meta-header">
+                <div class="report-id">RPT-202603-STU001</div>
+                <div>発行日：2026年4月2日</div>
+                <div>対象期間：2026年3月1日 ─ 3月31日</div>
+            </div>
+        </header>
+
+        <!-- タイトル -->
+        <div class="title-block">
+            <h1>学習状況分析レポート</h1>
+            <div class="title-period">月次学習進捗と今後の学習計画</div>
+        </div>
+
+        <!-- 基本情報 -->
+        <table class="info-table">
+            <tr>
+                <td>生徒名</td>
+                <td>小林 慧 様</td>
+                <td>生徒番号</td>
+                <td>STU001</td>
+            </tr>
+            <tr>
+                <td>担当教師</td>
+                <td>池田 健太郎 先生</td>
+                <td>担当CA</td>
+                <td>藤井 優子</td>
+            </tr>
+        </table>
+
+        <!-- KPIサマリー -->
+        <div class="kpi-row">
+            <div class="kpi-box">
+                <div class="kpi-val">75%</div>
+                <div class="kpi-lbl">今月の正答率</div>
+                <div class="kpi-delta">▲ +15pt 前月比</div>
+            </div>
+            <div class="kpi-box">
+                <div class="kpi-val">6</div>
+                <div class="kpi-lbl">現在の IB スコア</div>
+                <div class="kpi-delta">目標まで残り 1pt</div>
+            </div>
+            <div class="kpi-box">
+                <div class="kpi-val">8週</div>
+                <div class="kpi-lbl">試験まで</div>
+                <div class="kpi-delta">2026年5月末</div>
+            </div>
+            <div class="kpi-box">
+                <div class="kpi-val">−5回</div>
+                <div class="kpi-lbl">指導時間の不足</div>
+                <div class="kpi-delta warn">▲ 要対応</div>
+            </div>
+        </div>
+
+        <!-- セクション1: 今月の学習成果 -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">01</span>
+                <h2>今月の学習成果（肯定的フィードバック）</h2>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>科目・単元</th>
+                        <th>進捗状況</th>
+                        <th>正答率</th>
+                        <th>前月比</th>
+                        <th>評価</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>微分法の応用（全範囲）</td>
+                        <td>修得済み</td>
+                        <td>
+                            <div class="bar-gauge">
+                                <div class="bar-track"><div class="bar-fill high" style="width:80%"></div></div>
+                                <span class="bar-pct">80%</span>
+                            </div>
+                        </td>
+                        <td>+12%</td>
+                        <td>良好</td>
+                    </tr>
+                    <tr>
+                        <td>積分法の基礎計算</td>
+                        <td>修得済み</td>
+                        <td>
+                            <div class="bar-gauge">
+                                <div class="bar-track"><div class="bar-fill mid" style="width:72%"></div></div>
+                                <span class="bar-pct">72%</span>
+                            </div>
+                        </td>
+                        <td>+18%</td>
+                        <td>良好</td>
+                    </tr>
+                    <tr>
+                        <td>三角関数のグラフと性質</td>
+                        <td>修得済み</td>
+                        <td>
+                            <div class="bar-gauge">
+                                <div class="bar-track"><div class="bar-fill high" style="width:76%"></div></div>
+                                <span class="bar-pct">76%</span>
+                            </div>
+                        </td>
+                        <td>+10%</td>
+                        <td>良好</td>
+                    </tr>
+                    <tr>
+                        <td>積分法の応用問題</td>
+                        <td>学習中</td>
+                        <td>
+                            <div class="bar-gauge">
+                                <div class="bar-track"><div class="bar-fill low" style="width:45%"></div></div>
+                                <span class="bar-pct">45%</span>
+                            </div>
+                        </td>
+                        <td>+5%</td>
+                        <td>要強化</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="analysis-box">
+                <div class="box-label">特筆すべき成果</div>
+                Topic Eにおける「Score 6」の獲得は、IB評価基準における「複雑な概念の正確な理解と応用力」を示す高い成果です。今月は計3単元を修得し、計画通りの進捗を維持しています。
+            </div>
+        </section>
+
+        <!-- セクション2: 現状の課題と分析 -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">02</span>
+                <h2>現状の課題と分析（逆算データ）</h2>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>指標</th>
+                        <th>目標値</th>
+                        <th>現状値</th>
+                        <th>達成度</th>
+                        <th>分析・コメント</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>目標 IB スコア</td>
+                        <td>7点</td>
+                        <td>6点</td>
+                        <td>86%</td>
+                        <td>あと1点で目標達成</td>
+                    </tr>
+                    <tr>
+                        <td>試験までの残り週数</td>
+                        <td>─</td>
+                        <td>8週</td>
+                        <td>─</td>
+                        <td>2026年5月末が最終試験</td>
+                    </tr>
+                    <tr>
+                        <td>必要授業回数</td>
+                        <td>32回</td>
+                        <td>27回（実施済み）</td>
+                        <td>84%</td>
+                        <td>あと5回分の指導が必要</td>
+                    </tr>
+                    <tr>
+                        <td>ボトルネック単元</td>
+                        <td>─</td>
+                        <td>積分法の応用問題</td>
+                        <td>─</td>
+                        <td>応用問題での正答率が低い（45%）</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="analysis-box">
+                <div class="box-label">逆算スケジュール分析</div>
+                現時点での進捗と、今後のシラバス網羅および Past Paper 演習の期間を厳密に逆算した結果、現在の指導頻度では目標達成までに<strong>合計5回分</strong>の指導時間が不足しています。理解した内容を「試験で使える知識」として定着させるためのアウトプット演習時間の確保が急務です。
+            </div>
+        </section>
+
+        <!-- セクション3: 今後の学習計画案 -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">03</span>
+                <h2>今後の学習計画案</h2>
+            </div>
+
+            <table class="plan-table">
+                <thead>
+                    <tr>
+                        <th style="width:12%">案</th>
+                        <th style="width:28%">内容</th>
+                        <th style="width:20%">追加費用</th>
+                        <th style="width:40%">主なポイント・リスク</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A案：現状維持</td>
+                        <td>週1回・60分授業を継続し、自学自習で不足分を補う</td>
+                        <td>追加費用なし</td>
+                        <td>進捗が自己管理能力に依存するリスクあり</td>
+                    </tr>
+                    <tr>
+                        <td><strong>B案：指導延長</strong><span class="badge-recommended">推奨</span></td>
+                        <td>週1回・90分授業（30分延長）で不足5回分を解消</td>
+                        <td>月額 +5,000円</td>
+                        <td>Past Paper 対策の早期着手。目標達成への確実性が最も高い</td>
+                    </tr>
+                    <tr>
+                        <td>C案：集中講義</td>
+                        <td>春季休暇中に集中講義5回を実施してキャッチアップ</td>
+                        <td>一括 30,000円</td>
+                        <td>短期間で弱点単元を集中克服。Mock 試験対策パック含む</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- セクション4: ご家庭へのお願い -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">04</span>
+                <h2>ご家庭へのお願い・共有事項</h2>
+            </div>
+
+            <div class="analysis-box" style="margin-bottom:12px;">
+                <div class="box-label">情報提供のお願い</div>
+                より精度の高い学習計画立案のため、以下の資料を Google Drive の専用フォルダへアップロードいただけますと幸いです。
+                <ul class="checklist" style="margin-top:8px;">
+                    <li>学校のシラバス（授業計画）</li>
+                    <li>直近の試験・模試の答案用紙</li>
+                    <li>今後の試験日程（学校発表分）</li>
+                </ul>
+            </div>
+
+            <div class="analysis-box">
+                <div class="box-label">三者面談のご案内</div>
+                今後の学習計画について方向性を確認するため、三者面談の実施をご提案いたします。ご都合の良い日時をお選びください。
+            </div>
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>候補日時</th>
+                        <th>形式</th>
+                        <th>所要時間</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2026年4月10日（木）18:00〜</td>
+                        <td>オンライン（Zoom）</td>
+                        <td>60分</td>
+                    </tr>
+                    <tr>
+                        <td>2026年4月12日（土）10:00〜</td>
+                        <td>オンライン（Zoom）</td>
+                        <td>60分</td>
+                    </tr>
+                    <tr>
+                        <td>2026年4月13日（日）14:00〜</td>
+                        <td>対面（弊アカデミー）</td>
+                        <td>60分</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- フッター -->
+        <footer class="page-footer">
+            <div class="footer-contact">
+                <strong>EDUBAL Academy</strong><br>
+                〒150-0001 東京都渋谷区神宮前1-1-1<br>
+                TEL: 03-1234-5678 ｜ contact@edubal-academy.jp
+            </div>
+            <div class="footer-right">
+                © 2026 EDUBAL Academy<br>
+                本レポートの内容は個人情報を含みます。<br>
+                取り扱いにご注意ください。
+            </div>
+        </footer>
+    </div>
+
+    <!-- 印刷ボタン（印刷時は非表示） -->
+    <button class="print-btn no-print" onclick="window.print()">印刷 / PDF保存</button>
+</body>
+</html>

@@ -1,0 +1,76 @@
+{
+  "notebook_id": "8d0e1e72-2137-485e-a524-826ba11d359c",
+  "template_dir": "household_giga",
+  "households": [
+    {
+      "slug": "tokura",
+      "family_house": "十倉家",
+      "pattern_honorific": "十倉さま（とくらさん）",
+      "meta_student_line": "十倉 様（Math AA SL・生徒番号 61630）",
+      "student_id": "61630",
+      "course": "Math AA SL",
+      "timeline_source_id": "4b6d2b1a-4d72-4278-b77c-1714ae654c39",
+      "nl_drive_blurb": "61630 十倉さま（Math AA SL）"
+    },
+    {
+      "slug": "wasada",
+      "family_house": "和佐田家",
+      "pattern_honorific": "和佐田さま（わさださん）",
+      "meta_student_line": "和佐田 様（Math AA SL・生徒番号 70469）",
+      "student_id": "70469",
+      "course": "Math AA SL",
+      "timeline_source_id": "2d87c779-1704-4759-b714-86756844fbe6",
+      "nl_drive_blurb": "70469 和佐田さま (Math AA SL)"
+    },
+    {
+      "slug": "kobayashi_kei",
+      "family_house": "小林家",
+      "pattern_honorific": "小林 慧さま（こばやしけいさん）",
+      "meta_student_line": "小林 慧 様（コース・生徒番号は sources の Drive／03 で確認）",
+      "student_id": "TBD",
+      "course": "（要確認）",
+      "timeline_source_id": "97362767-1ee1-41d7-979b-6dbdea95722c",
+      "nl_drive_blurb": "小林 慧さま（NotebookLM 個別ソース参照）"
+    },
+    {
+      "slug": "kawaguchi",
+      "family_house": "川口家",
+      "pattern_honorific": "川口さま（かわぐちさん）",
+      "meta_student_line": "川口 様（Physics HL・生徒番号 71972）",
+      "student_id": "71972",
+      "course": "Physics HL",
+      "timeline_source_id": "ce13a5f4-aa09-4c67-96b3-93ad39ab536b",
+      "nl_drive_blurb": "71972 川口さま(Physics HL)"
+    },
+    {
+      "slug": "takeishi",
+      "family_house": "武石家",
+      "pattern_honorific": "武石さま（たけいしさん）",
+      "meta_student_line": "武石 様（Physics HL・生徒番号 72321）",
+      "student_id": "72321",
+      "course": "Physics HL",
+      "timeline_source_id": "3fb4d01d-a654-4325-a927-ca02e5cde08d",
+      "nl_drive_blurb": "72321 武石さま(Physics(HL))"
+    },
+    {
+      "slug": "takahama",
+      "family_house": "高浜家",
+      "pattern_honorific": "高浜さま（たかはまさん）",
+      "meta_student_line": "高浜 様（Math AA HL・Chemistry HL・生徒番号 56807）",
+      "student_id": "56807",
+      "course": "Math AA HL、Chemistry HL",
+      "timeline_source_id": "b05928d0-3ee9-4a6c-bb7f-49778409a9f4",
+      "nl_drive_blurb": "56807 高浜さま (Math AA HL、Chemistry HL)"
+    },
+    {
+      "slug": "takafuji",
+      "family_house": "高藤家",
+      "pattern_honorific": "高藤さま（たかふじさん）",
+      "meta_student_line": "高藤 様（Math AA SL・生徒番号 72324）",
+      "student_id": "72324",
+      "course": "Math AA SL",
+      "timeline_source_id": "383a365e-cc9e-4410-8c32-2de6b3bd9f3c",
+      "nl_drive_blurb": "72324 高藤さま(Math AA SL)"
+    }
+  ]
+}

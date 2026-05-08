@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>十倉さま（とくらさん）Math AA SL — 学習状況分析レポート（Pattern B）</title>
+    <style>
+        /* ===== リセット ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ===== 基本設定（A4想定） ===== */
+        body {
+            font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+            font-size: 10.5pt;
+            line-height: 1.7;
+            color: #1a1a1a;
+            background: #e8e8e8;
+            padding: 20px;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            background: #fff;
+            margin: 0 auto;
+            padding: 20mm 18mm 18mm;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+        }
+
+        /* ===== ヘッダー ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 16px;
+        }
+
+        .logo-block .logo-name {
+            font-size: 16pt;
+            font-weight: 900;
+            color: #2c3e50;
+            letter-spacing: 1px;
+        }
+
+        .logo-block .logo-sub {
+            font-size: 8pt;
+            color: #666;
+            letter-spacing: 0.5px;
+        }
+
+        .report-meta-header {
+            text-align: right;
+            font-size: 8pt;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .report-meta-header .report-id {
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        /* ===== タイトルブロック ===== */
+        .title-block {
+            background: #2c3e50;
+            color: #fff;
+            padding: 14px 20px;
+            margin-bottom: 14px;
+            border-radius: 2px;
+        }
+
+        .title-block h1 {
+            font-size: 15pt;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .title-block .title-period {
+            font-size: 9pt;
+            opacity: 0.85;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== 基本情報テーブル ===== */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 18px;
+            font-size: 9.5pt;
+        }
+
+        .info-table td {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+        }
+
+        .info-table td:nth-child(odd) {
+            background: #f5f5f5;
+            font-weight: 700;
+            color: #2c3e50;
+            width: 18%;
+            white-space: nowrap;
+        }
+
+        .info-table td:nth-child(even) {
+            width: 32%;
+        }
+
+        /* ===== KPIサマリー ===== */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .kpi-box {
+            border: 1px solid #c8d5e8;
+            border-top: 3px solid #4a6491;
+            padding: 10px 12px;
+            border-radius: 2px;
+            background: #f9fbff;
+        }
+
+        .kpi-box .kpi-val {
+            font-size: 18pt;
+            font-weight: 900;
+            color: #2c3e50;
+            line-height: 1.1;
+        }
+
+        .kpi-box .kpi-lbl {
+            font-size: 7.5pt;
+            color: #555;
+            margin-top: 2px;
+        }
+
+        .kpi-box .kpi-delta {
+            font-size: 8pt;
+            font-weight: 700;
+            color: #2e7d32;
+            margin-top: 3px;
+        }
+
+        .kpi-box .kpi-delta.warn { color: #c0392b; }
+
+        /* ===== セクション共通 ===== */
+        .section {
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #2c3e50;
+            color: #fff;
+            padding: 6px 12px;
+            margin-bottom: 12px;
+            border-radius: 2px;
+        }
+
+        .section-heading .sec-num {
+            font-size: 9pt;
+            background: #4a6491;
+            padding: 1px 7px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .section-heading h2 {
+            font-size: 11pt;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== 進捗テーブル ===== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 12px;
+        }
+
+        .data-table thead tr {
+            background: #2c3e50;
+            color: #fff;
+        }
+
+        .data-table thead th {
+            padding: 7px 10px;
+            font-weight: 700;
+            text-align: left;
+            font-size: 9pt;
+        }
+
+        .data-table tbody tr:nth-child(even) {
+            background: #f5f7fa;
+        }
+
+        .data-table tbody tr:hover {
+            background: #eef2f8;
+        }
+
+        .data-table tbody td {
+            padding: 7px 10px;
+            border-bottom: 1px solid #dde3ec;
+        }
+
+        /* ===== バーゲージ ===== */
+        .bar-gauge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bar-track {
+            flex: 1;
+            height: 8px;
+            background: #e0e6f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: #4a6491;
+            border-radius: 4px;
+        }
+
+        .bar-fill.low { background: #e74c3c; }
+        .bar-fill.mid { background: #e6a817; }
+        .bar-fill.high { background: #2e7d32; }
+
+        .bar-pct {
+            font-weight: 700;
+            font-size: 9pt;
+            min-width: 32px;
+            text-align: right;
+        }
+
+        /* ===== 課題・分析ボックス ===== */
+        .analysis-box {
+            border: 1px solid #c8d5e8;
+            border-left: 4px solid #4a6491;
+            padding: 10px 14px;
+            margin-bottom: 10px;
+            background: #f9fbff;
+            border-radius: 0 2px 2px 0;
+            font-size: 9.5pt;
+        }
+
+        .analysis-box .box-label {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+
+        /* ===== 学習計画案テーブル ===== */
+        .plan-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 10px;
+        }
+
+        .plan-table th, .plan-table td {
+            border: 1px solid #ccc;
+            padding: 7px 10px;
+            vertical-align: top;
+        }
+
+        .plan-table thead th {
+            background: #2c3e50;
+            color: #fff;
+            font-weight: 700;
+            font-size: 9pt;
+        }
+
+        .plan-table tbody tr:nth-child(even) { background: #f5f7fa; }
+
+        .badge-recommended {
+            display: inline-block;
+            background: #4a6491;
+            color: #fff;
+            font-size: 7.5pt;
+            font-weight: 700;
+            padding: 1px 8px;
+            border-radius: 10px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        /* ===== お願い事項リスト ===== */
+        .checklist {
+            list-style: none;
+            font-size: 9.5pt;
+            margin-bottom: 10px;
+        }
+
+        .checklist li {
+            padding: 5px 0 5px 22px;
+            border-bottom: 1px dotted #dde3ec;
+            position: relative;
+        }
+
+        .checklist li::before {
+            content: "□";
+            position: absolute;
+            left: 0;
+            color: #4a6491;
+            font-weight: 700;
+        }
+
+        .checklist li:last-child { border-bottom: none; }
+
+        /* ===== 面談候補テーブル ===== */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+        }
+
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #ccc;
+            padding: 6px 10px;
+        }
+
+        .schedule-table thead th {
+            background: #f5f5f5;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        /* ===== フッター ===== */
+        .page-footer {
+            margin-top: 24px;
+            padding-top: 10px;
+            border-top: 2px solid #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 8pt;
+            color: #555;
+        }
+
+        .page-footer .footer-contact { line-height: 1.8; }
+        .page-footer .footer-right { text-align: right; line-height: 1.8; }
+
+        /* ===== 運用メモ・分析・参照（Pattern A 準拠） ===== */
+        .info-strip {
+            font-size: 8.5pt;
+            color: #3d3518;
+            background: #fff9e6;
+            border: 1px solid #e6d39a;
+            padding: 8px 10px;
+            margin-bottom: 12px;
+            line-height: 1.45;
+        }
+        .info-strip a { color: #2c5aa0; }
+        .focus-strip {
+            font-size: 9pt;
+            background: #e8f4fc;
+            border: 1px solid #b6d4ee;
+            padding: 8px 10px;
+            margin-bottom: 14px;
+            line-height: 1.45;
+        }
+        .focus-strip ul { margin: 6px 0 0; padding-left: 1.2em; }
+        .tail-block {
+            margin-top: 14px;
+            margin-bottom: 12px;
+            page-break-inside: avoid;
+        }
+        .tail-block h3.tail-h {
+            font-size: 10pt;
+            color: #2c3e50;
+            margin: 0 0 8px;
+            padding: 4px 0 4px 8px;
+            border-left: 3px solid #4a6491;
+        }
+        .tail-p {
+            font-size: 8.5pt;
+            color: #495057;
+            line-height: 1.55;
+            margin-bottom: 8px;
+        }
+        .review-mail-box {
+            border: 1px solid #93c5fd;
+            background: #eef6ff;
+            padding: 8px 10px;
+            font-size: 8.5pt;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        .factcheck-table-b {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 7.5pt;
+            margin-bottom: 8px;
+        }
+        .factcheck-table-b th,
+        .factcheck-table-b td {
+            border: 1px solid #dde3ec;
+            padding: 4px 5px;
+            vertical-align: top;
+            text-align: left;
+        }
+        .factcheck-table-b th { background: #e8eef5; color: #2c3e50; font-weight: 700; }
+        .factcheck-table-b a { color: #2c5aa0; word-break: break-all; }
+        .fc-badge {
+            display: inline-block;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-size: 7pt;
+            font-weight: 700;
+        }
+        .fc-ok { background: #d4edda; color: #155724; }
+        .fc-demo { background: #fff3cd; color: #856404; }
+        .fc-tpl { background: #e2e3e5; color: #383d41; }
+        .fc-review { background: #f8d7da; color: #721c24; }
+
+        /* ===== 印刷設定 ===== */
+        @media print {
+            body { background: none; padding: 0; }
+
+            .page {
+                width: 210mm;
+                padding: 18mm 16mm 16mm;
+                box-shadow: none;
+            }
+
+            .no-print { display: none; }
+        }
+
+        /* ===== 印刷ボタン（画面表示時のみ） ===== */
+        .print-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 10px 22px;
+            background: #2c3e50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 10pt;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+        }
+
+        .print-btn:hover { background: #4a6491; }
+    </style>
+</head>
+<body>
+    <div class="page">
+
+        <div class="info-strip">
+            <strong>十倉さま（とくらさん）・Pattern B</strong> — 本文根拠は <code>sources/01〜03</code>（<strong>数値の正は 03</strong>）。メールはレビュー用のみ。一次情報の <code>.md</code> は <code>python scripts/serve_project.py</code> で配信推奨。
+            <a href="#factcheck">ファクトチェック</a> · <a href="#graph-requirements">グラフに必要な情報</a> · <a href="#references">参照一覧</a> · <a href="#review-mail">レビュー用メール</a>
+        </div>
+
+        <!-- ヘッダー -->
+        <header class="page-header">
+            <div class="logo-block">
+                <div class="logo-name">EDUBAL Academy</div>
+                <div class="logo-sub">個別最適化された国際バカロレア教育</div>
+            </div>
+            <div class="report-meta-header">
+                <div class="report-id">RPT-202603-61630</div>
+                <div>発行日：2026年4月9日</div>
+                <div>対象期間：2026年3月1日 ─ 3月31日</div>
+            </div>
+        </header>
+
+        <!-- タイトル -->
+        <div class="title-block">
+            <h1>学習状況分析レポート</h1>
+            <div class="title-period">月次学習進捗と今後の学習計画</div>
+            <div class="title-period" style="margin-top:6px;font-size:9pt;opacity:0.9;">対象：十倉さま（とくらさん）／生徒番号 61630・Math AA SL</div>
+        </div>
+
+        <!-- 基本情報 -->
+        <table class="info-table">
+            <tr>
+                <td>生徒名</td>
+                <td>十倉 様（とくらさん・Math AA SL）</td>
+                <td>生徒番号</td>
+                <td>61630</td>
+            </tr>
+            <tr>
+                <td>担当教師</td>
+                <td>Kim 先生</td>
+                <td>担当CA</td>
+                <td>（要確認）</td>
+            </tr>
+            <tr>
+                <td>数値・目標の正</td>
+                <td colspan="3">学習計画表 2026/3/31 時点（03）</td>
+            </tr>
+        </table>
+
+        <div class="focus-strip">
+            <strong>本レポートの主眼（最新出力の扱い）</strong>
+            <ul>
+                <li><strong>KPI・分析表</strong>は <a href="sources/03_学習計画表_プレースホルダー.md">03_学習計画表（3/31）</a> と <a href="sources/00_260319_時系列まとめ_NotebookLM.md">02 ご家庭への提案（1/27）</a> を中心に構成。</li>
+                <li><a href="sources/00_260319_時系列まとめ_NotebookLM.md">01 教師MTG（2/25）</a> は時系列参考。食い違いは<strong>常に 03 を優先</strong>。</li>
+            </ul>
+        </div>
+
+        <!-- KPIサマリー -->
+        <div class="kpi-row">
+            <div class="kpi-box">
+                <div class="kpi-val">71%</div>
+                <div class="kpi-lbl">Calculus 演習正答率（2/25 MTG）</div>
+                <div class="kpi-delta">弱点単元は Trig / Geometry</div>
+            </div>
+            <div class="kpi-box">
+                <div class="kpi-val">5→6</div>
+                <div class="kpi-lbl">見立て / 目標（SL）</div>
+                <div class="kpi-delta">03 学習計画表</div>
+            </div>
+            <div class="kpi-box">
+                <div class="kpi-val">8月</div>
+                <div class="kpi-lbl">Mock 試験（計画表）</div>
+                <div class="kpi-delta">最終試験 2026年11月</div>
+            </div>
+            <div class="kpi-box">
+                <div class="kpi-val">要確認</div>
+                <div class="kpi-lbl">不足コマ（計画表）</div>
+                <div class="kpi-delta warn">03 実シートで確認</div>
+            </div>
+        </div>
+
+        <!-- セクション1: 今月の学習成果 -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">01</span>
+                <h2>今月の学習成果（肯定的フィードバック）</h2>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>科目・単元</th>
+                        <th>進捗状況</th>
+                        <th>正答率</th>
+                        <th>前月比</th>
+                        <th>評価</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Calculus（演習）</td>
+                        <td>継続</td>
+                        <td>
+                            <div class="bar-gauge">
+                                <div class="bar-track"><div class="bar-fill high" style="width:71%"></div></div>
+                                <span class="bar-pct">71%</span>
+                            </div>
+                        </td>
+                        <td>—</td>
+                        <td>良好（2/25 MTG）</td>
+                    </tr>
+                    <tr>
+                        <td>Trigonometry（角度問題含む）</td>
+                        <td>強化中</td>
+                        <td>
+                            <div class="bar-gauge">
+                                <div class="bar-track"><div class="bar-fill low" style="width:40%"></div></div>
+                                <span class="bar-pct">要強化</span>
+                            </div>
+                        </td>
+                        <td>—</td>
+                        <td>弱点</td>
+                    </tr>
+                    <tr>
+                        <td>Geometry</td>
+                        <td>強化中</td>
+                        <td>
+                            <div class="bar-gauge">
+                                <div class="bar-track"><div class="bar-fill mid" style="width:50%"></div></div>
+                                <span class="bar-pct">要強化</span>
+                            </div>
+                        </td>
+                        <td>—</td>
+                        <td>弱点</td>
+                    </tr>
+                    <tr>
+                        <td>解き直し・再演習</td>
+                        <td>習慣化</td>
+                        <td>
+                            <div class="bar-gauge">
+                                <div class="bar-track"><div class="bar-fill low" style="width:35%"></div></div>
+                                <span class="bar-pct">課題</span>
+                            </div>
+                        </td>
+                        <td>—</td>
+                        <td>01 で指摘</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="analysis-box">
+                <div class="box-label">特筆すべき点</div>
+                Paper 1・2 の演習を進め、Calculus 分野では正答率が良好です。学習意欲が高く、旅行中も授業参加など前向きな取り組みが共有されています。一方、苦手単元の反復と解き直しを徹底することが今後の焦点です（sources/01〜03）。
+            </div>
+        </section>
+
+        <!-- セクション2: 現状の課題と分析 -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">02</span>
+                <h2>現状の課題と分析（逆算データ）</h2>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>指標</th>
+                        <th>目標値</th>
+                        <th>現状値</th>
+                        <th>達成度</th>
+                        <th>分析・コメント</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>目標スコア / 見立て</td>
+                        <td>6</td>
+                        <td>5</td>
+                        <td>—</td>
+                        <td>03 を正とする</td>
+                    </tr>
+                    <tr>
+                        <td>Mock / 最終試験</td>
+                        <td>2026年8月</td>
+                        <td>2026年11月</td>
+                        <td>—</td>
+                        <td>マイルストーンは 02・03</td>
+                    </tr>
+                    <tr>
+                        <td>不足コマ</td>
+                        <td>（計画表）</td>
+                        <td>要確認</td>
+                        <td>—</td>
+                        <td>実シートで更新</td>
+                    </tr>
+                    <tr>
+                        <td>ボトルネック単元</td>
+                        <td>─</td>
+                        <td>Trig / Geometry</td>
+                        <td>─</td>
+                        <td>解き直しの習慣（01）</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="analysis-box">
+                <div class="box-label">逆算スケジュール分析</div>
+                全単元完了は<strong>5月中旬頃</strong>、Mock は<strong>8月</strong>、最終試験は<strong>11月</strong>（03・02）を起点に逆算します。不足コマが計画表に出た場合は、延長・集中枠で Trig/Geometry と Past Paper を厚くするのが有効です（sources/01〜03）。
+            </div>
+        </section>
+
+        <!-- セクション3: 今後の学習計画案 -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">03</span>
+                <h2>今後の学習計画案</h2>
+            </div>
+
+            <table class="plan-table">
+                <thead>
+                    <tr>
+                        <th style="width:12%">案</th>
+                        <th style="width:28%">内容</th>
+                        <th style="width:20%">追加費用</th>
+                        <th style="width:40%">主なポイント・リスク</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A案：現状維持</td>
+                        <td>週次ペースを維持し、Trig/Geometry の反復と解き直しを徹底</td>
+                        <td>追加費用なし</td>
+                        <td>解き直しが弱いままだと弱点が先送りに</td>
+                    </tr>
+                    <tr>
+                        <td><strong>B案：指導延長</strong><span class="badge-recommended">推奨</span></td>
+                        <td>03 で不足が示された場合、90分化等で演習密度を上げ Trig/Geometry・Past Paper を厚くする</td>
+                        <td>別紙料金表</td>
+                        <td>目標スコア6に向けた確実性が高い</td>
+                    </tr>
+                    <tr>
+                        <td>C案：長期休暇集中</td>
+                        <td>時系列上の集中講義・週2回ペース等を家庭の都合と 03 で調整</td>
+                        <td>別途お見積り</td>
+                        <td>短期間で弱点単元の反復をまとめて実施</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- セクション4: ご家庭へのお願い -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">04</span>
+                <h2>ご家庭へのお願い・共有事項</h2>
+            </div>
+
+            <div class="analysis-box" style="margin-bottom:12px;">
+                <div class="box-label">情報提供のお願い</div>
+                より精度の高い学習計画立案のため、以下の資料を Google Drive の専用フォルダへアップロードいただけますと幸いです。
+                <ul class="checklist" style="margin-top:8px;">
+                    <li>学校のシラバス（授業計画）</li>
+                    <li>直近の試験・模試の答案用紙</li>
+                    <li>今後の試験日程（学校発表分）</li>
+                </ul>
+            </div>
+
+            <div class="analysis-box">
+                <div class="box-label">三者面談のご案内</div>
+                今後の学習計画について方向性を確認するため、三者面談の実施をご提案いたします。ご都合の良い日時をお選びください。
+            </div>
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>候補日時</th>
+                        <th>形式</th>
+                        <th>所要時間</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2026年4月10日（木）18:00〜</td>
+                        <td>オンライン（Zoom）</td>
+                        <td>60分</td>
+                    </tr>
+                    <tr>
+                        <td>2026年4月12日（土）10:00〜</td>
+                        <td>オンライン（Zoom）</td>
+                        <td>60分</td>
+                    </tr>
+                    <tr>
+                        <td>2026年4月13日（日）14:00〜</td>
+                        <td>対面（弊アカデミー）</td>
+                        <td>60分</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- レビュー用：対応メール（根拠外） -->
+        <section class="tail-block" id="review-mail">
+            <h3 class="tail-h">レビュー用：対応メール（品質比較・本文根拠外）</h3>
+            <div class="review-mail-box">
+                保護者向けレポートの一次根拠ではありません（照合対象は sources/01〜03）。旧メールとの比較用ファイル:
+                <a href="sources/04_参照メール_プレースホルダー.md">sources/04_参照メール_プレースホルダー.md</a>
+                （iframe 表示は Pattern A を参照）
+            </div>
+        </section>
+
+        <!-- ファクトチェック -->
+        <section class="tail-block" id="factcheck">
+            <h3 class="tail-h">ファクトチェック（根拠対照表）</h3>
+            <p class="tail-p">記載と一次情報の対応。<a href="sources/">sources/</a> 内の Markdown で照合。メール本文は根拠に含めません。</p>
+            <table class="factcheck-table-b">
+                <thead>
+                    <tr>
+                        <th style="width:24%">レポート上の主な記載</th>
+                        <th style="width:22%">根拠ソース</th>
+                        <th style="width:12%">照合</th>
+                        <th style="width:42%">メモ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Calculus 正答率 （要確認）、Paper1・2 演習</td>
+                        <td><a href="sources/00_260319_時系列まとめ_NotebookLM.md">01</a>／<a href="sources/03_学習計画表_プレースホルダー.md">03</a></td>
+                        <td><span class="fc-badge fc-ok">照合済</span></td>
+                        <td>矛盾時は03優先。</td>
+                    </tr>
+                    <tr>
+                        <td>Trig/Geometry 弱点、解き直し</td>
+                        <td><a href="sources/00_260319_時系列まとめ_NotebookLM.md">01</a></td>
+                        <td><span class="fc-badge fc-ok">照合済</span></td>
+                        <td>01 と整合。</td>
+                    </tr>
+                    <tr>
+                        <td>目標6・見立て5、Mock8月・最終11月・5/11目安</td>
+                        <td><a href="sources/03_学習計画表_プレースホルダー.md">03</a>／<a href="sources/00_260319_時系列まとめ_NotebookLM.md">02</a></td>
+                        <td><span class="fc-badge fc-ok">照合済</span></td>
+                        <td>実シート更新時に再照合。</td>
+                    </tr>
+                    <tr>
+                        <td>不足コマ「要確認」</td>
+                        <td><a href="sources/03_学習計画表_プレースホルダー.md">03</a></td>
+                        <td><span class="fc-badge fc-review">要確認</span></td>
+                        <td>実表で更新後に照合済へ。</td>
+                    </tr>
+                    <tr>
+                        <td>6ヶ月グラフ（数値系列）</td>
+                        <td>（該当なし）</td>
+                        <td><span class="fc-badge fc-demo">デモ</span></td>
+                        <td>ソースに月次系列なし。イメージ表示の場合は明示。</td>
+                    </tr>
+                    <tr>
+                        <td>三者面談候補日時</td>
+                        <td>03 備考・運用のみ</td>
+                        <td><span class="fc-badge fc-tpl">テンプレ</span></td>
+                        <td>確定日程は別途。</td>
+                    </tr>
+                    <tr>
+                        <td>フッター連絡先・認証UI</td>
+                        <td>（該当なし）</td>
+                        <td><span class="fc-badge fc-tpl">テンプレ</span></td>
+                        <td>配布前に差し替え。</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="tail-p"><strong>運用:</strong> <a href="../../../docs/project/月次レポート生成ワークフロー.md">月次レポート生成ワークフロー.md</a></p>
+        </section>
+
+        <!-- グラフ要件 -->
+        <section class="tail-block" id="graph-requirements">
+            <h3 class="tail-h">グラフ作成に必要な情報（参照）</h3>
+            <p class="tail-p">根拠のあるグラフにするには、指標定義・時間粒度・各期間の値・データ出所を揃える。3ソースだけでは長期推移の数値系列が不足しがち。本番は成績・演習ログのスプレッドシート等の一次データを別途用意。<a href="#factcheck">ファクトチェック</a>・<a href="#references">参照一覧</a> と併用。</p>
+        </section>
+
+        <!-- 参照一覧 -->
+        <section class="tail-block" id="references">
+            <h3 class="tail-h">参照一覧</h3>
+            <p class="tail-p">本ファイル: <code>samples/reports/household_tokura/pattern_b.html</code>。ローカルは <code>python scripts/serve_project.py</code> で相対リンク有効。NotebookLM: <a href="https://notebooklm.google.com/notebook/8d0e1e72-2137-485e-a524-826ba11d359c" target="_blank" rel="noopener noreferrer">EA_生徒状況分析</a>。</p>
+            <table class="factcheck-table-b">
+                <thead>
+                    <tr>
+                        <th style="width:18%">種別</th>
+                        <th style="width:32%">リソース</th>
+                        <th>参照</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>一次情報</td>
+                        <td>教師MTG</td>
+                        <td><a href="sources/00_260319_時系列まとめ_NotebookLM.md">sources/00_260319_時系列まとめ_NotebookLM.md</a></td>
+                    </tr>
+                    <tr>
+                        <td>一次情報</td>
+                        <td>ご家庭への提案</td>
+                        <td><a href="sources/00_260319_時系列まとめ_NotebookLM.md">sources/00_260319_時系列まとめ_NotebookLM.md</a></td>
+                    </tr>
+                    <tr>
+                        <td>一次情報</td>
+                        <td>学習計画表スナップショット</td>
+                        <td><a href="sources/03_学習計画表_プレースホルダー.md">sources/03_学習計画表_プレースホルダー.md</a></td>
+                    </tr>
+                    <tr>
+                        <td>レビュー用</td>
+                        <td>対応メール</td>
+                        <td><a href="sources/04_参照メール_プレースホルダー.md">sources/04_参照メール_プレースホルダー.md</a></td>
+                    </tr>
+                    <tr>
+                        <td>ドキュメント</td>
+                        <td>月次レポート生成ワークフロー</td>
+                        <td><a href="../../../docs/project/月次レポート生成ワークフロー.md">月次レポート生成ワークフロー.md</a></td>
+                    </tr>
+                    <tr>
+                        <td>スプレッドシート（例）</td>
+                        <td>学習計画表 URL</td>
+                        <td><a href="https://docs.google.com/spreadsheets/d/1t0adYWix8HzkpZHPSfjps2QKlu1H4r9ol97vhsshLBE/edit?gid=869629603#gid=869629603" target="_blank" rel="noopener noreferrer">Google スプレッドシート（03 記載の URL）</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- フッター -->
+        <footer class="page-footer">
+            <div class="footer-contact">
+                <strong>EDUBAL Academy</strong><br>
+                〒150-0001 東京都渋谷区神宮前1-1-1<br>
+                TEL: 03-1234-5678 ｜ contact@edubal-academy.jp
+            </div>
+            <div class="footer-right">
+                © 2026 EDUBAL Academy<br>
+                本レポートの内容は個人情報を含みます。<br>
+                取り扱いにご注意ください。
+            </div>
+        </footer>
+    </div>
+
+    <!-- 印刷ボタン（印刷時は非表示） -->
+    <button class="print-btn no-print" onclick="window.print()">印刷 / PDF保存</button>
+</body>
+</html>

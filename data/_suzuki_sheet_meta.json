@@ -1,0 +1,1554 @@
+{
+  "properties": {
+    "autoRecalc": "ON_CHANGE",
+    "defaultFormat": {
+      "backgroundColor": {
+        "blue": 1,
+        "green": 1,
+        "red": 1
+      },
+      "backgroundColorStyle": {
+        "rgbColor": {
+          "blue": 1,
+          "green": 1,
+          "red": 1
+        }
+      },
+      "padding": {
+        "bottom": 2,
+        "left": 3,
+        "right": 3,
+        "top": 2
+      },
+      "textFormat": {
+        "bold": false,
+        "fontFamily": "arial,sans,sans-serif",
+        "fontSize": 10,
+        "foregroundColor": {},
+        "foregroundColorStyle": {
+          "rgbColor": {}
+        },
+        "italic": false,
+        "strikethrough": false,
+        "underline": false
+      },
+      "verticalAlignment": "BOTTOM",
+      "wrapStrategy": "OVERFLOW_CELL"
+    },
+    "locale": "ja_JP",
+    "spreadsheetTheme": {
+      "primaryFontFamily": "Arial",
+      "themeColors": [
+        {
+          "color": {
+            "rgbColor": {}
+          },
+          "colorType": "TEXT"
+        },
+        {
+          "color": {
+            "rgbColor": {
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            }
+          },
+          "colorType": "BACKGROUND"
+        },
+        {
+          "color": {
+            "rgbColor": {
+              "blue": 0.95686275,
+              "green": 0.52156866,
+              "red": 0.25882354
+            }
+          },
+          "colorType": "ACCENT1"
+        },
+        {
+          "color": {
+            "rgbColor": {
+              "blue": 0.20784314,
+              "green": 0.2627451,
+              "red": 0.91764706
+            }
+          },
+          "colorType": "ACCENT2"
+        },
+        {
+          "color": {
+            "rgbColor": {
+              "blue": 0.015686275,
+              "green": 0.7372549,
+              "red": 0.9843137
+            }
+          },
+          "colorType": "ACCENT3"
+        },
+        {
+          "color": {
+            "rgbColor": {
+              "blue": 0.3254902,
+              "green": 0.65882355,
+              "red": 0.20392157
+            }
+          },
+          "colorType": "ACCENT4"
+        },
+        {
+          "color": {
+            "rgbColor": {
+              "blue": 0.003921569,
+              "green": 0.42745098,
+              "red": 1
+            }
+          },
+          "colorType": "ACCENT5"
+        },
+        {
+          "color": {
+            "rgbColor": {
+              "blue": 0.7764706,
+              "green": 0.7411765,
+              "red": 0.27450982
+            }
+          },
+          "colorType": "ACCENT6"
+        },
+        {
+          "color": {
+            "rgbColor": {
+              "blue": 0.8,
+              "green": 0.33333334,
+              "red": 0.06666667
+            }
+          },
+          "colorType": "LINK"
+        }
+      ]
+    },
+    "timeZone": "Asia/Tokyo",
+    "title": "73594縲驤ｴ譛ｨ縺輔∪縲蟄ｦ鄙定ｨ育判陦ｨ縲Physics(HL) "
+  },
+  "sheets": [
+    {
+      "properties": {
+        "gridProperties": {
+          "columnCount": 26,
+          "rowCount": 1000
+        },
+        "index": 0,
+        "sheetId": 1227932684,
+        "sheetType": "GRID",
+        "title": "student"
+      }
+    },
+    {
+      "merges": [
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 1,
+          "sheetId": 774872471,
+          "startColumnIndex": 0,
+          "startRowIndex": 0
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 21,
+          "sheetId": 774872471,
+          "startColumnIndex": 0,
+          "startRowIndex": 20
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 35,
+          "sheetId": 774872471,
+          "startColumnIndex": 0,
+          "startRowIndex": 34
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 48,
+          "sheetId": 774872471,
+          "startColumnIndex": 0,
+          "startRowIndex": 47
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 59,
+          "sheetId": 774872471,
+          "startColumnIndex": 0,
+          "startRowIndex": 58
+        }
+      ],
+      "properties": {
+        "gridProperties": {
+          "columnCount": 30,
+          "rowCount": 1029
+        },
+        "index": 1,
+        "sheetId": 774872471,
+        "sheetType": "GRID",
+        "title": "lesson plan"
+      }
+    },
+    {
+      "bandedRanges": [
+        {
+          "bandedRangeId": 137145717,
+          "bandedRangeReference": "137145717",
+          "range": {
+            "endColumnIndex": 17,
+            "endRowIndex": 1,
+            "sheetId": 661355791,
+            "startColumnIndex": 12,
+            "startRowIndex": 0
+          },
+          "rowProperties": {
+            "firstBandColor": {
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            },
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "headerColor": {
+              "blue": 0.23529412,
+              "green": 0.27450982,
+              "red": 0.73333335
+            },
+            "headerColorStyle": {
+              "rgbColor": {
+                "blue": 0.23529412,
+                "green": 0.27450982,
+                "red": 0.73333335
+              }
+            },
+            "secondBandColor": {
+              "blue": 0.98039216,
+              "green": 0.9764706,
+              "red": 0.972549
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          }
+        },
+        {
+          "bandedRangeId": 2028609595,
+          "range": {
+            "endColumnIndex": 29,
+            "endRowIndex": 1,
+            "sheetId": 661355791,
+            "startColumnIndex": 24,
+            "startRowIndex": 0
+          },
+          "rowProperties": {
+            "firstBandColor": {
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            },
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "headerColor": {
+              "blue": 0.25882354,
+              "green": 0.21176471,
+              "red": 0.60784316
+            },
+            "headerColorStyle": {
+              "rgbColor": {
+                "blue": 0.25882354,
+                "green": 0.21176471,
+                "red": 0.60784316
+              }
+            },
+            "secondBandColor": {
+              "blue": 0.98039216,
+              "green": 0.9764706,
+              "red": 0.972549
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          }
+        },
+        {
+          "bandedRangeId": 2056664546,
+          "bandedRangeReference": "2056664546",
+          "range": {
+            "endColumnIndex": 5,
+            "endRowIndex": 1,
+            "sheetId": 661355791,
+            "startColumnIndex": 0,
+            "startRowIndex": 0
+          },
+          "rowProperties": {
+            "firstBandColor": {
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            },
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "headerColor": {
+              "blue": 0.32941177,
+              "green": 0.40784314,
+              "red": 0.20784314
+            },
+            "headerColorStyle": {
+              "rgbColor": {
+                "blue": 0.32941177,
+                "green": 0.40784314,
+                "red": 0.20784314
+              }
+            },
+            "secondBandColor": {
+              "blue": 0.98039216,
+              "green": 0.9764706,
+              "red": 0.972549
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          }
+        },
+        {
+          "bandedRangeId": 775306426,
+          "bandedRangeReference": "775306426",
+          "range": {
+            "endColumnIndex": 11,
+            "endRowIndex": 1,
+            "sheetId": 661355791,
+            "startColumnIndex": 6,
+            "startRowIndex": 0
+          },
+          "rowProperties": {
+            "firstBandColor": {
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            },
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "headerColor": {
+              "blue": 0.75686276,
+              "green": 0.37254903,
+              "red": 0.3254902
+            },
+            "headerColorStyle": {
+              "rgbColor": {
+                "blue": 0.75686276,
+                "green": 0.37254903,
+                "red": 0.3254902
+              }
+            },
+            "secondBandColor": {
+              "blue": 0.98039216,
+              "green": 0.9764706,
+              "red": 0.972549
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          }
+        },
+        {
+          "bandedRangeId": 793604491,
+          "bandedRangeReference": "793604491",
+          "range": {
+            "endColumnIndex": 23,
+            "endRowIndex": 1,
+            "sheetId": 661355791,
+            "startColumnIndex": 18,
+            "startRowIndex": 0
+          },
+          "rowProperties": {
+            "firstBandColor": {
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            },
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "headerColor": {
+              "blue": 0.25882354,
+              "green": 0.21176471,
+              "red": 0.60784316
+            },
+            "headerColorStyle": {
+              "rgbColor": {
+                "blue": 0.25882354,
+                "green": 0.21176471,
+                "red": 0.60784316
+              }
+            },
+            "secondBandColor": {
+              "blue": 0.98039216,
+              "green": 0.9764706,
+              "red": 0.972549
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          }
+        },
+        {
+          "bandedRangeId": 109017604,
+          "range": {
+            "endColumnIndex": 5,
+            "endRowIndex": 44,
+            "sheetId": 661355791,
+            "startColumnIndex": 3,
+            "startRowIndex": 38
+          },
+          "rowProperties": {
+            "firstBandColor": {
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            },
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "secondBandColor": {
+              "blue": 0.98039216,
+              "green": 0.9764706,
+              "red": 0.972549
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          }
+        },
+        {
+          "bandedRangeId": 572454529,
+          "range": {
+            "endColumnIndex": 5,
+            "endRowIndex": 58,
+            "sheetId": 661355791,
+            "startColumnIndex": 3,
+            "startRowIndex": 52
+          },
+          "rowProperties": {
+            "firstBandColor": {
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            },
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "secondBandColor": {
+              "blue": 0.98039216,
+              "green": 0.9764706,
+              "red": 0.972549
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          }
+        },
+        {
+          "bandedRangeId": 1182522733,
+          "range": {
+            "endColumnIndex": 5,
+            "endRowIndex": 17,
+            "sheetId": 661355791,
+            "startColumnIndex": 3,
+            "startRowIndex": 1
+          },
+          "rowProperties": {
+            "firstBandColor": {
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            },
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "secondBandColor": {
+              "blue": 0.98039216,
+              "green": 0.9764706,
+              "red": 0.972549
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          }
+        },
+        {
+          "bandedRangeId": 1203340590,
+          "range": {
+            "endColumnIndex": 29,
+            "endRowIndex": 37,
+            "sheetId": 661355791,
+            "startColumnIndex": 27,
+            "startRowIndex": 1
+          },
+          "rowProperties": {
+            "firstBandColor": {
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            },
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "secondBandColor": {
+              "blue": 0.98039216,
+              "green": 0.9764706,
+              "red": 0.972549
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          }
+        },
+        {
+          "bandedRangeId": 1248355489,
+          "range": {
+            "endColumnIndex": 5,
+            "endRowIndex": 30,
+            "sheetId": 661355791,
+            "startColumnIndex": 3,
+            "startRowIndex": 25
+          },
+          "rowProperties": {
+            "firstBandColor": {
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            },
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "secondBandColor": {
+              "blue": 0.98039216,
+              "green": 0.9764706,
+              "red": 0.972549
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          }
+        },
+        {
+          "bandedRangeId": 1506770841,
+          "range": {
+            "endColumnIndex": 11,
+            "endRowIndex": 36,
+            "sheetId": 661355791,
+            "startColumnIndex": 9,
+            "startRowIndex": 1
+          },
+          "rowProperties": {
+            "firstBandColor": {
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            },
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "secondBandColor": {
+              "blue": 0.98039216,
+              "green": 0.9764706,
+              "red": 0.972549
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          }
+        },
+        {
+          "bandedRangeId": 1862286728,
+          "range": {
+            "endColumnIndex": 23,
+            "endRowIndex": 32,
+            "sheetId": 661355791,
+            "startColumnIndex": 21,
+            "startRowIndex": 1
+          },
+          "rowProperties": {
+            "firstBandColor": {
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            },
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "secondBandColor": {
+              "blue": 0.98039216,
+              "green": 0.9764706,
+              "red": 0.972549
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          }
+        },
+        {
+          "bandedRangeId": 1965044031,
+          "range": {
+            "endColumnIndex": 17,
+            "endRowIndex": 28,
+            "sheetId": 661355791,
+            "startColumnIndex": 15,
+            "startRowIndex": 1
+          },
+          "rowProperties": {
+            "firstBandColor": {
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            },
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "secondBandColor": {
+              "blue": 0.98039216,
+              "green": 0.9764706,
+              "red": 0.972549
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          }
+        },
+        {
+          "bandedRangeId": 205867291,
+          "range": {
+            "endColumnIndex": 11,
+            "endRowIndex": 40,
+            "sheetId": 661355791,
+            "startColumnIndex": 10,
+            "startRowIndex": 36
+          },
+          "rowProperties": {
+            "firstBandColor": {
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            },
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "secondBandColor": {
+              "blue": 0.98039216,
+              "green": 0.9764706,
+              "red": 0.972549
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          }
+        }
+      ],
+      "conditionalFormats": [
+        {
+          "booleanRule": {
+            "condition": {
+              "type": "TEXT_CONTAINS",
+              "values": [
+                {
+                  "userEnteredValue": "譛ｪ螳・
+                }
+              ]
+            },
+            "format": {
+              "textFormat": {
+                "foregroundColor": {
+                  "blue": 0.23529412,
+                  "green": 0.27450982,
+                  "red": 0.73333335
+                },
+                "foregroundColorStyle": {
+                  "rgbColor": {
+                    "blue": 0.23529412,
+                    "green": 0.27450982,
+                    "red": 0.73333335
+                  }
+                }
+              }
+            }
+          },
+          "ranges": [
+            {
+              "endColumnIndex": 2,
+              "endRowIndex": 22,
+              "sheetId": 661355791,
+              "startColumnIndex": 1,
+              "startRowIndex": 19
+            },
+            {
+              "endColumnIndex": 2,
+              "endRowIndex": 26,
+              "sheetId": 661355791,
+              "startColumnIndex": 1,
+              "startRowIndex": 23
+            },
+            {
+              "endColumnIndex": 2,
+              "endRowIndex": 67,
+              "sheetId": 661355791,
+              "startColumnIndex": 1,
+              "startRowIndex": 29
+            }
+          ]
+        },
+        {
+          "booleanRule": {
+            "condition": {
+              "type": "TEXT_CONTAINS",
+              "values": [
+                {
+                  "userEnteredValue": "譛ｪ螳・
+                }
+              ]
+            },
+            "format": {
+              "textFormat": {
+                "foregroundColor": {
+                  "blue": 0.23529412,
+                  "green": 0.27450982,
+                  "red": 0.73333335
+                },
+                "foregroundColorStyle": {
+                  "rgbColor": {
+                    "blue": 0.23529412,
+                    "green": 0.27450982,
+                    "red": 0.73333335
+                  }
+                }
+              }
+            }
+          },
+          "ranges": [
+            {
+              "endColumnIndex": 14,
+              "endRowIndex": 25,
+              "sheetId": 661355791,
+              "startColumnIndex": 13,
+              "startRowIndex": 19
+            }
+          ]
+        },
+        {
+          "booleanRule": {
+            "condition": {
+              "type": "TEXT_CONTAINS",
+              "values": [
+                {
+                  "userEnteredValue": "譛ｪ螳・
+                }
+              ]
+            },
+            "format": {
+              "textFormat": {
+                "foregroundColor": {
+                  "blue": 0.23529412,
+                  "green": 0.27450982,
+                  "red": 0.73333335
+                },
+                "foregroundColorStyle": {
+                  "rgbColor": {
+                    "blue": 0.23529412,
+                    "green": 0.27450982,
+                    "red": 0.73333335
+                  }
+                }
+              }
+            }
+          },
+          "ranges": [
+            {
+              "endColumnIndex": 26,
+              "endRowIndex": 22,
+              "sheetId": 661355791,
+              "startColumnIndex": 25,
+              "startRowIndex": 11
+            }
+          ]
+        }
+      ],
+      "merges": [
+        {
+          "endColumnIndex": 20,
+          "endRowIndex": 14,
+          "sheetId": 661355791,
+          "startColumnIndex": 19,
+          "startRowIndex": 8
+        },
+        {
+          "endColumnIndex": 20,
+          "endRowIndex": 31,
+          "sheetId": 661355791,
+          "startColumnIndex": 19,
+          "startRowIndex": 28
+        },
+        {
+          "endColumnIndex": 26,
+          "endRowIndex": 35,
+          "sheetId": 661355791,
+          "startColumnIndex": 25,
+          "startRowIndex": 29
+        },
+        {
+          "endColumnIndex": 26,
+          "endRowIndex": 41,
+          "sheetId": 661355791,
+          "startColumnIndex": 25,
+          "startRowIndex": 35
+        },
+        {
+          "endColumnIndex": 26,
+          "endRowIndex": 29,
+          "sheetId": 661355791,
+          "startColumnIndex": 25,
+          "startRowIndex": 25
+        },
+        {
+          "endColumnIndex": 26,
+          "endRowIndex": 50,
+          "sheetId": 661355791,
+          "startColumnIndex": 25,
+          "startRowIndex": 41
+        },
+        {
+          "endColumnIndex": 20,
+          "endRowIndex": 8,
+          "sheetId": 661355791,
+          "startColumnIndex": 19,
+          "startRowIndex": 1
+        },
+        {
+          "endColumnIndex": 25,
+          "endRowIndex": 50,
+          "sheetId": 661355791,
+          "startColumnIndex": 24,
+          "startRowIndex": 1
+        },
+        {
+          "endColumnIndex": 26,
+          "endRowIndex": 6,
+          "sheetId": 661355791,
+          "startColumnIndex": 25,
+          "startRowIndex": 1
+        },
+        {
+          "endColumnIndex": 26,
+          "endRowIndex": 11,
+          "sheetId": 661355791,
+          "startColumnIndex": 25,
+          "startRowIndex": 6
+        },
+        {
+          "endColumnIndex": 26,
+          "endRowIndex": 17,
+          "sheetId": 661355791,
+          "startColumnIndex": 25,
+          "startRowIndex": 11
+        },
+        {
+          "endColumnIndex": 26,
+          "endRowIndex": 25,
+          "sheetId": 661355791,
+          "startColumnIndex": 25,
+          "startRowIndex": 17
+        },
+        {
+          "endColumnIndex": 20,
+          "endRowIndex": 43,
+          "sheetId": 661355791,
+          "startColumnIndex": 19,
+          "startRowIndex": 38
+        },
+        {
+          "endColumnIndex": 20,
+          "endRowIndex": 50,
+          "sheetId": 661355791,
+          "startColumnIndex": 19,
+          "startRowIndex": 43
+        },
+        {
+          "endColumnIndex": 14,
+          "endRowIndex": 5,
+          "sheetId": 661355791,
+          "startColumnIndex": 13,
+          "startRowIndex": 1
+        },
+        {
+          "endColumnIndex": 14,
+          "endRowIndex": 8,
+          "sheetId": 661355791,
+          "startColumnIndex": 13,
+          "startRowIndex": 5
+        },
+        {
+          "endColumnIndex": 8,
+          "endRowIndex": 12,
+          "sheetId": 661355791,
+          "startColumnIndex": 7,
+          "startRowIndex": 6
+        },
+        {
+          "endColumnIndex": 8,
+          "endRowIndex": 18,
+          "sheetId": 661355791,
+          "startColumnIndex": 7,
+          "startRowIndex": 12
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 18,
+          "sheetId": 661355791,
+          "startColumnIndex": 1,
+          "startRowIndex": 13
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 22,
+          "sheetId": 661355791,
+          "startColumnIndex": 1,
+          "startRowIndex": 18
+        },
+        {
+          "endColumnIndex": 20,
+          "endRowIndex": 19,
+          "sheetId": 661355791,
+          "startColumnIndex": 19,
+          "startRowIndex": 14
+        },
+        {
+          "endColumnIndex": 20,
+          "endRowIndex": 22,
+          "sheetId": 661355791,
+          "startColumnIndex": 19,
+          "startRowIndex": 19
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 13,
+          "sheetId": 661355791,
+          "startColumnIndex": 1,
+          "startRowIndex": 9
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 26,
+          "sheetId": 661355791,
+          "startColumnIndex": 1,
+          "startRowIndex": 22
+        },
+        {
+          "endColumnIndex": 8,
+          "endRowIndex": 28,
+          "sheetId": 661355791,
+          "startColumnIndex": 7,
+          "startRowIndex": 23
+        },
+        {
+          "endColumnIndex": 14,
+          "endRowIndex": 29,
+          "sheetId": 661355791,
+          "startColumnIndex": 13,
+          "startRowIndex": 25
+        },
+        {
+          "endColumnIndex": 20,
+          "endRowIndex": 25,
+          "sheetId": 661355791,
+          "startColumnIndex": 19,
+          "startRowIndex": 22
+        },
+        {
+          "endColumnIndex": 20,
+          "endRowIndex": 28,
+          "sheetId": 661355791,
+          "startColumnIndex": 19,
+          "startRowIndex": 25
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 33,
+          "sheetId": 661355791,
+          "startColumnIndex": 1,
+          "startRowIndex": 29
+        },
+        {
+          "endColumnIndex": 14,
+          "endRowIndex": 32,
+          "sheetId": 661355791,
+          "startColumnIndex": 13,
+          "startRowIndex": 29
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 64,
+          "sheetId": 661355791,
+          "startColumnIndex": 1,
+          "startRowIndex": 60
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 66,
+          "sheetId": 661355791,
+          "startColumnIndex": 1,
+          "startRowIndex": 64
+        },
+        {
+          "endColumnIndex": 1,
+          "endRowIndex": 66,
+          "sheetId": 661355791,
+          "startColumnIndex": 0,
+          "startRowIndex": 1
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 5,
+          "sheetId": 661355791,
+          "startColumnIndex": 1,
+          "startRowIndex": 1
+        },
+        {
+          "endColumnIndex": 7,
+          "endRowIndex": 40,
+          "sheetId": 661355791,
+          "startColumnIndex": 6,
+          "startRowIndex": 1
+        },
+        {
+          "endColumnIndex": 8,
+          "endRowIndex": 6,
+          "sheetId": 661355791,
+          "startColumnIndex": 7,
+          "startRowIndex": 1
+        },
+        {
+          "endColumnIndex": 19,
+          "endRowIndex": 31,
+          "sheetId": 661355791,
+          "startColumnIndex": 18,
+          "startRowIndex": 1
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 9,
+          "sheetId": 661355791,
+          "startColumnIndex": 1,
+          "startRowIndex": 5
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 29,
+          "sheetId": 661355791,
+          "startColumnIndex": 1,
+          "startRowIndex": 26
+        },
+        {
+          "endColumnIndex": 13,
+          "endRowIndex": 25,
+          "sheetId": 661355791,
+          "startColumnIndex": 12,
+          "startRowIndex": 1
+        },
+        {
+          "endColumnIndex": 14,
+          "endRowIndex": 11,
+          "sheetId": 661355791,
+          "startColumnIndex": 13,
+          "startRowIndex": 8
+        },
+        {
+          "endColumnIndex": 14,
+          "endRowIndex": 13,
+          "sheetId": 661355791,
+          "startColumnIndex": 13,
+          "startRowIndex": 11
+        },
+        {
+          "endColumnIndex": 14,
+          "endRowIndex": 16,
+          "sheetId": 661355791,
+          "startColumnIndex": 13,
+          "startRowIndex": 13
+        },
+        {
+          "endColumnIndex": 14,
+          "endRowIndex": 19,
+          "sheetId": 661355791,
+          "startColumnIndex": 13,
+          "startRowIndex": 16
+        },
+        {
+          "endColumnIndex": 14,
+          "endRowIndex": 22,
+          "sheetId": 661355791,
+          "startColumnIndex": 13,
+          "startRowIndex": 19
+        },
+        {
+          "endColumnIndex": 14,
+          "endRowIndex": 25,
+          "sheetId": 661355791,
+          "startColumnIndex": 13,
+          "startRowIndex": 22
+        },
+        {
+          "endColumnIndex": 8,
+          "endRowIndex": 23,
+          "sheetId": 661355791,
+          "startColumnIndex": 7,
+          "startRowIndex": 18
+        },
+        {
+          "endColumnIndex": 8,
+          "endRowIndex": 31,
+          "sheetId": 661355791,
+          "startColumnIndex": 7,
+          "startRowIndex": 28
+        },
+        {
+          "endColumnIndex": 8,
+          "endRowIndex": 34,
+          "sheetId": 661355791,
+          "startColumnIndex": 7,
+          "startRowIndex": 31
+        },
+        {
+          "endColumnIndex": 14,
+          "endRowIndex": 35,
+          "sheetId": 661355791,
+          "startColumnIndex": 13,
+          "startRowIndex": 32
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 38,
+          "sheetId": 661355791,
+          "startColumnIndex": 1,
+          "startRowIndex": 33
+        },
+        {
+          "endColumnIndex": 8,
+          "endRowIndex": 37,
+          "sheetId": 661355791,
+          "startColumnIndex": 7,
+          "startRowIndex": 34
+        },
+        {
+          "endColumnIndex": 14,
+          "endRowIndex": 38,
+          "sheetId": 661355791,
+          "startColumnIndex": 13,
+          "startRowIndex": 35
+        },
+        {
+          "endColumnIndex": 8,
+          "endRowIndex": 40,
+          "sheetId": 661355791,
+          "startColumnIndex": 7,
+          "startRowIndex": 37
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 43,
+          "sheetId": 661355791,
+          "startColumnIndex": 1,
+          "startRowIndex": 38
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 48,
+          "sheetId": 661355791,
+          "startColumnIndex": 1,
+          "startRowIndex": 43
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 55,
+          "sheetId": 661355791,
+          "startColumnIndex": 1,
+          "startRowIndex": 48
+        },
+        {
+          "endColumnIndex": 2,
+          "endRowIndex": 60,
+          "sheetId": 661355791,
+          "startColumnIndex": 1,
+          "startRowIndex": 55
+        }
+      ],
+      "properties": {
+        "gridProperties": {
+          "columnCount": 31,
+          "rowCount": 1048
+        },
+        "index": 2,
+        "sheetId": 661355791,
+        "sheetType": "GRID",
+        "title": "video"
+      },
+      "tables": [
+        {
+          "columnProperties": [
+            {
+              "columnName": "TOPIC"
+            },
+            {
+              "columnIndex": 1,
+              "columnName": "LESSON"
+            },
+            {
+              "columnIndex": 2,
+              "columnName": "蜍慕判"
+            },
+            {
+              "columnIndex": 3,
+              "columnName": "隕冶・迥ｶ豕・
+            },
+            {
+              "columnIndex": 4,
+              "columnName": "MEMO",
+              "columnType": "TEXT"
+            }
+          ],
+          "name": "C_Wave behaviour",
+          "range": {
+            "endColumnIndex": 17,
+            "endRowIndex": 1,
+            "sheetId": 661355791,
+            "startColumnIndex": 12,
+            "startRowIndex": 0
+          },
+          "rowsProperties": {
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "headerColorStyle": {
+              "rgbColor": {
+                "blue": 0.23529412,
+                "green": 0.27450982,
+                "red": 0.73333335
+              }
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          },
+          "tableId": "137145717"
+        },
+        {
+          "columnProperties": [
+            {
+              "columnName": "TOPIC"
+            },
+            {
+              "columnIndex": 1,
+              "columnName": "LESSON"
+            },
+            {
+              "columnIndex": 2,
+              "columnName": "蜍慕判"
+            },
+            {
+              "columnIndex": 3,
+              "columnName": "隕冶・迥ｶ豕・
+            },
+            {
+              "columnIndex": 4,
+              "columnName": "MEMO",
+              "columnType": "TEXT"
+            }
+          ],
+          "name": "A_Unity_and_diversity",
+          "range": {
+            "endColumnIndex": 5,
+            "endRowIndex": 1,
+            "sheetId": 661355791,
+            "startColumnIndex": 0,
+            "startRowIndex": 0
+          },
+          "rowsProperties": {
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "headerColorStyle": {
+              "rgbColor": {
+                "blue": 0.32941177,
+                "green": 0.40784314,
+                "red": 0.20784314
+              }
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          },
+          "tableId": "2056664546"
+        },
+        {
+          "columnProperties": [
+            {
+              "columnName": "TOPIC"
+            },
+            {
+              "columnIndex": 1,
+              "columnName": "LESSON"
+            },
+            {
+              "columnIndex": 2,
+              "columnName": "蜍慕判"
+            },
+            {
+              "columnIndex": 3,
+              "columnName": "隕冶・迥ｶ豕・
+            },
+            {
+              "columnIndex": 4,
+              "columnName": "MEMO",
+              "columnType": "TEXT"
+            }
+          ],
+          "name": "B_The particulate nature of matter",
+          "range": {
+            "endColumnIndex": 11,
+            "endRowIndex": 1,
+            "sheetId": 661355791,
+            "startColumnIndex": 6,
+            "startRowIndex": 0
+          },
+          "rowsProperties": {
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "headerColorStyle": {
+              "rgbColor": {
+                "blue": 0.75686276,
+                "green": 0.37254903,
+                "red": 0.3254902
+              }
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          },
+          "tableId": "775306426"
+        },
+        {
+          "columnProperties": [
+            {
+              "columnName": "TOPIC"
+            },
+            {
+              "columnIndex": 1,
+              "columnName": "LESSON"
+            },
+            {
+              "columnIndex": 2,
+              "columnName": "蜍慕判"
+            },
+            {
+              "columnIndex": 3,
+              "columnName": "隕冶・迥ｶ豕・
+            },
+            {
+              "columnIndex": 4,
+              "columnName": "MEMO",
+              "columnType": "TEXT"
+            }
+          ],
+          "name": "D_Fields",
+          "range": {
+            "endColumnIndex": 23,
+            "endRowIndex": 1,
+            "sheetId": 661355791,
+            "startColumnIndex": 18,
+            "startRowIndex": 0
+          },
+          "rowsProperties": {
+            "firstBandColorStyle": {
+              "rgbColor": {
+                "blue": 1,
+                "green": 1,
+                "red": 1
+              }
+            },
+            "headerColorStyle": {
+              "rgbColor": {
+                "blue": 0.25882354,
+                "green": 0.21176471,
+                "red": 0.60784316
+              }
+            },
+            "secondBandColorStyle": {
+              "rgbColor": {
+                "blue": 0.98039216,
+                "green": 0.9764706,
+                "red": 0.972549
+              }
+            }
+          },
+          "tableId": "793604491"
+        }
+      ]
+    },
+    {
+      "properties": {
+        "gridProperties": {
+          "columnCount": 59,
+          "rowCount": 1006
+        },
+        "hidden": true,
+        "index": 3,
+        "sheetId": 1792917745,
+        "sheetType": "GRID",
+        "title": "・磯撼陦ｨ遉ｺ・峨ヨ繝斐ャ繧ｯ荳隕ｧ"
+      }
+    }
+  ],
+  "spreadsheetId": "1PwCEU459GnXVuqE72N_rP9ojtwTWZ-p6ij_mAr1v1bE",
+  "spreadsheetUrl": "https://docs.google.com/spreadsheets/d/1PwCEU459GnXVuqE72N_rP9ojtwTWZ-p6ij_mAr1v1bE/edit?ouid=111863040728288757718"
+}

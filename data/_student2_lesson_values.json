@@ -1,0 +1,1072 @@
+{
+  "majorDimension": "ROWS",
+  "range": "'lesson plan'!A1:L200",
+  "values": [
+    [
+      "Number and Algebra"
+    ],
+    [
+      "No",
+      "Subtopic",
+      "学校",
+      "進捗",
+      "授業日",
+      "授業日",
+      "配点",
+      "得点",
+      "得点率",
+      "メモ",
+      "復習（2回復習・一回テスト）",
+      "授業内で全体の復習テスト（過去問形式）↓"
+    ],
+    [
+      "1",
+      "Arithmetic sequences",
+      "TRUE",
+      "済",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "2026/03/31　復習",
+      "2026/05/16〜2026/07/04"
+    ],
+    [
+      "2",
+      "Geometric sequences",
+      "TRUE",
+      "済",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "2026/04/04　復習"
+    ],
+    [
+      "3",
+      "Financial applications of geometric sequences",
+      "TRUE",
+      "済",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "宿題に過去問　解説を授業内でやる↓"
+    ],
+    [
+      "4",
+      "Arithmetic series",
+      "TRUE",
+      "済",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "2026/04/07　test",
+      "モック以降（時間が取れなければ週一に戻す）"
+    ],
+    [
+      "",
+      "Finite geometric series",
+      "TRUE",
+      "済"
+    ],
+    [
+      "",
+      "Infinite geometric series",
+      "TRUE",
+      "済"
+    ],
+    [
+      "5",
+      "Unit test 1",
+      "",
+      "済"
+    ],
+    [
+      "6",
+      "Laws of exponents with rational exponents",
+      "TRUE",
+      "済"
+    ],
+    [
+      "",
+      "Expansion and factorization",
+      "TRUE",
+      "済"
+    ],
+    [
+      "7",
+      "Introduction to logarithms with base 10 & 'a'",
+      "TRUE",
+      "済"
+    ],
+    [
+      "8",
+      "Natural Logarithms",
+      "TRUE",
+      "済"
+    ],
+    [
+      "",
+      "Logarithmic equations",
+      "TRUE",
+      "済"
+    ],
+    [
+      "",
+      "Change of base of a logarithm",
+      "TRUE",
+      "済"
+    ],
+    [
+      "9",
+      "Factorial notation",
+      "TRUE",
+      "済"
+    ],
+    [
+      "",
+      "Binomial Expansions",
+      "TRUE",
+      "済"
+    ],
+    [
+      "10",
+      "Combination",
+      "TRUE",
+      "済"
+    ],
+    [
+      "",
+      "The binomial theorem",
+      "TRUE",
+      "済"
+    ],
+    [
+      "11",
+      "Unit test 2",
+      "",
+      "済",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "授業内でテスト50分　20分復習"
+    ],
+    [],
+    [
+      "Functions"
+    ],
+    [
+      "No",
+      "Subtopic",
+      "",
+      "進捗",
+      "授業日",
+      "",
+      "配点",
+      "得点",
+      "得点率",
+      "メモ",
+      "復習（2回復習・一回テスト）"
+    ],
+    [
+      "1",
+      "Quadratic equations",
+      "TRUE",
+      "済",
+      "2025/10/07",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "2026/04/11　復習"
+    ],
+    [
+      "",
+      "Factorization",
+      "TRUE",
+      "済",
+      "2025/10/07",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "2026/04/14　復習"
+    ],
+    [
+      "",
+      "Completing the square",
+      "TRUE",
+      "済",
+      "2025/10/07"
+    ],
+    [
+      "2",
+      "Quadratic functions",
+      "TRUE",
+      "済",
+      "2025/10/07",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "2026/04/18　test"
+    ],
+    [
+      "3",
+      "Using the discriminant",
+      "TRUE",
+      "済",
+      "2025/10/07"
+    ],
+    [
+      "4",
+      "Quadratic inequalities",
+      "TRUE",
+      "済",
+      "2025/10/07"
+    ],
+    [
+      "5",
+      "Unit test 1",
+      "",
+      "済",
+      "2025/10/07",
+      "",
+      "29",
+      "0",
+      "0.0%",
+      "単語の意味がわからず、解けない問題があったのと、Vertex formulaがわからず、最初の問題が解けずそのまま次の問題も解けず、という負の連鎖がありました。単語の意味に関しては、説明した後とかなくてはいけないことを理解した様子で、もう一度解き直したら解けるといった感じでした。Vertex　Formulaもやり方を忘れてしまったようなのですが、2個あったうちの最初の一つを説明した後、もう一つの方を解いていただいたら問題なかったので、今後それを忘れないようにすることが大事だと思います。点数は0でしたが、解き方を忘れてしまった、Exam方式の単語がわからなかった、というのが原因だと思いますので、短い問題を簡単に解く、というよりかは、Exam式の問題の練習が必要だと思います。"
+    ],
+    [
+      "6",
+      "Domain and range",
+      "TRUE",
+      "済",
+      "2025/10/07"
+    ],
+    [
+      "7",
+      "Rational function",
+      "TRUE",
+      "済",
+      "2025/10/07"
+    ],
+    [
+      "",
+      "Composite functions",
+      "TRUE",
+      "済",
+      "2025/10/07"
+    ],
+    [
+      "8",
+      "Inverse functions",
+      "TRUE",
+      "済",
+      "2025/10/07"
+    ],
+    [
+      "",
+      "Absolute value functions",
+      "TRUE",
+      "済",
+      "2025/10/07"
+    ],
+    [
+      "",
+      "Transformations",
+      "TRUE",
+      "済",
+      "2025/10/07"
+    ],
+    [
+      "9",
+      "Exponential functions",
+      "TRUE",
+      "済",
+      "2025/10/07"
+    ],
+    [
+      "10",
+      "Logarithmic functions",
+      "TRUE",
+      "済",
+      "2025/10/07"
+    ],
+    [
+      "11",
+      "Unit test 2",
+      "",
+      "済",
+      "2025/09/16",
+      "",
+      "",
+      "",
+      "",
+      "授業内でテスト50分　20分復習"
+    ],
+    [],
+    [
+      "Geometry and Trigonometry"
+    ],
+    [
+      "No",
+      "Subtopic",
+      "",
+      "進捗",
+      "授業日",
+      "授業日",
+      "配点",
+      "得点",
+      "得点率",
+      "メモ",
+      "復習（2回復習・一回テスト）"
+    ],
+    [
+      "1",
+      "The trigonometric ratios",
+      "TRUE",
+      "済",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "2026/04/21　復習"
+    ],
+    [
+      "",
+      "Finding side lengths",
+      "TRUE",
+      "済",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "2026/04/25　復習"
+    ],
+    [
+      "",
+      "Finding angles",
+      "TRUE",
+      "済"
+    ],
+    [
+      "2",
+      "The area of a triangle",
+      "TRUE",
+      "済",
+      "2025/09/06",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "2026/04/28　test"
+    ],
+    [
+      "",
+      "The cosine rule",
+      "TRUE",
+      "済",
+      "2025/09/06"
+    ],
+    [
+      "3",
+      "The sine rule",
+      "TRUE",
+      "済",
+      "2025/09/06"
+    ],
+    [
+      "",
+      "Problem solving with trigonometry",
+      "TRUE",
+      "済"
+    ],
+    [
+      "4",
+      "The radian measure",
+      "TRUE",
+      "済"
+    ],
+    [
+      "5",
+      "Unit test 1",
+      "",
+      "済",
+      "2025/09/22",
+      "",
+      "28",
+      "21",
+      "75.0%",
+      "ケアレスミスのみ"
+    ],
+    [
+      "6",
+      "The Pythagorean identity",
+      "TRUE",
+      "済",
+      "2025/09/27"
+    ],
+    [
+      "7",
+      "General sine and cosine functions",
+      "TRUE",
+      "済",
+      "2025/09/27"
+    ],
+    [
+      "8",
+      "The tangent function",
+      "FALSE",
+      "済",
+      "2025/09/27"
+    ],
+    [
+      "",
+      "Trigonometric equations",
+      "TRUE",
+      "済",
+      "2025/09/27"
+    ],
+    [
+      "9",
+      "Trigonometric identities",
+      "TRUE",
+      "済",
+      "2025/09/27"
+    ],
+    [
+      "10",
+      "Double angle identities",
+      "TRUE",
+      "済",
+      "2025/09/27"
+    ],
+    [
+      "11",
+      "Unit test 2",
+      "",
+      "済",
+      "2025/09/22",
+      "",
+      "31",
+      "6",
+      "19.4%",
+      "他のトピックと絡まると、問題を解くのが難しく感じている模様。あとは、Sine/cosine／tangentの関係性を表すIdentity formulaの記憶が薄かったため、解けていない。（内容は理解しているので振り返りは必要ではないが、練習問題をいくつか繰り返すことによって、自分の中でのIdentity formulaの存在感を高め、問題を解くときにパッと頭に浮かぶようにした方がいい。）"
+    ],
+    [
+      "12",
+      "Unit test 2",
+      "",
+      "済",
+      "2026/01/10",
+      "",
+      "",
+      "",
+      "",
+      "授業内でTrigonometryの復習　unit testはなし？"
+    ],
+    [
+      "13",
+      "Unit test 2",
+      "",
+      "済",
+      "2026/01/17",
+      "",
+      "31",
+      "18",
+      "58.0%"
+    ],
+    [],
+    [
+      "Statistics and Probability"
+    ],
+    [
+      "No",
+      "Subtopic",
+      "",
+      "進捗",
+      "授業日",
+      "授業日",
+      "配点",
+      "得点",
+      "得点率",
+      "メモ",
+      "復習なし"
+    ],
+    [
+      "1",
+      "Box and whisker diagrams",
+      "TRUE",
+      "済",
+      "2026/02/24",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "2026/05/12　test"
+    ],
+    [
+      "",
+      "Outliers",
+      "TRUE",
+      "済",
+      "2026/02/24"
+    ],
+    [
+      "",
+      "Parallel box and whisker diagrams",
+      "TRUE",
+      "済",
+      "2026/02/24"
+    ],
+    [
+      "",
+      "Cumulative frequency graphs",
+      "TRUE",
+      "済",
+      "2026/02/24"
+    ],
+    [
+      "2",
+      "Variance and standard deviation",
+      "FALSE",
+      "済",
+      "2026/02/24"
+    ],
+    [
+      "",
+      "Pearson's product-moment correlation coefficient",
+      "FALSE",
+      "済",
+      "2026/02/28"
+    ],
+    [
+      "3",
+      "Line of best fit by eye",
+      "FALSE",
+      "済",
+      "2026/02/28"
+    ],
+    [
+      "",
+      "The least squares regression line",
+      "FALSE",
+      "済",
+      "2026/02/28"
+    ],
+    [
+      "",
+      "The regression line of x against y",
+      "FALSE",
+      "済",
+      "2026/02/28"
+    ],
+    [
+      "4",
+      "Theoretical probability",
+      "FALSE",
+      "済",
+      "2026/03/03"
+    ],
+    [
+      "5",
+      "Unit test 1",
+      "",
+      "済",
+      "2026/03/03",
+      "",
+      "29",
+      "26",
+      "89.70%",
+      "英単語の課題がまだありますが、現段階では計算機も正しく使えており、Unit test 1の範囲の理解はしっかりとできていると思います。"
+    ],
+    [
+      "6",
+      "The addition law of probability",
+      "FALSE",
+      "済",
+      "2026/03/03"
+    ],
+    [
+      "",
+      "P(A∪B)=P(A)+P(B)−P(A∩B)",
+      "FALSE",
+      "済",
+      "2026/03/07"
+    ],
+    [
+      "7",
+      "Conditional probability",
+      "FALSE",
+      "済",
+      "2026/03/07"
+    ],
+    [
+      "8",
+      "Expectation",
+      "FALSE",
+      "済",
+      "2026/03/07"
+    ],
+    [
+      "",
+      "The binomial distribution",
+      "FALSE",
+      "済",
+      "2026/03/10",
+      "2026/03/14",
+      "2026/03/17"
+    ],
+    [
+      "9",
+      "The normal distribution",
+      "FALSE",
+      "済",
+      "2026/03/21"
+    ],
+    [
+      "",
+      "Calculating normal probabilities",
+      "FALSE",
+      "済",
+      "2026/03/21"
+    ],
+    [
+      "10",
+      "The standard normal distribution",
+      "FALSE",
+      "済",
+      "2026/03/21",
+      "2026/03/24"
+    ],
+    [
+      "",
+      "Quantiles",
+      "FALSE",
+      "済",
+      "2026/03/21"
+    ],
+    [
+      "11",
+      "Unit test 2",
+      "",
+      "済",
+      "2026/03/30",
+      "",
+      "34",
+      "13",
+      "38.2%"
+    ],
+    [],
+    [
+      "Calculus"
+    ],
+    [
+      "No",
+      "Subtopic",
+      "",
+      "進捗",
+      "授業日",
+      "授業日",
+      "配点",
+      "得点",
+      "得点率",
+      "メモ",
+      "復習（2回復習・一回テスト）"
+    ],
+    [
+      "1",
+      "Limits",
+      "TRUE",
+      "済",
+      "2025/10/11",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "2026/05/02　復習"
+    ],
+    [
+      "",
+      "The gradient of a tangent",
+      "TRUE",
+      "済",
+      "2025/10/11",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "2026/05/05　復習"
+    ],
+    [
+      "",
+      "The derivative function",
+      "FALSE",
+      "済",
+      "2025/10/11"
+    ],
+    [
+      "",
+      "Simple rules of differentiation",
+      "TRUE",
+      "済",
+      "2025/10/11",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "2026/05/09　test"
+    ],
+    [
+      "2",
+      "The chain rule",
+      "TRUE",
+      "済",
+      "2025/10/11"
+    ],
+    [
+      "",
+      "The product rule",
+      "TRUE",
+      "済",
+      "2025/10/11"
+    ],
+    [
+      "",
+      "The quotient rule",
+      "TRUE",
+      "済",
+      "2025/10/11"
+    ],
+    [
+      "3",
+      "Derivatives of exponential functions",
+      "TRUE",
+      "済",
+      "2025/10/18"
+    ],
+    [
+      "",
+      "Derivatives of logarithmic functions",
+      "TRUE",
+      "済",
+      "2025/10/18"
+    ],
+    [
+      "",
+      "Derivatives of trigonometric functions",
+      "TRUE",
+      "済",
+      "2025/10/18"
+    ],
+    [
+      "4",
+      "Tangents",
+      "TRUE",
+      "済",
+      "2025/10/25"
+    ],
+    [
+      "",
+      "Normals",
+      "TRUE",
+      "済",
+      "2025/10/25"
+    ],
+    [
+      "5",
+      "Increasing & Decreasing Functions",
+      "TRUE",
+      "済",
+      "2025/11/08"
+    ],
+    [
+      "",
+      "Concavity",
+      "TRUE",
+      "済",
+      "2025/11/08"
+    ],
+    [
+      "6",
+      "Unit test 1",
+      "",
+      "済",
+      "2025/11/01",
+      "2025/12/27"
+    ],
+    [
+      "7",
+      "Stationary points/max&min",
+      "TRUE",
+      "済",
+      "2025/11/08"
+    ],
+    [
+      "",
+      "Shape",
+      "TRUE",
+      "済",
+      "2025/11/08"
+    ],
+    [
+      "",
+      "Inflection points",
+      "TRUE",
+      "済",
+      "2025/11/08"
+    ],
+    [
+      "8",
+      "Discovering integrals",
+      "TRUE",
+      "済",
+      "2025/11/29"
+    ],
+    [
+      "",
+      "Rules for integration",
+      "TRUE",
+      "済",
+      "2025/11/29"
+    ],
+    [
+      "9",
+      "Integrating f(ax+b)",
+      "TRUE",
+      "済",
+      "2025/11/29"
+    ],
+    [
+      "",
+      "Integration by substitution",
+      "TRUE",
+      "済",
+      "2025/12/13"
+    ],
+    [
+      "10",
+      "The area under a curve",
+      "TRUE",
+      "済",
+      "2025/12/16"
+    ],
+    [
+      "",
+      "The area above a curve",
+      "TRUE",
+      "済",
+      "2025/12/16"
+    ],
+    [
+      "11",
+      "The area between two functions",
+      "TRUE",
+      "済",
+      "2025/12/16"
+    ],
+    [
+      "",
+      "Displacement",
+      "TRUE",
+      "済",
+      "2025/12/16"
+    ],
+    [
+      "",
+      "Velocity",
+      "FALSE",
+      "済",
+      "2025/12/16"
+    ],
+    [
+      "12",
+      "Unit test 2",
+      "",
+      "済",
+      "2025/12/20",
+      "2026/01/03",
+      "4",
+      "33",
+      "12%",
+      "1. Area bounded by two curveのコンセプトはわかっていても実際の解き方がわかっていない\n2. GDCを使わずに解こうとした結果、Integrationのやり方をわかっていない（➗5というのに困惑）\n3. (c)が分からなかったため、その他を全て諦め\n4. Substitutionするべきものがわからなかったので、挫折\n\n問題点\n－諦めが早い\n－Integrationのやり方をまだ完全に理解できていない（シンプルなのは解けても、中身の微分が必要なものであったり、複雑なものになると全く解けない→何ならシンプルなステップもこんがらがってわからなくなる現象が起きる）\n－コンセプトの理解はあっても、実用的な解き方のスキルを持っていない（←相当な練習が必要）\n\n\n感想\nIntegrationは今までの授業の感じでは理解できているように思えたので、結果を見て残念な気持ちもありました。まだ学校でカバーしていないトピックであるので仕方がないことではあると思いますが、Integration自体の練習がもっと必要だと思いましたので、あと2-3回はIntegrationにFocusした授業を行いたいと思います。本人にはIntegrationの練習用のWorksheetを必ず2週間の間で終わらすように、と念を押しつつ共有しましたので、次回はそちらの丸付け・解説を行い、時間が余ればさらに練習問題を行なっていこうと思います。学校が1月8日からだそうなので、テストは早くて今月末か2月の前半だと思われます。ある程度理解が進んだところでもう一度Unit testを半分の時間で解いていただき、大丈夫そう且つ学校のIntegrationのテストまで時間があったら、他のトピックをやる時間を設けられたら、と思います。"
+    ],
+    [],
+    [
+      "",
+      "授業日",
+      "授業",
+      "宿題",
+      "メモ・備考"
+    ],
+    [
+      "土",
+      "2026/04/18",
+      "Functionの練習問題",
+      "stats（小1大1）、Unit1（小1大1）Total 30（30分）",
+      "StatsのSummative examが近づくまでは、毎週一回"
+    ],
+    [
+      "火",
+      "2026/04/21",
+      "Trigo復習1",
+      "Unit1（小1大1）、Unit2（小1大1）Total 30（30分）"
+    ],
+    [
+      "土",
+      "2026/04/25",
+      "Trigo復習2",
+      "stats（小1大1）、Unit2（小1大1）Total 30（30分）"
+    ],
+    [
+      "火",
+      "2026/04/28",
+      "Trigo問題",
+      "Unit1（小1大1）、Unit2（小1大1）Total 30（30分）"
+    ],
+    [
+      "土",
+      "2026/05/02",
+      "Differentiation",
+      "stats（小1大1）、Unit1（小1大1）Total 30（30分）"
+    ],
+    [
+      "火",
+      "2026/05/05",
+      "Differentiation問題",
+      "Unit2（小1大1）、Unit3（小1大1）Total 30（30分）"
+    ],
+    [
+      "土",
+      "2026/05/09",
+      "Integration",
+      "stats（小1大1）、Unit1（小1大1）Total 30（30分）"
+    ],
+    [
+      "火",
+      "2026/05/12",
+      "Integrationの問題",
+      "Unit 2（小1大1）、Unit3（小1大1）Total 30（30分）"
+    ],
+    [
+      "土",
+      "2026/05/16",
+      "Statsの練習問題",
+      "stats（小1大1）、Unit1（小1大1）Total 30（30分）",
+      "Statisticsのテストの日付によっては、順列が前後"
+    ],
+    [
+      "火",
+      "2026/05/19",
+      "Unit 1練習問題",
+      "Unit 4（小1大1）、Unit2（小1大1）Total 30（30分）",
+      "Statsが終わったと仮定↓（Statsがのテストが終わってなかった場合、授業でStatsの練習問題、宿題でStats以外の練習問題）"
+    ],
+    [
+      "土",
+      "2026/05/23",
+      "Unit 2練習問題",
+      "Unit 3（小1大1）、Unit5（小1大1）Total 30（30分）"
+    ],
+    [
+      "火",
+      "2026/05/26",
+      "Unit 3練習問題",
+      "Unit 1（小1大1）、Unit2（小1大1）Total 30（30分）"
+    ],
+    [
+      "土",
+      "2026/05/30",
+      "Unit 4練習問題",
+      "Unit 5（小1大1）、Unit 4（小1大1）Total 30（30分）"
+    ],
+    [
+      "火",
+      "2026/06/02",
+      "Unit 5練習問題",
+      "Unit 3（小1大1）、Unit 1（小1大1）Total 30（30分）"
+    ],
+    [
+      "土",
+      "2026/06/06",
+      "Unit 1練習問題",
+      "Unit 4（小1大1）、Unit2（小1大1）Total 30（30分）"
+    ],
+    [
+      "火",
+      "2026/06/09",
+      "Unit 2練習問題",
+      "Unit 3（小1大1）、Unit5（小1大1）Total 30（30分）"
+    ],
+    [
+      "土",
+      "2026/06/13",
+      "Unit 3練習問題",
+      "Unit 1（小1大1）、Unit2（小1大1）Total 30（30分）"
+    ],
+    [
+      "火",
+      "2026/06/16",
+      "Unit 4練習問題",
+      "Unit 5（小1大1）、Unit 4（小1大1）Total 30（30分）"
+    ],
+    [
+      "土",
+      "2026/06/20",
+      "Unit 5練習問題",
+      "Unit 3（小1大1）、Unit 1（小1大1）Total 30（30分）"
+    ],
+    [
+      "火",
+      "2026/06/23",
+      "Unit 1練習問題",
+      "以下繰り返し"
+    ],
+    [
+      "土",
+      "2026/06/27",
+      "Unit 2練習問題"
+    ],
+    [
+      "火",
+      "2026/06/30",
+      "Unit 3練習問題"
+    ],
+    [
+      "土",
+      "2026/07/04",
+      "Unit 4練習問題"
+    ],
+    [
+      "火",
+      "2026/07/07",
+      "Unit 5練習問題"
+    ]
+  ]
+}
