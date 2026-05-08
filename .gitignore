@@ -1,5 +1,7 @@
 .vercel
 node_modules/
+__pycache__/
+*.pyc
 
 # GCP サービスアカウント鍵（公開リポジトリに絶対にコミットしない）
 config/gen-lang-client-*.json
