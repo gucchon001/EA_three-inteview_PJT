@@ -1,0 +1,29 @@
+{% extends "mock/base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block body %}
+<main style="max-width: 960px; margin: 2rem auto;">
+  <p class="muted">{{ role_label }} · <label><input type="checkbox" /> 過去分も表示</label>（将来 HTMX）</p>
+  <h1 class="display">{{ page_title }}</h1>
+  <div class="card" style="overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          {% for col in columns %}
+          <th style="text-align: left; padding: 0.5rem; border-bottom: 1px solid var(--rule-line);">{{ col }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr style="background: {% if loop.index0 % 2 == 0 %}var(--panel-cloud){% else %}var(--paper-mist){% endif %};">
+          {% for cell in row %}
+          <td style="padding: 0.5rem; border-bottom: 1px solid var(--rule-line);">{{ cell }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top: 1rem;"><a href="/mock/">← モック索引</a></p>
+</main>
+{% endblock %}

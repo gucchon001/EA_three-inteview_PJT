@@ -2,13 +2,15 @@
 {% block title %}モック UI — EB 指導管理{% endblock %}
 {% block body %}
 <main style="max-width: 720px; margin: 2rem auto;">
-  <p class="muted">EB_ENABLE_MOCK_UI=1 のときのみ公開。DESIGN.md の仮トークン適用。</p>
-  <h1>モック索引</h1>
+  <p class="muted">EB_ENABLE_MOCK_UI=1 のときのみ公開。<a href="/docs">OpenAPI</a> · 正本: <code>docs/web-app/screen-design.md</code></p>
+  <h1 class="display">モック索引</h1>
   <ul class="card" style="list-style: none; padding: 1.25rem; margin: 0;">
     {% for r in routes %}
-    <li style="margin-bottom: 0.5rem;">
+    <li style="margin-bottom: 0.65rem;">
+      <span class="badge" style="margin-right:0.35rem;">{{ r.screen_id }}</span>
       <a href="{{ r.path }}">{{ r.label }}</a>
       <span class="muted"> — <code>{{ r.path }}</code></span>
+      {% if r.note %}<span class="muted"> — {{ r.note }}</span>{% endif %}
     </li>
     {% endfor %}
   </ul>

@@ -1,0 +1,16 @@
+{% extends "mock/base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block body %}
+<main style="max-width: 720px; margin: 2rem auto;">
+  <p class="muted">{{ role_label }} · student_id={{ student_id }}</p>
+  <h1 class="display">{{ page_title }}</h1>
+  <div class="card">
+    <p class="muted">フォームはスタブ（種別・日付・参加者・本文・タグ）</p>
+    <label class="muted">種別</label>
+    <select style="display:block;width:100%;margin-bottom:1rem;padding:0.5rem;">
+      {% for k in kinds %}<option>{{ k }}</option>{% endfor %}
+    </select>
+    <button type="button" class="btn btn-primary" disabled>保存（未接続）</button>
+  </div>
+</main>
+{% endblock %}

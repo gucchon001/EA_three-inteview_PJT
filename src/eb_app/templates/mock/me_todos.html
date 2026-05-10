@@ -1,0 +1,17 @@
+{% extends "mock/base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block body %}
+<main style="max-width: 720px; margin: 2rem auto;">
+  <p class="muted">{{ role_label }}</p>
+  <h1 class="display">{{ page_title }}</h1>
+  <ul class="card" style="list-style:none;margin:0;padding:1rem;">
+    {% for t in todos %}
+    <li style="margin-bottom:0.75rem;">
+      <strong>{{ t.title }}</strong>
+      <span class="muted"> — 期限 {{ t.due }}（{{ t.status }}）</span>
+    </li>
+    {% endfor %}
+  </ul>
+  <p><a href="/mock/">← 索引</a></p>
+</main>
+{% endblock %}

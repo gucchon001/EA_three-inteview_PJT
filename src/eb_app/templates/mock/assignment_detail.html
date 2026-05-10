@@ -1,0 +1,35 @@
+{% extends "mock/base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block body %}
+<main style="max-width: 960px; margin: 2rem auto;">
+  <p class="muted">{{ role_label }}</p>
+  <h1 class="display">{{ page_title }}</h1>
+  <div class="card">
+    <p>選考番号 <code>{{ assignment.selection_no }}</code> / {{ assignment.subject }} / 月 {{ assignment.monthly_hours }} h</p>
+  </div>
+  <h2>月次タイムライン</h2>
+  <div class="card" style="overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:0.5rem;">年月</th>
+          <th style="text-align:left;padding:0.5rem;">実施時間</th>
+          <th style="text-align:left;padding:0.5rem;">充足率</th>
+          <th style="text-align:left;padding:0.5rem;">提出</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in monthly_rows %}
+        <tr>
+          <td style="padding:0.5rem;">{{ m.ym }}</td>
+          <td style="padding:0.5rem;">{{ m.hours }}</td>
+          <td style="padding:0.5rem;">{{ m.rate }}</td>
+          <td style="padding:0.5rem;">{{ m.submitted }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p><a href="/mock/students/demo">← 生徒詳細</a></p>
+</main>
+{% endblock %}
