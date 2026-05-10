@@ -1,37 +1,26 @@
 {% extends "mock/base.html" %}
 {% block title %}{{ page_title }} — {{ role_label }}{% endblock %}
-{% block body %}
-<div class="layout">
-  <aside>
-    <p class="muted" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.06em;">Mock nav</p>
-    <nav>
-      <a href="/mock/" class="active">ダッシュボード</a>
-      <a href="/mock/">（未実装プレースホルダ）</a>
-    </nav>
-  </aside>
-  <main>
-    <p class="muted">{{ role_label }}向け · フィクスチャ表示のみ</p>
-    <h1 class="display">{{ page_title }}</h1>
+{% block content %}
+<p class="muted">{{ role_label }}向け · フィクスチャ表示のみ</p>
+<h1 class="display">{{ page_title }}</h1>
 
-    <h2>サマリー</h2>
-    <div class="metric-grid">
-      {% for m in metrics %}
-      <div class="card metric {{ m.tone }}">
-        <div class="muted">{{ m.label }}</div>
-        <div class="value">{{ m.value }}</div>
-      </div>
-      {% endfor %}
-    </div>
+<h2>サマリー</h2>
+<div class="metric-grid">
+  {% for m in metrics %}
+  <div class="card metric {{ m.tone }}">
+    <div class="muted">{{ m.label }}</div>
+    <div class="value">{{ m.value }}</div>
+  </div>
+  {% endfor %}
+</div>
 
-    <h2>自分宛て・アラート（HTMX で断片読込サンプル）</h2>
-    <div
-      id="admin-alerts"
-      hx-get="/mock/fragments/admin-alerts"
-      hx-trigger="load"
-      hx-swap="innerHTML"
-    >
-      <p class="muted">読み込み中…</p>
-    </div>
-  </main>
+<h2>自分宛て・アラート（HTMX で断片読込サンプル）</h2>
+<div
+  id="admin-alerts"
+  hx-get="/mock/fragments/admin-alerts"
+  hx-trigger="load"
+  hx-swap="innerHTML"
+>
+  <p class="muted">読み込み中…</p>
 </div>
 {% endblock %}

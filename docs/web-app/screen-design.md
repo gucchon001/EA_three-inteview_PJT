@@ -2,7 +2,7 @@
 
 > **正本の位置づけ**: 要件 [v0.3 §6 画面・URL設計](../requirements/v0.3.md) を分解・追記したもの。レイアウト・コンポーネントの詳細は本書と [DESIGN.md](../../DESIGN.md) を併用。モック URL は `EB_ENABLE_MOCK_UI=1` 時のみ（[mock-ui-boundary.md](mock-ui-boundary.md)）。
 
-**更新ルール**: 画面を追加・変更したら、(1) 本表を更新 (2) `src/eb_app/fixtures/mock_screens.py` の `MOCK_INDEX` を同期 (3) モックルート・テンプレ・テストを追従。
+**更新ルール**: 画面を追加・変更したら、(1) 本表を更新 (2) `mock_screens.MOCK_INDEX` を同期 (3) モックルート・テストを追従 (4) サイド項目追加時は **`portal_frame._nav_groups`** を更新。
 
 ---
 
@@ -21,6 +21,8 @@
 ## 2. ポータル IA（サイドバー + グローバルメニュー）
 
 **ベンチマーク（スキル）**: 入口の情報優先順は **`dashboard-first-view-ux`**（「自分宛て・アラートを最上段」／Jira 型の要約・担当リストの考え方を参照）。ナビの可読性・コントラストは **`ui-frontend-patterns`**。視覚トークンは **[DESIGN.md](../../DESIGN.md)**（左アクティブボーダー等）。
+
+**実装（モック）**: グローバルバー・サイドバー・パンくずは `src/eb_app/templates/mock/base.html` と `src/eb_app/fixtures/portal_frame.py`（`augment_context`）。管理者ダッシュのみ `show_parallel_sheet` サンプル on。
 
 ### 2.1 グローバルメニュー（上部・常時固定）
 
@@ -130,4 +132,4 @@
 
 | 日付 | 内容 |
 |------|------|
-| 2026-05-10 | 初版。SCR ID・モック URL。§2 ポータル IA（グローバル + サイドバー）。ベンチマーク: `dashboard-first-view-ux`, `ui-frontend-patterns`, DESIGN.md。 |
+| 2026-05-10 | 初版（SCR ID・§2 ポータル IA）。ベンチマーク: `dashboard-first-view-ux` 等。モックに `portal_frame.py` / `base.html` でポータル枠実装。 |

@@ -1,31 +1,28 @@
 {% extends "mock/base.html" %}
 {% block title %}{{ page_title }}{% endblock %}
-{% block body %}
-<main style="max-width: 960px; margin: 2rem auto;">
-  <p class="muted">{{ role_label }} · 対象 <strong>{{ ym }}</strong></p>
-  <h1 class="display">{{ page_title }}</h1>
-  <div class="card" style="overflow-x: auto;">
-    <table style="width:100%; border-collapse:collapse;">
-      <thead>
-        <tr>
-          <th style="text-align:left;padding:0.5rem;">選考番号</th>
-          <th style="text-align:left;padding:0.5rem;">教師</th>
-          <th style="text-align:left;padding:0.5rem;">生徒</th>
-          <th style="text-align:left;padding:0.5rem;">提出</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for r in rows %}
-        <tr>
-          <td style="padding:0.5rem;">{{ r.selection_no }}</td>
-          <td style="padding:0.5rem;">{{ r.teacher }}</td>
-          <td style="padding:0.5rem;">{{ r.student }}</td>
-          <td style="padding:0.5rem;">{{ r.submitted }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  <p><a href="/mock/">← 索引</a></p>
-</main>
+{% block content %}
+<p class="muted">{{ role_label }} · 対象 <strong>{{ ym }}</strong></p>
+<h1 class="display">{{ page_title }}</h1>
+<div class="card" style="overflow-x: auto;">
+  <table style="width:100%; border-collapse:collapse;">
+    <thead>
+      <tr>
+        <th style="text-align:left;padding:0.5rem;">選考番号</th>
+        <th style="text-align:left;padding:0.5rem;">教師</th>
+        <th style="text-align:left;padding:0.5rem;">生徒</th>
+        <th style="text-align:left;padding:0.5rem;">提出</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td style="padding:0.5rem;">{{ r.selection_no }}</td>
+        <td style="padding:0.5rem;">{{ r.teacher }}</td>
+        <td style="padding:0.5rem;">{{ r.student }}</td>
+        <td style="padding:0.5rem;">{{ r.submitted }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

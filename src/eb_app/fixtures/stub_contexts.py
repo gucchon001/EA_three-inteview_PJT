@@ -48,7 +48,7 @@ def teachers_list_context() -> dict[str, Any]:
 def students_list_context() -> dict[str, Any]:
     return list_page(
         "生徒一覧",
-        "管理者（スタブ）",
+        "教師（自担当のみ・スタブ）",
         ["生徒番号", "氏名", "学年", "ステータス"],
         [
             ["S-2001", "山田 太郎", "DP2", "在籍"],
@@ -123,7 +123,7 @@ def meeting_new_context() -> dict[str, Any]:
 def me_todos_context() -> dict[str, Any]:
     return {
         "page_title": "自分宛 ToDo",
-        "role_label": "管理者（スタブ）",
+        "role_label": "教師（スタブ）",
         "todos": [
             {"title": "承諾書確認", "due": "2026-05-12", "status": "open"},
         ],

@@ -1,29 +1,26 @@
 {% extends "mock/base.html" %}
 {% block title %}{{ page_title }}{% endblock %}
-{% block body %}
-<main style="max-width: 720px; margin: 2rem auto;">
-  <p class="muted">{{ role_label }}</p>
-  <h1 class="display">{{ page_title }}</h1>
-  <h2>自分宛て・締切（ファーストビュー）</h2>
-  <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-    {% for x in first_view %}
-    <div class="card">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <strong>{{ x.title }}</strong>
-        <span class="badge badge-warning">{{ x.badge }}</span>
-      </div>
-      <p class="muted" style="margin: 0.35rem 0 0;">{{ x.body }}</p>
+{% block content %}
+<p class="muted">{{ role_label }}</p>
+<h1 class="display">{{ page_title }}</h1>
+<h2>自分宛て・締切（ファーストビュー）</h2>
+<div style="display: flex; flex-direction: column; gap: 0.75rem;">
+  {% for x in first_view %}
+  <div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <strong>{{ x.title }}</strong>
+      <span class="badge badge-warning">{{ x.badge }}</span>
     </div>
-    {% endfor %}
+    <p class="muted" style="margin: 0.35rem 0 0;">{{ x.body }}</p>
   </div>
-  <h2>担当指導枠（抜粋）</h2>
-  <ul class="card" style="list-style: none; margin: 0; padding: 1rem;">
-    {% for s in slots_preview %}
-    <li style="margin-bottom: 0.5rem;">
-      <code>{{ s.selection_no }}</code> — {{ s.student }} / {{ s.subject }}
-    </li>
-    {% endfor %}
-  </ul>
-  <p style="margin-top: 1rem;"><a href="/mock/">← モック索引</a></p>
-</main>
+  {% endfor %}
+</div>
+<h2>担当指導枠（抜粋）</h2>
+<ul class="card" style="list-style: none; margin: 0; padding: 1rem;">
+  {% for s in slots_preview %}
+  <li style="margin-bottom: 0.5rem;">
+    <code>{{ s.selection_no }}</code> — {{ s.student }} / {{ s.subject }}
+  </li>
+  {% endfor %}
+</ul>
 {% endblock %}

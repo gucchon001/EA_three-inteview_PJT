@@ -24,6 +24,8 @@
       --radius: 8px;
       --font-display: "Fraunces", ui-serif, Georgia, serif;
       --font-body: "Lexend", system-ui, sans-serif;
+      --sidebar-w: 232px;
+      --global-h: 52px;
     }
     * { box-sizing: border-box; }
     body {
@@ -47,34 +49,118 @@
     }
     a { color: var(--deep-teal); text-decoration: none; }
     a:hover { color: var(--deep-teal-hover); text-decoration: underline; }
-    .layout {
-      min-height: 100vh;
+
+    .global-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: var(--global-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem 0 1.25rem;
+      background: var(--panel-cloud);
+      border-bottom: 1px solid var(--rule-line);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .global-bar .brand {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--ink-slate);
+      text-decoration: none;
+    }
+    .global-bar .brand:hover { text-decoration: none; color: var(--deep-teal); }
+    .global-bar-center {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      flex: 1;
+      justify-content: flex-end;
+    }
+    .global-bar a.nav-pill {
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius);
+      color: var(--deep-teal);
+      background: var(--paper-mist);
+    }
+    .global-bar a.nav-pill:hover { background: rgba(15, 89, 89, 0.12); text-decoration: none; }
+    .global-bar .sheet-link {
+      font-size: 0.8125rem;
+      color: var(--accent-amber);
+    }
+
+    .app-body {
       display: grid;
-      grid-template-columns: 220px 1fr;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      min-height: calc(100vh - var(--global-h));
     }
-    @media (max-width: 640px) {
-      .layout { grid-template-columns: 1fr; }
-      aside { display: none; }
+    @media (max-width: 768px) {
+      .app-body { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
     }
-    aside {
+
+    .sidebar {
       background: var(--panel-cloud);
       border-right: 1px solid var(--rule-line);
-      padding: 1rem;
+      padding: 1rem 0.75rem 2rem;
+      overflow-y: auto;
     }
-    aside nav a {
+    .sidebar .nav-group-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin: 1.25rem 0 0.35rem 0.5rem;
+    }
+    .sidebar .nav-group-label:first-child { margin-top: 0; }
+    .sidebar nav a {
       display: block;
-      padding: 0.5rem 0.75rem;
+      padding: 0.45rem 0.75rem;
       border-radius: var(--radius);
       color: var(--ink-slate);
       text-decoration: none;
       border-left: 3px solid transparent;
+      font-size: 0.9375rem;
     }
-    aside nav a:hover { background: var(--paper-mist); }
-    aside nav a.active {
+    .sidebar nav a:hover { background: var(--paper-mist); text-decoration: none; }
+    .sidebar nav a.active {
       background: var(--paper-mist);
       border-left-color: var(--deep-teal);
+      font-weight: 500;
     }
-    main { padding: 1.5rem 2rem; max-width: 1280px; }
+
+    .content-column {
+      min-width: 0;
+    }
+    .breadcrumbs {
+      padding: 0.75rem 1.5rem 0;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    .breadcrumbs a { color: var(--text-muted); }
+    .breadcrumbs a:hover { color: var(--deep-teal); }
+    .breadcrumbs span.sep { margin: 0 0.35rem; color: var(--rule-line); }
+
+    .content-inner {
+      padding: 0.5rem 1.5rem 2rem;
+      max-width: 1280px;
+    }
+
+    .metric-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+    .metric .value { font-size: 1.75rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .metric.warning .value { color: var(--warning-ochre); }
+    .metric.error .value { color: var(--error-rust); }
+    .muted { color: var(--text-muted); font-size: 0.875rem; }
     .card {
       background: var(--panel-cloud);
       border: 1px solid var(--rule-line);
@@ -94,15 +180,6 @@
     }
     .badge-warning { background: rgba(194, 123, 26, 0.15); color: var(--accent-amber); }
     .badge-error { background: rgba(163, 58, 42, 0.12); color: var(--error-rust); }
-    .metric-grid {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    }
-    .metric .value { font-size: 1.75rem; font-weight: 600; font-variant-numeric: tabular-nums; }
-    .metric.warning .value { color: var(--warning-ochre); }
-    .metric.error .value { color: var(--error-rust); }
-    .muted { color: var(--text-muted); font-size: 0.875rem; }
     .btn {
       display: inline-block;
       padding: 0.5rem 1rem;
@@ -117,10 +194,57 @@
       color: #fff;
     }
     .btn-primary:hover { background: var(--deep-teal-hover); }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
     {% block extra_style %}{% endblock %}
   </style>
 </head>
 <body>
-  {% block body %}{% endblock %}
+{% if portal.show_chrome %}
+  <header class="global-bar">
+    <a class="brand" href="{{ portal.home_href }}">EB 指導管理</a>
+    <div class="global-bar-center">
+      <span class="badge" title="ロール">{{ portal.role_label_ja }}</span>
+      {% if portal.show_parallel_sheet %}
+      <a class="sheet-link" href="{{ portal.parallel_sheet_url }}" target="_blank" rel="noopener noreferrer">元のシートを開く ↗</a>
+      {% endif %}
+      <a class="nav-pill" href="{{ portal.mock_index_href }}">モック索引</a>
+      <a class="nav-pill" href="/mock/me/todos">自分宛 ToDo{% if portal.todo_badge %} <span class="badge badge-warning">{{ portal.todo_badge }}</span>{% endif %}</a>
+      <span class="muted" style="font-size:0.8125rem;">ユーザー ▾</span>
+    </div>
+  </header>
+  <div class="app-body">
+    <aside class="sidebar" aria-label="メインナビゲーション">
+      {% for group in portal.nav_groups %}
+      <p class="nav-group-label">{{ group['label'] }}</p>
+      <nav>
+        {% for item in group['items'] %}
+        <a href="{{ item['href'] }}" {% if portal.active_nav == item['id'] %}class="active" aria-current="page"{% endif %}>{{ item['label'] }}</a>
+        {% endfor %}
+      </nav>
+      {% endfor %}
+    </aside>
+    <div class="content-column">
+      {% if portal.breadcrumbs %}
+      <nav class="breadcrumbs" aria-label="パンくず">
+        {% for c in portal.breadcrumbs %}
+          {% if c.href %}
+          <a href="{{ c.href }}">{{ c.label }}</a>
+          {% else %}
+          <span>{{ c.label }}</span>
+          {% endif %}
+          {% if not loop.last %}<span class="sep">/</span>{% endif %}
+        {% endfor %}
+      </nav>
+      {% endif %}
+      <div class="content-inner">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+  </div>
+{% else %}
+  {% block bare %}{% endblock %}
+{% endif %}
 </body>
 </html>

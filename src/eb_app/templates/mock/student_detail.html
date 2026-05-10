@@ -1,13 +1,11 @@
 {% extends "mock/base.html" %}
 {% block title %}{{ page_title }}{% endblock %}
-{% block body %}
-<main style="max-width: 720px; margin: 2rem auto;">
-  <p class="muted">{{ role_label }}</p>
-  <h1 class="display">{{ page_title }}</h1>
-  <div class="card">
-    <p><strong>{{ student.name }}</strong>（{{ student.no }}）</p>
-    <p class="muted">学年: {{ student.grade }} / ステータス: {{ student.status }}</p>
-    <p><a href="{{ assignments_link }}">指導枠・月次へ</a> · <a href="/mock/students">← 一覧</a></p>
-  </div>
-</main>
+{% block content %}
+<p class="muted">{{ role_label }}</p>
+<h1 class="display">{{ page_title }}</h1>
+<div class="card">
+  <p><strong>{{ student.name }}</strong>（{{ student.no }}）</p>
+  <p class="muted">学年: {{ student.grade }} / ステータス: {{ student.status }}</p>
+  <p><a href="{{ assignments_link }}">指導枠・月次へ</a></p>
+</div>
 {% endblock %}
