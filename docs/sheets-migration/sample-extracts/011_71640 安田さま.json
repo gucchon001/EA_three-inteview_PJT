@@ -1,0 +1,1142 @@
+{
+  "spreadsheet_id": "1inBUyjKQbFEH1tt-XnauWFKJqRU21F-GQGEzleLJLbA",
+  "spreadsheet_title": "★新【EB塾】【2026年度】指導モニタリング管理表",
+  "index": 11,
+  "gid": 1474146511,
+  "title": "71640 安田さま",
+  "grid_properties": {
+    "rowCount": 1024,
+    "columnCount": 25
+  },
+  "merged_ranges": [
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 19,
+      "endRowIndex": 20,
+      "startColumnIndex": 3,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 23,
+      "endRowIndex": 24,
+      "startColumnIndex": 12,
+      "endColumnIndex": 16
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 27,
+      "endRowIndex": 28,
+      "startColumnIndex": 12,
+      "endColumnIndex": 16
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 30,
+      "endRowIndex": 31,
+      "startColumnIndex": 3,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 42,
+      "endRowIndex": 43,
+      "startColumnIndex": 3,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 3,
+      "endRowIndex": 4,
+      "startColumnIndex": 4,
+      "endColumnIndex": 6
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 6,
+      "endRowIndex": 7,
+      "startColumnIndex": 5,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 6,
+      "endRowIndex": 7,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 7,
+      "endRowIndex": 8,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 7,
+      "endRowIndex": 8,
+      "startColumnIndex": 9,
+      "endColumnIndex": 11
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 8,
+      "endRowIndex": 9,
+      "startColumnIndex": 9,
+      "endColumnIndex": 11
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 11,
+      "endRowIndex": 12,
+      "startColumnIndex": 3,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 6,
+      "endRowIndex": 7,
+      "startColumnIndex": 3,
+      "endColumnIndex": 5
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 13,
+      "endRowIndex": 15,
+      "startColumnIndex": 1,
+      "endColumnIndex": 2
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 15,
+      "endRowIndex": 17,
+      "startColumnIndex": 1,
+      "endColumnIndex": 2
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 21,
+      "endRowIndex": 25,
+      "startColumnIndex": 1,
+      "endColumnIndex": 2
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 25,
+      "endRowIndex": 29,
+      "startColumnIndex": 1,
+      "endColumnIndex": 2
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 32,
+      "endRowIndex": 36,
+      "startColumnIndex": 1,
+      "endColumnIndex": 2
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 36,
+      "endRowIndex": 40,
+      "startColumnIndex": 1,
+      "endColumnIndex": 2
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 44,
+      "endRowIndex": 47,
+      "startColumnIndex": 1,
+      "endColumnIndex": 2
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 47,
+      "endRowIndex": 50,
+      "startColumnIndex": 1,
+      "endColumnIndex": 2
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 53,
+      "endRowIndex": 54,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 53,
+      "endRowIndex": 54,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 53,
+      "endRowIndex": 54,
+      "startColumnIndex": 9,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 54,
+      "endRowIndex": 55,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 54,
+      "endRowIndex": 55,
+      "startColumnIndex": 9,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 54,
+      "endRowIndex": 55,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 55,
+      "endRowIndex": 56,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 55,
+      "endRowIndex": 56,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 55,
+      "endRowIndex": 56,
+      "startColumnIndex": 9,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 56,
+      "endRowIndex": 57,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 56,
+      "endRowIndex": 57,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 56,
+      "endRowIndex": 57,
+      "startColumnIndex": 9,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 59,
+      "endRowIndex": 60,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 59,
+      "endRowIndex": 60,
+      "startColumnIndex": 9,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 57,
+      "endRowIndex": 58,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 57,
+      "endRowIndex": 58,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 57,
+      "endRowIndex": 58,
+      "startColumnIndex": 9,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 58,
+      "endRowIndex": 59,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 58,
+      "endRowIndex": 59,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 58,
+      "endRowIndex": 59,
+      "startColumnIndex": 9,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 59,
+      "endRowIndex": 60,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 66,
+      "endRowIndex": 67,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 66,
+      "endRowIndex": 67,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 66,
+      "endRowIndex": 67,
+      "startColumnIndex": 9,
+      "endColumnIndex": 11
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 66,
+      "endRowIndex": 67,
+      "startColumnIndex": 11,
+      "endColumnIndex": 13
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 66,
+      "endRowIndex": 67,
+      "startColumnIndex": 13,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 67,
+      "endRowIndex": 68,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 67,
+      "endRowIndex": 68,
+      "startColumnIndex": 13,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 67,
+      "endRowIndex": 68,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 68,
+      "endRowIndex": 69,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 68,
+      "endRowIndex": 69,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 68,
+      "endRowIndex": 69,
+      "startColumnIndex": 9,
+      "endColumnIndex": 11
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 68,
+      "endRowIndex": 69,
+      "startColumnIndex": 11,
+      "endColumnIndex": 13
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 68,
+      "endRowIndex": 69,
+      "startColumnIndex": 13,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 69,
+      "endRowIndex": 70,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 62,
+      "endRowIndex": 63,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 62,
+      "endRowIndex": 63,
+      "startColumnIndex": 9,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 60,
+      "endRowIndex": 61,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 60,
+      "endRowIndex": 61,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 60,
+      "endRowIndex": 61,
+      "startColumnIndex": 9,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 61,
+      "endRowIndex": 62,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 61,
+      "endRowIndex": 62,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 61,
+      "endRowIndex": 62,
+      "startColumnIndex": 9,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 62,
+      "endRowIndex": 63,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 65,
+      "endRowIndex": 66,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 65,
+      "endRowIndex": 66,
+      "startColumnIndex": 9,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 63,
+      "endRowIndex": 64,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 63,
+      "endRowIndex": 64,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 63,
+      "endRowIndex": 64,
+      "startColumnIndex": 9,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 64,
+      "endRowIndex": 65,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 64,
+      "endRowIndex": 65,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 64,
+      "endRowIndex": 65,
+      "startColumnIndex": 9,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 65,
+      "endRowIndex": 66,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 67,
+      "endRowIndex": 68,
+      "startColumnIndex": 9,
+      "endColumnIndex": 11
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 67,
+      "endRowIndex": 68,
+      "startColumnIndex": 11,
+      "endColumnIndex": 13
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 69,
+      "endRowIndex": 70,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 69,
+      "endRowIndex": 70,
+      "startColumnIndex": 9,
+      "endColumnIndex": 11
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 70,
+      "endRowIndex": 71,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 70,
+      "endRowIndex": 71,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 70,
+      "endRowIndex": 71,
+      "startColumnIndex": 9,
+      "endColumnIndex": 11
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 71,
+      "endRowIndex": 72,
+      "startColumnIndex": 2,
+      "endColumnIndex": 7
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 71,
+      "endRowIndex": 72,
+      "startColumnIndex": 7,
+      "endColumnIndex": 9
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 71,
+      "endRowIndex": 72,
+      "startColumnIndex": 9,
+      "endColumnIndex": 11
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 69,
+      "endRowIndex": 70,
+      "startColumnIndex": 11,
+      "endColumnIndex": 13
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 69,
+      "endRowIndex": 70,
+      "startColumnIndex": 13,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 70,
+      "endRowIndex": 71,
+      "startColumnIndex": 11,
+      "endColumnIndex": 13
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 70,
+      "endRowIndex": 71,
+      "startColumnIndex": 13,
+      "endColumnIndex": 15
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 71,
+      "endRowIndex": 72,
+      "startColumnIndex": 11,
+      "endColumnIndex": 13
+    },
+    {
+      "sheetId": 1474146511,
+      "startRowIndex": 71,
+      "endRowIndex": 72,
+      "startColumnIndex": 13,
+      "endColumnIndex": 15
+    }
+  ],
+  "values": [
+    [],
+    [
+      "",
+      "生徒情報"
+    ],
+    [
+      "★EB塾生徒一覧 へ戻る",
+      "生徒番号",
+      "生徒氏名",
+      "学年",
+      "最終試験時期",
+      "",
+      "入会日"
+    ],
+    [
+      "Economics SL 学習計画表",
+      "71640",
+      "安田 勝哉",
+      "高２",
+      "2027　Nov",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Economics(HL)指導可能教師"
+    ],
+    [
+      "生徒カルテ",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "1123541",
+      "倉橋 然",
+      "DP42、EE⇒Economics\n7点　東大学部1年",
+      "クレーム、ご意見なし"
+    ],
+    [
+      "指導報告システム",
+      "選考情報",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "1101615",
+      "土屋 結菜",
+      "DP40、EE⇒Business Management(B)\n7点　早稲田TAISI　学部2年",
+      "クレームまではいかないがご意見あり、要確認"
+    ],
+    [
+      "",
+      "No",
+      "選考番号",
+      "採用教師名",
+      "",
+      "指導コース",
+      "",
+      "指導科目",
+      "",
+      "契約時間（月）"
+    ],
+    [
+      "",
+      "１",
+      "64299",
+      "",
+      "",
+      "特進",
+      "",
+      "Economics(SL)"
+    ],
+    [],
+    [],
+    [],
+    [
+      "",
+      "契約時間充足率",
+      "",
+      "2026年度　（月）"
+    ],
+    [
+      "",
+      "選考番号",
+      "契約時間充足率",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "1",
+      "2",
+      "3"
+    ],
+    [
+      "",
+      "64299",
+      "実施時間"
+    ],
+    [
+      "",
+      "",
+      "契約時間充足率"
+    ],
+    [
+      "",
+      "",
+      "実施時間"
+    ],
+    [
+      "",
+      "",
+      "契約時間充足率"
+    ],
+    [],
+    [],
+    [
+      "",
+      "教師評価",
+      "",
+      "2026年度　（月）"
+    ],
+    [
+      "",
+      "選考番号",
+      "教師評価",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "1",
+      "2",
+      "3"
+    ],
+    [
+      "",
+      "64299",
+      "指導の計画性"
+    ],
+    [
+      "",
+      "",
+      "指導の計画性"
+    ],
+    [
+      "",
+      "",
+      "指導キャンセル"
+    ],
+    [
+      "",
+      "",
+      "総合満足度"
+    ],
+    [
+      "",
+      "",
+      "指導の計画性"
+    ],
+    [
+      "",
+      "",
+      "指導の計画性"
+    ],
+    [
+      "",
+      "",
+      "指導キャンセル"
+    ],
+    [
+      "",
+      "",
+      "総合満足度"
+    ],
+    [],
+    [
+      "",
+      "指導報告書",
+      "",
+      "2026年度　（月）"
+    ],
+    [
+      "",
+      "選考番号",
+      "指導報告書",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "1",
+      "2",
+      "3"
+    ],
+    [
+      "",
+      "64299",
+      "メッセージの有無",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE"
+    ],
+    [
+      "",
+      "",
+      "課題の明確化",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE"
+    ],
+    [
+      "",
+      "",
+      "月次報告生徒達成度"
+    ],
+    [
+      "",
+      "",
+      "月次報告教師達成度"
+    ],
+    [
+      "",
+      "",
+      "メッセージの有無",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE"
+    ],
+    [
+      "",
+      "",
+      "課題の明確化",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE"
+    ],
+    [
+      "",
+      "",
+      "月次報告生徒達成度"
+    ],
+    [
+      "",
+      "",
+      "月次報告教師達成度"
+    ],
+    [],
+    [],
+    [
+      "",
+      "学習進捗確認",
+      "",
+      "2026年度　（月）"
+    ],
+    [
+      "",
+      "選考番号",
+      "学習進捗",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "1",
+      "2",
+      "3"
+    ],
+    [
+      "",
+      "64299",
+      "計画の更新",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE"
+    ],
+    [
+      "",
+      "",
+      "計画の妥当性",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE"
+    ],
+    [
+      "",
+      "",
+      "ユニットテストのスコア"
+    ],
+    [
+      "",
+      "",
+      "計画の更新",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE"
+    ],
+    [
+      "",
+      "",
+      "計画の妥当性",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE",
+      "FALSE"
+    ],
+    [
+      "",
+      "",
+      "ユニットテストのスコア"
+    ],
+    [],
+    [],
+    [],
+    [
+      "",
+      "月",
+      "三者面談",
+      "",
+      "",
+      "",
+      "",
+      "三者面談面談実施日",
+      "",
+      "教師mtg",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "教師mtg実施日"
+    ],
+    [
+      "",
+      "4",
+      "ご家庭（母・生徒）と三者面談を実施。\r\n\r\n■学校のスケジュール\r\n・mock exam：本番に近い形で行うため、7/16-7/31の3週間に拡大。Econのテスト日はP2が7/21、P1が7/22。\r\n・夏休み：8/8-8/26\r\n\r\n■IAの進捗\r\n・Econ：GW中に3本目の記事を選定。6月下旬～7月中旬にfinal dradt提出？ mockと重なる懸念あり。\r\n・Chem：実験完了。GW中に書き上げる予定。\r\n・Math：これから着手する。5/25にfirst draft提出予定。\r\n\r\n■学習状況\r\n成績は3月の面談時から変更なし。5月中に何かしらの成績が出る予定とのこと。\r\n・Econ：4月より学校の先生が代わった。授業のやり方は前任者と同様、概念理解を重視となっており、生徒はテスト対策（問題演習）の不足に不安を感じている。いまは「為替」の学習が終わったところ。GW明けからEB塾の授業で過去問演習（事前に解き、授業で解説）を開始予定。\r\n・Chem：EBで過去問演習をしている。\r\n・Physics：EBで実験完了。GW中にデータ処理と考察を執筆予定。\r\n・Math：学校で未習の「ベクトル」をEBで学習中。終わり次第、過去問演習へ移行予定。\r\n・Japa A：最も苦手意識のある科目。外部のオンライン指導で分析の練習中。\r\n\r\n\r\n■母からの質問\r\n①EB塾はIBOのSubject Reportを持っているか。\r\n→ない。学校の先生は持っているはずなので、直接見せてもらえるか聞いてみてはと提案。\r\n②IAの対応に追われ、Mock試験に向けた過去問演習の時間が取れない。他の生徒はどうやって時間を作っているのか。\r\n→高3の1学期はIAとmock対策で一条校の生徒は忙しい。現時点では締切の早いIAが最優先。\r\nすべてを完璧にこなすのは難しいため、優先順位をつけて「やらないことを決める」のが大事。時間の取れるときに取り組むタスクとスキマ時間にやるタスクに分け、自分に合った時間配分のルール化を推奨。\r\n生徒はすでに5:30に起きて勉強したり、通学中に電車内で宿題をやったりしているようでした。※家から学校が遠く通学だけで1.5hかかるそう。帰宅時刻は19:00頃。\r\n\r\n■大学受験\r\n第一志望は岡山大学の医学部。ただ確定というわけではなく、GW中に家族でしっかり話し合い受験校を検討するそう。\r\n母曰く、父は医学部はとりあえず受験できるだけ受験しておいて合格したところに行けばいいという考えのよう。\r\n\r\n■To do\r\n次回面談時に受験校を決定。\r\n※試験日程を考慮の上、併願可能か要チェック。",
+      "",
+      "",
+      "",
+      "",
+      "2026/04/30"
+    ],
+    [
+      "",
+      "5"
+    ],
+    [
+      "",
+      "6"
+    ],
+    [
+      "",
+      "7"
+    ],
+    [
+      "",
+      "8"
+    ],
+    [
+      "",
+      "9"
+    ],
+    [
+      "",
+      "10"
+    ],
+    [
+      "",
+      "11"
+    ],
+    [
+      "",
+      "12"
+    ],
+    [
+      "",
+      "1"
+    ],
+    [
+      "",
+      "2"
+    ],
+    [
+      "",
+      "3"
+    ]
+  ]
+}

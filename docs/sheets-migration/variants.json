@@ -1,0 +1,520 @@
+{
+  "teacher_canonical": [
+    "Deshpande Ria",
+    "Deshpande Siya",
+    "Kim　Hyojin",
+    "アシソビ　リタ",
+    "タルカス ソリナ",
+    "ブレット　イーファ",
+    "マーシュ アレキサンダー隆民",
+    "上宮　千惠",
+    "中村 奏太",
+    "中橋 彩未",
+    "中野 竜希",
+    "中野　実桜",
+    "久我 優衣奈",
+    "二宮　瑠南",
+    "佐藤　里桜",
+    "前田 哲志",
+    "北川　廉",
+    "原　龍之介",
+    "原田 琉碧",
+    "吉田 ハンナ",
+    "坂部　乃藍",
+    "堀江　真理",
+    "塚本 渚生",
+    "大須賀 一希",
+    "宗澤　慶明",
+    "小池　陽大",
+    "山口 碧仁",
+    "山本希音",
+    "広谷　美咲",
+    "景山 樹安",
+    "朴　莉娜",
+    "杉山千弥",
+    "松岡 柊",
+    "松村 友貴",
+    "松浦 宝",
+    "林 史奈",
+    "林 裕美",
+    "柳　詩月",
+    "梅村　幸希",
+    "森　陽音",
+    "森元 瑞城",
+    "森田　大翔",
+    "横井 愛来",
+    "橋本 直樹",
+    "橋都　喜実子",
+    "武内 彩葉",
+    "池田　和永",
+    "石橋　はるか",
+    "稲益 未有",
+    "竹本 侑果",
+    "菅　拓哉",
+    "関　月歌",
+    "関谷 美夕",
+    "須崎　優未子",
+    "馬場　一樹",
+    "黒瀬 陽音"
+  ],
+  "teacher_variants_seen": [
+    "Deshpande　ria",
+    "Kim",
+    "中橋",
+    "中野 実桜",
+    "二宮　瑠南",
+    "佐藤",
+    "前田 哲志",
+    "北川廉",
+    "原田",
+    "坂部",
+    "城",
+    "堀江 真理",
+    "大須賀",
+    "宗澤",
+    "山口",
+    "広谷",
+    "広谷　美咲",
+    "李",
+    "松岡　柊",
+    "松村",
+    "林",
+    "森田",
+    "横井",
+    "横井 愛来",
+    "橋本",
+    "橋都 喜実子",
+    "武内 彩葉",
+    "池田",
+    "池田和永",
+    "瀧田",
+    "稲益",
+    "竹本",
+    "関 月歌",
+    "関　月歌",
+    "関月歌",
+    "黒瀬 陽音"
+  ],
+  "subject_variants_seen": [
+    "Biology(HL)",
+    "Biology(SL)",
+    "Chemistry(HL)",
+    "Economics(HL)",
+    "Economics(SL)",
+    "English A LL(SL)",
+    "History(SL)",
+    "Math AA (HL)",
+    "Math AA (SL)",
+    "Math AA(HL)",
+    "Math AA(SL)",
+    "Math AI(HL)",
+    "Math(HL)",
+    "Math　AA",
+    "Physics(HL)",
+    "Physics(SL)",
+    "SSST"
+  ],
+  "grade_variants_seen": [
+    "高1",
+    "高2",
+    "高3",
+    "高3\nDP2",
+    "高１",
+    "高２",
+    "高２　DP1",
+    "高３"
+  ],
+  "by_tab": {
+    "56807 高浜さま": {
+      "teachers": [
+        "広谷　美咲",
+        "橋都 喜実子"
+      ],
+      "subjects": [
+        "Chemistry(HL)",
+        "Math AA(HL)"
+      ],
+      "grades": [
+        "高１"
+      ]
+    },
+    "60636 犬貝さま": {
+      "teachers": [
+        "中野 実桜",
+        "関 月歌"
+      ],
+      "subjects": [
+        "Biology(HL)",
+        "Math AA(SL)"
+      ],
+      "grades": [
+        "高２"
+      ]
+    },
+    "61630 十倉さま": {
+      "teachers": [
+        "二宮　瑠南"
+      ],
+      "subjects": [
+        "Math AA(SL)"
+      ],
+      "grades": [
+        "高１"
+      ]
+    },
+    "61776 値賀さま": {
+      "teachers": [
+        "広谷"
+      ],
+      "subjects": [],
+      "grades": []
+    },
+    "66610 伴場さま": {
+      "teachers": [
+        "北川廉"
+      ],
+      "subjects": [
+        "English A LL(SL)"
+      ],
+      "grades": [
+        "高1"
+      ]
+    },
+    "67251 大塚さま": {
+      "teachers": [
+        "竹本"
+      ],
+      "subjects": [
+        "Economics(HL)"
+      ],
+      "grades": [
+        "高3"
+      ]
+    },
+    "67982 平林さま": {
+      "teachers": [
+        "山口",
+        "橋本"
+      ],
+      "subjects": [
+        "Math(HL)",
+        "Physics(SL)"
+      ],
+      "grades": []
+    },
+    "68475 中野さま": {
+      "teachers": [
+        "池田"
+      ],
+      "subjects": [
+        "Math AA(HL)"
+      ],
+      "grades": [
+        "高２"
+      ]
+    },
+    "69018 濵田さま": {
+      "teachers": [
+        "松岡　柊",
+        "関　月歌"
+      ],
+      "subjects": [
+        "Biology(HL)",
+        "Math AA (HL)"
+      ],
+      "grades": [
+        "高２"
+      ]
+    },
+    "69610 藤田さま": {
+      "teachers": [
+        "中橋"
+      ],
+      "subjects": [
+        "Math AI(HL)"
+      ],
+      "grades": [
+        "高２"
+      ]
+    },
+    "70128 逸見さま": {
+      "teachers": [
+        "林"
+      ],
+      "subjects": [
+        "Biology(HL)"
+      ],
+      "grades": [
+        "高1"
+      ]
+    },
+    "70161 坂本さま": {
+      "teachers": [],
+      "subjects": [],
+      "grades": [
+        "高１"
+      ]
+    },
+    "70469 和佐田さま": {
+      "teachers": [
+        "堀江 真理"
+      ],
+      "subjects": [
+        "Math AA(SL)"
+      ],
+      "grades": [
+        "高１"
+      ]
+    },
+    "70569 儀賀さま": {
+      "teachers": [
+        "Kim"
+      ],
+      "subjects": [
+        "Math AA (SL)"
+      ],
+      "grades": [
+        "高２"
+      ]
+    },
+    "70685 村上さま": {
+      "teachers": [
+        "関月歌"
+      ],
+      "subjects": [
+        "Biology(HL)"
+      ],
+      "grades": [
+        "高３"
+      ]
+    },
+    "70955 本間さま": {
+      "teachers": [
+        "横井"
+      ],
+      "subjects": [
+        "Physics(SL)"
+      ],
+      "grades": [
+        "高3"
+      ]
+    },
+    "71610 小林 俊太郎さま": {
+      "teachers": [
+        "佐藤"
+      ],
+      "subjects": [
+        "Math AA(SL)"
+      ],
+      "grades": [
+        "高3"
+      ]
+    },
+    "71640 安田さま": {
+      "teachers": [],
+      "subjects": [
+        "Economics(SL)"
+      ],
+      "grades": [
+        "高２"
+      ]
+    },
+    "71667 馬場さま": {
+      "teachers": [
+        "竹本"
+      ],
+      "subjects": [
+        "Economics(HL)"
+      ],
+      "grades": [
+        "高3"
+      ]
+    },
+    "71804 ラプトンさま": {
+      "teachers": [
+        "宗澤"
+      ],
+      "subjects": [
+        "Math　AA"
+      ],
+      "grades": [
+        "高１"
+      ]
+    },
+    "71810 小林さま": {
+      "teachers": [
+        "中野 実桜"
+      ],
+      "subjects": [
+        "Physics(HL)"
+      ],
+      "grades": [
+        "高３"
+      ]
+    },
+    "71972 川口さま": {
+      "teachers": [
+        "森田"
+      ],
+      "subjects": [
+        "Physics(HL)"
+      ],
+      "grades": [
+        "高２"
+      ]
+    },
+    "72015 飯村さま": {
+      "teachers": [
+        "李"
+      ],
+      "subjects": [
+        "Economics(SL)"
+      ],
+      "grades": [
+        "高3"
+      ]
+    },
+    "72179 中西さま": {
+      "teachers": [
+        "原田"
+      ],
+      "subjects": [
+        "Math AA (HL)"
+      ],
+      "grades": [
+        "高２"
+      ]
+    },
+    "72321 武石さま": {
+      "teachers": [
+        "森田"
+      ],
+      "subjects": [
+        "Physics(SL)"
+      ],
+      "grades": [
+        "高２"
+      ]
+    },
+    "72324 高藤さま": {
+      "teachers": [
+        "池田和永"
+      ],
+      "subjects": [
+        "Math AA(SL)"
+      ],
+      "grades": [
+        "高２"
+      ]
+    },
+    "72454 安藤さま": {
+      "teachers": [
+        "大須賀"
+      ],
+      "subjects": [
+        "Math AA(HL)"
+      ],
+      "grades": [
+        "高２"
+      ]
+    },
+    "72575　末吉さま": {
+      "teachers": [
+        "宗澤"
+      ],
+      "subjects": [
+        "Math AA(HL)"
+      ],
+      "grades": [
+        "高３"
+      ]
+    },
+    "72737 小林さま": {
+      "teachers": [
+        "武内 彩葉",
+        "黒瀬 陽音"
+      ],
+      "subjects": [
+        "Chemistry(HL)",
+        "Math AA(HL)"
+      ],
+      "grades": [
+        "高２　DP1"
+      ]
+    },
+    "72769 三好さま": {
+      "teachers": [
+        "Deshpande　ria",
+        "林"
+      ],
+      "subjects": [
+        "Biology(SL)",
+        "Math AA(SL)"
+      ],
+      "grades": [
+        "高3\nDP2"
+      ]
+    },
+    "73594 鈴木さま": {
+      "teachers": [
+        "城",
+        "森田",
+        "瀧田"
+      ],
+      "subjects": [
+        "History(SL)",
+        "Math AI(HL)",
+        "Physics(HL)"
+      ],
+      "grades": [
+        "高2"
+      ]
+    },
+    "73970 本池さま": {
+      "teachers": [
+        "坂部",
+        "稲益"
+      ],
+      "subjects": [
+        "Biology(HL)",
+        "Math AA(HL)"
+      ],
+      "grades": [
+        "高1"
+      ]
+    },
+    "74143　青木さま": {
+      "teachers": [
+        "横井 愛来"
+      ],
+      "subjects": [
+        "Physics(SL)"
+      ],
+      "grades": [
+        "高３"
+      ]
+    },
+    "75008 吉川さま": {
+      "teachers": [
+        "松村"
+      ],
+      "subjects": [
+        "Biology(HL)"
+      ],
+      "grades": [
+        "高2"
+      ]
+    },
+    "75033 近添さま": {
+      "teachers": [
+        "前田 哲志"
+      ],
+      "subjects": [
+        "SSST"
+      ],
+      "grades": [
+        "高2"
+      ]
+    }
+  }
+}
