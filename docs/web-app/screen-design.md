@@ -22,7 +22,7 @@
 
 **ベンチマーク（スキル）**: 入口の情報優先順は **`dashboard-first-view-ux`**（「自分宛て・アラートを最上段」／Jira 型の要約・担当リストの考え方を参照）。ナビの可読性・コントラストは **`ui-frontend-patterns`**。視覚トークンは **[DESIGN.md](../../DESIGN.md)**（左アクティブボーダー等）。
 
-**実装（モック）**: グローバルバー・サイドバー・パンくずは `src/eb_app/templates/mock/base.html` と `src/eb_app/fixtures/portal_frame.py`（`augment_context`）。管理者ダッシュのみ `show_parallel_sheet` サンプル on。
+**実装（モック）**: `base.html` / `portal_frame.py`。**Cool utilitarian**（`DESIGN.md` §1）— ティールの髪線シャドウ・ブランド円点・`:focus-visible`・44px ナビ行。
 
 ### 2.1 グローバルメニュー（上部・常時固定）
 
@@ -132,4 +132,4 @@
 
 | 日付 | 内容 |
 |------|------|
-| 2026-05-10 | 初版（SCR ID・§2 ポータル IA）。ベンチマーク: `dashboard-first-view-ux` 等。モックに `portal_frame.py` / `base.html` でポータル枠実装。 |
+| 2026-05-10 | 初版・ポータル枠・SCR 一覧。同日: Cool utilitarian ポリッシュ（DESIGN §8、`eb-juku-portal-ui` スキル、モック `base.html` の髪線／ブランド点／focus-visible／44px ナビ）。 |
