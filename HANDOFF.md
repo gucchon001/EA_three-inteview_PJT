@@ -116,6 +116,8 @@ python scripts/sheets-survey/inventory.py        # CSV/JSON 再生成
 - `config/gen-lang-client-0360012476-457924b0f2ae.json` — GCP SA（gitignore 済）
 
 ### スキル（次に呼ぶべきもの）
+- `eb-juku-portal-ui` — **本リポ** `.cursor/skills/`（Jinja+HTMX・DESIGN/screen-design 正本）
+- `frontend-design` / `dashboard-first-view-ux` / `ui-frontend-patterns` — ポータル UI（グローバル）
 - `fastapi-foundation-design` — Phase 1 着手前に基礎設計レビュー
 - `spec-driven-mock-ui` — Phase 1 のモック先行
 - `supabase-local-dev` — ローカル DB 立ち上げ
@@ -130,7 +132,7 @@ python scripts/sheets-survey/inventory.py        # CSV/JSON 再生成
 
 ### 触ってよい範囲
 - **Phase -1 で新規作成したファイル**: `docs/sheets-migration/`、`scripts/sheets-survey/`、`docs/requirements/v0.3.md`、本 `HANDOFF.md`
-- **Phase 0 で新規作成済み**: `docs/phase0/`、`docs/pjc/*.md`、`docs/wbs/*.md`、`docs/web-app/`（**screen-design.md 含む**）、`DESIGN.md`、`src/eb_app/`、`requirements-app.txt`、`pytest.ini`（Web アプリ用）
+- **Phase 0 で新規作成済み**: `docs/phase0/`、`docs/pjc/*.md`、`docs/wbs/*.md`、`docs/web-app/`（**screen-design.md 含む**）、`DESIGN.md`、`.cursor/skills/eb-juku-portal-ui/`、`src/eb_app/`、`requirements-app.txt`、`pytest.ini`（Web アプリ用）
 - **これから新規作成**: `docs/requirements/v0.4+.md`、（任意）PJC/WBS の Google シート反映、本番 `src/eb_app` 拡張（RLS 接続等）
 
 ### 触らないでほしい範囲（別作業の途中）
