@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}{{ title | default("EB 指導管理") }}{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Lexend:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <style>
+    :root {
+      --ink-slate: #1C2333;
+      --paper-mist: #F4F1EC;
+      --panel-cloud: #FFFFFF;
+      --deep-teal: #0F5959;
+      --deep-teal-hover: #0A4545;
+      --accent-amber: #C27B1A;
+      --rule-line: #D4CFC4;
+      --text-muted: #5C6472;
+      --success-fern: #2E6B4E;
+      --warning-ochre: #B8860B;
+      --error-rust: #A33A2A;
+      --radius: 8px;
+      --font-display: "Fraunces", ui-serif, Georgia, serif;
+      --font-body: "Lexend", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--ink-slate);
+      background: var(--paper-mist);
+    }
+    h1, .display {
+      font-family: var(--font-display);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    h1 { font-size: clamp(1.75rem, 2vw + 1rem, 2.25rem); margin: 0 0 1rem; }
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 2rem 0 0.75rem;
+    }
+    a { color: var(--deep-teal); text-decoration: none; }
+    a:hover { color: var(--deep-teal-hover); text-decoration: underline; }
+    .layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+    }
+    @media (max-width: 640px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { display: none; }
+    }
+    aside {
+      background: var(--panel-cloud);
+      border-right: 1px solid var(--rule-line);
+      padding: 1rem;
+    }
+    aside nav a {
+      display: block;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius);
+      color: var(--ink-slate);
+      text-decoration: none;
+      border-left: 3px solid transparent;
+    }
+    aside nav a:hover { background: var(--paper-mist); }
+    aside nav a.active {
+      background: var(--paper-mist);
+      border-left-color: var(--deep-teal);
+    }
+    main { padding: 1.5rem 2rem; max-width: 1280px; }
+    .card {
+      background: var(--panel-cloud);
+      border: 1px solid var(--rule-line);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      box-shadow: 0 1px 2px rgba(28, 35, 51, 0.06);
+    }
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      background: var(--paper-mist);
+      color: var(--text-muted);
+    }
+    .badge-warning { background: rgba(194, 123, 26, 0.15); color: var(--accent-amber); }
+    .badge-error { background: rgba(163, 58, 42, 0.12); color: var(--error-rust); }
+    .metric-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+    .metric .value { font-size: 1.75rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .metric.warning .value { color: var(--warning-ochre); }
+    .metric.error .value { color: var(--error-rust); }
+    .muted { color: var(--text-muted); font-size: 0.875rem; }
+    .btn {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: var(--deep-teal);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--deep-teal-hover); }
+    {% block extra_style %}{% endblock %}
+  </style>
+</head>
+<body>
+  {% block body %}{% endblock %}
+</body>
+</html>

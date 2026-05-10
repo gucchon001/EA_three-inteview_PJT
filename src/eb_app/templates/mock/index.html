@@ -1,0 +1,16 @@
+{% extends "mock/base.html" %}
+{% block title %}モック UI — EB 指導管理{% endblock %}
+{% block body %}
+<main style="max-width: 720px; margin: 2rem auto;">
+  <p class="muted">EB_ENABLE_MOCK_UI=1 のときのみ公開。DESIGN.md の仮トークン適用。</p>
+  <h1>モック索引</h1>
+  <ul class="card" style="list-style: none; padding: 1.25rem; margin: 0;">
+    {% for r in routes %}
+    <li style="margin-bottom: 0.5rem;">
+      <a href="{{ r.path }}">{{ r.label }}</a>
+      <span class="muted"> — <code>{{ r.path }}</code></span>
+    </li>
+    {% endfor %}
+  </ul>
+</main>
+{% endblock %}

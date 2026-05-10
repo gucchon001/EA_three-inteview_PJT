@@ -1,0 +1,12 @@
+{# HTMX が innerHTML で差し込む断片（html / body なし） #}
+<div class="card" style="display: flex; flex-direction: column; gap: 0.75rem;">
+  {% for a in alerts %}
+  <div style="border-bottom: 1px solid var(--rule-line); padding-bottom: 0.75rem;">
+    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+      <strong>{{ a.title }}</strong>
+      <span class="badge badge-warning">{{ a.badge }}</span>
+    </div>
+    <p class="muted" style="margin: 0.35rem 0 0;">{{ a.body }}</p>
+  </div>
+  {% endfor %}
+</div>

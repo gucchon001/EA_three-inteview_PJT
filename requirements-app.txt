@@ -1,0 +1,6 @@
+# EB 指導管理 Web アプリ（FastAPI / Jinja / HTMX）— Phase 1 向け最小依存
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+jinja2>=3.1.4
+pytest>=8.0.0
+httpx>=0.27.0
