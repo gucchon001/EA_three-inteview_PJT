@@ -11,6 +11,8 @@
             background: #f4f6f9;
             padding: 40px 20px;
             color: #1a1a1a;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
         }
         .container { max-width: 880px; margin: 0 auto; }
         .header { text-align: center; margin-bottom: 28px; }
@@ -66,7 +68,7 @@
         </div>
 
         <div class="ver-note">
-            <strong>バージョン</strong>：HTML 先頭の <code>monthly-report-revision</code> を正とします。<strong>鈴木（73594）</strong>は <strong>v3.2</strong>。<strong>高藤（72324）</strong>は <strong>v3.5.1</strong>（<strong>01「学校のテスト状況」</strong>・05 に学習計画表リンク・採番 01・02–05・<a href="REVIEW_高藤_PDFコメント反映_v3.3.md">反映メモ</a>）。過去版は <code>versions/v1/</code>・<code>versions/v2/</code>・<code>versions/v3/</code> に凍結コピーを保持します（上書きしません）。方針は <a href="versions/README.md">versions/README.md</a> を参照してください。
+            <strong>まず読む規約</strong>：<strong><a href="monthly_pattern_b_content.template.md">monthly_pattern_b_content.template.md</a></strong> の **「正本の順位（一般化）」** と <strong>Pattern B の表・禁止事項</strong>。<strong>HTML 事例</strong>：鈴木 <strong>v3.6.1</strong>・高藤（72324）<strong>v3.5.7</strong>（先頭コメント rev）。**01** の mock/final に **（計画表）などの内部出典括弧は載せない**（規約準拠）。鈴木の旧 Physics（05進捗・06計画）は <code>versions/v3/</code>。過去版は <code>versions/v1/</code>〜 <code>versions/v4/</code>。**全文エディタ**は <code>tools/monthly_report_full_editor.html</code>。一覧の運用説明：<a href="versions/README.md">versions/README.md</a>。
         </div>
 
         <p class="section-title">社内向け · レポート微修正</p>
@@ -85,9 +87,17 @@
         <div class="cards">
             <a class="card" href="monthly_2026-04_suzuki_report.html">
                 <div class="card-info">
-                    <div class="pattern-label">最新 URL（推奨）· v3.2 内容</div>
+                    <div class="pattern-label">最新 URL（推奨）· v3.6.1 内容</div>
                     <h2>monthly_2026-04_suzuki_report.html</h2>
-                    <p>Physics HL · 05 トピック別10区間（03・calendar_buckets_10）</p>
+                    <p>Physics HL · 高藤と同一 01〜05 · 進捗専用節なし（旧版は versions/v3）</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+            <a class="card" href="versions/v4/monthly_2026-04_suzuki_report.html">
+                <div class="card-info">
+                    <div class="pattern-label">凍結コピー v4</div>
+                    <h2>versions/v4/ 鈴木</h2>
+                    <p>v3.6.1 スナップショット（MD 同梱）</p>
                 </div>
                 <div class="card-arrow">›</div>
             </a>
@@ -95,7 +105,7 @@
                 <div class="card-info">
                     <div class="pattern-label">凍結コピー v3</div>
                     <h2>versions/v3/ 鈴木</h2>
-                    <p>v3.2 相当スナップショット（05 トピック別・MD 同梱）</p>
+                    <p>v3.5.8（05 進捗・06 計画）— 高藤と採番が異なる旧ライン</p>
                 </div>
                 <div class="card-arrow">›</div>
             </a>
@@ -121,7 +131,7 @@
         <div class="cards">
             <a class="card" href="monthly_2026-04_takafuji_report.html">
                 <div class="card-info">
-                    <div class="pattern-label">最新 URL（推奨）· v3.5.1 内容</div>
+                    <div class="pattern-label">最新 URL（推奨）· v3.5.7 内容</div>
                     <h2>monthly_2026-04_takafuji_report.html</h2>
                     <p>Math AA SL · 05 トピック別10区間（03・calendar_buckets_10）</p>
                 </div>
@@ -148,6 +158,34 @@
                     <div class="pattern-label">v1</div>
                     <h2>高藤 v1 について</h2>
                     <p>初回から _report のみのため v1 HTML は未保管。README を参照。</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+        </div>
+
+        <p class="section-title">十倉 未希（61630）</p>
+        <div class="cards">
+            <a class="card" href="monthly_2026-04_tokura_report.html">
+                <div class="card-info">
+                    <div class="pattern-label">ドラフト · gws 一次ソース</div>
+                    <h2>monthly_2026-04_tokura_report.html</h2>
+                    <p>Math AA SL · manifest <code>tokura</code> · 全文エディタ <a href="tools/monthly_report_full_editor.html?sample=tokura" style="color:#4a6491;">?sample=tokura</a></p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+            <a class="card" href="monthly_2026-04_tokura_v2_report.html">
+                <div class="card-info">
+                    <div class="pattern-label">手製事例 · Pattern B／スキル準拠</div>
+                    <h2>monthly_2026-04_tokura_v2_report.html</h2>
+                    <p><code>.unit-main</code>／<code>.unit-subtopics</code> · manifest <code>tokura_v2</code> · エディタ <a href="tools/monthly_report_full_editor.html?sample=tokura_v2" style="color:#4a6491;">?sample=tokura_v2</a></p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+            <a class="card" href="monthly_2026-04_tokura_v3_report.html">
+                <div class="card-info">
+                    <div class="pattern-label">LLM（OpenRouter）· 構造テンプレ寄せ</div>
+                    <h2>monthly_2026-04_tokura_v3_report.html</h2>
+                    <p>十倉 v3 配布ヒントとしてのスナップショット · manifest <code>tokura_v3</code> · エディタ <a href="tools/monthly_report_full_editor.html?sample=tokura_v3" style="color:#4a6491;">?sample=tokura_v3</a></p>
                 </div>
                 <div class="card-arrow">›</div>
             </a>

@@ -1,10 +1,11 @@
 {
-  "revision": "2026-05-13-tokura-v2",
+  "revision": "2026-05-14-tokura-hub-editor-v3-parity",
   "description": "月次レポートHTMLの正本パスをここだけで管理する。ファイル名を変えたら samples の値と sync 先を更新。正本を配布用に更新したら revision を必ず変えてください（全文エディタが下書き表示中に正本更新を検知します）。",
   "samples": {
     "takafuji": "monthly_2026-04_takafuji_report.html",
     "suzuki": "monthly_2026-04_suzuki_report.html",
     "tokura": "monthly_2026-04_tokura_report.html",
-    "tokura_v2": "monthly_2026-04_tokura_v2_report.html"
+    "tokura_v2": "monthly_2026-04_tokura_v2_report.html",
+    "tokura_v3": "monthly_2026-04_tokura_v3_report.html"
   }
 }

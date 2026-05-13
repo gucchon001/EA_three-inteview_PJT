@@ -344,7 +344,7 @@
                     <li><strong>サンプルが読めない</strong>：<code>file://</code> では fetch できません。<code>python scripts/serve_project.py</code> で起動した <code>http://127.0.0.1:…</code> から開くか、<strong>ファイルを開く</strong>で HTML を指定してください。</li>
                     <li><strong>表示が古い／真っ白</strong>：ブラウザ下書きが優先されています。<strong>下書き削除</strong>、または画面上の<strong>サンプル読み込み</strong>ボタン（マニフェストの事例）からやり直してください。</li>
                     <li><strong>正本とエディタの整合</strong>：サンプルの URL とキー割当は <code>../reports-manifest.json</code> にあります。**規約側の優先順位は** <strong><code>monthly_pattern_b_content.template.md</code></strong>（正本の順位）を参照。**正本 HTML を更新した人はマニフェストの <code>revision</code> も更新し**、下書き保持中に rev が変わると起動時に緑メッセージで知らせます。</li>
-                    <li>URL に <code>?sample=</code><strong>マニフェストのキー</strong>（例: <code>suzuki</code>、<code>takafuji</code>、<code>tokura</code>、<code>tokura_v2</code>）を付けて開くと、<strong>ブラウザ下書きが無いときだけ</strong>そのサンプルを読み込みます。下書きが残っているときは「下書き削除」するか、画面上の<strong>サンプル</strong>ボタンを押してください。別名: <code>?report=</code> も同じです。</li>
+                    <li>URL に <code>?sample=</code><strong>マニフェストのキー</strong>（例: <code>suzuki</code>、<code>takafuji</code>、<code>tokura</code>、<code>tokura_v2</code>、<code>tokura_v3</code>）を付けて開くと、<strong>ブラウザ下書きが無いときだけ</strong>そのサンプルを読み込みます。下書きが残っているときは「下書き削除」するか、画面上の<strong>サンプル</strong>ボタンを押してください。別名: <code>?report=</code> も同じです。</li>
                     <li><strong>送付エクスポート</strong>：暗号化 HTML 保存後、<strong>送付用 URL を自動発行</strong>します（同一サイトへ <code>POST /api/monthly-protected-upload</code>）。<strong>ローカル</strong>は <code>serve_project.py</code> がディスクの <code>tools/_published/</code> に保存。<strong>Vercel</strong> は Blob ストア連携で <code>BLOB_READ_WRITE_TOKEN</code> が自動付与されれば追加設定なしで動作します（未連携時は相対パス目安のみ）。パスワードは別経路で伝えてください。詳細は <a href="../SECURE_DELIVERY_月次レポート_HTML.md">SECURE_DELIVERY</a>。</li>
                     <li><strong>送付 API の上書き</strong>：別ドメインの受け口を使う場合のみ、<code>localStorage.setItem('ea_monthly_protected_upload_url', 'https://…')</code> または <code>meta name="ea-monthly-protected-upload"</code> を設定してください（応答は <code>{"ok":true,"url":"…"}</code>）。</li>
                     <li><strong>別ブラウザ・他PCで続ける</strong>：下書き（ブラウザ内の自動保存）は共有されません。<strong>ファイルに保存</strong>で HTML を書き出し、続きからは<strong>ファイルから開く</strong>で同じファイルを選んでください。</li>
@@ -531,7 +531,8 @@
                 takafuji: 'monthly_2026-04_takafuji_report.html',
                 suzuki: 'monthly_2026-04_suzuki_report.html',
                 tokura: 'monthly_2026-04_tokura_report.html',
-                tokura_v2: 'monthly_2026-04_tokura_v2_report.html'
+                tokura_v2: 'monthly_2026-04_tokura_v2_report.html',
+                tokura_v3: 'monthly_2026-04_tokura_v3_report.html'
             }
         };
         if (isFileProtocol()) {
@@ -581,7 +582,20 @@
         }
     }
 
-    var SAMPLE_BTN_LABELS = { takafuji: '高藤', suzuki: '鈴木', tokura: '十倉', tokura_v2: '十倉 v2' };
+    var SAMPLE_BTN_LABELS = { takafuji: '高藤', suzuki: '鈴木', tokura: '十倉', tokura_v2: '十倉 v2', tokura_v3: '十倉 v3' };
+    /** manifest のキー順（十倉は v2 と同列に v3 を並べる） */
+    var SAMPLE_BTN_ORDER = ['takafuji', 'suzuki', 'tokura', 'tokura_v2', 'tokura_v3'];
+    function orderedSampleKeys(samplesObj) {
+        var s = samplesObj || {};
+        var out = [];
+        SAMPLE_BTN_ORDER.forEach(function (k) {
+            if (s[k]) out.push(k);
+        });
+        Object.keys(s).forEach(function (k) {
+            if (out.indexOf(k) === -1) out.push(k);
+        });
+        return out;
+    }
     function labelForSampleKey(key) {
         return SAMPLE_BTN_LABELS[key] || key;
     }
@@ -602,6 +616,7 @@
         if (raw === 'takafuji' || raw === '72324') return s.takafuji ? 'takafuji' : '';
         if (raw === 'tokura' || raw === '61630') return s.tokura ? 'tokura' : '';
         if (raw === 'tokura_v2' || raw === 'tokurav2' || raw === '十倉v2') return s.tokura_v2 ? 'tokura_v2' : '';
+        if (raw === 'tokura_v3' || raw === 'tokurav3' || raw === '十倉v3') return s.tokura_v3 ? 'tokura_v3' : '';
         return '';
     }
     function getBootstrapSampleSlug(manifest) {
@@ -618,7 +633,7 @@
         host.innerHTML = '';
         var s = manifest && manifest.samples;
         if (!s || typeof s !== 'object') return;
-        Object.keys(s).forEach(function (key) {
+        orderedSampleKeys(s).forEach(function (key) {
             var btn = document.createElement('button');
             btn.type = 'button';
             btn.textContent = labelForSampleKey(key);
