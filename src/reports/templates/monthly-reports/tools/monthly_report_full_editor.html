@@ -50,6 +50,92 @@
             background: #e8e8e8;
             margin-bottom: 12px;
         }
+        /* 編集 iframe 直上：1行・小アイコン */
+        .editor-frame-toolbar {
+            background: linear-gradient(180deg, #ffffff 0%, #f4f7fb 100%);
+            border-bottom: 1px solid #c5cdd8;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .editor-strip-one-line {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: 6px 8px;
+            padding: 4px 8px;
+            min-height: 1.875rem;
+            box-sizing: border-box;
+            width: max-content;
+            min-width: 100%;
+        }
+        .editor-strip-short-label {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .editor-toolbar-divider {
+            width: 1px;
+            height: 1.15rem;
+            background: #cbd5e1;
+            flex-shrink: 0;
+            align-self: center;
+            margin: 0 1px;
+        }
+        .editor-frame-toolbar .tb-edit-row {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: 6px 10px;
+            margin: 0;
+            flex: 0 0 auto;
+            min-width: 0;
+        }
+        .editor-frame-toolbar .tb-cluster {
+            flex-direction: row;
+            align-items: center;
+            gap: 3px 5px;
+            flex-shrink: 0;
+        }
+        .editor-frame-toolbar .tb-cluster-label {
+            font-size: 0.615rem;
+            font-weight: 700;
+            color: #475569;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+        .editor-frame-toolbar .tb-cluster-btns {
+            flex-wrap: nowrap;
+            gap: 3px;
+        }
+        .editor-frame-toolbar .tb-icon-btn {
+            padding: 1px 3px;
+            min-width: 1.55rem;
+            min-height: 1.55rem;
+        }
+        .editor-frame-toolbar .tb-svg {
+            width: 0.88rem;
+            height: 0.88rem;
+        }
+        .editor-frame-toolbar .tb-hint-inline {
+            font-size: 0.58rem;
+            margin-left: 1px;
+        }
+        .editor-frame-toolbar .tb-emoji-btn {
+            font-size: 0.92rem;
+            line-height: 1;
+            padding: 1px 4px;
+            min-width: 1.42rem;
+            min-height: 1.42rem;
+        }
+        .editor-frame-toolbar button.ghost.tb-emoji-custom {
+            font-size: 0.625rem !important;
+            padding: 1px 5px !important;
+            white-space: nowrap;
+        }
+        .editor-frame-toolbar .grow { display: none; }
         #editorFrame {
             width: 100%;
             height: min(70vh, 800px);
@@ -67,6 +153,8 @@
         }
         .tb-group:last-of-type { border-bottom: none; padding-bottom: 0; }
         .tb-group:first-of-type { padding-top: 0; }
+        .manifest-sample-btns { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; width: 100%; margin-bottom: 4px; }
+        .manifest-sample-btns:empty { display: none; }
         .tb-title {
             font-size: 0.72rem;
             font-weight: 700;
@@ -246,7 +334,7 @@
             <a href="../monthly-reports-index.html">← 一覧</a>
         </div>
         <h1>月次レポート · 編集</h1>
-        <p class="tagline">下の枠をクリックしてそのまま編集 → プレビュー・コピー・保存。</p>
+        <p class="tagline">編集枠直上は<strong>1行のコンパクトツールバー</strong>（表・リンク・05・ムード）。下の枠で本文編集 → 下部で読み込み・保存。</p>
 
         <details class="help">
             <summary>うまく動かないとき</summary>
@@ -254,95 +342,97 @@
                 <ul>
                     <li><strong>送付用 URL が空・HTTP 501</strong>：<code>python -m http.server</code> では POST がなく自動発行できません。必ず <code>python scripts/serve_project.py</code> で起動し、表示されたポートの URL からエディタを開き直してください。</li>
                     <li><strong>サンプルが読めない</strong>：<code>file://</code> では fetch できません。<code>python scripts/serve_project.py</code> で起動した <code>http://127.0.0.1:…</code> から開くか、<strong>ファイルを開く</strong>で HTML を指定してください。</li>
-                    <li><strong>表示が古い／真っ白</strong>：ブラウザ下書きが優先されています。<strong>下書き削除</strong>または<strong>高藤でリセット</strong>を試してください。</li>
-                    <li><strong>正本とエディタの整合</strong>：サンプル（高藤・鈴木）の URL は <code>../reports-manifest.json</code> に一元化しています。正本 HTML を更新した人はマニフェストの <code>revision</code> も更新してください。下書き保持中に rev が変わると、起動時に緑メッセージで知らせます。</li>
+                    <li><strong>表示が古い／真っ白</strong>：ブラウザ下書きが優先されています。<strong>下書き削除</strong>、または画面上の<strong>サンプル読み込み</strong>ボタン（マニフェストの事例）からやり直してください。</li>
+                    <li><strong>正本とエディタの整合</strong>：サンプルの URL とキー割当は <code>../reports-manifest.json</code> にあります。**規約側の優先順位は** <strong><code>monthly_pattern_b_content.template.md</code></strong>（正本の順位）を参照。**正本 HTML を更新した人はマニフェストの <code>revision</code> も更新し**、下書き保持中に rev が変わると起動時に緑メッセージで知らせます。</li>
+                    <li>URL に <code>?sample=</code><strong>マニフェストのキー</strong>（例: <code>suzuki</code>、<code>takafuji</code>、<code>tokura</code>、<code>tokura_v2</code>）を付けて開くと、<strong>ブラウザ下書きが無いときだけ</strong>そのサンプルを読み込みます。下書きが残っているときは「下書き削除」するか、画面上の<strong>サンプル</strong>ボタンを押してください。別名: <code>?report=</code> も同じです。</li>
                     <li><strong>送付エクスポート</strong>：暗号化 HTML 保存後、<strong>送付用 URL を自動発行</strong>します（同一サイトへ <code>POST /api/monthly-protected-upload</code>）。<strong>ローカル</strong>は <code>serve_project.py</code> がディスクの <code>tools/_published/</code> に保存。<strong>Vercel</strong> は Blob ストア連携で <code>BLOB_READ_WRITE_TOKEN</code> が自動付与されれば追加設定なしで動作します（未連携時は相対パス目安のみ）。パスワードは別経路で伝えてください。詳細は <a href="../SECURE_DELIVERY_月次レポート_HTML.md">SECURE_DELIVERY</a>。</li>
                     <li><strong>送付 API の上書き</strong>：別ドメインの受け口を使う場合のみ、<code>localStorage.setItem('ea_monthly_protected_upload_url', 'https://…')</code> または <code>meta name="ea-monthly-protected-upload"</code> を設定してください（応答は <code>{"ok":true,"url":"…"}</code>）。</li>
                     <li><strong>別ブラウザ・他PCで続ける</strong>：下書き（ブラウザ内の自動保存）は共有されません。<strong>ファイルに保存</strong>で HTML を書き出し、続きからは<strong>ファイルから開く</strong>で同じファイルを選んでください。</li>
-                    <li><strong>絵文字</strong>：ツールバーの「絵文字挿入」で枠内のカーソル位置に入れられます（<strong>HTML を直接編集</strong>のソースにフォーカスがあるときはそちらに挿入）。修正は該当箇所を選択してからキーボードで打ち直しても構いません。</li>
+                    <li><strong>表・リンク・見出し05</strong>：編集枠<strong>直上の1行ツールバー左側</strong>です。iframe 内でセルや文字を選択してから操作してください。</li>
+                    <li><strong>ムード表のアイコン（02）</strong>：編集ツールバーは<strong>1行</strong>の右側にまとめています。<strong>02 の「今月の学習状況と評価」列</strong>をクリックしてから選ぶと <code>span.mood-icon</code> のみ差し替え。そのほかはカーソル位置へ挿入。<strong>HTML ソース</strong>にフォーカスがあるときはソースのカーソルへ挿入のみです。</li>
                 </ul>
             </div>
         </details>
 
         <div class="panel">
             <div class="frame-wrap">
+                <div class="editor-frame-toolbar" aria-label="編集ツールバー（枠直上・1行）">
+                    <div class="editor-strip-one-line" role="toolbar">
+                        <span class="editor-strip-short-label" title="枠内で選択後">編集</span>
+                        <div class="tb-edit-row">
+                            <div class="tb-cluster">
+                                <span class="tb-cluster-label">表</span>
+                                <div class="tb-cluster-btns">
+                                    <button type="button" class="tb-icon-btn" id="tblRowAdd" title="選択セルの下に行を追加" aria-label="選択セルの下に行を追加">
+                                        <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M3 5h18v5H3zM3 12h18v5H3z"/><path d="M12 20v4m-2-2h4"/>
+                                        </svg>
+                                    </button>
+                                    <button type="button" class="tb-icon-btn" id="tblRowDel" title="選択行を削除" aria-label="選択行を削除">
+                                        <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M3 5h18v5H3zM3 12h18v5H3z"/><path d="M5 14.5h14"/>
+                                        </svg>
+                                    </button>
+                                    <button type="button" class="tb-icon-btn" id="tblColAdd" title="選択列の右に列を追加" aria-label="選択列の右に列を追加">
+                                        <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M4 4h7v16H4zM13 4h7v16h-7z"/><path d="M21 11v4M19 13h4"/>
+                                        </svg>
+                                    </button>
+                                    <button type="button" class="tb-icon-btn" id="tblColDel" title="選択列を削除" aria-label="選択列を削除">
+                                        <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M4 4h7v16H4zM13 4h7v16h-7z"/><path d="M16.5 4v16"/>
+                                        </svg>
+                                    </button>
+                                    <span class="tb-hint-inline" title="tbody のセルを選んでから">※</span>
+                                </div>
+                            </div>
+                            <div class="tb-cluster">
+                                <span class="tb-cluster-label">リンク</span>
+                                <div class="tb-cluster-btns">
+                                    <button type="button" class="tb-icon-btn" id="linkApply" title="選択範囲にリンク（URL 入力）" aria-label="リンクを付与">
+                                        <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M10 13a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1"/><path d="M14 11a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1"/>
+                                        </svg>
+                                    </button>
+                                    <button type="button" class="tb-icon-btn" id="linkRemove" title="選択範囲のリンクを解除" aria-label="リンクを解除">
+                                        <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M10 13a5 5 0 0 1 0-7l1-1"/><path d="M14 11a5 5 0 0 1 0 7l-1 1"/><path d="M5 5L19 19"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="tb-cluster">
+                                <span class="tb-cluster-label">見出し</span>
+                                <div class="tb-cluster-btns">
+                                    <button type="button" class="tb-icon-btn" id="removeSec05" title="見出し番号 05 のセクションを削除" aria-label="見出し05のセクションを削除">
+                                        <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9.5 9.5 5 5"/><path d="m14.5 9.5-5 5"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <span class="grow"></span>
+                        </div>
+                        <span class="editor-toolbar-divider" aria-hidden="true"></span>
+                        <span class="editor-strip-short-label" title="02の評価列セルを選択してから">ムード</span>
+                        <div class="tb-cluster-btns emoji-toolbar" role="group" aria-label="ムード・アイコン">
+                            <button type="button" class="tb-emoji-btn" title="良い" data-emoji="😊" aria-label="😊 を挿入またはムードに適用">😊</button>
+                            <button type="button" class="tb-emoji-btn" title="まずまず" data-emoji="😐" aria-label="😐 を挿入またはムードに適用">😐</button>
+                            <button type="button" class="tb-emoji-btn" title="普通・要注意" data-emoji="🙂" aria-label="🙂 を挿入またはムードに適用">🙂</button>
+                            <button type="button" class="tb-emoji-btn" title="課題" data-emoji="😢" aria-label="😢 を挿入またはムードに適用">😢</button>
+                            <button type="button" class="tb-emoji-btn" title="チェック" data-emoji="✓" aria-label="✓ を挿入またはムードに適用">✓</button>
+                            <button type="button" class="tb-emoji-btn" title="星" data-emoji="★" aria-label="★ を挿入またはムードに適用">★</button>
+                            <button type="button" class="ghost tb-emoji-custom" id="emojiCustom" title="その他の文字・絵文字">…</button>
+                        </div>
+                    </div>
+                </div>
                 <iframe id="editorFrame" title="レポート編集"></iframe>
             </div>
 
             <div class="tb-group">
-                <span class="tb-title">レポートの編集</span>
-                <div class="tb-edit-row">
-                    <div class="tb-cluster">
-                        <span class="tb-cluster-label">表（行・列）の追加 / 削除</span>
-                        <div class="tb-cluster-btns">
-                            <button type="button" class="tb-icon-btn" id="tblRowAdd" title="選択セルの下に行を追加" aria-label="選択セルの下に行を追加">
-                                <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M3 5h18v5H3zM3 12h18v5H3z"/><path d="M12 20v4m-2-2h4"/>
-                                </svg>
-                            </button>
-                            <button type="button" class="tb-icon-btn" id="tblRowDel" title="選択行を削除" aria-label="選択行を削除">
-                                <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M3 5h18v5H3zM3 12h18v5H3z"/><path d="M5 14.5h14"/>
-                                </svg>
-                            </button>
-                            <button type="button" class="tb-icon-btn" id="tblColAdd" title="選択列の右に列を追加" aria-label="選択列の右に列を追加">
-                                <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M4 4h7v16H4zM13 4h7v16h-7z"/><path d="M21 11v4M19 13h4"/>
-                                </svg>
-                            </button>
-                            <button type="button" class="tb-icon-btn" id="tblColDel" title="選択列を削除" aria-label="選択列を削除">
-                                <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M4 4h7v16H4zM13 4h7v16h-7z"/><path d="M16.5 4v16"/>
-                                </svg>
-                            </button>
-                            <span class="tb-hint-inline">※セル選択後</span>
-                        </div>
-                    </div>
-                    <div class="tb-cluster">
-                        <span class="tb-cluster-label">リンク挿入・解除</span>
-                        <div class="tb-cluster-btns">
-                            <button type="button" class="tb-icon-btn" id="linkApply" title="選択範囲にリンク（URL 入力）" aria-label="リンクを付与">
-                                <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M10 13a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1"/><path d="M14 11a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1"/>
-                                </svg>
-                            </button>
-                            <button type="button" class="tb-icon-btn" id="linkRemove" title="選択範囲のリンクを解除" aria-label="リンクを解除">
-                                <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M10 13a5 5 0 0 1 0-7l1-1"/><path d="M14 11a5 5 0 0 1 0 7l-1 1"/><path d="M5 5L19 19"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="tb-cluster">
-                        <span class="tb-cluster-label">見出し 05</span>
-                        <div class="tb-cluster-btns">
-                            <button type="button" class="tb-icon-btn" id="removeSec05" title="見出し番号 05 のブロックを削除" aria-label="見出し05のセクションを削除">
-                                <svg class="tb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9.5 9.5 5 5"/><path d="m14.5 9.5-5 5"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="tb-cluster">
-                        <span class="tb-cluster-label">絵文字挿入</span>
-                        <div class="tb-cluster-btns emoji-toolbar" role="group" aria-label="カーソル位置に絵文字を挿入（枠内または HTML ソース）">
-                            <button type="button" class="tb-emoji-btn" title="良い" data-emoji="😊" aria-label="絵文字 😊 を挿入">😊</button>
-                            <button type="button" class="tb-emoji-btn" title="まずまず" data-emoji="😐" aria-label="絵文字 😐 を挿入">😐</button>
-                            <button type="button" class="tb-emoji-btn" title="普通・要注意" data-emoji="🙂" aria-label="絵文字 🙂 を挿入">🙂</button>
-                            <button type="button" class="tb-emoji-btn" title="課題" data-emoji="😢" aria-label="絵文字 😢 を挿入">😢</button>
-                            <button type="button" class="tb-emoji-btn" title="チェック" data-emoji="✓" aria-label="記号 ✓ を挿入">✓</button>
-                            <button type="button" class="tb-emoji-btn" title="星" data-emoji="★" aria-label="記号 ★ を挿入">★</button>
-                            <button type="button" class="ghost tb-emoji-custom" id="emojiCustom" title="ほかの文字・絵文字を入力して挿入">その他…</button>
-                        </div>
-                    </div>
-                    <span class="grow"></span>
-                </div>
-            </div>
-
-            <div class="tb-group">
-                <span class="tb-title">読み込み · ファイル</span>
-                <button type="button" id="loadTakafuji">高藤</button>
-                <button type="button" id="loadSuzuki">鈴木</button>
+                <span class="tb-title">読み込み · マニフェストサンプル</span>
+                <span id="manifestSampleButtons" class="manifest-sample-btns" aria-label="reports-manifest.json の samples キー"></span>
+                <span class="tb-title" style="margin-top:8px;width:100%;">読み込み · ファイル</span>
                 <button type="button" class="file-btn" id="openFileBtn" title=".html を開く（別ブラウザで保存したファイルにも）">ファイルから開く</button>
                 <input type="file" id="fileIn" accept=".html,.htm,text/html" />
                 <button type="button" id="pasteFromClipboard" title="HTML をクリップボードから">貼り付け</button>
@@ -356,7 +446,7 @@
                 <button type="button" id="downloadProtected" title="暗号化HTMLを保存し、送付用パスワードとURLを表示">送付エクスポート</button>
                 <span class="grow"></span>
                 <button type="button" class="ghost" id="draftClear">下書き削除</button>
-                <button type="button" class="ghost" id="recoverSample">高藤でリセット</button>
+                <button type="button" class="ghost" id="recoverSample" title="ブラウザ下書きを消し、マニフェスト既定キー（takafuji があればそれ、なければ先頭キー）の HTML を読み直します">既定事例でリセット</button>
             </div>
 
             <div class="pw-out-box" id="pwOutBox" hidden>
@@ -439,7 +529,9 @@
             revision: 'fallback',
             samples: {
                 takafuji: 'monthly_2026-04_takafuji_report.html',
-                suzuki: 'monthly_2026-04_suzuki_report.html'
+                suzuki: 'monthly_2026-04_suzuki_report.html',
+                tokura: 'monthly_2026-04_tokura_report.html',
+                tokura_v2: 'monthly_2026-04_tokura_v2_report.html'
             }
         };
         if (isFileProtocol()) {
@@ -454,7 +546,7 @@
             var res = await fetch(mu.href, { cache: 'no-store' });
             if (!res.ok) throw new Error(String(res.status));
             var data = await res.json();
-            if (!data || !data.samples || !data.samples.takafuji) throw new Error('invalid manifest');
+            if (!data || !data.samples || typeof data.samples !== 'object' || Object.keys(data.samples).length === 0) throw new Error('invalid manifest');
             monthlyManifestCache = data;
         } catch (e1) {
             monthlyManifestCache = fallback;
@@ -488,6 +580,54 @@
             return false;
         }
     }
+
+    var SAMPLE_BTN_LABELS = { takafuji: '高藤', suzuki: '鈴木', tokura: '十倉', tokura_v2: '十倉 v2' };
+    function labelForSampleKey(key) {
+        return SAMPLE_BTN_LABELS[key] || key;
+    }
+    function getDefaultSampleKey(manifest) {
+        var s = manifest && manifest.samples;
+        if (!s || typeof s !== 'object') return 'takafuji';
+        if (s.takafuji) return 'takafuji';
+        var keys = Object.keys(s);
+        return keys.length ? keys[0] : 'takafuji';
+    }
+    function resolveBootstrapSlug(manifest, raw) {
+        raw = String(raw || '').trim().toLowerCase();
+        if (!raw) return '';
+        var s = manifest && manifest.samples;
+        if (!s) return '';
+        if (s[raw]) return raw;
+        if (raw === 'suzuki' || raw === '73594') return s.suzuki ? 'suzuki' : '';
+        if (raw === 'takafuji' || raw === '72324') return s.takafuji ? 'takafuji' : '';
+        if (raw === 'tokura' || raw === '61630') return s.tokura ? 'tokura' : '';
+        if (raw === 'tokura_v2' || raw === 'tokurav2' || raw === '十倉v2') return s.tokura_v2 ? 'tokura_v2' : '';
+        return '';
+    }
+    function getBootstrapSampleSlug(manifest) {
+        try {
+            var q = new URLSearchParams(window.location.search || '');
+            var raw = String(q.get('sample') || q.get('report') || '').trim().toLowerCase();
+            return resolveBootstrapSlug(manifest, raw);
+        } catch (eSl) {}
+        return '';
+    }
+    function renderManifestSampleButtons(manifest) {
+        var host = document.getElementById('manifestSampleButtons');
+        if (!host) return;
+        host.innerHTML = '';
+        var s = manifest && manifest.samples;
+        if (!s || typeof s !== 'object') return;
+        Object.keys(s).forEach(function (key) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.textContent = labelForSampleKey(key);
+            btn.title = 'manifest samples.' + key + ' → ' + String(s[key]);
+            btn.addEventListener('click', function () { loadSampleReport(key); });
+            host.appendChild(btn);
+        });
+    }
+
     try {
         localStorage.removeItem('ea_monthly_report_full_editor_draft_html_v3');
         localStorage.removeItem('ea_monthly_report_full_editor_draft_meta_v3');
@@ -538,7 +678,7 @@
             }
             if (!isPlausibleReportHtml(html)) {
                 if (opts.warn) {
-                    showErr('内容が空に近いためソースを更新しませんでした。「高藤でリセット」を試してください。');
+                    showErr('内容が空に近いためソースを更新しませんでした。「既定事例でリセット」またはサンプルボタンを試してください。');
                 }
                 return false;
             }
@@ -1146,6 +1286,32 @@
         return true;
     }
 
+    /** 02 の mood 表：`span.mood-icon` または評価列（2列目 tbody）から対象ノードを得る */
+    function findClosestMoodIconSpan(doc, sel) {
+        if (!doc || !doc.body || !sel || !sel.anchorNode) return null;
+        const n = sel.anchorNode;
+        let el = n.nodeType === Node.TEXT_NODE ? n.parentElement : n;
+        if (!el || el.nodeType !== Node.ELEMENT_NODE) return null;
+        try {
+            if (!doc.body.contains(el)) return null;
+            const direct = el.closest && el.closest('span.mood-icon');
+            if (direct && doc.body.contains(direct)) return direct;
+            const td = el.closest && el.closest('td');
+            if (!td || !doc.body.contains(td)) return null;
+            const table = td.closest && td.closest('table.mood-table');
+            if (!table) return null;
+            const tr = td.closest('tr');
+            if (!tr || !tr.parentElement) return null;
+            if (String(tr.parentElement.tagName).toUpperCase() !== 'TBODY') return null;
+            /* 項目 | 評価+アイコン | … の 2 列目（0-based index 1） */
+            if (td.cellIndex !== 1) return null;
+            const span = td.querySelector('span.mood-icon');
+            return span && doc.body.contains(span) ? span : null;
+        } catch (e) {
+            return null;
+        }
+    }
+
     function insertEmojiSymbol(emoji) {
         hideOk();
         const ch = String(emoji || '').trim();
@@ -1163,6 +1329,21 @@
             return;
         }
         try { frame.contentWindow.focus(); } catch (e0) {}
+        let sel = null;
+        try { sel = doc.getSelection(); } catch (eSel) {}
+        const moodSpan = findClosestMoodIconSpan(doc, sel);
+        if (moodSpan) {
+            moodSpan.textContent = slice;
+            try {
+                moodSpan.normalize();
+            } catch (eNorm) {}
+            if (!syncFrameToSource()) {
+                showErr('アイコンを更新しましたがソースへの取り込みに失敗しました。');
+                return;
+            }
+            showOk('ムード表のアイコンを更新しました。');
+            return;
+        }
         if (!insertEmojiInFrameDocument(doc, frame.contentWindow, slice)) {
             showErr('挿入に失敗しました。HTML ソースから直接入力するか、別ブラウザでお試しください。');
             return;
@@ -1313,22 +1494,25 @@
     document.getElementById('removeSec05').addEventListener('click', removeSection05);
     document.getElementById('linkApply').addEventListener('click', applyHyperlink);
     document.getElementById('linkRemove').addEventListener('click', removeHyperlink);
-    var emojiToolbar = document.querySelector('.emoji-toolbar');
-    if (emojiToolbar) {
-        emojiToolbar.addEventListener('click', function (ev) {
+    document.querySelectorAll('.emoji-toolbar').forEach(function (bar) {
+        bar.addEventListener('click', function (ev) {
             var btn = ev.target.closest('[data-emoji]');
             if (!btn) return;
             ev.preventDefault();
             insertEmojiSymbol(btn.getAttribute('data-emoji'));
         });
-    }
-    document.getElementById('emojiCustom').addEventListener('click', function () {
-        var s = window.prompt('挿入する絵文字や記号（短い文字列）', '🙂');
-        if (s === null) return;
-        s = String(s).trim();
-        if (!s) return;
-        insertEmojiSymbol(s);
     });
+    (function attachEmojiCustom() {
+        var ec = document.getElementById('emojiCustom');
+        if (!ec) return;
+        ec.addEventListener('click', function () {
+            var s = window.prompt('挿入・またはムード表アイコンに適用する文字（短い文字列）', '🙂');
+            if (s === null) return;
+            s = String(s).trim();
+            if (!s) return;
+            insertEmojiSymbol(s);
+        });
+    })();
     document.getElementById('tblRowAdd').addEventListener('click', tableRowAdd);
     document.getElementById('tblRowDel').addEventListener('click', tableRowDel);
     document.getElementById('tblColAdd').addEventListener('click', tableColAdd);
@@ -1437,14 +1621,15 @@
     async function bootstrap() {
         updateDraftStatus();
         const manifest = await fetchMonthlyReportsManifest();
+        renderManifestSampleButtons(manifest);
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved && saved.trim().length > 20) {
             if (!isPlausibleReportHtml(saved)) {
                 discardBrowserDraftKeys();
                 updateDraftStatus();
                 hideErr();
-                var reloadedBad = await loadSampleReport('takafuji');
-                if (reloadedBad) showOk('壊れた下書きを破棄し、高藤を読み込みました。');
+                var reloadedBad = await loadSampleReport(getDefaultSampleKey(manifest));
+                if (reloadedBad) showOk('壊れた下書きを破棄し、既定のサンプルを読み込みました。');
                 return;
             }
             var mRev = manifest && manifest.revision ? String(manifest.revision) : '';
@@ -1456,22 +1641,18 @@
             lastPersisted = saved;
             pushSourceToFrame();
             if (mRev && storedRev && mRev !== storedRev) {
-                showOk('ブラウザの下書きを表示しています。**リポジトリの正本が更新されています**（マニフェスト revision: ' + mRev + '）。最新 HTML を読むには「高藤」または「鈴木」をクリックするか、「下書き削除」後にサンプルを開き直してください。');
+                showOk('ブラウザの下書きを表示しています。**リポジトリの正本が更新されています**（マニフェスト revision: ' + mRev + '）。最新 HTML を読むには画面上の<strong>サンプル</strong>ボタンのいずれかを押すか、「下書き削除」後に開き直してください。');
             } else {
                 showOk('下書きを復元しました。');
             }
             updateDraftStatus();
             return;
         }
-        await loadSampleReport('takafuji');
+        const initial = getBootstrapSampleSlug(manifest);
+        var defKey = getDefaultSampleKey(manifest);
+        await loadSampleReport(initial || defKey);
+        if (initial) showOk(labelForSampleKey(initial) + 'のサンプルを読み込みました。');
     }
-
-    document.getElementById('loadTakafuji').addEventListener('click', function () {
-        loadSampleReport('takafuji');
-    });
-    document.getElementById('loadSuzuki').addEventListener('click', function () {
-        loadSampleReport('suzuki');
-    });
 
     document.getElementById('pasteFromClipboard').addEventListener('click', async function () {
         hideOk();
@@ -1614,7 +1795,7 @@
 
     document.getElementById('recoverSample').addEventListener('click', async function () {
         hideOk();
-        if (!window.confirm('下書きを消して高藤サンプルから読み直しますか？')) return;
+        if (!window.confirm('下書きを消して、マニフェスト既定のサンプルから読み直しますか？')) return;
         discardBrowserDraftKeys();
         source.value = '';
         updateMeta();
@@ -1622,7 +1803,10 @@
         try { frame.removeAttribute('srcdoc'); } catch (e) {}
         updateDraftStatus();
         hideErr();
-        await loadSampleReport('takafuji');
+        monthlyManifestCache = null;
+        var manifest = await fetchMonthlyReportsManifest();
+        renderManifestSampleButtons(manifest);
+        await loadSampleReport(getDefaultSampleKey(manifest));
         showOk('リセットしました。');
     });
 

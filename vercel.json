@@ -34,6 +34,14 @@
       "dest": "/src/reports/templates/monthly-reports/monthly_2026-04_suzuki_report.html"
     },
     {
+      "src": "/monthly_2026-04_tokura_report.html",
+      "dest": "/src/reports/templates/monthly-reports/monthly_2026-04_tokura_report.html"
+    },
+    {
+      "src": "/monthly_2026-04_tokura_v2_report.html",
+      "dest": "/src/reports/templates/monthly-reports/monthly_2026-04_tokura_v2_report.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "/src/reports/templates/$1"
     }
