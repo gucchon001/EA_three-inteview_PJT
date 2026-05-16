@@ -1,0 +1,35 @@
+{
+  "recipe_version": 1,
+  "id": "hirayama_economics_pattern_b_shell",
+  "description": "平山（Economics）: household_hirabayashi_economics・複数生徒MTG対策として scope_reminder を付与。",
+  "sources": {
+    "dir": "samples/reports/household_hirabayashi_economics/sources",
+    "preset": "pattern_b_gws_sl",
+    "presets_json": "scripts/monthly_report_source_presets.json",
+    "with_gws_json": false,
+    "globs": [],
+    "preset_tokura_sources": false
+  },
+  "prompts": {
+    "template": "docs/samples/monthly-reports/monthly_pattern_b_content.template.md",
+    "family_tone_md": ".cursor/skills/monthly-report-notebooklm-patterns/references/family-facing-tone.md",
+    "scope_reminder": "本レポートの主題は **Economics SL**（`_gws_SL_lesson_plan*.json` の進行が正）。`_gws_student*` の「生徒氏名」から **対象の ○○様**（姓＋様。例: 平林　礼→**平林様**。メモにより**広林様**等のゆれがあり得る）を決める。\n\n**教師 MTG から事実として採るときは強制**：段落・箇条書きの **行頭**（先頭の `[…]`・番号は除いてよい）が **この対象の ○○様で始まるブロック**に属する本文に限定する。**別姓＋様**（この Doc では例:**飯村様**）で始まる段落・項目の内容は、他生徒の事実として**レポートに書かない**（対象の成績・課題・意向と混同しない）。\n文頭に氏名がない段落は、(1)**直前の段落が対象 ○○様の続き**で、(2)**Economics と対象生徒のみ**に言及すると明読できる場合に限る。それ以外は省略。Economics と結べない総括や推測は採らない。"
+  },
+  "structure": {
+    "ideal_html": "docs/samples/monthly-reports/fixtures/tokura_2026-04_user_ideal.html",
+    "structure_from_ideal": true,
+    "structure_html": null,
+    "ideal_max_chars": 12000,
+    "structure_max_chars": 48000
+  },
+  "generation": {
+    "artifact": "html",
+    "model": "",
+    "temperature": 0.1,
+    "seed": 6798299,
+    "max_tokens": 16384,
+    "timeout_sec": 420,
+    "max_bundle_chars": 400000
+  },
+  "output": "docs/samples/monthly-reports/monthly_2026-04_hirayama_economics_report.html"
+}

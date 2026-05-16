@@ -1,0 +1,30 @@
+project_id = "ea_three_interview_pjt"
+
+[api]
+enabled = true
+port = 56321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 56322
+major_version = 15
+
+[studio]
+enabled = true
+port = 56323
+
+[inbucket]
+enabled = true
+port = 56324
+
+[analytics]
+enabled = false
+
+[auth]
+enabled = true
+site_url = "http://127.0.0.1:8000"
+additional_redirect_urls = ["http://127.0.0.1:8000"]
+jwt_expiry = 3600
+enable_signup = false

@@ -7,6 +7,12 @@
 
 ---
 
+## レイアウト（2026-05-08 更新）
+
+- **版型**：**Pattern B 月次規約**（[monthly_pattern_b_content.template.md](monthly_pattern_b_content.template.md)・[monthly_pattern_b_template.html](monthly_pattern_b_template.html)）に適合させる。**HTML の見え方見本**：`monthly_2026-04_takafuji_report.html`（rev **v3.5.7**）、`monthly_2026-04_suzuki_report.html`（rev **v3.6.1**）。**01**：mock/final・学校試験の内部出典括弧「（計画表）／（計画表見出し）」は**付けない**。
+
+---
+
 ## 運用メモ（2026-04-21 更新）
 
 - **担当CA**: 学習計画表 `student` の「担当者名」に基づき **藤井** とする（配布レポートに統一済み）。
@@ -35,8 +41,9 @@
 | ③塾での様子 | 02 | 教師 mtg の議事録 | Doc（自動要約） |
 | ③授業内容 | 03 | 学習計画表＋教師 mtg | gws + Doc |
 | ④課題・アドバイス | 04 | 教師 mtg | Doc |
-| ⑤学習の進捗 | 05 | 学習計画表 | gws `lesson plan` |
-| ⑥今後の授業計画 | 06 | 学習計画表＋教師 mtg | gws + Doc |
+| ⑤今後の授業計画 | **05** | 学習計画表＋教師 mtg | gws + Doc |
+
+（**履歴**：v3.5.8 までは進捗表を別節として扱った。運用資料 [DATA_CONTRACT_05_学習の進捗.md](DATA_CONTRACT_05_学習の進捗.md) は他レポート再利用可。）
 
 ---
 

@@ -19,6 +19,24 @@ def create_app() -> FastAPI:
         description="EB塾 指導モニタリング管理（移行中）",
     )
 
+    from eb_app.routers import auth as auth_router
+    from eb_app.routers import auth_pages as auth_pages_router
+    from eb_app.routers import monthly_reports as monthly_reports_router
+
+    app.include_router(auth_pages_router.router, tags=["auth-pages"])
+
+    app.include_router(
+        auth_router.router,
+        prefix="/api/auth",
+        tags=["auth"],
+    )
+
+    app.include_router(
+        monthly_reports_router.router,
+        prefix="/api/monthly-reports",
+        tags=["monthly-reports"],
+    )
+
     if settings.enable_mock_ui:
         from eb_app.routers import mock as mock_router
 

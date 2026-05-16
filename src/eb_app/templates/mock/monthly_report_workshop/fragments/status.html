@@ -1,0 +1,13 @@
+<div>
+  <p class="muted" style="margin-top:0;">
+    status: <strong>{{ job.status }}</strong> · current stage: <strong>{{ job.current_stage }}</strong>
+  </p>
+  <div class="stage-list">
+    {% for s in job.stages %}
+    <div class="stage {{ s.state }}">
+      <strong>{{ s.label }}</strong>
+      <span class="muted">{{ s.id }} · {{ s.state }} · {{ s.duration }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>

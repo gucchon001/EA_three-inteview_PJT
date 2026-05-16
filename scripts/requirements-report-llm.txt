@@ -1,0 +1,4 @@
+# 月次レポート草稿生成（scripts/monthly_report_draft_openrouter.py）
+# およびペイロードレンダ（scripts/render_monthly_report_payload.py）
+python-dotenv>=1.0.1
+Jinja2>=3.1.4

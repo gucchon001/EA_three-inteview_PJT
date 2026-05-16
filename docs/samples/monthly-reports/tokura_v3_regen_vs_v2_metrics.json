@@ -1,0 +1,20 @@
+{
+  "ideal": "C:\\dev\\CODE\\EA_three-inteview_PJT\\docs\\samples\\monthly-reports\\monthly_2026-04_tokura_v2_report.html",
+  "ideal_lines": 485,
+  "candidates": [
+    {
+      "path": "C:\\dev\\CODE\\EA_three-inteview_PJT\\docs\\samples\\monthly-reports\\monthly_2026-04_tokura_v3_regen.html",
+      "lines": 469,
+      "plain_text_similarity": 0.713041,
+      "diff_lines_added_vs_ideal": 101,
+      "diff_lines_removed_vs_ideal": 117
+    },
+    {
+      "path": "C:\\dev\\CODE\\EA_three-inteview_PJT\\docs\\samples\\monthly-reports\\monthly_2026-04_tokura_v3_report.html",
+      "lines": 471,
+      "plain_text_similarity": 0.666462,
+      "diff_lines_added_vs_ideal": 105,
+      "diff_lines_removed_vs_ideal": 119
+    }
+  ]
+}

@@ -42,6 +42,26 @@
       "dest": "/src/reports/templates/monthly-reports/monthly_2026-04_tokura_v2_report.html"
     },
     {
+      "src": "/monthly_2026-04_tokura_v3_report.html",
+      "dest": "/src/reports/templates/monthly-reports/monthly_2026-04_tokura_v3_report.html"
+    },
+    {
+      "src": "/monthly_2026-04_tokura_v4_report.html",
+      "dest": "/src/reports/templates/monthly-reports/monthly_2026-04_tokura_v4_report.html"
+    },
+    {
+      "src": "/monthly_2026-04_tokura_v5_report.html",
+      "dest": "/src/reports/templates/monthly-reports/monthly_2026-04_tokura_v5_report.html"
+    },
+    {
+      "src": "/monthly_2026-04_hirayama_physics_report.html",
+      "dest": "/src/reports/templates/monthly-reports/monthly_2026-04_hirayama_physics_report.html"
+    },
+    {
+      "src": "/monthly_2026-04_hirayama_economics_report.html",
+      "dest": "/src/reports/templates/monthly-reports/monthly_2026-04_hirayama_economics_report.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "/src/reports/templates/$1"
     }

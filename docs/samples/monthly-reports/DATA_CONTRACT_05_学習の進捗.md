@@ -75,7 +75,7 @@
 **トピック別に並べる場合（v3.2 HTML サンプル）**
 
 - 05 の**各行（トピックまたは週ブロック）**ごとに、`prog-topic` を分け、**その行に対応する 03 授業日だけ**を集めて当塾レーンの区間を青にする。  
-- 03 の「学習単元」列を 05 のトピック行へ割り当てるルールは **担当定義**（例: 高藤サンプルでは Number/Algebra ← Geometric〜Factorization、Functions ← Quadratic functions、Geometry/Trig ← Trigonometry）。`sources` に 1 行メモを残すと再現性が上がる。
+- 03 の「学習単元」列を 05 のトピック行へ割り当てるルールは **担当定義**（例: ある適合済み事例では Number/Algebra ← Geometric〜Factorization、Functions ← Quadratic functions、Geometry/Trig ← Trigonometry）。`sources` に 1 行メモを残すと再現性が上がる。
 
 > **読み取りミスとの切り分け**: 旧 v3 の「トピックごとに 10 マス全部青」は、**データがすべて済**だったことに加え、**`boolean_topic` 的な割り当て**をしていたため。`calendar_buckets_10` に切り替えると、**同じ 03 日付**から灰マスが出る。
 

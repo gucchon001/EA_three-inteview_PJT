@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pattern_b_compact_01_05",
+  "title": "Pattern B compact (01–05) payload",
+  "type": "object",
+  "required": [
+    "layout_profile",
+    "meta",
+    "greeting",
+    "sec01",
+    "sec02",
+    "sec03",
+    "sec04",
+    "sec05",
+    "footer",
+    "admin"
+  ],
+  "properties": {
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "layout_profile": {
+      "type": "string",
+      "const": "pattern_b_compact_01_05",
+      "description": "レンダラが解釈するレイアウト識別子"
+    },
+    "revision_comment": {
+      "type": "string",
+      "description": "HTML 先頭コメント（-- を含めるとコメントが壊れるため避ける）"
+    },
+    "print_banner_html": {
+      "type": "string",
+      "description": "印刷注意（|safe。信頼パイプライン由来のみ）"
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "page_title",
+        "logo_sub_html",
+        "report_id",
+        "issue_date_label",
+        "period_range_label",
+        "report_title",
+        "title_period",
+        "copyright_year",
+        "print_button_label"
+      ]
+    },
+    "greeting": {
+      "type": "object",
+      "required": ["honorific_lines", "paragraphs"],
+      "properties": {
+        "honorific_lines": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "paragraphs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "プレーンテキスト（HTML エスケープされる）"
+        }
+      }
+    },
+    "sec01": { "type": "object" },
+    "sec02": { "type": "object" },
+    "sec03": {
+      "type": "object",
+      "required": ["title_suffix", "lesson_rows", "star_legend_html"],
+      "properties": {
+        "lesson_rows": {
+          "type": "array",
+          "description": "各行は simple_cell_html、または unit_main と unit_subtopics を指定",
+          "items": {
+            "type": "object",
+            "required": ["date", "rating"]
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "sec04": {
+      "type": "object",
+      "required": ["paragraphs_html"],
+      "properties": {
+        "paragraphs_html": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "各要素は <p>...</p> を想定（|safe）"
+        }
+      }
+    },
+    "sec05": { "type": "object" },
+    "footer": {
+      "type": "object",
+      "required": ["contact_lines_html"]
+    },
+    "admin": {
+      "type": "object",
+      "required": ["heading", "intro_html", "bullets_html"]
+    }
+  }
+}

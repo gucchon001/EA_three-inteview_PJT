@@ -1,0 +1,188 @@
+{% extends "mock/base.html" %}
+{% block title %}{{ page_title }} — {{ subtitle }}{% endblock %}
+{% block extra_style %}
+{% include "mock/monthly_report_workshop/shell_styles.html" %}
+.hero {
+  display:grid;
+  grid-template-columns:minmax(0, 1.12fr) minmax(320px, 0.88fr);
+  gap:1rem;
+  align-items:stretch;
+}
+.hero-main {
+  min-height:330px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  border:1px solid #dde3ec;
+  border-radius:8px;
+  background:#fff;
+  padding:24px;
+  box-shadow:0 1px 2px rgba(0,0,0,.04);
+}
+.hero-main h1 {
+  font-family:"Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+  font-size:clamp(2rem, 4vw + 1rem, 3.8rem);
+  line-height:1.05;
+  margin:0 0 1rem;
+  color:#2c3e50;
+  letter-spacing:0;
+}
+.hero-copy {
+  max-width:680px;
+  color:#5a6570;
+  font-size:1rem;
+}
+.action-row {
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.75rem;
+  margin-top:1.5rem;
+}
+.run-panel {
+  background:#fff;
+  border:1px solid #dde3ec;
+  border-radius:8px;
+  box-shadow:0 1px 2px rgba(0,0,0,.04);
+  padding:1rem;
+}
+.run-panel h2 { margin-top:0; }
+.step-list { display:grid; gap:0.65rem; }
+.step {
+  display:grid;
+  grid-template-columns:2rem 1fr;
+  gap:0.75rem;
+  align-items:start;
+  padding:0.65rem;
+  border:1px solid #dde3ec;
+  border-radius:8px;
+  background:#fafbfd;
+}
+.step-index {
+  width:2rem;
+  height:2rem;
+  display:grid;
+  place-items:center;
+  border-radius:6px;
+  background:#2c3e50;
+  color:#fff;
+  font-weight:700;
+}
+.home-grid {
+  display:grid;
+  grid-template-columns:0.8fr 1.2fr;
+  gap:1rem;
+  align-items:start;
+}
+.recent-table {
+  width:100%;
+  border-collapse:collapse;
+}
+.recent-table th,
+.recent-table td {
+  padding:0.65rem 0.5rem;
+  border-bottom:1px solid #dde3ec;
+  text-align:left;
+  vertical-align:top;
+}
+.recent-table th {
+  color:#5a6570;
+  font-size:0.78rem;
+  font-weight:700;
+}
+@media (max-width: 860px) {
+  .hero, .home-grid { grid-template-columns:1fr; }
+  .hero-main { min-height:auto; }
+}
+{% endblock %}
+{% block bare %}
+{% set active_mvp_nav = 'view' %}
+{% set sidebar_status = '単体MVPトップ' %}
+<div class="mvp-app">
+  {% include "mock/monthly_report_workshop/shell_sidebar.html" %}
+  <main class="mvp-main">
+    <div class="mvp-topbar">
+      <div>
+        <p class="mvp-muted" style="margin:0;">{{ subtitle }} · ソース取込 / 生成 / 検証 / 推敲</p>
+        <h1 class="mvp-page-title">レポート工房</h1>
+      </div>
+      <div class="mvp-topbar-actions">
+        <a class="btn mvp-secondary-btn" href="/mock/monthly-report-workshop/jobs/mrj_demo_001/edit">レポートビュー</a>
+        <a class="btn mvp-secondary-btn" href="/mock/">モック索引</a>
+      </div>
+    </div>
+
+    <div class="mvp-page-wrap mvp-grid">
+      <section class="hero" aria-labelledby="workshop-title">
+        <div class="hero-main">
+          <span class="mvp-badge">{{ subtitle }}</span>
+          <h1 id="workshop-title">{{ page_title }}</h1>
+          <p class="hero-copy">
+            Google Sheets / Docs のソース確認から、LLM生成、規約検証、推敲までをひとつの作業面で進めるためのMVPモックです。
+          </p>
+          <div class="action-row">
+            {% for action in primary_actions %}
+              <a class="btn {% if action.kind == 'primary' %}mvp-primary-btn{% else %}mvp-secondary-btn{% endif %}" href="{{ action.href }}">{{ action.label }}</a>
+            {% endfor %}
+          </div>
+        </div>
+
+        <aside class="run-panel" aria-label="生成フロー">
+          <h2>生成フロー</h2>
+          <div class="step-list">
+            {% for step in flow_steps %}
+            <div class="step">
+              <span class="step-index">{{ loop.index }}</span>
+              <div><strong>{{ step.label }}</strong><br><span class="mvp-muted">{{ step.note }}</span></div>
+            </div>
+            {% endfor %}
+          </div>
+        </aside>
+      </section>
+
+      <div class="mvp-card-grid">
+        {% for m in metrics %}
+        <section class="mvp-metric {% if m.tone != 'normal' %}{{ m.tone }}{% endif %}">
+          <p class="mvp-muted" style="margin:0;">{{ m.label }}</p>
+          <div class="value">{{ m.value }}</div>
+        </section>
+        {% endfor %}
+      </div>
+
+      <section class="home-grid">
+        <div class="mvp-panel">
+          <h2 style="margin-top:0;">次に見るもの</h2>
+          <p>初回レビューでは、新規生成からではなく既存デモジョブを開いて、進捗・検証・推敲の一連の作業面を確認します。</p>
+          <div class="action-row">
+            <a class="btn mvp-primary-btn" href="/mock/monthly-report-workshop/jobs/mrj_demo_001">デモジョブを開く</a>
+            <a class="btn mvp-secondary-btn" href="/mock/monthly-report-workshop/jobs/new">入力画面を見る</a>
+          </div>
+        </div>
+
+        <div class="mvp-panel" style="overflow-x:auto;">
+          <h2 style="margin-top:0;">最近の生成ジョブ</h2>
+          <table class="recent-table">
+            <thead>
+              <tr>
+                <th>ジョブ</th>
+                <th>対象</th>
+                <th>状態</th>
+                <th>検証</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for job in recent_jobs %}
+              <tr>
+                <td><a href="{{ job.href }}">{{ job.public_id }}</a></td>
+                <td>{{ job.target_month }}<br><span class="mvp-muted">{{ job.household }}</span></td>
+                <td>{{ job.status }}</td>
+                <td>{{ job.validation }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+{% endblock %}

@@ -1,6 +1,10 @@
 .vercel
+.env
+.env.*
+!.env.example
 node_modules/
 __pycache__/
+.pytest_cache/
 *.pyc
 
 # GCP サービスアカウント鍵（公開リポジトリに絶対にコミットしない）
@@ -10,3 +14,12 @@ config/gen-lang-client-*.json
 .claude/settings.local.json
 # 月次エディタ・ローカル送付用（暗号化 HTML の一時公開。個人情報をコミットしない）
 docs/samples/monthly-reports/tools/_published/
+# render_monthly_report_payload.py の一時出力
+_tmp_*
+docs/samples/monthly-reports/_tmp_*
+# レポート生成レシピのローカルラン記録（任意・比較チューニング用）
+docs/samples/monthly-reports/fixtures/report_recipes/run_log.jsonl
+
+# Supabase CLI local state
+supabase/.branches/
+supabase/.temp/

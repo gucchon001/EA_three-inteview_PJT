@@ -1,0 +1,930 @@
+{
+  "majorDimension": "ROWS",
+  "range": "'lesson plan'!A1:Z200",
+  "values": [
+    [],
+    [
+      "",
+      "Number and Algebra"
+    ],
+    [
+      "SL/HL",
+      "No",
+      "Subtopic",
+      "進捗",
+      "授業日",
+      "授業日",
+      "配点",
+      "得点",
+      "得点率",
+      "メモ"
+    ],
+    [
+      "共通",
+      "1",
+      "Arithmetic sequences, geometric sequences",
+      "済",
+      "2025/06/30"
+    ],
+    [
+      "共通",
+      "2",
+      "Financial applications of geometric sequences",
+      "済",
+      "2025/07/07"
+    ],
+    [
+      "共通",
+      "",
+      "Arithmetic series",
+      "済",
+      "2025/07/07",
+      "2025/07/14"
+    ],
+    [
+      "共通",
+      "",
+      "Finite/Infinite geometric series",
+      "済",
+      "2025/07/07",
+      "2025/07/14"
+    ],
+    [
+      "共通",
+      "3",
+      "Rational exponents",
+      "済",
+      "2025/07/21"
+    ],
+    [
+      "HLのみ",
+      "",
+      "Expansion and factorisation",
+      "済",
+      "2025/07/21"
+    ],
+    [
+      "共通",
+      "",
+      "Exponential equation",
+      "済",
+      "2025/07/21"
+    ],
+    [
+      "共通",
+      "",
+      "Exponential function",
+      "済",
+      "2025/07/21"
+    ],
+    [
+      "共通",
+      "4",
+      "Introduction to logarithms with base 10 & \"a\"",
+      "済",
+      "2025/07/28"
+    ],
+    [
+      "共通",
+      "",
+      "Natural logarithms",
+      "済",
+      "2025/08/04"
+    ],
+    [
+      "",
+      "5",
+      "Unit test 1",
+      "済",
+      "2025/08/11",
+      "",
+      "33",
+      "25",
+      "76%"
+    ],
+    [
+      "共通",
+      "6",
+      "Logarithmic equations",
+      "済",
+      "2025/08/11"
+    ],
+    [
+      "共通",
+      "",
+      "Change of base of a logarithm",
+      "済",
+      "2025/08/18"
+    ],
+    [
+      "共通",
+      "7",
+      "Factorial notation",
+      "済",
+      "2025/08/18"
+    ],
+    [
+      "HLのみ",
+      "",
+      "Permutation",
+      "済",
+      "2025/08/26"
+    ],
+    [
+      "HLのみ",
+      "",
+      "Combination",
+      "済",
+      "2025/08/26"
+    ],
+    [
+      "共通",
+      "8",
+      "Binomial expansions",
+      "未",
+      "2025/09/01"
+    ],
+    [
+      "共通",
+      "",
+      "Binomial theorem",
+      "未",
+      "2025/09/01"
+    ],
+    [
+      "HLのみ",
+      "9",
+      "The complex plane",
+      "未",
+      "2025/09/08"
+    ],
+    [
+      "HLのみ",
+      "10",
+      "Polar form",
+      "未",
+      "2025/09/15"
+    ],
+    [
+      "",
+      "11",
+      "Unit test 2",
+      "未",
+      "2025/09/22"
+    ],
+    [
+      "",
+      "",
+      "1.6 Simple deductive proof, numerical and algebraic; how to lay out a left-hand side to right-hand side proof; the symbols and notation for equality and identity.\r"
+    ],
+    [],
+    [],
+    [
+      "共通",
+      "Functions"
+    ],
+    [
+      "共通",
+      "No",
+      "Subtopic",
+      "進捗"
+    ],
+    [
+      "共通",
+      "1",
+      "Quadratic equations",
+      "",
+      "2025/09/15"
+    ],
+    [
+      "共通",
+      "",
+      "Factorization",
+      "",
+      "2025/09/15"
+    ],
+    [
+      "共通",
+      "",
+      "Completing the square",
+      "",
+      "2025/09/15"
+    ],
+    [
+      "共通",
+      "2",
+      "Quadratic functions",
+      "",
+      "2025/09/22"
+    ],
+    [
+      "共通",
+      "",
+      "Using the discriminant",
+      "",
+      "2025/09/22"
+    ],
+    [
+      "共通",
+      "3",
+      "Quadratic inequalities",
+      "",
+      "2025/09/29"
+    ],
+    [
+      "共通",
+      "",
+      "Domain and range",
+      "",
+      "2025/09/29"
+    ],
+    [
+      "共通",
+      "4",
+      "Rational functions",
+      "",
+      "2025/10/06"
+    ],
+    [
+      "",
+      "",
+      "Composite functions",
+      "",
+      "2025/10/06"
+    ],
+    [
+      "共通",
+      "",
+      "Inverse functions",
+      "",
+      "2025/10/06"
+    ],
+    [
+      "共通",
+      "5",
+      "Unit test 1",
+      "",
+      "2025/10/13"
+    ],
+    [
+      "HLのみ",
+      "6",
+      "Exponential functions",
+      "",
+      "2025/10/20"
+    ],
+    [
+      "HLのみ",
+      "7",
+      "Logarithmic functions ",
+      "",
+      "2025/10/27"
+    ],
+    [
+      "HLのみ",
+      "",
+      "Polynomial equality",
+      "",
+      "2025/10/27"
+    ],
+    [
+      "HLのみ",
+      "8",
+      "Graphing cubic functions",
+      "",
+      "2025/11/03"
+    ],
+    [
+      "HLのみ",
+      "",
+      "Graphing quartic functions",
+      "",
+      "2025/11/03"
+    ],
+    [
+      "一部HLのみ",
+      "9",
+      "Even and odd functions",
+      "",
+      "2025/11/10"
+    ],
+    [
+      "HLのみ",
+      "",
+      "The graph of y=[f(x)]^2",
+      "",
+      "2025/11/10"
+    ],
+    [
+      "",
+      "",
+      "Absolute value functions",
+      "",
+      "2025/11/10"
+    ],
+    [
+      "",
+      "10",
+      "Rational functions",
+      "",
+      "2025/11/17"
+    ],
+    [
+      "",
+      "11",
+      "Unit test 2",
+      "",
+      "2025/11/24"
+    ],
+    [],
+    [
+      "共通",
+      "Geometry and Trigonometry"
+    ],
+    [
+      "共通",
+      "No",
+      "Subtopic",
+      "進捗",
+      "授業日",
+      "授業日",
+      "配点",
+      "得点",
+      "得点率",
+      "メモ"
+    ],
+    [
+      "共通",
+      "1",
+      "The trigonometric ratios",
+      "",
+      "2025/12/01"
+    ],
+    [
+      "共通",
+      "",
+      "Finding side lengths",
+      "",
+      "2025/12/01"
+    ],
+    [
+      "共通",
+      "",
+      "Finding angles",
+      "",
+      "2025/12/01"
+    ],
+    [
+      "共通",
+      "2",
+      "The pythagorean identity",
+      "",
+      "2025/12/08"
+    ],
+    [
+      "共通",
+      "",
+      "The area of a triangle",
+      "",
+      "2025/12/08"
+    ],
+    [
+      "共通",
+      "3",
+      "The cosine rule ",
+      "",
+      "2025/12/15"
+    ],
+    [
+      "共通",
+      "",
+      "The sine rule",
+      "",
+      "2025/12/15"
+    ],
+    [
+      "共通",
+      "4",
+      "Radian measure",
+      "",
+      "2025/12/22"
+    ],
+    [
+      "共通",
+      "",
+      "General sine and cosine functions",
+      "",
+      "2025/12/22"
+    ],
+    [
+      "",
+      "5",
+      "Tangent function",
+      "",
+      "2025/12/29"
+    ],
+    [
+      "共通",
+      "",
+      "Trigonometric equations",
+      "",
+      "2025/12/29"
+    ],
+    [
+      "HLのみ",
+      "6",
+      "Unit test 1",
+      "",
+      "2026/01/05"
+    ],
+    [
+      "HLのみ",
+      "7",
+      "Double angle identities",
+      "",
+      "2026/01/12"
+    ],
+    [
+      "HLのみ",
+      "8",
+      "Vectors and scalars",
+      "",
+      "2026/01/19"
+    ],
+    [
+      "HLのみ",
+      "",
+      "Vectors in the plane",
+      "",
+      "2026/01/19"
+    ],
+    [
+      "HLのみ",
+      "",
+      "The magnitude of a vector",
+      "",
+      "2026/01/19"
+    ],
+    [
+      "HLのみ",
+      "9",
+      "The scalar product of the two vectors ",
+      "",
+      "2026/01/26"
+    ],
+    [
+      "HLのみ",
+      "",
+      "The angle between two vectors",
+      "",
+      "2026/01/26"
+    ],
+    [
+      "HLのみ",
+      "",
+      "The vector product of two vectors",
+      "",
+      "2026/01/26"
+    ],
+    [
+      "HLのみ",
+      "10",
+      "Lines in 2 and 3 dimensions",
+      "",
+      "2026/02/02"
+    ],
+    [
+      "",
+      "11",
+      "Intersecting lines",
+      "",
+      "2026/02/09"
+    ],
+    [
+      "",
+      "12",
+      "Planes",
+      "",
+      "2026/02/16"
+    ],
+    [
+      "",
+      "13",
+      "Unit test 2",
+      "",
+      "2026/02/23"
+    ],
+    [],
+    [
+      "共通",
+      "Statistics and Probability"
+    ],
+    [
+      "共通",
+      "No",
+      "Subtopic",
+      "進捗",
+      "授業日",
+      "授業日",
+      "配点",
+      "得点",
+      "得点率",
+      "メモ"
+    ],
+    [
+      "共通",
+      "1",
+      "Box and whisker diagrams",
+      "",
+      "2026/03/02"
+    ],
+    [
+      "共通",
+      "",
+      "Outliers",
+      "",
+      "2026/03/02"
+    ],
+    [
+      "共通",
+      "",
+      "Parallel box and whisker diagrams",
+      "",
+      "2026/03/02"
+    ],
+    [
+      "共通",
+      "2",
+      "Variance and standard deviation",
+      "",
+      "2026/03/09"
+    ],
+    [
+      "共通",
+      "",
+      "Pearson's product-moment correlation coefficient",
+      "",
+      "2026/03/09"
+    ],
+    [
+      "共通",
+      "3",
+      "The least squares regression line",
+      "",
+      "2026/03/16"
+    ],
+    [
+      "共通",
+      "",
+      "The regression line of x against y",
+      "",
+      "2026/03/16"
+    ],
+    [
+      "共通",
+      "4",
+      "Theoretical probability",
+      "",
+      "2026/03/23"
+    ],
+    [
+      "共通",
+      "",
+      "The addition law of probability",
+      "",
+      "2026/03/23"
+    ],
+    [
+      "HLのみ",
+      "",
+      "P(A∪B)=P(A)+P(B)−P(A∩B)",
+      "",
+      "2026/03/23"
+    ],
+    [
+      "",
+      "5",
+      "Conditional probability",
+      "",
+      "2026/03/30"
+    ],
+    [
+      "HLのみ",
+      "",
+      "Formal definition of independence",
+      "",
+      "2026/03/30"
+    ],
+    [
+      "共通",
+      "6",
+      "Unit test 1",
+      "",
+      "2026/04/06"
+    ],
+    [
+      "共通",
+      "7",
+      "Bayes' theorem",
+      "",
+      "2026/04/13"
+    ],
+    [
+      "HLのみ",
+      "8",
+      "Expectation",
+      "",
+      "2026/04/20"
+    ],
+    [
+      "共通",
+      "",
+      "The binomial distribution",
+      "",
+      "2026/04/20"
+    ],
+    [
+      "共通",
+      "9",
+      "Using technology to find binomial probabilities",
+      "",
+      "2026/04/27"
+    ],
+    [
+      "共通",
+      "",
+      "The mean and standard deviation of a binomial distribution",
+      "",
+      "2026/04/27"
+    ],
+    [
+      "共通",
+      "10",
+      "The normal distribution",
+      "",
+      "2026/05/04"
+    ],
+    [
+      "共通",
+      "",
+      "Calculating normal probabilities",
+      "",
+      "2026/05/04"
+    ],
+    [
+      "共通",
+      "11",
+      "The standard normal distribution",
+      "",
+      "2026/05/11"
+    ],
+    [
+      "",
+      "",
+      "Quantiles",
+      "",
+      "2026/05/11"
+    ],
+    [
+      "",
+      "12",
+      "Quantiles part 2",
+      "",
+      "2026/05/18"
+    ],
+    [
+      "",
+      "13",
+      "Unit test 2",
+      "",
+      "2026/05/25"
+    ],
+    [],
+    [
+      "共通",
+      "Calculus"
+    ],
+    [
+      "共通",
+      "No",
+      "Subtopic",
+      "進捗",
+      "授業日",
+      "授業日",
+      "配点",
+      "得点",
+      "得点率",
+      "メモ"
+    ],
+    [
+      "共通",
+      "1",
+      "Limits",
+      "",
+      "2026/06/01"
+    ],
+    [
+      "共通",
+      "",
+      "The gradient of a tangent",
+      "",
+      "2026/06/01"
+    ],
+    [
+      "共通",
+      "",
+      "The derivative function",
+      "",
+      "2026/06/01"
+    ],
+    [
+      "共通",
+      "",
+      "Simple rules of differentiation",
+      "",
+      "2026/06/01"
+    ],
+    [
+      "共通",
+      "2",
+      "The chain rule",
+      "",
+      "2026/06/08"
+    ],
+    [
+      "共通",
+      "",
+      "The product rule",
+      "",
+      "2026/06/08"
+    ],
+    [
+      "共通",
+      "",
+      "The quotient rule",
+      "",
+      "2026/06/08"
+    ],
+    [
+      "共通",
+      "3",
+      "Derivatives of exponential functions",
+      "",
+      "2026/06/15"
+    ],
+    [
+      "HLのみ",
+      "",
+      "Derivatives of logarithmic functions",
+      "",
+      "2026/06/15"
+    ],
+    [
+      "共通",
+      "",
+      "Derivatives of trigonometric functions",
+      "",
+      "2026/06/15"
+    ],
+    [
+      "共通",
+      "",
+      "Derivatives of inverse trigonometric functions",
+      "",
+      "2026/06/15"
+    ],
+    [
+      "共通",
+      "4",
+      "Tangents",
+      "",
+      "2026/06/22"
+    ],
+    [
+      "共通",
+      "",
+      "Normals",
+      "",
+      "2026/06/22"
+    ],
+    [
+      "共通",
+      "5",
+      "Stationary points",
+      "",
+      "2026/06/29"
+    ],
+    [
+      "",
+      "",
+      "Shape",
+      "",
+      "2026/06/29"
+    ],
+    [
+      "共通",
+      "",
+      "Inflection points",
+      "",
+      "2026/06/29"
+    ],
+    [
+      "共通",
+      "6",
+      "Unit test 1",
+      "",
+      "2026/07/06"
+    ],
+    [
+      "共通",
+      "7",
+      "Rules for integration",
+      "",
+      "2026/07/13"
+    ],
+    [
+      "共通",
+      "8",
+      "Integrating f(ax+b)",
+      "",
+      "2026/07/20"
+    ],
+    [
+      "共通",
+      "",
+      "Integration by substitution",
+      "",
+      "2026/07/20"
+    ],
+    [
+      "共通",
+      "9",
+      "The area under a curve ",
+      "",
+      "2026/07/27"
+    ],
+    [
+      "共通",
+      "",
+      "The area above a curve",
+      "",
+      "2026/07/27"
+    ],
+    [
+      "共通",
+      "10",
+      "The area between two functions",
+      "",
+      "2026/08/03"
+    ],
+    [
+      "HLのみ",
+      "",
+      "Displacement",
+      "",
+      "2026/08/03"
+    ],
+    [
+      "HLのみ",
+      "",
+      "Velocity",
+      "",
+      "2026/08/03"
+    ],
+    [
+      "HLのみ",
+      "11",
+      "Acceleration ",
+      "",
+      "2026/08/10"
+    ],
+    [
+      "HLのみ",
+      "",
+      "Speed",
+      "",
+      "2026/08/10"
+    ],
+    [
+      "",
+      "12",
+      "Differential equations",
+      "",
+      "2026/08/17"
+    ],
+    [
+      "",
+      "",
+      "Differential equations in the form dy/dx=f(x)",
+      "",
+      "2026/08/17"
+    ],
+    [
+      "",
+      "13",
+      "Unit test 2",
+      "",
+      "2026/08/24"
+    ]
+  ]
+}

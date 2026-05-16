@@ -1,0 +1,64 @@
+{
+  "majorDimension": "ROWS",
+  "range": "student!A1:Z200",
+  "values": [
+    [
+      "生徒氏名",
+      "十倉　未希（とくら みき）"
+    ],
+    [
+      "滞在国",
+      "マレーシア"
+    ],
+    [
+      "高校",
+      "Fairview International School KL, Malaysia"
+    ],
+    [
+      "final exam",
+      "2027 May"
+    ],
+    [
+      "mock exam",
+      "2027"
+    ],
+    [
+      "HL",
+      "Business Management\nEconomics\nEnglish A "
+    ],
+    [
+      "SL",
+      "Mandarin ab initio\nBiology\nMath AA"
+    ],
+    [
+      "英語力",
+      "IELTS 7.5"
+    ],
+    [
+      "志望校",
+      "モナシュ大学マレーシア校、シンガポール経営大学"
+    ],
+    [
+      "目標スコア",
+      "35~38/45"
+    ],
+    [
+      "現状スコア",
+      "7/7"
+    ],
+    [
+      "IA"
+    ],
+    [
+      "EE トピック",
+      "Business Management"
+    ],
+    [
+      "次回試験日程"
+    ],
+    [
+      "前回の試験結果",
+      "prob 4-2 unittestで１００％\r\nまた、trigの学校のテストも７"
+    ]
+  ]
+}

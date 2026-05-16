@@ -1,0 +1,723 @@
+{
+  "majorDimension": "ROWS",
+  "range": "'lesson plan'!A1:M250",
+  "values": [
+    [],
+    [
+      "No",
+      "Introduction to economics",
+      "学校の進捗",
+      "EBA進捗",
+      "授業日",
+      "授業日",
+      "配点",
+      "得点",
+      "得点率",
+      "メモ"
+    ],
+    [
+      "1",
+      "1.1.1. Intro to Economics",
+      "済"
+    ],
+    [
+      "",
+      "1.1.2 Circular flow of income",
+      "済"
+    ],
+    [
+      "",
+      "1.1.3 Production possibilities curve",
+      "済"
+    ],
+    [
+      "2",
+      "1.2.1 Economic methodology",
+      "済"
+    ],
+    [
+      "",
+      "1.2.2 History of economic thought",
+      "済"
+    ],
+    [
+      "3",
+      "Review",
+      "済"
+    ],
+    [],
+    [
+      "No",
+      "Microeconomics",
+      "学校の進捗",
+      "EBA進捗",
+      "授業日",
+      "授業日",
+      "配点",
+      "得点",
+      "得点率",
+      "メモ"
+    ],
+    [
+      "1",
+      "2.1.1 The law of demand",
+      "済"
+    ],
+    [
+      "",
+      "2.1.2 Movements and shifts along the demand curve",
+      "済"
+    ],
+    [
+      "",
+      "2.1.3 (HL) Assumptions underlying the law of demand",
+      "済"
+    ],
+    [
+      "2",
+      "2.2.1 The law of supply",
+      "済"
+    ],
+    [
+      "",
+      "2.2.2 Movements and shifts along the supply curve",
+      "済"
+    ],
+    [
+      "",
+      "2.2.3 (HL) Assumptions underlying the law of supply",
+      "済"
+    ],
+    [
+      "3",
+      "2.3.1 Market equilibrium",
+      "済"
+    ],
+    [
+      "",
+      "2.3.2 Producer, consumer, social surplus",
+      "済"
+    ],
+    [
+      "",
+      "2.3.3 (HL) Calculations of social surplus",
+      "済"
+    ],
+    [
+      "4",
+      "2.4.1 (HL) Rational consumer choice",
+      "済"
+    ],
+    [
+      "",
+      "2.4.2 (HL) Behavioural economics",
+      "済"
+    ],
+    [
+      "",
+      "2.4.3 (HL) Business Objectives",
+      "済"
+    ],
+    [
+      "5",
+      "2.5.1 PED",
+      "済",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "1回"
+    ],
+    [
+      "",
+      "2.5.2 Range of PED values",
+      "済"
+    ],
+    [
+      "",
+      "2.5.3 Determinants of PED",
+      "済"
+    ],
+    [
+      "6",
+      "Review",
+      "済"
+    ],
+    [
+      "7",
+      "2.5.4 (HL) Changing PED along a demand curve",
+      "済"
+    ],
+    [
+      "",
+      "2.5.5 YED and its range of values",
+      "済"
+    ],
+    [
+      "",
+      "2.5.6 (HL) Importance of PED and YED",
+      "済"
+    ],
+    [
+      "8",
+      "2.6.1 PES",
+      "済"
+    ],
+    [
+      "",
+      "2.6.2 Determinants of PES",
+      "済"
+    ],
+    [
+      "",
+      "2.6.3 (HL) PES or primary commodities versus manufactured goods",
+      "済"
+    ],
+    [
+      "9",
+      "2.7.1 Price ceilings and price floors",
+      "済",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "1回"
+    ],
+    [
+      "",
+      "2.7.2 (HL) Calculating price controls",
+      "済"
+    ],
+    [
+      "",
+      "2.7.3 Indirect taxes",
+      "済"
+    ],
+    [
+      "10",
+      "2.7.4 (HL) Calculating indirect taxes",
+      "済"
+    ],
+    [
+      "",
+      "2.7.5 Subsidies",
+      "済"
+    ],
+    [
+      "",
+      "2.7.6 (HL) Calculating subsidies",
+      "済"
+    ],
+    [
+      "11",
+      "2.8.1 Types of market failure",
+      "済"
+    ],
+    [
+      "",
+      "2.8.2 Common pool resources",
+      "済"
+    ],
+    [
+      "12",
+      "Review",
+      "済"
+    ],
+    [
+      "13",
+      "2.8.3 Negative externalities",
+      "済"
+    ],
+    [
+      "",
+      "2.8.4 Positive externalities",
+      "済"
+    ],
+    [
+      "14",
+      "2.9.1 Public goods",
+      "済"
+    ],
+    [
+      "",
+      "2.10.1 (HL) Asymmetric information",
+      "済"
+    ],
+    [
+      "",
+      "2.10.2 (HL) Responses to asymmetric information",
+      "済"
+    ],
+    [
+      "15",
+      "2.11.1 (HL) Rational producer behaviour",
+      "済"
+    ],
+    [
+      "",
+      "2.11.2 (HL) Perfect competition",
+      "済"
+    ],
+    [
+      "",
+      "2.11.3 (HL) Monopoly",
+      "済"
+    ],
+    [
+      "16",
+      "2.11.4 (HL) Oligopoly",
+      "済"
+    ],
+    [
+      "",
+      "2.11.5 (HL) Monopolistic competition",
+      "済"
+    ],
+    [
+      "17",
+      "2.11.6 (HL) Government response against market abuse",
+      "済"
+    ],
+    [
+      "",
+      "2.12.1 (HL) The market's inability to achieve equity",
+      "済"
+    ],
+    [
+      "18",
+      "Review",
+      "済"
+    ],
+    [],
+    [
+      "No",
+      " Macroeconomics",
+      "学校の進捗",
+      "EBA進捗",
+      "授業日",
+      "授業日",
+      "配点",
+      "得点",
+      "得点率",
+      "メモ"
+    ],
+    [
+      "1",
+      "3.1.1 Measures of economic activity",
+      "済"
+    ],
+    [
+      "",
+      "3.1.2 (real) GDP and GNI",
+      "済"
+    ],
+    [
+      "",
+      "3.1.3 Alternative measures of well-being",
+      "済"
+    ],
+    [
+      "2",
+      "3.2.1 Aggregate demand",
+      "済"
+    ],
+    [
+      "",
+      "3.2.2 Aggregate supply",
+      "済"
+    ],
+    [
+      "",
+      "3.2.3 Macroeconomic equilibrium",
+      "済"
+    ],
+    [
+      "3",
+      "3.3.1 Economic growth",
+      "済"
+    ],
+    [
+      "",
+      "3.3.2 Low unemployment",
+      "済"
+    ],
+    [
+      "",
+      "3.3.3. Inflation",
+      "済",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "1回分"
+    ],
+    [
+      "4",
+      "3.3.4 Disinflation and deflation",
+      "済"
+    ],
+    [
+      "",
+      "3.3.5 Conflicts between macroeconomic objectives",
+      "済"
+    ],
+    [
+      "5",
+      "3.3.6 (HL) Calculating inflation",
+      "済"
+    ],
+    [
+      "",
+      "3.3.7 (HL) Sustainable level of government (national) debt",
+      "済"
+    ],
+    [
+      "",
+      "3.3.8 (HL) The philips curve",
+      "済"
+    ],
+    [
+      "6",
+      "Review",
+      "済"
+    ],
+    [
+      "7",
+      "3.4.1 Measuring inequality",
+      "済"
+    ],
+    [
+      "",
+      "3.4.2 Causes of inequality",
+      "済"
+    ],
+    [
+      "",
+      "3.4.3 Consequences of inequality and poverty",
+      "済"
+    ],
+    [
+      "8",
+      "3.4.4 Taxes to combat inequality and poverty",
+      "済"
+    ],
+    [
+      "",
+      "3.4.5 (HL) Calculating income tax rates",
+      "済"
+    ],
+    [
+      "",
+      "3.4.6 Policies to reduce inequality and poverty",
+      "済"
+    ],
+    [
+      "9",
+      "3.5.1 Monetary Policy",
+      "済",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "2.3回"
+    ],
+    [
+      "",
+      "3.5.2 (HL) Money creation and market",
+      "済"
+    ],
+    [
+      "10",
+      "3.5.3 Expansionary and contractionary monetary policies",
+      "済"
+    ],
+    [
+      "",
+      "3.5.4 Effectiveness of monetary policy",
+      "済"
+    ],
+    [
+      "11",
+      "Review",
+      "済"
+    ],
+    [
+      "12",
+      "3.6.1 Fiscal policy",
+      "済"
+    ],
+    [
+      "",
+      "3.6.2 Goals of fiscal policy",
+      "済"
+    ],
+    [
+      "",
+      "3.6.3 Expansionary and contractionary fiscal policy",
+      "済"
+    ],
+    [
+      "13",
+      "3.6.4 (HL) Keynesian multiplier",
+      "済"
+    ],
+    [
+      "",
+      "3.6.5 (HL) Crowding out",
+      "済"
+    ],
+    [
+      "14",
+      "3.6.6 (HL) Automatic stabilisers",
+      "済"
+    ],
+    [
+      "",
+      "3.6.7 Effectiveness of fiscal policy",
+      "済"
+    ],
+    [
+      "15",
+      "3.7.1 Goals of supply side policies",
+      "済"
+    ],
+    [
+      "",
+      "3.7.2 Market based and incentive based SS policies",
+      "済"
+    ],
+    [
+      "",
+      "3.7.3 Interventionist supply side policies",
+      "済"
+    ],
+    [
+      "16",
+      "3.7.4 Supply and demand side effects of SS policies",
+      "済"
+    ],
+    [
+      "",
+      "3.7.5 Effectiveness of supply side policies",
+      "済"
+    ],
+    [
+      "17",
+      "Review",
+      "済"
+    ],
+    [],
+    [
+      "No",
+      "The global economy",
+      "学校の進捗",
+      "EBA進捗",
+      "授業日",
+      "授業日",
+      "配点",
+      "得点",
+      "得点率",
+      "メモ"
+    ],
+    [
+      "1",
+      "4.1.1 The benefits of international trade",
+      "済",
+      "未",
+      "2026/04/15",
+      "",
+      "",
+      "",
+      "",
+      "1回"
+    ],
+    [
+      "",
+      "4.1.2 (HL) Calculating exports and imports",
+      "済",
+      "未",
+      "2026/04/15"
+    ],
+    [
+      "",
+      "4.1.3  (HL) Absolute and compartive advantage",
+      "済",
+      "未",
+      "2026/04/15"
+    ],
+    [
+      "2",
+      "4.1.4. Tariffs",
+      "済",
+      "未",
+      "2026/04/15"
+    ],
+    [
+      "",
+      "4.1.5.  (HL) Calculating the effects of tariffs",
+      "済"
+    ],
+    [
+      "",
+      "4.1.6 Quotas",
+      "済"
+    ],
+    [
+      "3",
+      "4.1.7  (HL) lculating the effect of quotas",
+      "済"
+    ],
+    [
+      "",
+      "4.1.8 Subsidies and export subsidies",
+      "済"
+    ],
+    [
+      "4",
+      "4.1.9 (HL) Calculating the effects of export subsidies",
+      "済"
+    ],
+    [
+      "",
+      "4.1.10 Administrative barriers",
+      "済"
+    ],
+    [
+      "5",
+      "Review",
+      "済"
+    ],
+    [
+      "6",
+      "4.2.1 Arguments for and against protection",
+      "済"
+    ],
+    [
+      "",
+      "4.2.2 Trading blocs and monetary union",
+      "済",
+      "",
+      "2026/05/11"
+    ],
+    [
+      "",
+      "4.2.3 WTO",
+      "済",
+      "",
+      "2026/05/11"
+    ],
+    [
+      "7",
+      "4.3.1 Floating exchange rates",
+      "済"
+    ],
+    [
+      "",
+      "4.3.2 Calculating floating exchange rates",
+      "済"
+    ],
+    [
+      "",
+      "4.3.3 Consequences of ER changes",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "gwの課題だった"
+    ],
+    [
+      "8",
+      "4.3.4 Government intervention of ER",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "gwの課題だった"
+    ],
+    [
+      "",
+      "4.3.5 The balance of payments"
+    ],
+    [
+      "9",
+      "4.3.6 (HL) The current and financial account"
+    ],
+    [
+      "",
+      "4.3.7 (HL) Current deficits and surpluses"
+    ],
+    [
+      "10",
+      "Review"
+    ],
+    [
+      "11",
+      "4.4.1 Sustainable development"
+    ],
+    [
+      "",
+      "4.4.2 Measuring development"
+    ],
+    [
+      "12",
+      "4.5.1 Poverty cycles"
+    ],
+    [
+      "",
+      "4.5.2 Economic barriers"
+    ],
+    [
+      "",
+      "4.5.3 Political and social barriers"
+    ],
+    [
+      "13",
+      "4.6.1 International Trade Strategies"
+    ],
+    [
+      "",
+      "4.6.2 Diversification and social entreprise"
+    ],
+    [
+      "14",
+      "4.6.3 Market-based policies"
+    ],
+    [
+      "",
+      "4.6.4 Interventionist policies"
+    ],
+    [
+      "15",
+      "Review"
+    ],
+    [],
+    [
+      "",
+      "",
+      "",
+      "",
+      "後8回"
+    ],
+    [
+      "",
+      "",
+      "",
+      "",
+      "2回はIA"
+    ]
+  ]
+}

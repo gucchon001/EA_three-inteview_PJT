@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<!-- monthly-report-revision: v3.2.1 — 03 理解度（★）の目安を正本統一（★☆☆／★★☆／★★★） -->
-<html lang="ja">
-<head>
+<!-- monthly-report-revision: v3.5.8 — 高藤 v3.5.7 テンプレ準拠（CSS・表頭色・02 良い点＋振り返り表）。Physics 用に 05 進捗・06 計画を維持。旧 07→06。-->
+<html lang="ja"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDUBAL Academy 月次学習レポート（鈴木 謙吾 様）</title>
@@ -12,6 +11,8 @@
             font-size: 10.5pt;
             line-height: 1.75;
             color: #1a1a1a;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
             background: #e8e8e8;
             padding: 20px;
         }
@@ -69,7 +70,8 @@
             width: 22%;
             white-space: nowrap;
         }
-        .info-table td:nth-child(even) { width: 28%; }
+        .info-table td:nth-child(even):not([colspan]) { width: 28%; }
+        .info-table td[colspan] { width: auto; }
         .section { margin-bottom: 22px; page-break-inside: avoid; }
         .section-heading {
             display: flex;
@@ -96,13 +98,20 @@
             margin: 14px 0 8px;
             font-weight: 700;
         }
+        /* テーブル列見出し：タイトル／セクション帯（#2c3e50）と色が被らないようグレー系 */
+        .data-table thead tr,
+        .plan-table thead th,
+        .exam-mini-table thead th,
+        .mood-table thead th {
+            background: #6d7482;
+            color: #fff;
+        }
         .data-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 9.5pt;
             margin-bottom: 12px;
         }
-        .data-table thead tr { background: #2c3e50; color: #fff; }
         .data-table thead th {
             padding: 7px 10px;
             font-weight: 700;
@@ -136,8 +145,6 @@
             vertical-align: top;
         }
         .plan-table thead th {
-            background: #2c3e50;
-            color: #fff;
             font-weight: 700;
             font-size: 9pt;
         }
@@ -195,7 +202,6 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.25);
         }
         .print-btn:hover { background: #4a6491; }
-        /* ユーザーレビュー②③：学校試験ミニ表・三段階（顔）・理解度★ */
         .exam-mini-table {
             width: 100%;
             border-collapse: collapse;
@@ -208,7 +214,7 @@
             text-align: left;
             vertical-align: top;
         }
-        .exam-mini-table thead th { background: #2c3e50; color: #fff; font-weight: 700; }
+        .exam-mini-table thead th { font-weight: 700; }
         .exam-mini-table tbody tr:nth-child(even) { background: #f5f7fa; }
         .mood-table {
             width: 100%;
@@ -221,9 +227,28 @@
             padding: 8px 10px;
             vertical-align: top;
         }
-        .mood-table thead th { background: #2c3e50; color: #fff; font-weight: 700; font-size: 9pt; }
+        .mood-table thead th { font-weight: 700; font-size: 9pt; }
         .mood-table tbody tr:nth-child(even) { background: #f5f7fa; }
+        .mood-table tbody td:first-child {
+            white-space: nowrap;
+            width: 1%;
+            padding-right: 12px;
+        }
         .mood-icon { font-size: 14pt; margin-right: 4px; vertical-align: middle; }
+        .mood-legend {
+            font-size: 8.5pt;
+            color: #444;
+            background: #f8f9fb;
+            border: 1px solid #dde3ec;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            line-height: 1.55;
+            border-radius: 2px;
+        }
+        .mood-legend p { margin: 0 0 6px; }
+        .mood-legend p:last-child { margin-bottom: 0; }
+        .h3-monthly { font-size: 10.5pt; color: #2c3e50; margin: 0 0 10px; font-weight: 700; }
+        .plan-sub { font-size: 10pt; font-weight: 700; color: #2c3e50; margin: 12px 0 8px; }
         /* v3: 05 進捗バー（DATA_CONTRACT_05 準拠・10 マス） */
         .progress-05-block { margin: 14px 0 18px; font-size: 8.5pt; }
         .progress-05-legend {
@@ -270,7 +295,7 @@
         <header class="page-header">
             <div class="logo-block">
                 <div class="logo-name">EDUBAL Academy</div>
-                <div class="logo-sub">個別最適化された国際バカロレア教育</div>
+                <div class="logo-sub"><br></div>
             </div>
             <div class="report-meta-header">
                 <div class="report-id">RPT-202604-73594</div>
@@ -296,7 +321,7 @@
                 <h2>基本情報</h2>
             </div>
             <table class="info-table">
-                <tr>
+                <tbody><tr>
                     <td>生徒番号</td>
                     <td>73594</td>
                     <td>お名前</td>
@@ -340,7 +365,7 @@
                     <td>学校 end of exam</td>
                     <td colspan="3">2026年5月末（計画表見出し）</td>
                 </tr>
-            </table>
+            </tbody></table>
         </section>
 
         <section class="section">
@@ -349,15 +374,21 @@
                 <h2>塾での様子</h2>
             </div>
             <div class="analysis-box">
-                <div class="box-label">学習の進み</div>
+                <div class="box-label">良い点・成長がみられる点</div>
                 <p>Physics の授業は、<strong>お子さまお一人あたり合計 75 分</strong>の枠で実施しております。</p>
                 <p>単元の理解度については、<strong>Topic B は高い水準で安定している一方</strong>、<strong>Topic A は「理解は進んでいるが、難易度の高い問題では演習量が成果につながりやすい」</strong>という見立てです。春休みの授業では復習と予習の両方を組み合わせ、とくに Topic A に不安を感じやすいとの共有を踏まえ、<strong>3月29日および4月5日の授業では A2・A3 の復習を中心</strong>に進めてまいります（詳細な授業日と単元は <strong>03（授業内容）の表</strong> をご参照ください）。</p>
             </div>
+            <h3 class="h3-monthly">今月の振り返りと次月の目標</h3>
             <table class="mood-table">
                 <thead>
-                    <tr><th>観点</th><th>今月の学習状況と評価</th><th>メモ（補足）</th></tr>
+                    <tr><th>項目</th><th>今月の学習状況と評価</th><th>今月の振り返りと次月の目標</th></tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td>学習進捗</td>
+                        <td><span class="mood-icon" aria-hidden="true">😐</span>まずまず</td>
+                        <td>Topic B は安定しています。Topic A は発展問題でさらに演習を重ねられる段階です。</td>
+                    </tr>
                     <tr>
                         <td>学習意欲</td>
                         <td><span class="mood-icon" aria-hidden="true">😊</span>良い</td>
@@ -366,7 +397,7 @@
                     <tr>
                         <td>宿題の提出</td>
                         <td><span class="mood-icon" aria-hidden="true">😊</span>良い</td>
-                        <td>おおよそ <strong>7〜8 割程度の正答率</strong>。無理に量を増やす必要はない形で調整しています。</td>
+                        <td>おおよそ <strong>7〜8 割程度の正答率</strong>です。無理に量を増やす必要はない形で調整しています。</td>
                     </tr>
                 </tbody>
             </table>
@@ -389,7 +420,7 @@
                     <tr><td>2026/03/29</td><td>A.1 Kinematics 1〜2；A.2 Forces and momentum 1〜3；A.3 Work, energy and power 1〜3</td><td>★★☆</td></tr>
                 </tbody>
             </table>
-            <p class="section-body" style="font-size:9pt;color:#555;margin-bottom:10px;"><b>理解度（★）の目安：<br></b><span style="font-size: 9pt;">★☆☆＝基礎内容の定着が必要<br>★★☆＝基礎問題が解けるが応用問題に対応できない<br>★★★＝基礎に加え応用問題にも対応できている<br>※いずれも授業内の観察と演習の様子に基づきます。学習計画表に「理解度」列がない場合は、担当の見立てで記載しています。</span></p>
+            <p class="section-body" style="font-size:9pt;color:#555;margin-bottom:10px;"><b>理解度（★）の目安：<br></b><span style="font-size: 9pt;">★☆☆＝基礎内容の定着が必要<br>★★☆＝基礎問題が解けるが応用問題に対応できない<br>★★★＝基礎に加え応用問題にも対応できている<br>※いずれも授業内の観察と演習の様子に基づきます。</span></p>
             <div class="analysis-box">
                 <div class="box-label">当塾からのコメント</div>
                 <p>春休み中の授業は、<strong>復習を2回、予習を1回</strong>のペースで進めることで合意しております。<strong>4月12日の授業</strong>では、Topic C1 の最初の部分の予習に入る予定です。</p>
@@ -433,7 +464,7 @@
                     <span><span class="swatch planned"></span> 対象月内に予定あり（黄）</span>
                     <span><span class="swatch pending"></span> 未（灰）</span>
                 </div>
-                <p class="prog-subhead">2026年3月を10区間に分割。各ブロックは<strong>上表の1行＝その週の当塾授業日</strong>のみを青で示します（03 と同じ日付）。4 月の予定は <strong>07 今後の授業計画</strong>。</p>
+                <p class="prog-subhead">2026年3月を10区間に分割。各ブロックは<strong>上表の1行＝その週の当塾授業日</strong>のみを青で示します（03 と同じ日付）。4月の予定は <strong>06 今後の授業計画</strong>。</p>
                 <div class="prog-topic">
                     <div class="prog-topic-title">3/1 週 — B.5 Current and circuits 1</div>
                     <p class="prog-topic-map">当塾の該当（03）: 3/1</p>
@@ -478,7 +509,7 @@
 
         <section class="section">
             <div class="section-heading">
-                <span class="sec-num">07</span>
+                <span class="sec-num">06</span>
                 <h2>今後の授業計画</h2>
             </div>
             <table class="plan-table">
@@ -519,13 +550,14 @@
             <h2>【管理者・担当者向け】配布前チェック</h2>
             <p>ご家庭へ送付する PDF では、本節が印刷されないことを確認してください。Markdown 版から配布する場合は本節を削除してください。</p>
             <ul>
+                <li>本レポートは <strong>高藤 v3.5.7 系テンプレ</strong>（CSS・02 の見出し・表頭配色）と整合する <strong>v3.5.8</strong>。Physics HL のため<strong>05 学習の進捗</strong>を残し、<strong>今後の授業計画は 06</strong>（旧称 07）としています。</li>
                 <li>本レポートの根拠の一部は、会議の自動要約（Gemini）です。配布前に音声・原記録と照合してください。</li>
                 <li>MTG 記録では「Taiga Morita」との表記がありますが、本文では学習計画表に合わせ「森田 大翔」に統一しています（同一人物として扱う運用）。</li>
                 <li>学習計画表の取得範囲では、IB 合計の「目標点」欄は確認できていません。必要ならスプレを追記取得してください。</li>
                 <li>3月の学校試験の日程・得点は表からは特定できていません。MTG 要約に「B5・火曜実施・結果未出」の言及あり。日付確定後に本文へ反映してください。</li>
                 <li>学校試験の得点表記が「B1・B3・B4 で得点7」と「A7取得」で食い違うため、原資料で確定してからご家庭向け文面に反映してください。</li>
-                <li>03 の理解度★は授業観察ベース。学習計画表に「理解度」列が無い場合は原資料と照合してください。</li>
-                <li>05 の「学校／当塾」は学習計画表の進捗列の転記です。v3.2 は <strong>calendar_buckets_10 をトピック（週）別</strong>（03 の授業日・DATA_CONTRACT_05）。</li>
+                <li>03 の理解度★は授業観察ベース。学習計画表に「理解度」列が無い場合は原資料と照合してください。03 表下の★目安文言は Pattern B / 高藤と同一短文に統一しています。</li>
+                <li>05 の「学校／当塾」は学習計画表の進捗列の転記です。<strong>calendar_buckets_10</strong> はトピック（週）別（03 の授業日・DATA_CONTRACT_05）。</li>
                 <li>「Review (practice test A.1-A3 )」行は授業日セルが一部空欄のため、3/29 に Review のみが実施されたかは断定不可。</li>
                 <li>月次案の「ミスの種類と原因」は MTG 要約から抽出していません。</li>
                 <li>トピック C 付近はスプレの空欄が多く、未実施と未入力の区別不可。</li>
@@ -534,5 +566,6 @@
     </div>
 
     <button class="print-btn no-print" onclick="window.print()">印刷 / PDF保存（管理者欄は非表示）</button>
-</body>
-</html>
+
+
+</body></html>

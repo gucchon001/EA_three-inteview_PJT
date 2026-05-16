@@ -1,0 +1,27 @@
+{
+  "presets": {
+    "pattern_b_gws_sl": {
+      "description": "fetch_monthly_gws_sources 既定出力想定: student + SL lesson plan + 教師MTG (.json/.txt) + メタ（HL タブ未取得の世帯向け）",
+      "globs": [
+        "_gws_student*.json",
+        "_gws_SL_lesson_plan*.json",
+        "_gws_doc_teacher_MTG_gemini.*",
+        "_gws_spreadsheet_meta.json"
+      ]
+    },
+    "pattern_b_gws_sl_hl": {
+      "description": "pattern_b_gws_sl に HL lesson plan（_gws_HL_lesson_plan*.json）を追加",
+      "globs": [
+        "_gws_student*.json",
+        "_gws_SL_lesson_plan*.json",
+        "_gws_HL_lesson_plan*.json",
+        "_gws_doc_teacher_MTG_gemini.*",
+        "_gws_spreadsheet_meta.json"
+      ]
+    },
+    "pattern_b_gws_json_bundle": {
+      "description": "sources 内の _gws_*.json をすべて束ねる（NotebookLM 由来 .md は含めない）",
+      "globs": ["_gws_*.json"]
+    }
+  }
+}

@@ -1,0 +1,486 @@
+{# Pattern B compact: セクション 01〜05のみ（tokura_v2 系の固定 DOM）。
+   ペイロードは docs/samples/monthly-reports/fixtures/payloads/ を参照。
+   本文フィールドで HTML を許可するキーは |safe と注記済み（信頼できるパイプライン出力のみ）。
+#}
+<!DOCTYPE html>
+{% if revision_comment %}<!-- {{ revision_comment }} -->{% endif %}
+<html lang="ja"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ meta.page_title | e }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+            font-size: 10.5pt;
+            line-height: 1.75;
+            color: #1a1a1a;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            background: #e8e8e8;
+            padding: 20px;
+        }
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            background: #fff;
+            margin: 0 auto;
+            padding: 20mm 18mm 18mm;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 16px;
+        }
+        .logo-block .logo-name { font-size: 16pt; font-weight: 900; color: #2c3e50; letter-spacing: 1px; }
+        .logo-block .logo-sub { font-size: 8pt; color: #666; letter-spacing: 0.5px; }
+        .report-meta-header { text-align: right; font-size: 8pt; color: #555; line-height: 1.8; }
+        .report-meta-header .report-id { font-weight: 700; color: #2c3e50; }
+        .title-block {
+            background: #2c3e50;
+            color: #fff;
+            padding: 14px 20px;
+            margin-bottom: 14px;
+            border-radius: 2px;
+        }
+        .title-block h1 { font-size: 15pt; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
+        .title-block .title-period { font-size: 9pt; opacity: 0.9; letter-spacing: 0.5px; }
+        .family-greeting {
+            font-size: 10.5pt;
+            color: #333;
+            margin-bottom: 18px;
+            line-height: 1.85;
+        }
+        .family-greeting p { margin-bottom: 10px; }
+        .family-greeting .honorific { margin-bottom: 4px; font-weight: 700; color: #2c3e50; }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 18px;
+            font-size: 9.5pt;
+        }
+        .info-table td {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+        }
+        .info-table td:nth-child(odd) {
+            background: #f5f5f5;
+            font-weight: 700;
+            color: #2c3e50;
+            width: 22%;
+            white-space: nowrap;
+        }
+        .info-table td:nth-child(even):not([colspan]) { width: 28%; }
+        .info-table td[colspan] { width: auto; }
+        .section { margin-bottom: 22px; page-break-inside: avoid; }
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #2c3e50;
+            color: #fff;
+            padding: 6px 12px;
+            margin-bottom: 12px;
+            border-radius: 2px;
+        }
+        .section-heading .sec-num {
+            font-size: 9pt;
+            background: #4a6491;
+            padding: 1px 7px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+        .section-heading h2 { font-size: 11pt; font-weight: 700; letter-spacing: 0.5px; }
+        .section-body p { margin-bottom: 10px; font-size: 10.5pt; }
+        .section-body h3 {
+            font-size: 10.5pt;
+            color: #2c3e50;
+            margin: 14px 0 8px;
+            font-weight: 700;
+        }
+        /* テーブル列見出し：セクション見出し帯と被らないグレー */
+        .data-table thead tr,
+        .plan-table thead th,
+        .exam-mini-table thead th,
+        .mood-table thead th {
+            background: #6d7482;
+            color: #fff;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 12px;
+        }
+        .data-table thead th {
+            padding: 7px 10px;
+            font-weight: 700;
+            text-align: left;
+            font-size: 9pt;
+        }
+        .data-table tbody tr:nth-child(even) { background: #f5f7fa; }
+        .data-table tbody td { padding: 7px 10px; border-bottom: 1px solid #dde3ec; vertical-align: top; }
+        .data-table tbody td .unit-main { font-weight: 700; }
+        .data-table tbody td .unit-subtopics {
+            display: block;
+            font-size: 9pt;
+            line-height: 1.45;
+            margin-top: 6px;
+            color: #3d5166;
+            font-weight: normal;
+        }
+        .analysis-box {
+            border: 1px solid #c8d5e8;
+            border-left: 4px solid #4a6491;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            background: #f9fbff;
+            border-radius: 0 2px 2px 0;
+            font-size: 10.5pt;
+        }
+        .analysis-box .box-label { font-weight: 700; color: #2c3e50; margin-bottom: 8px; }
+        .analysis-box p { margin-bottom: 8px; }
+        .analysis-box ul { margin-left: 1.15em; }
+        .analysis-box li { margin-bottom: 6px; }
+        .closing-line { margin-top: 14px; font-size: 10.5pt; }
+        .page-footer {
+            margin-top: 28px;
+            padding-top: 12px;
+            border-top: 2px solid #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 8pt;
+            color: #555;
+        }
+        .admin-only {
+            margin-top: 28px;
+            padding: 14px 16px;
+            border: 2px dashed #c0392b;
+            background: #fff8f8;
+            border-radius: 4px;
+        }
+        .admin-only h2 {
+            font-size: 10.5pt;
+            color: #c0392b;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .admin-only > p { font-size: 9pt; color: #c0392b; font-weight: 700; margin-bottom: 10px; }
+        .admin-only ul { margin-left: 1.1em; }
+        .admin-only li {
+            color: #c0392b;
+            font-weight: 700;
+            font-size: 9.5pt;
+            margin-bottom: 8px;
+            line-height: 1.55;
+        }
+        @media print {
+            body { background: none; padding: 0; }
+            .page { width: 210mm; padding: 18mm 16mm 16mm; box-shadow: none; }
+            .no-print { display: none !important; }
+        }
+        .print-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 10px 22px;
+            background: #2c3e50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 10pt;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+        }
+        .print-btn:hover { background: #4a6491; }
+        .mood-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 14px;
+        }
+        .mood-table th, .mood-table td {
+            border: 1px solid #dde3ec;
+            padding: 8px 10px;
+            vertical-align: top;
+        }
+        .mood-table thead th { font-weight: 700; font-size: 9pt; }
+        .mood-table tbody tr:nth-child(even) { background: #f5f7fa; }
+        .mood-table tbody td:first-child {
+            white-space: nowrap;
+            width: 1%;
+            padding-right: 12px;
+        }
+        .mood-icon { font-size: 14pt; margin-right: 4px; vertical-align: middle; }
+        .mood-legend {
+            font-size: 8.5pt;
+            color: #444;
+            background: #f8f9fb;
+            border: 1px solid #dde3ec;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            line-height: 1.55;
+            border-radius: 2px;
+        }
+        .mood-legend p { margin: 0 0 6px; }
+        .mood-legend p:last-child { margin-bottom: 0; }
+        .h3-monthly { font-size: 10.5pt; color: #2c3e50; margin: 0 0 10px; font-weight: 700; }
+        /* この compact では未使用だが tokura_v2 の CSS と揃える（将来セクション拡張用） */
+        .exam-mini-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 12px;
+        }
+        .exam-mini-table th, .exam-mini-table td {
+            border: 1px solid #ccc;
+            padding: 7px 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .exam-mini-table thead th { font-weight: 700; }
+        .exam-mini-table tbody tr:nth-child(even) { background: #f5f7fa; }
+        .plan-sub { font-size: 10pt; font-weight: 700; color: #2c3e50; margin: 12px 0 8px; }
+        .progress-05-block { margin: 14px 0 18px; font-size: 8.5pt; }
+        .progress-05-legend {
+            display: flex; flex-wrap: wrap; gap: 10px 18px; margin-bottom: 10px;
+            padding: 8px 10px; background: #f8f9fb; border: 1px solid #dde3ec; border-radius: 2px;
+        }
+        .progress-05-legend span { display: inline-flex; align-items: center; gap: 6px; }
+        .swatch { width: 14px; height: 14px; border-radius: 2px; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.06); }
+        .swatch.done { background: #2e7dd4; }
+        .swatch.planned { background: #e6c940; }
+        .swatch.pending { background: #c8ccd2; }
+        .prog-topic { margin-bottom: 12px; page-break-inside: avoid; }
+        .prog-topic-title { font-weight: 700; color: #2c3e50; margin-bottom: 6px; font-size: 9pt; line-height: 1.35; }
+        .prog-lane { display: grid; grid-template-columns: 4.5em 1fr; gap: 8px; align-items: center; margin-bottom: 4px; }
+        .prog-lane-label { font-size: 8.5pt; color: #555; white-space: nowrap; }
+        .prog-cells { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; min-height: 14px; }
+        .prog-cells .cell { border-radius: 1px; min-height: 14px; }
+        .prog-cells .cell.done { background: #2e7dd4; }
+        .prog-cells .cell.planned { background: #e6c940; }
+        .prog-cells .cell.pending { background: #c8ccd2; }
+        .progress-05-note { font-size: 8pt; color: #666; margin-top: 8px; line-height: 1.5; }
+        .prog-month-title { font-weight: 700; color: #2c3e50; font-size: 9.5pt; margin: 14px 0 6px; line-height: 1.35; }
+        .prog-subhead { font-size: 8.5pt; color: #555; margin-bottom: 10px; line-height: 1.55; }
+        .prog-bucket-labels {
+            display: grid;
+            grid-template-columns: 4.5em repeat(10, 1fr);
+            gap: 8px 2px;
+            font-size: 6.5pt;
+            color: #777;
+            line-height: 1.2;
+            margin-top: 2px;
+            margin-bottom: 14px;
+        }
+        .prog-bucket-labels span { text-align: center; }
+        .prog-topic-map { font-size: 7.5pt; color: #666; margin: -2px 0 8px; line-height: 1.45; }
+        .plan-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 12px;
+        }
+        .plan-table th, .plan-table td {
+            border: 1px solid #ccc;
+            padding: 7px 10px;
+            vertical-align: top;
+        }
+        .plan-table thead th {
+            font-weight: 700;
+            font-size: 9pt;
+        }
+        .plan-table tbody tr:nth-child(even) { background: #f5f7fa; }
+    </style>
+</head>
+<body>
+{% if print_banner_html %}
+    <p class="no-print" style="max-width:210mm;margin:0 auto 10px;padding:8px 12px;background:#eef6ff;border:1px solid #90caf9;font-size:9pt;text-align:center;">{{ print_banner_html | safe }}</p>
+{% endif %}
+    <div class="page">
+
+        <header class="page-header">
+            <div class="logo-block">
+                <div class="logo-name">EDUBAL Academy</div>
+                <div class="logo-sub">{{ meta.logo_sub_html | safe }}</div>
+            </div>
+            <div class="report-meta-header">
+                <div class="report-id">{{ meta.report_id | e }}</div>
+                <div>発行日：{{ meta.issue_date_label | e }}</div>
+                <div>対象期間：{{ meta.period_range_label | e }}</div>
+            </div>
+        </header>
+
+        <div class="title-block">
+            <h1>{{ meta.report_title | e }}</h1>
+            <div class="title-period">{{ meta.title_period | e }}</div>
+        </div>
+
+        <div class="family-greeting">
+            <p class="honorific">{% for line in greeting.honorific_lines %}{{ line | e }}{% if not loop.last %}<br>{% endif %}{% endfor %}</p>
+{% for gp in greeting.paragraphs %}
+            <p>{{ gp | e }}</p>
+{% endfor %}
+        </div>
+
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">01</span>
+                <h2>基本情報</h2>
+            </div>
+            <table class="info-table">
+                <tbody><tr>
+                    <td>生徒番号</td>
+                    <td>{{ sec01.student_code | e }}</td>
+                    <td>お名前</td>
+                    <td>{{ sec01.student_display_name | e }}</td>
+                </tr>
+                <tr>
+                    <td>担当教師</td>
+                    <td>{{ sec01.teacher_display | e }}</td>
+                    <td>担当</td>
+                    <td>{{ sec01.staff_contact | e }}</td>
+                </tr>
+                <tr>
+                    <td>指導科目</td>
+                    <td>{{ sec01.subject | e }}</td>
+                    <td>ご志望の大学</td>
+                    <td>{{ sec01.universities | e }}</td>
+                </tr>
+                <tr>
+                    <td>IBスコア（目標）</td>
+                    <td>{{ sec01.ib_target | e }}</td>
+                    <td>IBスコア（現状）</td>
+                    <td>{{ sec01.ib_current | e }}</td>
+                </tr>
+                <tr>
+                    <td>mock exam</td>
+                    <td>{{ sec01.mock_exam | e }}</td>
+                    <td>final exam</td>
+                    <td>{{ sec01.final_exam | e }}</td>
+                </tr>
+            </tbody></table>
+            <div class="section-body">
+                <h3>{{ sec01.school_tests_heading | e }}</h3>
+                <p>{{ sec01.school_tests_body_html | safe }}</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">02</span>
+                <h2>塾での様子</h2>
+            </div>
+            <div class="analysis-box">
+                <div class="box-label">{{ sec02.good_points_label | e }}</div>
+{% for hx in sec02.highlight_paragraphs_html %}
+{{ hx | safe }}
+{% endfor %}
+            </div>
+{% if sec02.show_plan_policy_box %}
+            <div class="analysis-box">
+                <div class="box-label">{{ sec02.plan_policy_label | e }}</div>
+                {{ sec02.plan_policy_body_html | safe }}
+            </div>
+{% endif %}
+            <p class="mood-legend">{{ sec02.mood_legend_html | safe }}</p>
+            <h3 class="h3-monthly">{{ sec02.mood_table_heading | e }}</h3>
+            <table class="mood-table">
+                <thead>
+                    <tr><th>項目</th><th>{{ sec02.mood_col_eval_heading | e }}</th><th>{{ sec02.mood_col_goal_heading | e }}</th></tr>
+                </thead>
+                <tbody>
+{% for row in sec02.mood_rows %}
+                    <tr>
+                        <td>{{ row.item | e }}</td>
+                        <td>{{ row.eval_cell_html | safe }}</td>
+                        <td>{{ row.goal_cell_html | safe }}</td>
+                    </tr>
+{% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">03</span>
+                <h2>授業内容{{ sec03.title_suffix | e }}</h2>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr><th>授業日</th><th>学習単元</th><th>理解度</th></tr>
+                </thead>
+                <tbody>
+{% for row in sec03.lesson_rows %}
+                    <tr><td>{{ row.date | e }}</td><td>{% if row.get('simple_cell_html') %}{{ row.simple_cell_html | safe }}{% else %}<span class="unit-main">{{ row.unit_main | e }}</span><span class="unit-subtopics">{{ row.unit_subtopics | e }}</span>{% endif %}</td><td>{{ row.rating | e }}</td></tr>
+{% endfor %}
+                </tbody>
+            </table>
+            <p class="section-body" style="font-size:9pt;color:#555;margin-bottom:10px;">{{ sec03.star_legend_html | safe }}</p>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">04</span>
+                <h2>課題とアドバイス</h2>
+            </div>
+            <div class="section-body">
+{% for px in sec04.paragraphs_html %}
+                {{ px | safe }}
+{% endfor %}
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">05</span>
+                <h2>今後の授業計画</h2>
+            </div>
+            <div class="section-body">
+{% for px in sec05.paragraphs_html %}
+                {{ px | safe }}
+{% endfor %}
+            </div>
+            <div class="analysis-box">
+                <div class="box-label">{{ sec05.family_asks_label | e }}</div>
+                <ul>
+{% for bx in sec05.family_ask_bullets_html %}
+                    <li>{{ bx | safe }}</li>
+{% endfor %}
+                </ul>
+            </div>
+            <p class="closing-line">{{ sec05.closing_html | safe }}</p>
+        </section>
+
+        <footer class="page-footer">
+            <div class="footer-contact">
+                <strong>EDUBAL Academy</strong><br>
+                {{ footer.contact_lines_html | safe }}
+            </div>
+            <div class="footer-right">
+                © {{ meta.copyright_year | e }} EDUBAL Academy<br>
+                本レポートの内容は個人情報を含みます。<br>
+                取り扱いにご注意ください。
+            </div>
+        </footer>
+
+        <section class="admin-only no-print" aria-label="管理者向け注意">
+            <h2>{{ admin.heading | e }}</h2>
+            <p>{{ admin.intro_html | safe }}</p>
+            <ul>
+{% for lix in admin.bullets_html %}
+                <li>{{ lix | safe }}</li>
+{% endfor %}
+            </ul>
+        </section>
+    </div>
+
+    <button class="print-btn no-print" onclick="window.print()">{{ meta.print_button_label | e }}</button>
+
+
+</body></html>

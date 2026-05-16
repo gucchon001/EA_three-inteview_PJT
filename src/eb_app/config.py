@@ -15,11 +15,84 @@ class Settings:
     """環境変数から読む実行時設定（import 時ではなく create_app ごとに読み直す）。"""
 
     enable_mock_ui: bool
+    auth_mode: str
+    env: str
+    monthly_report_database_url: str | None
+    openrouter_api_key: str | None
+    openrouter_model_report: str
+    openrouter_timeout_seconds: float
+    openrouter_max_tokens: int | None
+    google_workspace_access_token: str | None
+    google_oauth_client_id: str | None
+    google_oauth_client_secret: str | None
+    google_token_encryption_key: str | None
+    google_token_encryption_key_version: str
+    supabase_url: str | None
+    supabase_anon_key: str | None
+    google_oauth_scopes: str
+    supabase_jwt_secret: str | None
+    supabase_jwt_audience: str
+    allowed_email_domain: str
 
     @classmethod
     def from_env(cls) -> Settings:
-        return cls(enable_mock_ui=_truthy(os.environ.get("EB_ENABLE_MOCK_UI")))
+        return cls(
+            enable_mock_ui=_truthy(os.environ.get("EB_ENABLE_MOCK_UI")),
+            auth_mode=os.environ.get("EB_AUTH_MODE", "supabase").strip().lower() or "supabase",
+            env=os.environ.get("EB_ENV", "local").strip().lower() or "local",
+            monthly_report_database_url=(
+                os.environ.get("EB_MONTHLY_REPORT_DATABASE_URL", "").strip() or None
+            ),
+            openrouter_api_key=(os.environ.get("OPENROUTER_API_KEY", "").strip() or None),
+            openrouter_model_report=(
+                os.environ.get("OPENROUTER_MODEL_REPORT", "").strip()
+                or os.environ.get("OPENROUTER_MODEL", "").strip()
+                or "anthropic/claude-sonnet-4.6"
+            ),
+            openrouter_timeout_seconds=float(
+                os.environ.get("OPENROUTER_TIMEOUT", "").strip() or "120"
+            ),
+            openrouter_max_tokens=_optional_int(os.environ.get("OPENROUTER_MAX_TOKENS")),
+            google_workspace_access_token=(
+                os.environ.get("EB_GOOGLE_WORKSPACE_ACCESS_TOKEN", "").strip() or None
+            ),
+            google_oauth_client_id=(
+                os.environ.get("GOOGLE_OAUTH_CLIENT_ID", "").strip() or None
+            ),
+            google_oauth_client_secret=(
+                os.environ.get("GOOGLE_OAUTH_CLIENT_SECRET", "").strip() or None
+            ),
+            google_token_encryption_key=(
+                os.environ.get("EB_GOOGLE_TOKEN_ENCRYPTION_KEY", "").strip() or None
+            ),
+            google_token_encryption_key_version=(
+                os.environ.get("EB_GOOGLE_TOKEN_ENCRYPTION_KEY_VERSION", "").strip()
+                or "local-v1"
+            ),
+            supabase_url=(os.environ.get("SUPABASE_URL", "").strip() or None),
+            supabase_anon_key=(os.environ.get("SUPABASE_ANON_KEY", "").strip() or None),
+            google_oauth_scopes=(
+                os.environ.get("EB_GOOGLE_OAUTH_SCOPES", "").strip()
+                or "openid email profile https://www.googleapis.com/auth/documents.readonly https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/drive.readonly"
+            ),
+            supabase_jwt_secret=(
+                os.environ.get("SUPABASE_JWT_SECRET", "").strip() or None
+            ),
+            supabase_jwt_audience=(
+                os.environ.get("SUPABASE_JWT_AUDIENCE", "").strip() or "authenticated"
+            ),
+            allowed_email_domain=(
+                os.environ.get("EB_ALLOWED_EMAIL_DOMAIN", "").strip()
+                or "tomonokai-corp.com"
+            ),
+        )
 
 
 def get_settings() -> Settings:
     return Settings.from_env()
+
+
+def _optional_int(raw: str | None) -> int | None:
+    if raw is None or raw.strip() == "":
+        return None
+    return int(raw.strip())

@@ -14,6 +14,8 @@
             font-size: 10.5pt;
             line-height: 1.7;
             color: #1a1a1a;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
             background: #e8e8e8;
             padding: 20px;
         }
@@ -105,8 +107,11 @@
             white-space: nowrap;
         }
 
-        .info-table td:nth-child(even) {
+        .info-table td:nth-child(even):not([colspan]) {
             width: 32%;
+        }
+        .info-table td[colspan] {
+            width: auto;
         }
 
         /* ===== KPIサマリー ===== */
@@ -209,6 +214,17 @@
         .data-table tbody td {
             padding: 7px 10px;
             border-bottom: 1px solid #dde3ec;
+        }
+
+        /* 03 授業内容：親タイトルとサブトピック列挙を分ける（編集での span style 乱刷りを避ける） */
+        .data-table tbody td .unit-main { font-weight: 700; }
+        .data-table tbody td .unit-subtopics {
+            display: block;
+            font-size: 9pt;
+            line-height: 1.45;
+            margin-top: 6px;
+            color: #3d5166;
+            font-weight: normal;
         }
 
         /* ===== 02 mood 表（塾での様子） ===== */
@@ -433,7 +449,7 @@
                 <tr>
                     <td>担当教師</td>
                     <td>（転記）</td>
-                    <td>担当CA</td>
+                    <td>担当</td>
                     <td>（転記）</td>
                 </tr>
                 <tr>
@@ -443,12 +459,26 @@
                     <td>（転記）</td>
                 </tr>
                 <tr>
-                    <td>IB 合計スコア</td>
-                    <td>目標: （転記） / 現状: （転記）</td>
-                    <td>科目スコア</td>
-                    <td>目標: （転記） / 現状: （転記）</td>
+                    <td>IBスコア（目標）</td>
+                    <td>（計画表の「目標」列から転記。取り違え禁止）</td>
+                    <td>IBスコア（現状）</td>
+                    <td>（計画表の「現状」列から転記）</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="font-size:9pt;color:#555;padding-top:10px;"><strong>補足（任意）</strong>：計画表に科目別スコア行があるときは、上とは別の行で追加してよい。mock / final を同表に載せられたら次の行へ。</td>
+                </tr>
+                <tr>
+                    <td>mock exam</td>
+                    <td>（転記）</td>
+                    <td>final exam</td>
+                    <td>（転記）</td>
                 </tr>
             </table>
+            <!-- 任意：本文に載せない略号メモ。そのまま貼らず保護者向け一文へ。見出しに「（参考）」は付けない -->
+            <div class="section-body">
+                <h3>学校のテスト状況（省略可）</h3>
+                <p>Topic … の unit test で … でした。</p>
+            </div>
         </section>
 
         <!-- KPI：月次マップで可の項目のみ残す。不要ならこの div ごと削除 -->
@@ -477,7 +507,7 @@
 
         <!-- 学校の試験：01 に mock/final・テスト案内を含める場合は本セクションごと削除 -->
 
-        <!-- ========== 02 塾での様子（MD ## 02 塾での様子）— mood 表は「学習意欲」「宿題の提出」の2行のみ ========== -->
+        <!-- ========== 02 塾での様子（MD ## 02 塾での様子）— mood 表は「学習進捗」「学習意欲」「宿題の提出」の3行（monthly_pattern_b_content.template.md 正本と同一） ========== -->
         <section class="section">
             <div class="section-heading">
                 <span class="sec-num">02</span>
@@ -485,7 +515,7 @@
             </div>
             <div class="analysis-box">
                 <div class="box-label">良い点・成長がみられる点</div>
-                （転記：褒め中心。※進みの比較は 05、単元は 03 で書く）
+                （転記：先に<strong>当塾・学校で評価が言える一行</strong>。続けて総括のみ。細い単元は 03。※進みの比較は 05）
             </div>
             <div class="analysis-box">
                 <div class="box-label">今後の計画方針（当塾）</div>
@@ -498,9 +528,10 @@
             </div>
             <table class="mood-table">
                 <thead>
-                    <tr><th>観点</th><th>今月の学習状況と評価</th><th>メモ（補足）</th></tr>
+                    <tr><th>項目</th><th>今月の学習状況と評価</th><th>今月の振り返りと次月の目標</th></tr>
                 </thead>
                 <tbody>
+                    <tr><td>学習進捗</td><td>（アイコン＋一言）</td><td>（要確認）</td></tr>
                     <tr><td>学習意欲</td><td>（アイコン＋一言）</td><td>（要確認）</td></tr>
                     <tr><td>宿題の提出</td><td>（アイコン＋一言）</td><td>（要確認）</td></tr>
                 </tbody>
@@ -524,7 +555,16 @@
                 <tbody>
                     <tr>
                         <td>（転記）</td>
+                        <td>
+                            <span class="unit-main">Probability — （例）</span><br><span class="unit-subtopics">（サブトピックを英語公式名で。そのまま学習計画表どおり並べ）</span>
+                        </td>
                         <td>（転記）</td>
+                    </tr>
+                    <tr>
+                        <td>（転記）</td>
+                        <td>
+                            <span class="unit-main">Calculus — （例）</span><br><span class="unit-subtopics">Limits / The chain rule …</span>
+                        </td>
                         <td>（転記）</td>
                     </tr>
                 </tbody>
@@ -544,7 +584,7 @@
             </div>
             <div class="analysis-box">
                 <div class="box-label">ミスの傾向・課題・学習の工夫</div>
-                （転記）
+                （転記：**計算ミス**についてはソースにあれば、「自己採点のうえマークスキームで間違い箇所を確認する」を推奨可。創作しない。）
             </div>
         </section>
 
@@ -619,14 +659,15 @@
             </table>
             <div class="analysis-box">
                 <div class="box-label">方針・家庭でのサポートのお願い</div>
-                （転記：MTG で合意した内容に限定。）
+                （転記：試験日程・IA・EE。リンクは短文「▶ 学習計画表」。**仮の単一授業日**のみは本文に書かず運用側へ。）
             </div>
         </section>
 
         <footer class="page-footer">
             <div class="footer-contact">
                 <strong>EDUBAL Academy</strong><br>
-                （連絡先は運用の正に合わせて転記）
+                お問い合わせは担当教師・担当まで<br>
+                （連絡先の詳細は運用の正に合わせて転記。配布では「担当CA」を使わない。）
             </div>
             <div class="footer-right">
                 © 2026 EDUBAL Academy<br>

@@ -1,0 +1,985 @@
+{% extends "mock/base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block extra_style %}
+.editor-wrap {
+  max-width: min(1120px, 100%);
+  margin: 0 auto;
+}
+.editor-page-title {
+  font-family: "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+  font-size: 1.2rem;
+  color: #2c3e50;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.tagline {
+  font-size: 0.85rem;
+  color: #5a6570;
+  margin: 0 0 12px;
+}
+.editor-panel {
+  background: #fff;
+  border: 1px solid #dde3ec;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+.frame-wrap {
+  border: 1px solid #c5cdd8;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #e8e8e8;
+  margin-bottom: 12px;
+}
+.editor-frame-toolbar {
+  background: linear-gradient(180deg, #ffffff 0%, #f4f7fb 100%);
+  border-bottom: 1px solid #c5cdd8;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.editor-strip-one-line {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px 8px;
+  padding: 4px 8px;
+  min-height: 1.875rem;
+  box-sizing: border-box;
+  width: max-content;
+  min-width: 100%;
+}
+.editor-strip-short-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.editor-toolbar-divider {
+  width: 1px;
+  height: 1.15rem;
+  background: #cbd5e1;
+  flex-shrink: 0;
+  align-self: center;
+  margin: 0 1px;
+}
+.tb-edit-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin: 0;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+.tb-cluster {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 3px 5px;
+  flex-shrink: 0;
+}
+.tb-cluster-label {
+  font-size: 0.615rem;
+  font-weight: 700;
+  color: #475569;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.tb-cluster-btns {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 3px;
+}
+.tb-icon-btn,
+.tb-emoji-btn,
+.tb-mini-btn {
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid #c5cdd8;
+  background: #f8fafc;
+  color: #2c3e50;
+  font-family: inherit;
+}
+.tb-icon-btn {
+  padding: 1px 3px;
+  min-width: 1.55rem;
+  min-height: 1.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.tb-emoji-btn {
+  font-size: 0.92rem;
+  line-height: 1;
+  padding: 1px 4px;
+  min-width: 1.42rem;
+  min-height: 1.42rem;
+}
+.tb-mini-btn {
+  font-size: 0.625rem;
+  padding: 1px 5px;
+  white-space: nowrap;
+}
+.editor-frame {
+  width: 100%;
+  height: min(70vh, 800px);
+  min-height: 420px;
+  border: 0;
+  display: block;
+  overflow: auto;
+  background: #fff;
+}
+.report-canvas {
+  max-width: none;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  color: #1a1a1a;
+  font-family: "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.75;
+  background: #e8e8e8;
+}
+.report-canvas * {
+  box-sizing: border-box;
+}
+.report-canvas .no-print {
+  max-width: 210mm;
+  margin: 0 auto 10px;
+  padding: 8px 12px;
+  background: #eef6ff;
+  border: 1px solid #90caf9;
+  font-size: 9pt;
+  text-align: center;
+}
+.report-canvas .page {
+  width: 210mm;
+  min-height: 297mm;
+  background: #fff;
+  margin: 0 auto;
+  padding: 20mm 18mm 18mm;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+}
+.report-canvas .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #2c3e50;
+  margin-bottom: 16px;
+}
+.report-canvas .logo-name {
+  font-size: 16pt;
+  font-weight: 900;
+  color: #2c3e50;
+  letter-spacing: 1px;
+}
+.report-canvas .logo-sub {
+  font-size: 8pt;
+  color: #666;
+  letter-spacing: 0.5px;
+}
+.report-canvas .report-meta-header {
+  text-align: right;
+  font-size: 8pt;
+  color: #555;
+  line-height: 1.8;
+}
+.report-canvas .report-id {
+  font-weight: 700;
+  color: #2c3e50;
+}
+.report-canvas .title-block {
+  background: #2c3e50;
+  color: #fff;
+  padding: 14px 20px;
+  margin-bottom: 14px;
+  border-radius: 2px;
+}
+.report-canvas .title-block h1 {
+  font-size: 15pt;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0 0 4px;
+  color: #fff;
+}
+.report-canvas .title-period {
+  font-size: 9pt;
+  opacity: 0.9;
+  letter-spacing: 0.5px;
+}
+.report-canvas .family-greeting {
+  font-size: 10.5pt;
+  color: #333;
+  margin-bottom: 18px;
+  line-height: 1.85;
+}
+.report-canvas .family-greeting p,
+.report-canvas .section-body p {
+  margin: 0 0 10px;
+}
+.report-canvas .honorific {
+  margin-bottom: 4px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+.report-canvas .section {
+  margin-bottom: 22px;
+  page-break-inside: avoid;
+}
+.report-canvas .section-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #2c3e50;
+  color: #fff;
+  padding: 6px 12px;
+  margin-bottom: 12px;
+  border-radius: 2px;
+}
+.report-canvas .section-heading .sec-num {
+  font-size: 9pt;
+  background: #4a6491;
+  padding: 1px 7px;
+  border-radius: 20px;
+  font-weight: 700;
+}
+.report-canvas .section-heading h2 {
+  font-size: 11pt;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin: 0;
+  color: #fff;
+}
+.report-canvas .section-body h3,
+.report-canvas .h3-monthly,
+.report-canvas .plan-sub,
+.report-canvas .prog-topic-title,
+.report-canvas .prog-month-title {
+  color: #2c3e50;
+  font-weight: 700;
+}
+.report-canvas .section-body h3 {
+  font-size: 10.5pt;
+  margin: 14px 0 8px;
+}
+.report-canvas table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.report-canvas .info-table,
+.report-canvas .data-table,
+.report-canvas .plan-table,
+.report-canvas .exam-mini-table,
+.report-canvas .mood-table {
+  font-size: 9.5pt;
+  margin-bottom: 12px;
+}
+.report-canvas .info-table td,
+.report-canvas .plan-table th,
+.report-canvas .plan-table td,
+.report-canvas .exam-mini-table th,
+.report-canvas .exam-mini-table td,
+.report-canvas .mood-table th,
+.report-canvas .mood-table td {
+  border: 1px solid #ccc;
+  padding: 7px 10px;
+  vertical-align: top;
+}
+.report-canvas .info-table td {
+  padding: 5px 10px;
+}
+.report-canvas .info-table td:nth-child(odd) {
+  background: #f5f5f5;
+  font-weight: 700;
+  color: #2c3e50;
+  width: 22%;
+  white-space: nowrap;
+}
+.report-canvas .data-table thead tr,
+.report-canvas .plan-table thead th,
+.report-canvas .exam-mini-table thead th,
+.report-canvas .mood-table thead th {
+  background: #6d7482;
+  color: #fff;
+  font-weight: 700;
+}
+.report-canvas .data-table thead th,
+.report-canvas .data-table tbody td {
+  padding: 7px 10px;
+  vertical-align: top;
+}
+.report-canvas .data-table tbody tr:nth-child(even),
+.report-canvas .plan-table tbody tr:nth-child(even),
+.report-canvas .exam-mini-table tbody tr:nth-child(even),
+.report-canvas .mood-table tbody tr:nth-child(even) {
+  background: #f5f7fa;
+}
+.report-canvas .data-table tbody td {
+  border-bottom: 1px solid #dde3ec;
+}
+.report-canvas .analysis-box,
+.report-canvas .mood-legend,
+.report-canvas .progress-05-legend {
+  background: #f9fbff;
+  border: 1px solid #c8d5e8;
+  border-left: 4px solid #4a6491;
+  border-radius: 0 2px 2px 0;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+.report-canvas .admin-only {
+  margin-top: 28px;
+  padding: 14px 16px;
+  border: 2px dashed #c0392b;
+  background: #fff8f8;
+  border-radius: 4px;
+}
+.report-canvas .admin-only h2,
+.report-canvas .admin-only p,
+.report-canvas .admin-only li {
+  color: #c0392b;
+}
+.report-canvas .page-footer {
+  margin-top: 28px;
+  padding-top: 12px;
+  border-top: 2px solid #2c3e50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8pt;
+  color: #555;
+}
+.report-canvas .progress-05-block {
+  margin: 14px 0 18px;
+  font-size: 8.5pt;
+}
+.report-canvas .prog-lane {
+  display: grid;
+  grid-template-columns: 4.5em 1fr;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.report-canvas .prog-cells {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 2px;
+  min-height: 14px;
+}
+.report-canvas .prog-cells .cell {
+  border-radius: 1px;
+  min-height: 14px;
+}
+.report-canvas .prog-cells .cell.done,
+.report-canvas .swatch.done { background: #2e7dd4; }
+.report-canvas .prog-cells .cell.planned,
+.report-canvas .swatch.planned { background: #e6c940; }
+.report-canvas .prog-cells .cell.pending,
+.report-canvas .swatch.pending { background: #c8ccd2; }
+.report-canvas .swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+@media (max-width: 1100px) {
+  .report-canvas .page {
+    width: 100%;
+    min-height: auto;
+    padding: 24px;
+  }
+}
+.tb-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eef1f5;
+}
+.tb-group:last-of-type { border-bottom: none; padding-bottom: 0; }
+.tb-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #7f8c9a;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  width: 100%;
+  margin-bottom: 2px;
+}
+.editor-action-btn {
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid #c5cdd8;
+  font-size: 0.84rem;
+  background: #f8fafc;
+  color: #2c3e50;
+  font-family: inherit;
+}
+.editor-action-btn.primary {
+  background: #2c3e50;
+  color: #fff;
+  border-color: #2c3e50;
+  font-weight: 600;
+}
+.status-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #eef1f5;
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+.draft-pill {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-weight: 600;
+}
+.pw-out-box {
+  margin-top: 4px;
+  padding: 12px 14px;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #f0f9ff 0%, #f8fafc 100%);
+}
+.pw-out-heading { margin: 0 0 10px; font-size: 0.9rem; font-weight: 800; color: #0c4a6e; }
+.pw-out-label { margin: 0 0 8px; font-size: 0.8rem; font-weight: 700; color: #0c4a6e; }
+.pw-out-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
+.pw-out-field {
+  flex: 1;
+  min-width: 220px;
+  padding: 10px 12px;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.88rem;
+  border: 1px solid #7dd3fc;
+  border-radius: 6px;
+  background: #fff;
+  color: #0f172a;
+}
+.pw-out-hint { margin: 8px 0 0; font-size: 0.72rem; color: #475569; line-height: 1.45; }
+.source-details {
+  border: 1px solid #dde3ec;
+  border-radius: 8px;
+  background: #fafbfd;
+  margin-top: 12px;
+}
+.source-details summary {
+  cursor: pointer;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+}
+.source-inner { padding: 12px 14px 14px; }
+.source-box {
+  width: 100%;
+  min-height: 200px;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  resize: vertical;
+  background: #fff;
+}
+.editor-side-panels {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+.editor-side-panel {
+  scroll-margin-top: 16px;
+  border: 1px solid #dde3ec;
+  border-radius: 8px;
+  background: #fff;
+  padding: 14px;
+}
+.editor-side-panel h2 {
+  margin: 0 0 8px;
+  color: #2c3e50;
+  font-size: 0.98rem;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+.editor-side-panel p {
+  margin: 0;
+}
+.editor-panel-meta {
+  color: #5a6570;
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+}
+.editor-check-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.editor-check-item {
+  display: grid;
+  grid-template-columns: minmax(68px, auto) 1fr;
+  gap: 8px;
+  align-items: start;
+  padding: 9px 10px;
+  border: 1px solid #dde3ec;
+  border-radius: 6px;
+  background: #fafbfd;
+}
+.editor-severity {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid #c5cdd8;
+  background: #f4f7fb;
+  color: #475569;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.editor-severity.error {
+  border-color: #f0b8ae;
+  background: #fff4f2;
+  color: #a33a2a;
+}
+.editor-severity.warning {
+  border-color: #e6d28e;
+  background: #fff9df;
+  color: #7a5b00;
+}
+.editor-source-grid,
+.editor-tuning-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 8px;
+}
+.editor-source-card,
+.editor-tuning-card {
+  padding: 10px;
+  border: 1px solid #dde3ec;
+  border-radius: 6px;
+  background: #fafbfd;
+}
+.editor-source-card strong,
+.editor-tuning-card strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #2c3e50;
+  font-size: 0.85rem;
+}
+.editor-source-card span,
+.editor-tuning-card span {
+  display: block;
+  color: #5a6570;
+  font-size: 0.78rem;
+  overflow-wrap: anywhere;
+}
+.editor-diff-block {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.editor-diff-col {
+  border: 1px solid #dde3ec;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fafbfd;
+}
+.editor-diff-col h3 {
+  margin: 0;
+  padding: 8px 10px;
+  border-bottom: 1px solid #dde3ec;
+  background: #f4f7fb;
+  color: #2c3e50;
+  font-size: 0.82rem;
+}
+.editor-diff-col p {
+  padding: 10px;
+  color: #334155;
+  font-size: 0.84rem;
+}
+.editor-feedback-box {
+  width: 100%;
+  min-height: 96px;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 1px solid #c5cdd8;
+  border-radius: 6px;
+  background: #fff;
+  color: #2c3e50;
+  font-family: inherit;
+  font-size: 0.86rem;
+  resize: vertical;
+}
+.mvp-app {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 238px minmax(0, 1fr);
+  background: #eef2f7;
+  color: #1a1a1a;
+  font-family: "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+  line-height: 1.5;
+}
+.mvp-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: #fff;
+  border-right: 1px solid #dde3ec;
+  padding: 14px 12px;
+  box-shadow: 1px 0 2px rgba(0,0,0,.03);
+}
+.mvp-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  color: #2c3e50;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0;
+}
+.mvp-brand:hover { color: #4a6491; text-decoration: none; }
+.mvp-brand-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #2c3e50;
+  box-shadow: 0 0 0 3px rgba(44,62,80,.12);
+  flex-shrink: 0;
+}
+.mvp-nav-label {
+  margin: 18px 0 6px 8px;
+  color: #7f8c9a;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.mvp-nav a,
+.mvp-nav button {
+  width: 100%;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 7px 9px;
+  background: transparent;
+  color: #2c3e50;
+  font: inherit;
+  font-size: 0.84rem;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mvp-nav a:hover,
+.mvp-nav button:hover {
+  background: #eef2f7;
+  border-color: #dde3ec;
+  text-decoration: none;
+}
+.mvp-nav a.active {
+  background: #f4f7fb;
+  border-color: #c5cdd8;
+  box-shadow: inset 3px 0 0 #2c3e50;
+  font-weight: 600;
+}
+.mvp-status-card {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid #dde3ec;
+  border-radius: 8px;
+  background: #fafbfd;
+  font-size: 0.84rem;
+}
+.mvp-main {
+  min-width: 0;
+  padding: 16px;
+}
+.mvp-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 auto 12px;
+  max-width: min(1120px, 100%);
+}
+.mvp-topbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.mvp-topbar-actions .btn {
+  border: 1px solid #c5cdd8;
+  background: #f8fafc;
+  color: #2c3e50;
+  border-radius: 6px;
+  font-size: 0.84rem;
+}
+.mvp-topbar-actions .btn:hover {
+  background: #eef2f7;
+  border-color: #aeb8c4;
+  text-decoration: none;
+}
+@media (max-width: 860px) {
+  .mvp-app { grid-template-columns: 1fr; }
+  .mvp-sidebar {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid #dde3ec;
+  }
+  .mvp-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.25rem;
+  }
+  .mvp-topbar { align-items: flex-start; flex-direction: column; }
+}
+{% endblock %}
+{% block bare %}
+<div class="mvp-app">
+  <aside class="mvp-sidebar" aria-label="月次レポートMVPメニュー">
+    <a class="mvp-brand" href="/mock/monthly-report-workshop/jobs/{{ job.public_id }}/edit">
+      <span class="mvp-brand-dot" aria-hidden="true"></span>
+      月次レポートMVP
+    </a>
+    <p class="muted" style="margin:0.25rem 0 0 1.05rem;">{{ job.target_month }} · {{ job.household }}</p>
+
+    <p class="mvp-nav-label">作業</p>
+    <nav class="mvp-nav">
+      <a class="active" href="/mock/monthly-report-workshop/jobs/{{ job.public_id }}/edit">レポートビュー</a>
+      <a href="/mock/monthly-report-workshop/jobs/new">新規読み込み</a>
+      <a href="/mock/monthly-report-workshop/jobs">ジョブ一覧</a>
+      <a href="/mock/monthly-report-workshop/jobs/{{ job.public_id }}">生成ステータス</a>
+    </nav>
+
+    <p class="mvp-nav-label">チェック</p>
+    <nav class="mvp-nav">
+      <a href="#validation-panel">検証結果</a>
+      <a href="#source-panel">ソース確認</a>
+      <a href="#artifact-panel">成果物保存</a>
+      <a href="#diff-panel">簡易差分</a>
+    </nav>
+
+    <p class="mvp-nav-label">出力・設定</p>
+    <nav class="mvp-nav">
+      <button type="button">HTMLエクスポート</button>
+      <button type="button">送付エクスポート</button>
+      <a href="#tuning-panel">チューニング</a>
+    </nav>
+
+    <div class="mvp-status-card">
+      <p class="muted" style="margin:0;">保存状態</p>
+      <strong>サーバ保存済み</strong>
+      <p class="muted" style="margin:0.4rem 0 0;">検証: error {{ job.validation_summary.errors }} / warning {{ job.validation_summary.warnings }}</p>
+    </div>
+  </aside>
+
+  <main class="mvp-main">
+    <div class="mvp-topbar">
+      <div>
+        <p class="muted" style="margin:0;">{{ job.public_id }} · {{ job.prompt_version }} · {{ job.resolved_model }}</p>
+        <h1 class="editor-page-title">{{ page_title }} · HTML全文エディタ</h1>
+      </div>
+      <div class="mvp-topbar-actions">
+        <a class="btn" href="/mock/monthly-report-workshop">トップ</a>
+        <a class="btn" href="/mock/">モック索引</a>
+      </div>
+    </div>
+
+    <div class="editor-wrap">
+      <p class="tagline">編集枠直上は<strong>1行のコンパクトツールバー</strong>（表・リンク・05・ムード）。下の枠で本文編集 → 下部で保存・送付エクスポート。</p>
+
+  <section class="editor-panel">
+    <div class="frame-wrap">
+      <div class="editor-frame-toolbar" aria-label="編集ツールバー（枠直上・1行）">
+        <div class="editor-strip-one-line" role="toolbar">
+          <span class="editor-strip-short-label" title="枠内で選択後">編集</span>
+          <div class="tb-edit-row">
+            <div class="tb-cluster">
+              <span class="tb-cluster-label">表</span>
+              <div class="tb-cluster-btns">
+                <button type="button" class="tb-icon-btn" title="行を追加">＋行</button>
+                <button type="button" class="tb-icon-btn" title="行を削除">−行</button>
+                <button type="button" class="tb-icon-btn" title="列を追加">＋列</button>
+                <button type="button" class="tb-icon-btn" title="列を削除">−列</button>
+              </div>
+            </div>
+            <div class="tb-cluster">
+              <span class="tb-cluster-label">リンク</span>
+              <div class="tb-cluster-btns">
+                <button type="button" class="tb-icon-btn" title="リンクを付与">🔗</button>
+                <button type="button" class="tb-icon-btn" title="リンクを解除">解除</button>
+              </div>
+            </div>
+            <div class="tb-cluster">
+              <span class="tb-cluster-label">見出し</span>
+              <div class="tb-cluster-btns">
+                <button type="button" class="tb-icon-btn" title="見出し05を削除">05×</button>
+              </div>
+            </div>
+          </div>
+          <span class="editor-toolbar-divider" aria-hidden="true"></span>
+          <span class="editor-strip-short-label" title="02の評価列セルを選択してから">ムード</span>
+          <div class="tb-cluster-btns" role="group" aria-label="ムード・アイコン">
+            <button type="button" class="tb-emoji-btn">😊</button>
+            <button type="button" class="tb-emoji-btn">😐</button>
+            <button type="button" class="tb-emoji-btn">🙂</button>
+            <button type="button" class="tb-emoji-btn">😢</button>
+            <button type="button" class="tb-emoji-btn">✓</button>
+            <button type="button" class="tb-emoji-btn">★</button>
+            <button type="button" class="tb-mini-btn">…</button>
+          </div>
+        </div>
+      </div>
+      <div class="editor-frame">
+        <div class="report-canvas" contenteditable="true" aria-label="レポート編集領域">
+          {{ job.editor_html | safe }}
+        </div>
+      </div>
+    </div>
+
+    <div class="tb-group">
+      <span class="tb-title">出力</span>
+      <button type="button" class="editor-action-btn primary">プレビュー</button>
+      <button type="button" class="editor-action-btn">保存</button>
+      <button type="button" class="editor-action-btn">簡易差分</button>
+      <button type="button" class="editor-action-btn">HTMLエクスポート</button>
+      <button type="button" class="editor-action-btn">ファイルに保存</button>
+      <button type="button" class="editor-action-btn">送付エクスポート</button>
+    </div>
+
+    <div class="pw-out-box">
+      <p class="pw-out-heading">送付エクスポート — 宛先へ伝える情報</p>
+      <p class="pw-out-label">送付用パスワード（6桁・英数字／HTMLとは別経路で伝えてください）</p>
+      <div class="pw-out-row">
+        <input type="text" class="pw-out-field" value="A7K2Q9" readonly aria-label="送付用パスワード" />
+        <button type="button" class="editor-action-btn">コピー</button>
+        <input type="text" class="pw-out-field" value="https://example.test/reports/protected/demo" readonly aria-label="送付用URL" />
+        <button type="button" class="editor-action-btn">URLをコピー</button>
+      </div>
+      <p class="pw-out-hint">MVPモックではURL発行済みの状態を表示しています。本番では保存後に送付用URLを発行します。</p>
+    </div>
+
+    <div class="status-row">
+      <span class="draft-pill">下書き: サーバ保存済み</span>
+      <span>{{ job.prompt_version }}</span>
+      <span>{{ job.resolved_model }}</span>
+      <span>検証: error {{ job.validation_summary.errors }} / warning {{ job.validation_summary.warnings }}</span>
+    </div>
+
+    <details class="source-details">
+      <summary>HTMLソース直接編集</summary>
+      <div class="source-inner">
+        <textarea class="source-box">{{ job.editor_html }}</textarea>
+      </div>
+    </details>
+
+    <div class="editor-side-panels" aria-label="サイドバー連動パネル">
+      <section class="editor-side-panel" id="validation-panel" aria-labelledby="validation-panel-title">
+        <h2 id="validation-panel-title">検証結果</h2>
+        <p class="editor-panel-meta">必須見出し、禁止語、星5行、家庭向け表現のモック検証結果です。</p>
+        <ul class="editor-check-list">
+          {% for item in job.validations %}
+          <li class="editor-check-item">
+            <span class="editor-severity {{ item.severity }}">{{ item.severity }}</span>
+            <span><strong>{{ item.rule }}</strong><br>{{ item.message }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section class="editor-side-panel" id="source-panel" aria-labelledby="source-panel-title">
+        <h2 id="source-panel-title">ソース確認</h2>
+        <p class="editor-panel-meta">再生成できるように、取得元・hash・切り詰め有無を同じ画面で確認します。</p>
+        <div class="editor-source-grid">
+          {% for source in job.sources %}
+          <article class="editor-source-card">
+            <strong>{{ source.name }}</strong>
+            <span>{{ source.kind }} · {{ source.status }} · {{ source.size }}</span>
+            <span>{{ source.hash }}</span>
+            <span>切り詰め: {{ source.truncated }}</span>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="editor-side-panel" id="artifact-panel" aria-labelledby="artifact-panel-title">
+        <h2 id="artifact-panel-title">成果物保存</h2>
+        <p class="editor-panel-meta">生成Markdown、HTML、最終編集後ファイルを保存対象として確認します。</p>
+        <div class="editor-source-grid">
+          {% for artifact in job.artifacts %}
+          <article class="editor-source-card">
+            <strong>{{ artifact.label }}</strong>
+            <span>{{ artifact.type }} · {{ artifact.status }}</span>
+            <span>{{ artifact.hash }}</span>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="editor-side-panel" id="diff-panel" aria-labelledby="diff-panel-title">
+        <h2 id="diff-panel-title">簡易差分</h2>
+        <p class="editor-panel-meta">モックでは保存前後の代表差分を表示し、配布前レビューの視点を固定します。</p>
+        <div class="editor-diff-block">
+          <div class="editor-diff-col">
+            <h3>生成直後</h3>
+            <p>05 学習の進捗: 星5行の原文一致を要確認。表現はやや硬め。</p>
+          </div>
+          <div class="editor-diff-col">
+            <h3>現在の編集案</h3>
+            <p>保護者向けの語尾を調整。ソース由来の固有名詞と数値は未変更。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="editor-side-panel" id="tuning-panel" aria-labelledby="tuning-panel-title">
+        <h2 id="tuning-panel-title">チューニング</h2>
+        <p class="editor-panel-meta">プロンプト、テンプレート、モデルを比較するための記録欄です。</p>
+        <div class="editor-tuning-grid">
+          <div class="editor-tuning-card">
+            <strong>prompt_version</strong>
+            <span>{{ job.prompt_version }}</span>
+          </div>
+          <div class="editor-tuning-card">
+            <strong>report model</strong>
+            <span>{{ job.resolved_model }}</span>
+          </div>
+          <div class="editor-tuning-card">
+            <strong>template hash</strong>
+            <span>{{ job.template_hash }}</span>
+          </div>
+          <div class="editor-tuning-card">
+            <strong>source bundle</strong>
+            <span>{{ job.source_bundle_hash }}</span>
+          </div>
+          <div class="editor-tuning-card">
+            <strong>app_version</strong>
+            <span>{{ job.app_version }}</span>
+          </div>
+        </div>
+        <textarea class="editor-feedback-box" aria-label="チューニングメモ">次回比較メモ: 検証結果と保護者向け表現の修正量を記録する。</textarea>
+      </section>
+    </div>
+  </section>
+    </div>
+  </main>
+</div>
+{% endblock %}

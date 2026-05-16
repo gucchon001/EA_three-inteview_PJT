@@ -1,0 +1,430 @@
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from typing import Callable
+
+from eb_app.monthly_reports.ids import PUBLIC_ID_PREFIXES, new_public_id
+
+
+class JobStatus:
+    QUEUED = "queued"
+    RUNNING = "running"
+    SUCCEEDED = "succeeded"
+    FAILED = "failed"
+    CANCEL_REQUESTED = "cancel_requested"
+    CANCELLED = "cancelled"
+
+
+ACTIVE_JOB_STATUSES = {
+    JobStatus.QUEUED,
+    JobStatus.RUNNING,
+    JobStatus.CANCEL_REQUESTED,
+}
+
+DEFAULT_MOCK_OWNER_USER_ID = "mock-user"
+MAX_ACTIVE_JOBS_PER_USER = 3
+
+PIPELINE_STAGES = (
+    "fetch_sources",
+    "bundle",
+    "build_messages",
+    "call_llm",
+    "validate",
+    "persist",
+)
+
+
+class StatusTransitionError(RuntimeError):
+    pass
+
+
+class JobLimitExceeded(RuntimeError):
+    pass
+
+
+@dataclass
+class MockJob:
+    public_id: str
+    target_month: str
+    household_key: str
+    owner_user_id: str = DEFAULT_MOCK_OWNER_USER_ID
+    status: str = JobStatus.QUEUED
+    current_stage: str | None = None
+    completed_stages: list[str] = field(default_factory=list)
+    feedback: list[MockFeedback] = field(default_factory=list)
+    error_type: str | None = None
+    error_message: str | None = None
+    template_key: str | None = None
+    prompt_version: str | None = None
+    template_hash: str | None = None
+    model_report: str | None = None
+    model_light: str | None = None
+    resolved_model_report: str | None = None
+    source_bundle_hash: str | None = None
+    app_version: str | None = None
+    prompt_scope_notes: str | None = None
+
+
+@dataclass
+class MockFeedback:
+    public_id: str
+    job_id: str
+    category: str
+    comment: str
+
+
+@dataclass
+class MockSource:
+    public_id: str
+    job_id: str
+    source_type: str
+    display_name: str | None = None
+    snapshot_text: str | None = None
+    content_hash: str | None = None
+
+
+@dataclass
+class MockArtifact:
+    public_id: str
+    job_id: str
+    artifact_type: str
+    content: str | None = None
+    content_hash: str | None = None
+
+
+@dataclass
+class MockValidation:
+    public_id: str
+    job_id: str
+    rule_id: str
+    severity: str
+    message: str
+    path: str | None = None
+
+
+@dataclass
+class MockLLMCall:
+    public_id: str
+    job_id: str
+    prompt_kind: str
+    provider: str
+    requested_model: str | None = None
+    resolved_model: str | None = None
+    prompt_version: str | None = None
+    request_hash: str | None = None
+    response_hash: str | None = None
+    latency_ms: int | None = None
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+    finish_reason: str | None = None
+    error_type: str | None = None
+
+
+class MockJobStore:
+    def __init__(self, id_factory: Callable[[str], str] = new_public_id) -> None:
+        self._id_factory = id_factory
+        self._jobs: dict[str, MockJob] = {}
+        self._sources: dict[str, list[MockSource]] = {}
+        self._artifacts: dict[str, list[MockArtifact]] = {}
+        self._validations: dict[str, list[MockValidation]] = {}
+        self._llm_calls: dict[str, list[MockLLMCall]] = {}
+        self._feedback_sequence = 0
+
+    def create_job(
+        self,
+        *,
+        target_month: str,
+        household_key: str,
+        owner_user_id: str = DEFAULT_MOCK_OWNER_USER_ID,
+        template_key: str | None = None,
+        prompt_version: str | None = None,
+        template_hash: str | None = None,
+        model_report: str | None = None,
+        model_light: str | None = None,
+        resolved_model_report: str | None = None,
+        source_bundle_hash: str | None = None,
+        app_version: str | None = None,
+        prompt_scope_notes: str | None = None,
+    ) -> MockJob:
+        public_id = self._id_factory(PUBLIC_ID_PREFIXES.job)
+        job = MockJob(
+            public_id=public_id,
+            target_month=target_month,
+            household_key=household_key,
+            owner_user_id=owner_user_id,
+            template_key=template_key,
+            prompt_version=prompt_version,
+            template_hash=template_hash,
+            model_report=model_report,
+            model_light=model_light,
+            resolved_model_report=resolved_model_report,
+            source_bundle_hash=source_bundle_hash,
+            app_version=app_version,
+            prompt_scope_notes=prompt_scope_notes,
+        )
+        self._jobs[public_id] = job
+        return job
+
+    def create_job_with_active_limit(
+        self,
+        *,
+        target_month: str,
+        household_key: str,
+        owner_user_id: str = DEFAULT_MOCK_OWNER_USER_ID,
+        max_active_jobs: int = MAX_ACTIVE_JOBS_PER_USER,
+        template_key: str | None = None,
+        prompt_version: str | None = None,
+        template_hash: str | None = None,
+        model_report: str | None = None,
+        model_light: str | None = None,
+        resolved_model_report: str | None = None,
+        source_bundle_hash: str | None = None,
+        app_version: str | None = None,
+        prompt_scope_notes: str | None = None,
+    ) -> MockJob:
+        if self.count_active_jobs(owner_user_id) >= max_active_jobs:
+            raise JobLimitExceeded("user already has 3 active generation jobs")
+        return self.create_job(
+            target_month=target_month,
+            household_key=household_key,
+            owner_user_id=owner_user_id,
+            template_key=template_key,
+            prompt_version=prompt_version,
+            template_hash=template_hash,
+            model_report=model_report,
+            model_light=model_light,
+            resolved_model_report=resolved_model_report,
+            source_bundle_hash=source_bundle_hash,
+            app_version=app_version,
+            prompt_scope_notes=prompt_scope_notes,
+        )
+
+    def get(self, public_id: str) -> MockJob:
+        return self._jobs[public_id]
+
+    def list_jobs(self) -> list[MockJob]:
+        return list(self._jobs.values())
+
+    def count_active_jobs(self, owner_user_id: str) -> int:
+        return sum(
+            1
+            for job in self._jobs.values()
+            if job.owner_user_id == owner_user_id and job.status in ACTIVE_JOB_STATUSES
+        )
+
+    def claim_next_queued_job(self, owner_user_id: str | None = None) -> MockJob | None:
+        for job in self._jobs.values():
+            if job.status == JobStatus.QUEUED and (
+                owner_user_id is None or job.owner_user_id == owner_user_id
+            ):
+                job.status = JobStatus.RUNNING
+                job.current_stage = PIPELINE_STAGES[0]
+                return job
+        return None
+
+    def record_feedback(
+        self,
+        public_id: str,
+        *,
+        category: str,
+        comment: str,
+    ) -> MockFeedback:
+        job = self.get(public_id)
+        self._feedback_sequence += 1
+        feedback = MockFeedback(
+            public_id=f"mrf_{self._feedback_sequence}",
+            job_id=job.public_id,
+            category=category,
+            comment=comment,
+        )
+        job.feedback.append(feedback)
+        return feedback
+
+    def record_source(
+        self,
+        public_id: str,
+        *,
+        source_type: str,
+        display_name: str | None = None,
+        snapshot_text: str | None = None,
+        content_hash: str | None = None,
+    ) -> MockSource:
+        job = self.get(public_id)
+        source = MockSource(
+            public_id=self._id_factory(PUBLIC_ID_PREFIXES.source),
+            job_id=job.public_id,
+            source_type=source_type,
+            display_name=display_name,
+            snapshot_text=snapshot_text,
+            content_hash=content_hash,
+        )
+        self._sources.setdefault(job.public_id, []).append(source)
+        return source
+
+    def list_sources(self, public_id: str) -> list[MockSource]:
+        job = self.get(public_id)
+        return list(self._sources.get(job.public_id, []))
+
+    def record_artifact(
+        self,
+        public_id: str,
+        *,
+        artifact_type: str,
+        content: str | None = None,
+        content_hash: str | None = None,
+    ) -> MockArtifact:
+        job = self.get(public_id)
+        artifact = MockArtifact(
+            public_id=self._id_factory(PUBLIC_ID_PREFIXES.artifact),
+            job_id=job.public_id,
+            artifact_type=artifact_type,
+            content=content,
+            content_hash=content_hash,
+        )
+        self._artifacts.setdefault(job.public_id, []).append(artifact)
+        return artifact
+
+    def list_artifacts(self, public_id: str) -> list[MockArtifact]:
+        job = self.get(public_id)
+        return list(self._artifacts.get(job.public_id, []))
+
+    def record_validation(
+        self,
+        public_id: str,
+        *,
+        rule_id: str,
+        severity: str,
+        message: str,
+        path: str | None = None,
+    ) -> MockValidation:
+        job = self.get(public_id)
+        validation = MockValidation(
+            public_id=self._id_factory(PUBLIC_ID_PREFIXES.validation),
+            job_id=job.public_id,
+            rule_id=rule_id,
+            severity=severity,
+            message=message,
+            path=path,
+        )
+        self._validations.setdefault(job.public_id, []).append(validation)
+        return validation
+
+    def list_validations(self, public_id: str) -> list[MockValidation]:
+        job = self.get(public_id)
+        return list(self._validations.get(job.public_id, []))
+
+    def record_llm_call(
+        self,
+        public_id: str,
+        *,
+        prompt_kind: str,
+        provider: str,
+        requested_model: str | None = None,
+        resolved_model: str | None = None,
+        prompt_version: str | None = None,
+        request_hash: str | None = None,
+        response_hash: str | None = None,
+        latency_ms: int | None = None,
+        input_tokens: int | None = None,
+        output_tokens: int | None = None,
+        finish_reason: str | None = None,
+        error_type: str | None = None,
+    ) -> MockLLMCall:
+        job = self.get(public_id)
+        llm_call = MockLLMCall(
+            public_id=self._id_factory(PUBLIC_ID_PREFIXES.llm_call),
+            job_id=job.public_id,
+            prompt_kind=prompt_kind,
+            provider=provider,
+            requested_model=requested_model,
+            resolved_model=resolved_model,
+            prompt_version=prompt_version,
+            request_hash=request_hash,
+            response_hash=response_hash,
+            latency_ms=latency_ms,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+            finish_reason=finish_reason,
+            error_type=error_type,
+        )
+        self._llm_calls.setdefault(job.public_id, []).append(llm_call)
+        return llm_call
+
+    def list_llm_calls(self, public_id: str) -> list[MockLLMCall]:
+        job = self.get(public_id)
+        return list(self._llm_calls.get(job.public_id, []))
+
+    def rerun_job(self, public_id: str) -> MockJob:
+        source = self.get(public_id)
+        return self.create_job(
+            target_month=source.target_month,
+            household_key=source.household_key,
+            owner_user_id=source.owner_user_id,
+            template_key=source.template_key,
+            prompt_version=source.prompt_version,
+            template_hash=source.template_hash,
+            model_report=source.model_report,
+            model_light=source.model_light,
+            resolved_model_report=source.resolved_model_report,
+            source_bundle_hash=source.source_bundle_hash,
+            app_version=source.app_version,
+            prompt_scope_notes=source.prompt_scope_notes,
+        )
+
+    def start_next(self, public_id: str) -> MockJob:
+        job = self.get(public_id)
+        if job.status != JobStatus.QUEUED:
+            raise StatusTransitionError(f"cannot start job from {job.status}")
+        job.status = JobStatus.RUNNING
+        job.current_stage = PIPELINE_STAGES[0]
+        return job
+
+    def complete_current_stage(self, public_id: str) -> MockJob:
+        job = self.get(public_id)
+        if job.status not in {JobStatus.RUNNING, JobStatus.CANCEL_REQUESTED}:
+            raise StatusTransitionError(f"cannot complete stage from {job.status}")
+        if job.current_stage is None:
+            raise StatusTransitionError("job has no current stage")
+
+        completed_stage = job.current_stage
+        job.completed_stages.append(completed_stage)
+
+        if job.status == JobStatus.CANCEL_REQUESTED:
+            job.status = JobStatus.CANCELLED
+            job.current_stage = None
+            return job
+
+        next_index = PIPELINE_STAGES.index(completed_stage) + 1
+        if next_index >= len(PIPELINE_STAGES):
+            job.status = JobStatus.SUCCEEDED
+            job.current_stage = None
+            return job
+
+        job.current_stage = PIPELINE_STAGES[next_index]
+        return job
+
+    def fail_current_job(
+        self,
+        public_id: str,
+        *,
+        error_type: str,
+        error_message: str,
+    ) -> MockJob:
+        job = self.get(public_id)
+        if job.status in {JobStatus.SUCCEEDED, JobStatus.FAILED, JobStatus.CANCELLED}:
+            raise StatusTransitionError(f"cannot fail job from {job.status}")
+        job.status = JobStatus.FAILED
+        job.error_type = error_type
+        job.error_message = error_message
+        return job
+
+    def request_cancel(self, public_id: str) -> MockJob:
+        job = self.get(public_id)
+        if job.status == JobStatus.QUEUED:
+            job.status = JobStatus.CANCELLED
+            job.current_stage = None
+            return job
+        if job.status == JobStatus.RUNNING:
+            job.status = JobStatus.CANCEL_REQUESTED
+            return job
+        return job

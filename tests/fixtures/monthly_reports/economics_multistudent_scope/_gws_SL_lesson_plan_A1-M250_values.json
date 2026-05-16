@@ -1,0 +1,8 @@
+{
+  "range": "SL_lesson_plan!A1:M250",
+  "values": [
+    ["student", "subject", "lesson_focus", "next_action"],
+    ["対象生徒A", "Economics", "需要と供給のグラフ読解", "IA の問いを一文で整理する"],
+    ["対象外生徒B", "Exam preparation", "試験対策", "この行は対象外として扱う"]
+  ]
+}

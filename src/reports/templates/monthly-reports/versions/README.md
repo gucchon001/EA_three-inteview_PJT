@@ -12,11 +12,12 @@
 |------------|---------------|---------------|------|
 | **v1** | [v1/monthly_2026-04_suzuki_legacy_full.html](v1/monthly_2026-04_suzuki_legacy_full.html) | [v1/README.md](v1/README.md) | 鈴木は分割・レビュー対応**前**の単体 HTML（`monthly_2026-04_suzuki.html` 相当）を凍結。高藤は初回から `_report` のみのため **v1 HTML は未保管**（README に記載）。 |
 | **v2** | [v2/monthly_2026-04_suzuki_report.html](v2/monthly_2026-04_suzuki_report.html) | [v2/monthly_2026-04_takafuji_report.html](v2/monthly_2026-04_takafuji_report.html) | ユーザーレビュー反映後（2026-04-22）。MD も同梱。 |
-| **v3** | [v3/monthly_2026-04_suzuki_report.html](v3/monthly_2026-04_suzuki_report.html) | [v3/monthly_2026-04_takafuji_report.html](v3/monthly_2026-04_takafuji_report.html) | **鈴木** **v3.2**：05 に **10 マス**・`calendar_buckets_10`（週別）。[DATA_CONTRACT_05_学習の進捗.md](../DATA_CONTRACT_05_学習の進捗.md)。**高藤** **v3.5.1**：v3.5 ＋ **05 学習計画表**をスプレッドシートへリンク（▶学習計画表）。学校の試験の独立節なし。**Statistics（Topic 4）学校テスト**は **01「学校のテスト状況」**。採番 01・02–05。MD 同梱。 |
+| **v3** | [v3/monthly_2026-04_suzuki_report.html](v3/monthly_2026-04_suzuki_report.html) | [v3/monthly_2026-04_takafuji_report.html](v3/monthly_2026-04_takafuji_report.html) | **鈴木** **v3.5.8**：高藤 **v3.5.7** と同一スタイル。**05** 進捗・10 マス **`calendar_buckets_10`**。**06** 今後の授業計画（旧 **07**）。[DATA_CONTRACT_05_学習の進捗.md](../DATA_CONTRACT_05_学習の進捗.md)。**高藤** **v3.5.7**：01「学校のテスト状況」・05 に学習計画表リンク。**Statistics（Topic 4）学校テスト**は **01**。採番 01〜05。MD 同梱。 |
+| **v4** | [v4/monthly_2026-04_suzuki_report.html](v4/monthly_2026-04_suzuki_report.html) | （高藤の v4 スナップショットは未作成） | **鈴木** **v3.6.1**：v3.6.0 と同一方針。**01** の mock/final 等から **（計画表）／（計画表見出し）** 括弧を除去。MD 同梱。 |
 
-## 次回 v4 を出すとき
+## 次回 v5 を出すとき
 
 1. ルートの `*_report.html` / `.md` を編集して新版にする。
-2. リリース時点の内容を `versions/v4/` にコピーして凍結する。
+2. リリース時点の内容を `versions/v5/` にコピーして凍結する。
 3. `node scripts/sync_monthly_reports_to_vercel.mjs` を実行し、`monthly-reports/index.html` のバージョン表を更新。
 4. `vercel deploy`（または本番プロモート）。

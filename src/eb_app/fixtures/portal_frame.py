@@ -32,6 +32,7 @@ def _nav_groups(role: PortalRole) -> list[dict[str, Any]]:
 
     ops = [
         {"id": "reports", "label": "月次レポート一覧", "href": f"{p}/reports/monthly"},
+        {"id": "report_workshop", "label": "レポート工房", "href": f"{p}/monthly-report-workshop/jobs"},
         {"id": "meetings", "label": "面談・記録（新規）", "href": f"{p}/meetings/new"},
         {"id": "todos", "label": "自分宛 ToDo", "href": f"{p}/me/todos"},
     ]

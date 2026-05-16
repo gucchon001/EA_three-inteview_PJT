@@ -1,0 +1,29 @@
+---
+description: 月次レポート自動生成の北極星（ブラウザ完結ゴール／POCと工房の接続／非交渉事項）
+globs:
+  - docs/samples/monthly-reports/**/*
+  - docs/monthly-report-workshop/**/*
+  - scripts/monthly_report*.py
+  - scripts/fetch_monthly_gws_sources.py
+  - scripts/monthly_report_run_recipe.py
+  - scripts/sync_monthly_reports_to_vercel.mjs
+  - scripts/monthly_report_source_presets.json
+  - samples/reports/household_*/**
+  - .cursor/skills/monthly-report-*/**
+alwaysApply: false
+---
+
+# 月次レポート自動化 — ぶれない方針（要約）
+
+正本ドキュメント: [`docs/monthly-report-workshop/AUTOMATION_NORTH_STAR.md`](../../docs/monthly-report-workshop/AUTOMATION_NORTH_STAR.md)。
+
+## AI・実装時に守ること
+
+1. **北極星**: 最終は **ブラウザ上で** 一次ソースから月次 Pattern B を **自動生成 → 推敲 → 出力**（Cloud Run／レポート工房）。静的エディタ＋Vercel は **検証軌道**，本体と規約で乖離させない。
+2. **コンテンツ正本**: `docs/samples/monthly-reports/monthly_pattern_b_content.template.md` と DATA_CONTRACT。競合時は規約優先。
+3. **レイアウト**: LLM への **白紙 HTML だけ** は避ける。**`ideal_html` + `structure-from-ideal`** または **Jinja + JSON ペイロード** でシェルを固定。
+4. **再現**: 生成条件は `docs/samples/monthly-reports/fixtures/report_recipes/*.recipe.json` + `scripts/monthly_report_run_recipe.py` で保存・再実行可能にする（将来はサーバ job パラメータへ相当移植）。
+5. **セキュリティ**: OpenRouter／Google／暗号鍵を **ブラウザに載せない**（現在 POC のローカル `.env` は開発限定。運用モデルは `agents.md`）。
+6. **低トークン運用**: 探索は `rg` と正本入口で絞り、モデル選択・サブエージェント利用は `agents.md` の「低トークン運用・モデルルーティング」を優先する。
+
+スキルの入口: **`monthly-report-new-household-gws`**（gws〜エディタ）、**`monthly-report-notebooklm-patterns`**（文体・★固定）。

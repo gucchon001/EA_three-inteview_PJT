@@ -1,0 +1,37 @@
+<aside class="mvp-sidebar" aria-label="月次レポートMVPメニュー">
+  {% set sidebar_job_id = job.public_id if job is defined else 'mrj_demo_001' %}
+  <a class="mvp-brand" href="/mock/monthly-report-workshop">
+    <span class="mvp-brand-dot" aria-hidden="true"></span>
+    月次レポートMVP
+  </a>
+  <p class="mvp-muted" style="margin:0.25rem 0 0 1.05rem;">レポート工房 · 単体MVP</p>
+
+  <p class="mvp-nav-label">作業</p>
+  <nav class="mvp-nav">
+    <a class="{% if active_mvp_nav == 'view' %}active{% endif %}" href="/mock/monthly-report-workshop/jobs/{{ sidebar_job_id }}/edit">レポートビュー</a>
+    <a class="{% if active_mvp_nav == 'new' %}active{% endif %}" href="/mock/monthly-report-workshop/jobs/new">新規読み込み</a>
+    <a class="{% if active_mvp_nav == 'jobs' %}active{% endif %}" href="/mock/monthly-report-workshop/jobs">ジョブ一覧</a>
+    <a class="{% if active_mvp_nav == 'status' %}active{% endif %}" href="/mock/monthly-report-workshop/jobs/{{ sidebar_job_id }}">生成ステータス</a>
+  </nav>
+
+  <p class="mvp-nav-label">チェック</p>
+  <nav class="mvp-nav">
+    <a class="{% if active_mvp_nav == 'validation' %}active{% endif %}" href="/mock/monthly-report-workshop/jobs/{{ sidebar_job_id }}/edit#validation-panel">検証結果</a>
+    <a href="/mock/monthly-report-workshop/jobs/{{ sidebar_job_id }}/edit#source-panel">ソース確認</a>
+    <a href="/mock/monthly-report-workshop/jobs/{{ sidebar_job_id }}/edit#artifact-panel">成果物保存</a>
+    <a href="/mock/monthly-report-workshop/jobs/{{ sidebar_job_id }}/edit#diff-panel">簡易差分</a>
+  </nav>
+
+  <p class="mvp-nav-label">出力・設定</p>
+  <nav class="mvp-nav">
+    <button type="button">HTMLエクスポート</button>
+    <button type="button">送付エクスポート</button>
+    <a href="/mock/monthly-report-workshop/jobs/{{ sidebar_job_id }}/edit#tuning-panel">チューニング</a>
+  </nav>
+
+  <div class="mvp-status-card">
+    <p class="mvp-muted" style="margin:0;">MVP状態</p>
+    <strong>{{ sidebar_status | default('モック確認中') }}</strong>
+    <p class="mvp-muted" style="margin:0.4rem 0 0;">ソース・生成・検証・推敲を同じ作業面で確認します。</p>
+  </div>
+</aside>

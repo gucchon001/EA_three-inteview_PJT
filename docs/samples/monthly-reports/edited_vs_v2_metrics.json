@@ -1,0 +1,13 @@
+{
+  "ideal": "C:\\dev\\CODE\\EA_three-inteview_PJT\\docs\\samples\\monthly-reports\\monthly_2026-04_tokura_v2_report.html",
+  "ideal_lines": 485,
+  "candidates": [
+    {
+      "path": "C:\\Users\\yohay\\Downloads\\monthly_report_edited (2).html",
+      "lines": 471,
+      "plain_text_similarity": 0.865024,
+      "diff_lines_added_vs_ideal": 19,
+      "diff_lines_removed_vs_ideal": 33
+    }
+  ]
+}

@@ -19,8 +19,8 @@
 | [monthly_pattern_b_template.html](monthly_pattern_b_template.html) | **月次案対応のレイアウトひな型**（`pattern_b.html` の CSS を流用し、セクション構成のみ月次用に整理） |
 | `monthly_YYYY-MM_<student>.md` | 生徒別に上記テンプレを複製して作成 |
 | `monthly_YYYY-MM_<student>.html` | テンプレ HTML を複製し、確定 MD から転記した配布用 |
-| [monthly_2026-04_suzuki_report.md](monthly_2026-04_suzuki_report.md) / [monthly_2026-04_suzuki_report.html](monthly_2026-04_suzuki_report.html) | **配布用** 73594 鈴木謙吾さま（2026-03 対象・レポート文体） |
-| [monthly_2026-04_takafuji_report.md](monthly_2026-04_takafuji_report.md) / [monthly_2026-04_takafuji_report.html](monthly_2026-04_takafuji_report.html) | **配布用** 72324 高藤泰次郎さま（2026-04 対象・**v3.5.1**・05 に学習計画表リンク・**01「学校のテスト状況」**・採番 01・02–05） |
+| [monthly_2026-04_suzuki_report.md](monthly_2026-04_suzuki_report.md) / [monthly_2026-04_suzuki_report.html](monthly_2026-04_suzuki_report.html) | **配布用** 73594 鈴木謙吾さま（2026-03 対象。**v3.6.1**・Pattern B 規約適合：**01〜05**、進捗専用節なし。01 で **mock/final の括弧なし**） |
+| [monthly_2026-04_tokura_report.md](monthly_2026-04_tokura_report.md) / [monthly_2026-04_tokura_report.html](monthly_2026-04_tokura_report.html) | **ドラフト** 61630 十倉未希さま（2026-04 対象・**draft-2026-05-11-regenerated**）。gws 再取得＋Gemini MTG。02 は mood **3行**。**配布前に原記録・教師漢字表記を確認** |
 | [REVIEW_高藤_PDFコメント反映_v3.3.md](REVIEW_高藤_PDFコメント反映_v3.3.md) | **内部用** 高藤 PDF レビュー → v3.3 本文・メタ反映メモ |
 | [monthly_2026-04_suzuki_sources.md](monthly_2026-04_suzuki_sources.md) | **内部用** ソースメタ・推敲ログ・人間チェック |
 | [monthly_2026-04_takafuji_sources.md](monthly_2026-04_takafuji_sources.md) | **内部用** 高藤さま（同上） |
@@ -36,10 +36,11 @@
 
 プラン全文: Cursor プラン「月次レポート PatternB 手順」参照。
 
-## バージョン（v1 / v2 / v3）
+## バージョン（v1〜v4）
 
 - 方針とパス: [versions/README.md](versions/README.md)
-- **v3 / v3.2**＝05 に **10 マス**（**v3.2**: `calendar_buckets_10` を **トピック別**、`sources` と `prog-topic-map` で **03（授業日）**→トピック割当、[DATA_CONTRACT_05_学習の進捗.md](DATA_CONTRACT_05_学習の進捗.md) セクション3.1）。HTML 先頭 `monthly-report-revision: v3.2`。ルートの `*_report.html` が最新。
+- **v4**＝鈴木 **v3.6.1**（規約適合済み：**01〜05**、試験括弧省略。Physics 進捗専用節なし）。
+- **v3**＝鈴木 **v3.5.8**（進捗 05：`calendar_buckets_10`。**06** 今後の授業計画）／高藤 **v3.5.7**。
 - **v2**＝ユーザーレビュー反映のみ（表中心の 05）。凍結: `versions/v2/`。
 - **v1**＝凍結保管。鈴木は `versions/v1/monthly_2026-04_suzuki_legacy_full.html`（分割・レビュー前の単体 HTML 相当）。高藤は v1 HTML 未保管（`versions/v1/README.md`）。
 

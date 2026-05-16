@@ -1,0 +1,75 @@
+{% extends "mock/base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block extra_style %}
+{% include "mock/monthly_report_workshop/shell_styles.html" %}
+.stage-list { display:grid; gap:0.65rem; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); }
+.stage { border:1px solid #dde3ec; border-radius:8px; padding:0.75rem; background:#fafbfd; }
+.stage strong { display:block; color:#2c3e50; }
+.stage.running { border-color:#c5cdd8; background:#f4f7fb; box-shadow: inset 3px 0 0 #2c3e50; }
+.stage.done { border-color:rgba(46,107,78,.35); }
+.two-col { display:grid; grid-template-columns:1.15fr .85fr; gap:1rem; align-items:start; }
+@media (max-width: 900px) { .two-col { grid-template-columns:1fr; } }
+.source-row { display:grid; grid-template-columns:1fr auto; gap:0.5rem; padding:0.65rem 0; border-bottom:1px solid #dde3ec; }
+{% endblock %}
+{% block bare %}
+{% set active_mvp_nav = 'status' %}
+{% set sidebar_status = job.status %}
+<div class="mvp-app">
+  {% include "mock/monthly_report_workshop/shell_sidebar.html" %}
+  <main class="mvp-main">
+    <div class="mvp-topbar">
+      <div>
+        <p class="mvp-muted" style="margin:0;">{{ role_label }} · {{ job.target_month }} · {{ job.household }}</p>
+        <h1 class="mvp-page-title">{{ page_title }} <span class="mvp-badge">{{ job.public_id }}</span></h1>
+      </div>
+      <div class="mvp-topbar-actions">
+        <a class="btn mvp-secondary-btn" href="/mock/monthly-report-workshop/jobs">ジョブ一覧</a>
+        <a class="btn mvp-secondary-btn" href="/mock/">モック索引</a>
+      </div>
+    </div>
+
+    <div class="mvp-page-wrap mvp-grid">
+      <div class="two-col">
+        <section class="mvp-panel">
+          <h2 style="margin-top:0;">生成パイプライン</h2>
+          <div
+            hx-get="/mock/monthly-report-workshop/jobs/{{ job.public_id }}/fragments/status"
+            hx-trigger="load, every 5s"
+            hx-swap="innerHTML"
+          >
+            {% include "mock/monthly_report_workshop/fragments/status.html" %}
+          </div>
+          <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem;">
+            <a class="btn mvp-primary-btn" href="/mock/monthly-report-workshop/jobs/{{ job.public_id }}/edit">レポートビューへ</a>
+            <button class="btn mvp-secondary-btn">キャンセル要求</button>
+          </div>
+        </section>
+        <section class="mvp-panel">
+          <h2 style="margin-top:0;">版情報</h2>
+          <p><strong>prompt_version</strong><br><code>{{ job.prompt_version }}</code></p>
+          <p><strong>template_hash</strong><br><code>{{ job.template_hash }}</code></p>
+          <p><strong>requested_model</strong><br><code>{{ job.requested_model }}</code></p>
+          <p><strong>resolved_model</strong><br><code>{{ job.resolved_model }}</code></p>
+        </section>
+      </div>
+      <div class="two-col">
+        <section class="mvp-panel">
+          <h2 style="margin-top:0;">ソース確認</h2>
+          {% for s in job.sources %}
+          <div class="source-row">
+            <div><strong>{{ s.name }}</strong><br><span class="mvp-muted">{{ s.kind }} · {{ s.hash }} · truncation {{ s.truncated }}</span></div>
+            <span class="mvp-badge">{{ s.status }}</span>
+          </div>
+          {% endfor %}
+        </section>
+        <section class="mvp-panel">
+          <h2 style="margin-top:0;">検証結果</h2>
+          {% for v in job.validations %}
+          <p><span class="mvp-badge">{{ v.severity }}</span> <strong>{{ v.rule }}</strong><br>{{ v.message }}</p>
+          {% endfor %}
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock %}

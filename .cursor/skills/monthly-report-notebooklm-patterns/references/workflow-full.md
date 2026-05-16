@@ -63,7 +63,7 @@ python scripts/notebooklm_json_to_txt.py samples/reports/<household>/sources/_nl
 
 ## ドキュメント月次サンプル（Pattern B・ご家庭向け HTML）
 
-`samples/reports/` の Pattern A〜D とは別系統で、**`docs/samples/monthly-reports/`** に **月次サンプル（鈴木・高藤）** と **`monthly_pattern_b_content.template.md`** がある。教師 MTG の文字起こしと学習計画表から **同じレイアウトの HTML** を出すときは、次を正とする。
+`samples/reports/` の Pattern A〜D とは別系統で、**`docs/samples/monthly-reports/`** に **Pattern B 月次規約**（`monthly_pattern_b_content.template.md`・`monthly_pattern_b_template.html`）および **適合済み配布サンプル**（`monthly_YYYY-MM_*_report.*`、例：鈴木・高藤分）がある。教師 MTG の文字起こしと学習計画表から HTML を書くときは **まず規約（MD → HTML を複製したテンプレ）を正とし**、ファイル名だけを短絡しない。
 
 - **03（ご家庭向け月次の「授業内容」）** の表下 **理解度（★）の目安**：`family-facing-tone.md` の「03 授業内容 — 理解度（★）の目安」または `monthly_pattern_b_content.template.md` の **03 授業内容** 節（**固定文案・改変禁止**）。
 - **文体・notebook_query**：`family-facing-tone.md` 全体。

@@ -8,6 +8,13 @@ from jinja2 import Environment
 
 from eb_app.fixtures.dashboard import admin_dashboard_context
 from eb_app.fixtures.mock_screens import MOCK_INDEX
+from eb_app.fixtures.monthly_report_workshop import (
+    workshop_home_context,
+    workshop_detail_context,
+    workshop_editor_context,
+    workshop_jobs_context,
+    workshop_new_context,
+)
 from eb_app.fixtures.portal_frame import PortalRole, augment_context
 from eb_app.fixtures.stub_contexts import (
     assignment_detail_context,
@@ -211,6 +218,115 @@ def mock_reports_monthly(
         active_nav="reports",
         breadcrumbs=[("月次レポート一覧", None)],
     )
+
+
+@router.get("/monthly-report-workshop", response_class=HTMLResponse)
+def mock_monthly_report_workshop_home(
+    request: Request,
+    templates: Environment = Depends(_templates),
+) -> HTMLResponse:
+    return _render(
+        templates,
+        request,
+        "mock/monthly_report_workshop/home.html",
+        workshop_home_context(),
+        portal_role="admin",
+        active_nav="report_workshop",
+        show_chrome=False,
+    )
+
+
+@router.get("/monthly-report-workshop/jobs", response_class=HTMLResponse)
+def mock_monthly_report_workshop_jobs(
+    request: Request,
+    templates: Environment = Depends(_templates),
+) -> HTMLResponse:
+    return _render(
+        templates,
+        request,
+        "mock/monthly_report_workshop/jobs.html",
+        workshop_jobs_context(),
+        portal_role="admin",
+        active_nav="report_workshop",
+        show_chrome=False,
+        breadcrumbs=[("レポート工房", None)],
+    )
+
+
+@router.get("/monthly-report-workshop/jobs/new", response_class=HTMLResponse)
+def mock_monthly_report_workshop_new(
+    request: Request,
+    templates: Environment = Depends(_templates),
+) -> HTMLResponse:
+    return _render(
+        templates,
+        request,
+        "mock/monthly_report_workshop/new.html",
+        workshop_new_context(),
+        portal_role="admin",
+        active_nav="report_workshop",
+        show_chrome=False,
+        breadcrumbs=[("レポート工房", "/mock/monthly-report-workshop/jobs"), ("新規ジョブ", None)],
+    )
+
+
+@router.get("/monthly-report-workshop/jobs/{job_id}", response_class=HTMLResponse)
+def mock_monthly_report_workshop_detail(
+    job_id: str,
+    request: Request,
+    templates: Environment = Depends(_templates),
+) -> HTMLResponse:
+    ctx = workshop_detail_context()
+    ctx["job"]["public_id"] = job_id
+    return _render(
+        templates,
+        request,
+        "mock/monthly_report_workshop/detail.html",
+        ctx,
+        portal_role="admin",
+        active_nav="report_workshop",
+        show_chrome=False,
+        breadcrumbs=[("レポート工房", "/mock/monthly-report-workshop/jobs"), (job_id, None)],
+    )
+
+
+@router.get("/monthly-report-workshop/jobs/{job_id}/edit", response_class=HTMLResponse)
+def mock_monthly_report_workshop_edit(
+    job_id: str,
+    request: Request,
+    templates: Environment = Depends(_templates),
+) -> HTMLResponse:
+    ctx = workshop_editor_context()
+    ctx["job"]["public_id"] = job_id
+    return _render(
+        templates,
+        request,
+        "mock/monthly_report_workshop/edit.html",
+        ctx,
+        portal_role="admin",
+        active_nav="report_workshop",
+        show_chrome=False,
+        breadcrumbs=[
+            ("レポート工房", "/mock/monthly-report-workshop/jobs"),
+            (job_id, f"/mock/monthly-report-workshop/jobs/{job_id}"),
+            ("推敲", None),
+        ],
+    )
+
+
+@router.get("/monthly-report-workshop/jobs/{job_id}/fragments/status", response_class=HTMLResponse)
+def mock_monthly_report_workshop_status_fragment(
+    job_id: str,
+    request: Request,
+    templates: Environment = Depends(_templates),
+) -> HTMLResponse:
+    ctx = workshop_detail_context()
+    ctx["job"]["public_id"] = job_id
+    page = templates.get_template("mock/monthly_report_workshop/fragments/status.html").render(
+        request=request,
+        job=ctx["job"],
+    )
+    return HTMLResponse(page)
 
 
 @router.get("/meetings/new", response_class=HTMLResponse)

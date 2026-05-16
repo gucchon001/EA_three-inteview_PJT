@@ -1,0 +1,42 @@
+{
+  "majorDimension": "ROWS",
+  "range": "student!A1:Z200",
+  "values": [
+    [
+      "生徒氏名",
+      "平林　礼"
+    ],
+    [
+      "高校",
+      "関西国際学園"
+    ],
+    [
+      "final exam",
+      "2026 Nov"
+    ],
+    [
+      "mock exam",
+      "2026 Jul"
+    ],
+    [
+      "IA",
+      "2月下旬～3月上旬　実験のpre-trial\n4月上旬　実験の実施\n4月下旬　first draftのフィードバック\n5月中旬　final draftの提出"
+    ],
+    [
+      "HL",
+      "English B 6/7\nMath AA（英語）6/7\nBiology（英語）6/7→5/7"
+    ],
+    [
+      "SL",
+      "Japanese A LL 7/7→6/7→7/7\nEconomics（日本語） 6/7→7/7\nPhysics （英語） 5/7→6/7→7/7"
+    ],
+    [
+      "志望校",
+      "岡山大学医学部"
+    ],
+    [
+      "指導言語",
+      "日英両言語(苦手意識の範囲や追求して理解したい部分は日本語)"
+    ]
+  ]
+}

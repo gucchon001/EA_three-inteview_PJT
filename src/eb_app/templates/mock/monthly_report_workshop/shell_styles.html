@@ -1,0 +1,218 @@
+.mvp-app {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 238px minmax(0, 1fr);
+  background: #eef2f7;
+  color: #1a1a1a;
+  font-family: "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+  line-height: 1.5;
+}
+.mvp-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: #fff;
+  border-right: 1px solid #dde3ec;
+  padding: 14px 12px;
+  box-shadow: 1px 0 2px rgba(0,0,0,.03);
+}
+.mvp-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  color: #2c3e50;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0;
+}
+.mvp-brand:hover { color: #4a6491; text-decoration: none; }
+.mvp-brand-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #2c3e50;
+  box-shadow: 0 0 0 3px rgba(44,62,80,.12);
+  flex-shrink: 0;
+}
+.mvp-nav-label {
+  margin: 18px 0 6px 8px;
+  color: #7f8c9a;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.mvp-nav a,
+.mvp-nav button {
+  width: 100%;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 7px 9px;
+  background: transparent;
+  color: #2c3e50;
+  font: inherit;
+  font-size: 0.84rem;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mvp-nav a:hover,
+.mvp-nav button:hover {
+  background: #eef2f7;
+  border-color: #dde3ec;
+  text-decoration: none;
+}
+.mvp-nav a.active,
+.mvp-nav button.active {
+  background: #f4f7fb;
+  border-color: #c5cdd8;
+  box-shadow: inset 3px 0 0 #2c3e50;
+  font-weight: 600;
+}
+.mvp-status-card {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid #dde3ec;
+  border-radius: 8px;
+  background: #fafbfd;
+  font-size: 0.84rem;
+}
+.mvp-main {
+  min-width: 0;
+  padding: 16px;
+}
+.mvp-page-wrap {
+  max-width: min(1120px, 100%);
+  margin: 0 auto;
+}
+.mvp-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 auto 12px;
+  max-width: min(1120px, 100%);
+}
+.mvp-topbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.mvp-topbar-actions .btn,
+.mvp-secondary-btn {
+  border: 1px solid #c5cdd8;
+  background: #f8fafc;
+  color: #2c3e50;
+  border-radius: 6px;
+  font-size: 0.84rem;
+}
+.mvp-topbar-actions .btn:hover,
+.mvp-secondary-btn:hover {
+  background: #eef2f7;
+  border-color: #aeb8c4;
+  text-decoration: none;
+}
+.mvp-page-title {
+  font-family: "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+  font-size: 1.2rem;
+  color: #2c3e50;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.mvp-panel {
+  background: #fff;
+  border: 1px solid #dde3ec;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+.mvp-muted {
+  color: #5a6570;
+  font-size: 0.85rem;
+}
+.mvp-grid {
+  display: grid;
+  gap: 12px;
+}
+.mvp-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+.mvp-metric {
+  background: #fff;
+  border: 1px solid #dde3ec;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.mvp-metric .value {
+  color: #2c3e50;
+  font-size: 1.55rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.mvp-metric.warning .value { color: #9a6700; }
+.mvp-metric.error .value { color: #a33a2a; }
+.mvp-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 820px;
+}
+.mvp-table th,
+.mvp-table td {
+  padding: 0.65rem 0.55rem;
+  border-bottom: 1px solid #dde3ec;
+  text-align: left;
+  vertical-align: top;
+}
+.mvp-table th {
+  color: #5a6570;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.mvp-table a { color: #2c3e50; font-weight: 700; }
+.mvp-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f4f7fb;
+  border: 1px solid #dde3ec;
+  color: #475569;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+.mvp-primary-btn {
+  background: #2c3e50;
+  color: #fff;
+  border: 1px solid #2c3e50;
+  border-radius: 6px;
+}
+.mvp-primary-btn:hover {
+  background: #1f2d3a;
+  border-color: #1f2d3a;
+  color: #fff;
+  text-decoration: none;
+}
+@media (max-width: 860px) {
+  .mvp-app { grid-template-columns: 1fr; }
+  .mvp-sidebar {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid #dde3ec;
+  }
+  .mvp-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.25rem;
+  }
+  .mvp-topbar { align-items: flex-start; flex-direction: column; }
+}

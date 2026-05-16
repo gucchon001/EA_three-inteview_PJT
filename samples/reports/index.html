@@ -10,6 +10,8 @@
             font-family: "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
             background: #eef2f7;
             color: #1a1a1a;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
             padding: 28px 16px 48px;
             line-height: 1.5;
         }
@@ -108,7 +110,8 @@
             相対リンクはプロジェクトルートを静的配信したときに有効です。
             例: <code>python scripts/serve_project.py</code> のあと
             <a href="./index.html">samples/reports/index.html</a> を開く。
-            260319 時系列ありの 8 世帯について Pattern A〜D を配置（自動生成＋要レビュー）。
+            一覧のご家庭について Pattern A〜D を配置（自動生成＋要レビュー）。
+            平林様は当面 <strong>gws 一次ソース</strong>のみ（NotebookLM／Pattern は未）。
         </p>
 
         <div class="matrix-wrap">
@@ -210,6 +213,14 @@
                         <td><a class="cell" href="household_takafuji/pattern_b.html">pattern_b.html</a></td>
                         <td><a class="cell" href="household_takafuji/pattern_c_simple.html">pattern_c_simple.html</a></td>
                         <td><a class="cell" href="household_takafuji/pattern_d.html">pattern_d.html</a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            平林 礼さま（67982・Physics SL）
+                            <span class="sub">household_hirabayashi</span>
+                            <a class="sources" href="household_hirabayashi/sources/">sources/</a>
+                        </th>
+                        <td colspan="4"><span class="na">一次ソースのみ（README 参照）</span><span class="cell-desc"><code>gws</code> 済・Pattern A〜D は別途生成</span></td>
                     </tr>
                     <tr>
                         <th scope="row">

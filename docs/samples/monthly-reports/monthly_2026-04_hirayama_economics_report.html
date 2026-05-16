@@ -1,0 +1,449 @@
+<!-- openrouter draft artifact=html sources: _gws_doc_teacher_MTG_gemini.txt, _gws_SL_lesson_plan_A1-M250_values.json, _gws_spreadsheet_meta.json, _gws_student_A1-Z200_values.json truncated=False model=anthropic/claude-sonnet-4.6 temperature=0.1 seed=6798299 -->
+
+<!DOCTYPE html>
+<!-- monthly-report-revision: Economics SL / 平林 礼 / 2026-05 -->
+<html lang="ja"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUBAL Academy 月次学習レポート（平林 礼 様）</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+            font-size: 10.5pt;
+            line-height: 1.75;
+            color: #1a1a1a;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            background: #e8e8e8;
+            padding: 20px;
+        }
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            background: #fff;
+            margin: 0 auto;
+            padding: 20mm 18mm 18mm;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 16px;
+        }
+        .logo-block .logo-name { font-size: 16pt; font-weight: 900; color: #2c3e50; letter-spacing: 1px; }
+        .logo-block .logo-sub { font-size: 8pt; color: #666; letter-spacing: 0.5px; }
+        .report-meta-header { text-align: right; font-size: 8pt; color: #555; line-height: 1.8; }
+        .report-meta-header .report-id { font-weight: 700; color: #2c3e50; }
+        .title-block {
+            background: #2c3e50;
+            color: #fff;
+            padding: 14px 20px;
+            margin-bottom: 14px;
+            border-radius: 2px;
+        }
+        .title-block h1 { font-size: 15pt; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
+        .title-block .title-period { font-size: 9pt; opacity: 0.9; letter-spacing: 0.5px; }
+        .family-greeting {
+            font-size: 10.5pt;
+            color: #333;
+            margin-bottom: 18px;
+            line-height: 1.85;
+        }
+        .family-greeting p { margin-bottom: 10px; }
+        .family-greeting .honorific { margin-bottom: 4px; font-weight: 700; color: #2c3e50; }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 18px;
+            font-size: 9.5pt;
+        }
+        .info-table td {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+        }
+        .info-table td:nth-child(odd) {
+            background: #f5f5f5;
+            font-weight: 700;
+            color: #2c3e50;
+            width: 22%;
+            white-space: nowrap;
+        }
+        .info-table td:nth-child(even):not([colspan]) { width: 28%; }
+        .info-table td[colspan] { width: auto; }
+        .section { margin-bottom: 22px; page-break-inside: avoid; }
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #2c3e50;
+            color: #fff;
+            padding: 6px 12px;
+            margin-bottom: 12px;
+            border-radius: 2px;
+        }
+        .section-heading .sec-num {
+            font-size: 9pt;
+            background: #4a6491;
+            padding: 1px 7px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+        .section-heading h2 { font-size: 11pt; font-weight: 700; letter-spacing: 0.5px; }
+        .section-body p { margin-bottom: 10px; font-size: 10.5pt; }
+        .section-body h3 {
+            font-size: 10.5pt;
+            color: #2c3e50;
+            margin: 14px 0 8px;
+            font-weight: 700;
+        }
+        .data-table thead tr,
+        .plan-table thead th,
+        .exam-mini-table thead th,
+        .mood-table thead th {
+            background: #6d7482;
+            color: #fff;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 12px;
+        }
+        .data-table thead th {
+            padding: 7px 10px;
+            font-weight: 700;
+            text-align: left;
+            font-size: 9pt;
+        }
+        .data-table tbody tr:nth-child(even) { background: #f5f7fa; }
+        .data-table tbody td { padding: 7px 10px; border-bottom: 1px solid #dde3ec; vertical-align: top; }
+        .analysis-box {
+            border: 1px solid #c8d5e8;
+            border-left: 4px solid #4a6491;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            background: #f9fbff;
+            border-radius: 0 2px 2px 0;
+            font-size: 10.5pt;
+        }
+        .analysis-box .box-label { font-weight: 700; color: #2c3e50; margin-bottom: 8px; }
+        .analysis-box p { margin-bottom: 8px; }
+        .analysis-box ul { margin-left: 1.15em; }
+        .analysis-box li { margin-bottom: 6px; }
+        .plan-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 12px;
+        }
+        .plan-table th, .plan-table td {
+            border: 1px solid #ccc;
+            padding: 7px 10px;
+            vertical-align: top;
+        }
+        .plan-table thead th {
+            font-weight: 700;
+            font-size: 9pt;
+        }
+        .plan-table tbody tr:nth-child(even) { background: #f5f7fa; }
+        .closing-line { margin-top: 14px; font-size: 10.5pt; }
+        .page-footer {
+            margin-top: 28px;
+            padding-top: 12px;
+            border-top: 2px solid #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 8pt;
+            color: #555;
+        }
+        .admin-only {
+            margin-top: 28px;
+            padding: 14px 16px;
+            border: 2px dashed #c0392b;
+            background: #fff8f8;
+            border-radius: 4px;
+        }
+        .admin-only h2 {
+            font-size: 10.5pt;
+            color: #c0392b;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .admin-only > p { font-size: 9pt; color: #c0392b; font-weight: 700; margin-bottom: 10px; }
+        .admin-only ul { margin-left: 1.1em; }
+        .admin-only li {
+            color: #c0392b;
+            font-weight: 700;
+            font-size: 9.5pt;
+            margin-bottom: 8px;
+            line-height: 1.55;
+        }
+        @media print {
+            body { background: none; padding: 0; }
+            .page { width: 210mm; padding: 18mm 16mm 16mm; box-shadow: none; }
+            .no-print { display: none !important; }
+        }
+        .print-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 10px 22px;
+            background: #2c3e50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 10pt;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+        }
+        .print-btn:hover { background: #4a6491; }
+        .exam-mini-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 12px;
+        }
+        .exam-mini-table th, .exam-mini-table td {
+            border: 1px solid #ccc;
+            padding: 7px 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .exam-mini-table thead th { font-weight: 700; }
+        .exam-mini-table tbody tr:nth-child(even) { background: #f5f7fa; }
+        .mood-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 14px;
+        }
+        .mood-table th, .mood-table td {
+            border: 1px solid #dde3ec;
+            padding: 8px 10px;
+            vertical-align: top;
+        }
+        .mood-table thead th { font-weight: 700; font-size: 9pt; }
+        .mood-table tbody tr:nth-child(even) { background: #f5f7fa; }
+        .mood-table tbody td:first-child {
+            white-space: nowrap;
+            width: 1%;
+            padding-right: 12px;
+        }
+        .mood-icon { font-size: 14pt; margin-right: 4px; vertical-align: middle; }
+        .mood-legend {
+            font-size: 8.5pt;
+            color: #444;
+            background: #f8f9fb;
+            border: 1px solid #dde3ec;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            line-height: 1.55;
+            border-radius: 2px;
+        }
+        .mood-legend p { margin: 0 0 6px; }
+        .mood-legend p:last-child { margin-bottom: 0; }
+        .h3-monthly { font-size: 10.5pt; color: #2c3e50; margin: 0 0 10px; font-weight: 700; }
+        .plan-sub { font-size: 10pt; font-weight: 700; color: #2c3e50; margin: 12px 0 8px; }
+    </style>
+</head>
+<body>
+    <p class="no-print" style="max-width:210mm;margin:0 auto 10px;padding:8px 12px;background:#eef6ff;border:1px solid #90caf9;font-size:9pt;text-align:center;">
+        ご家庭へお送りする PDF を印刷するときは、この注意文と下の<strong>管理者向け</strong>の枠が印刷されないことをご確認ください（ブラウザの印刷プレビューで確認できます）。
+    </p>
+    <div class="page">
+
+        <header class="page-header">
+            <div class="logo-block">
+                <div class="logo-name">EDUBAL Academy</div>
+                <div class="logo-sub"><br></div>
+            </div>
+            <div class="report-meta-header">
+                <div class="report-id">RPT-202605-HIRABAYASHI</div>
+                <div>発行日：2026年5月11日</div>
+                <div>対象期間：2026年4月1日 ─ 5月11日</div>
+            </div>
+        </header>
+
+        <div class="title-block">
+            <h1>月次学習レポート</h1>
+            <div class="title-period">2026年4月〜5月の学習の様子と今後の予定</div>
+        </div>
+
+        <div class="family-greeting">
+            <p class="honorific">平林 礼 様<br>保護者の皆様</p>
+            <p>いつも Tehee Lee 先生の指導を受けていただき、ありがとうございます。</p>
+            <p>本レポートは、学習計画表と担当との打合せの内容をもとに、直近の学習の様子と今後の予定を整理したものです。</p>
+        </div>
+
+        <!-- 01 基本情報 -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">01</span>
+                <h2>基本情報</h2>
+            </div>
+            <table class="info-table">
+                <tbody>
+                    <tr>
+                        <td>お名前</td>
+                        <td>平林 礼 様</td>
+                        <td>担当教師</td>
+                        <td>Tehee Lee</td>
+                    </tr>
+                    <tr>
+                        <td>担当</td>
+                        <td>藤井</td>
+                        <td>指導科目</td>
+                        <td>Economics SL</td>
+                    </tr>
+                    <tr>
+                        <td>ご志望の大学</td>
+                        <td>岡山大学医学部</td>
+                        <td>IBスコア（目標）</td>
+                        <td>7/7（Economics SL）</td>
+                    </tr>
+                    <tr>
+                        <td>mock exam</td>
+                        <td>2026年7月</td>
+                        <td>final exam</td>
+                        <td>2026年11月</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="section-body">
+                <h3>学校のテスト状況・IA について</h3>
+                <p>学校では現在 Economics のカリキュラムが 4.3.2 まで進んでおり、ペースが速い状況です。また、学校から IA（内部評価）の課題が出されており、今月末までに初回ドラフトを提出する必要があります。礼さんは前回の評価を踏まえ、今回の IA でスコア 7 を目指したいという意欲を持っています。</p>
+            </div>
+        </section>
+
+        <!-- 02 塾での様子 -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">02</span>
+                <h2>塾での様子</h2>
+            </div>
+            <div class="analysis-box">
+                <div class="box-label">良い点・成長がみられる点</div>
+                <p>礼さんは IA に対して高い意欲を持って取り組んでおり、担当としても大変頼もしく感じています。</p>
+                <p>授業では理解できていない箇所をその都度質問し、一つひとつ解決していくスタイルが定着しています。基本的な概念は既習の範囲が多く、短期間でも効率よく学習を進められる素地が整っています。</p>
+            </div>
+            <p class="mood-legend"><strong>凡例：</strong>😊 良い　🙂 やや良い　😐 まずまず　😢 課題あり</p>
+            <h3 class="h3-monthly">今月の振り返りと次月の目標</h3>
+            <table class="mood-table">
+                <thead>
+                    <tr><th>項目</th><th>今月の学習状況と評価</th><th>今月の振り返りと次月の目標</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>学習進捗</td>
+                        <td><span class="mood-icon">🙂</span>やや良い</td>
+                        <td>学校のカリキュラムが速いペースで進んでおり、当塾では IA 対策と並行して The Global Economy（4.1〜4.2 周辺）の授業を進めています。7月のモック試験を見据え、6月中旬までにカリキュラムを終える計画で進めています。</td>
+                    </tr>
+                    <tr>
+                        <td>学習意欲</td>
+                        <td><span class="mood-icon">😊</span>良い</td>
+                        <td>IA のスコア 7 を目指したいという明確な目標を持って取り組んでいます。授業でも分からない箇所を積極的に質問する姿勢が見られ、担当として引き続き丁寧にサポートしてまいります。</td>
+                    </tr>
+                    <tr>
+                        <td>宿題の提出</td>
+                        <td><span class="mood-icon">🙂</span>やや良い</td>
+                        <td>今後は予習目的の読書に加え、練習問題を解く宿題も増やしていく方針です。アウトプットの量を増やすことで、試験本番に向けた記述力を高めていきたいと考えています。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 03 授業内容 -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">03</span>
+                <h2>授業内容</h2>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr><th>授業日</th><th>学習単元</th><th>理解度</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2026/04/15</td>
+                        <td>The Global Economy — International Trade<br><span style="font-size: 12.6667px;">4.1.1 The benefits of international trade/4.1.2 Calculating exports and imports/4.1.3 Absolute and comparative advantage/4.1.4 Tariffs</span></td>
+                        <td>★★☆</td>
+                    </tr>
+                    <tr>
+                        <td>2026/05/11</td>
+                        <td><span style="background-color: rgb(245, 247, 250);">The Global Economy — Trade Policy &amp; IA 対策<br><span style="font-size: 12.6667px;">4.2.2 Trading blocs and monetary union/4.2.3 WTO/IA outline・draft 作成</span></span></td>
+                        <td>★★☆</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="section-body" style="font-size:9pt;color:#555;margin-bottom:10px;"><b>理解度（★）の目安：<br></b><span style="font-size: 9pt;">★☆☆＝基礎内容の定着が必要<br>★★☆＝基礎問題が解けるが応用問題に対応できない<br>★★★＝基礎に加え応用問題にも対応できている<br>※いずれも授業内の観察と演習の様子に基づきます。</span></p>
+            <p class="section-body" style="font-size:9pt;color:#555;">学習計画表に理解度列がないため、担当の見立てで記載しています。</p>
+        </section>
+
+        <!-- 04 課題とアドバイス -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">04</span>
+                <h2>課題とアドバイス</h2>
+            </div>
+            <div class="section-body">
+                <p>学校のカリキュラムは指導順序が変動することがあり、内容の抜け漏れが生じる可能性があります。当塾では授業の中でシラバスを照合しながら、抜け漏れを把握して効率よく学習を進める方針をとっています。</p>
+                <p>IA については、学校の担当教員の採点基準が不明瞭な部分があるため、まずは初回ドラフトを提出し、教員のフィードバックを受けてから修正方針を決めることをお勧めします。前回のフィードバックをそのまま反映させることが必ずしも最善ではない場合もあるため、担当と一緒に内容を確認しながら進めていきます。</p>
+                <p>7月のモック試験に向けて、残り8回の授業のうち2回を IA 対策に充て、残り6回で重要単元および周辺知識の復習に注力する計画です。基本的な概念は既習のものが多いため、短期間でも十分に対応できると担当は見ています。</p>
+            </div>
+        </section>
+
+        <!-- 05 今後の授業計画 -->
+        <section class="section">
+            <div class="section-heading">
+                <span class="sec-num">05</span>
+                <h2>今後の授業計画</h2>
+            </div>
+            <div class="section-body">
+                <p>今後の詳細な単元と日程は、<a href="https://docs.google.com/spreadsheets/d/1hNXIgBDqB9qJnrgVqzfx9CamyEXVIJLQE0cHNfYDJEs/edit" target="_blank" rel="noopener noreferrer">▶ 学習計画表</a>をご確認ください。</p>
+                <p>6月中旬までに The Global Economy のカリキュラム内容を終えることを目標に、授業を進めてまいります。残りの授業は礼さんの学校のテスト期間や都合に合わせて柔軟に調整する方針です。IA のドラフト提出後は、担当と進捗を確認しながら演習の比重を高めていく予定です。</p>
+            </div>
+            <div class="analysis-box">
+                <div class="box-label">今後の進め方・ご家庭へのお願い</div>
+                <ul>
+                    <li>学校の<strong>テスト日程</strong>や <strong>IA・EE のスケジュール</strong>（提出期限・フィードバック時期など）が分かりましたら、当塾までお知らせください。他科目の負荷が高い時期を把握することで、授業の調整がよりスムーズになります。</li>
+                    <li>IA の初回ドラフト提出後、学校からのフィードバック内容もお知らせいただけますと、次回授業での修正サポートに活かせます。</li>
+                    <li>必要に応じて、担当の藤井より学習計画の調整についてもご連絡いたします。</li>
+                </ul>
+            </div>
+            <p class="closing-line">ご確認いただき、ご意見やご要望がありましたらお知らせいただけますと幸いです。<br>引き続きどうぞよろしくお願いいたします。</p>
+        </section>
+
+        <footer class="page-footer">
+            <div class="footer-contact">
+                <strong>EDUBAL Academy</strong><br>
+                お問い合わせは担当教師・担当まで<br><br>
+            </div>
+            <div class="footer-right">
+                © 2026 EDUBAL Academy<br>
+                本レポートの内容は個人情報を含みます。<br>
+                取り扱いにご注意ください。
+            </div>
+        </footer>
+
+        <section class="admin-only no-print" aria-label="管理者向け注意">
+            <h2>【管理者・担当者向け】配布前チェック</h2>
+            <p>ご家庭へ送付する PDF では、本節が印刷されないことを確認してください。</p>
+            <ul>
+                <li>一次情報：<code>_gws_student_A1-Z200_values.json</code>、<code>_gws_SL_lesson_plan_A1-M250_values.json</code>、<code>_gws_doc_teacher_MTG_gemini.txt</code>。配布前に原記録と照合してください。</li>
+                <li>MTG メモには平林様・飯村様の両名が登場します。本レポートは平林様（Economics SL）に関する記述のみを根拠としています。飯村様に関する内容は転記していません。</li>
+                <li>授業日は学習計画表の「授業日」列（E列）に記載のある 2026/04/15・2026/05/11 のみを採用しています。他の日付は計画表に記載がないため本文に載せていません。</li>
+                <li>理解度（★）は学習計画表に専用列がないため、担当の見立てで記載しています。配布前に Tehee Lee 先生と確認してください。</li>
+                <li>IA のスケジュール詳細（student シートの「IA」行）は Economics SL の IA ではなく他科目の可能性があります。配布前に平林様に直接確認してください。</li>
+                <li>IB スコア（目標）は student シートの SL 行「Economics（日本語） 6/7→7/7」から 7/7 を転記しています。現状スコアは計画表に記載がないため 01 表から省いています。</li>
+            </ul>
+        </section>
+    </div>
+
+    <button class="print-btn no-print" onclick="window.print()">印刷 / PDF保存（管理者欄は非表示）</button>
+
+</body></html>

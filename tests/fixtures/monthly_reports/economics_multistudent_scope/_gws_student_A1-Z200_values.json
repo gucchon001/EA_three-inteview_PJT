@@ -1,0 +1,8 @@
+{
+  "range": "student!A1:Z200",
+  "values": [
+    ["student", "course", "monthly_observation"],
+    ["対象生徒A", "Economics", "グラフの形と本文の主張を結びつけられるようになってきた"],
+    ["対象外生徒B", "Other", "この観察は対象外として扱う"]
+  ]
+}

@@ -1,0 +1,49 @@
+{% extends "mock/base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block extra_style %}
+{% include "mock/monthly_report_workshop/shell_styles.html" %}
+.form-grid { display:grid; gap:1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.form-grid label { display:flex; flex-direction:column; gap:0.35rem; font-size:0.86rem; color:#5a6570; font-weight:600; }
+.form-grid input, .form-grid select, textarea { font:inherit; border:1px solid #c5cdd8; border-radius:6px; padding:0.65rem 0.75rem; background:#fff; color:#2c3e50; }
+.form-grid input:focus-visible, .form-grid select:focus-visible, textarea:focus-visible { outline:2px solid #2c3e50; outline-offset:2px; }
+.form-grid .wide { grid-column:1 / -1; }
+@media (max-width: 760px) { .form-grid { grid-template-columns:1fr; } }
+{% endblock %}
+{% block bare %}
+{% set active_mvp_nav = 'new' %}
+{% set sidebar_status = '新規読み込み' %}
+<div class="mvp-app">
+  {% include "mock/monthly_report_workshop/shell_sidebar.html" %}
+  <main class="mvp-main">
+    <div class="mvp-topbar">
+      <div>
+        <p class="mvp-muted" style="margin:0;">{{ role_label }} · ソース指定 → 取得確認 → 生成</p>
+        <h1 class="mvp-page-title">{{ page_title }}</h1>
+      </div>
+      <div class="mvp-topbar-actions">
+        <a class="btn mvp-secondary-btn" href="/mock/monthly-report-workshop/jobs">ジョブ一覧</a>
+        <a class="btn mvp-secondary-btn" href="/mock/">モック索引</a>
+      </div>
+    </div>
+
+    <div class="mvp-page-wrap">
+      <section class="mvp-panel">
+        <h2 style="margin-top:0;">ソース指定</h2>
+        <div class="form-grid">
+          <label>対象月<input value="{{ target_month }}" /></label>
+          <label>対象世帯<input value="{{ household }}" /></label>
+          <label class="wide">Spreadsheet URL<input value="{{ spreadsheet_url }}" /></label>
+          <label class="wide">Docs URL<input value="{{ doc_url }}" /></label>
+          <label>テンプレート<select>{% for t in templates %}<option>{{ t }}</option>{% endfor %}</select></label>
+          <label>モデルプリセット<select><option>固定: report model</option><option>管理者比較: openrouter/auto</option></select></label>
+          <label class="wide">メモ<textarea rows="4">現行HTML全文エディタへ接続するモックジョブ</textarea></label>
+        </div>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem;">
+          <a class="btn mvp-primary-btn" href="/mock/monthly-report-workshop/jobs/mrj_demo_001">ソース取得して生成へ</a>
+          <a class="btn mvp-secondary-btn" href="/mock/monthly-report-workshop/jobs">一覧へ戻る</a>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+{% endblock %}
