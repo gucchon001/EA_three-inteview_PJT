@@ -32,6 +32,19 @@ def _rel(p: str | None) -> str | None:
     return str(p).strip() or None
 
 
+def recipe_to_workshop_job_fields(rec: dict[str, Any]) -> dict[str, str | None]:
+    rv = rec.get("recipe_version")
+    if rv != 1:
+        raise ValueError(f"未対応の recipe_version: {rv!r}（1のみ）")
+
+    prompts = rec.get("prompts") or {}
+    scope_reminder = prompts.get("scope_reminder")
+    prompt_scope_notes = (
+        str(scope_reminder).strip() if scope_reminder is not None else None
+    )
+    return {"prompt_scope_notes": prompt_scope_notes or None}
+
+
 def _recipe_to_argv(rec: dict[str, Any], root: Path) -> list[str]:
     rv = rec.get("recipe_version")
     if rv != 1:
@@ -93,9 +106,9 @@ def _recipe_to_argv(rec: dict[str, Any], root: Path) -> list[str]:
     if seed is not None:
         argv.extend(["--seed", str(int(seed))])
 
-    scope_r = prompts.get("scope_reminder")
+    scope_r = recipe_to_workshop_job_fields(rec)["prompt_scope_notes"]
     if scope_r:
-        argv.extend(["--bundle-scope-reminder", str(scope_r).strip()])
+        argv.extend(["--bundle-scope-reminder", scope_r])
 
     pj = sources.get("presets_json")
     argv.extend(["--presets-json", str(root / (pj or "scripts/monthly_report_source_presets.json"))])

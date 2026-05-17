@@ -1,0 +1,34 @@
+<div class="space-y-2">
+  {% if validations %}
+  <div class="overflow-x-auto">
+    <table class="table table-xs table-zebra">
+      <thead>
+        <tr>
+          <th>rule</th>
+          <th>severity</th>
+          <th>path</th>
+          <th>message</th>
+        </tr>
+      </thead>
+      <tbody>
+    {% for validation in validations %}
+        <tr>
+          <td class="font-semibold">{{ validation.rule_id }}</td>
+          <td>
+            <span class="badge badge-sm {% if validation.severity == 'error' %}badge-error{% elif validation.severity == 'warning' %}badge-warning{% else %}badge-info{% endif %}">
+              {{ validation.severity }}
+            </span>
+          </td>
+          <td><code>{{ validation.path }}</code></td>
+          <td>{{ validation.message }}</td>
+        </tr>
+    {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div role="alert" class="alert rounded-md py-3 text-sm">
+    <span>検証結果はまだありません。</span>
+  </div>
+  {% endif %}
+</div>

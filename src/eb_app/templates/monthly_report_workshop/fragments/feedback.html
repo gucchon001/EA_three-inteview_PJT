@@ -1,0 +1,26 @@
+<div class="space-y-2">
+  {% if job.feedback %}
+  <div class="overflow-x-auto">
+    <table class="table table-xs table-zebra">
+      <thead>
+        <tr>
+          <th>category</th>
+          <th>comment</th>
+        </tr>
+      </thead>
+      <tbody>
+    {% for item in job.feedback %}
+        <tr>
+          <td><span class="badge badge-sm badge-outline">{{ item.category }}</span></td>
+          <td>{{ item.comment }}</td>
+        </tr>
+    {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div role="alert" class="alert rounded-md py-3 text-sm">
+    <span>フィードバックはまだありません。</span>
+  </div>
+  {% endif %}
+</div>

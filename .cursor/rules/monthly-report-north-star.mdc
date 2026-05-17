@@ -23,7 +23,10 @@ alwaysApply: false
 2. **コンテンツ正本**: `docs/samples/monthly-reports/monthly_pattern_b_content.template.md` と DATA_CONTRACT。競合時は規約優先。
 3. **レイアウト**: LLM への **白紙 HTML だけ** は避ける。**`ideal_html` + `structure-from-ideal`** または **Jinja + JSON ペイロード** でシェルを固定。
 4. **再現**: 生成条件は `docs/samples/monthly-reports/fixtures/report_recipes/*.recipe.json` + `scripts/monthly_report_run_recipe.py` で保存・再実行可能にする（将来はサーバ job パラメータへ相当移植）。
-5. **セキュリティ**: OpenRouter／Google／暗号鍵を **ブラウザに載せない**（現在 POC のローカル `.env` は開発限定。運用モデルは `agents.md`）。
-6. **低トークン運用**: 探索は `rg` と正本入口で絞り、モデル選択・サブエージェント利用は `agents.md` の「低トークン運用・モデルルーティング」を優先する。
+5. **UI境界**: レポート工房の通常画面操作は **Jinja2 + HTMX のHTMLページ/HTML断片**を返す。`/api/monthly-reports/*` のJSON APIは worker、E2E、管理スクリプト、将来連携用に残し、通常UIからDOM更新目的で直接叩かない。
+6. **認証・RLS**: SSR/HTMX本番UIは **HTTPOnly / Secure / SameSite=Lax Cookie + CSRF** を正とする。Supabase RLSを主境界に寄せ、ユーザーJWT付きSupabase Clientを第一候補、service role/direct DBは限定用途に閉じる。
+7. **運用安全**: Cloud Run workerは lease timeout、stuck job再claim、再試行上限、冪等性を決めてから本番運用へ進める。Google Docs/Sheets本文は信頼済み指示として扱わず、プロンプトインジェクション対策と送付前の人間承認を必須にする。
+8. **セキュリティ**: OpenRouter／Google／暗号鍵を **ブラウザに載せない**（現在 POC のローカル `.env` は開発限定。運用モデルは `agents.md`）。
+9. **低トークン運用**: 探索は `rg` と正本入口で絞り、モデル選択・サブエージェント利用は `agents.md` の「低トークン運用・モデルルーティング」を優先する。
 
 スキルの入口: **`monthly-report-new-household-gws`**（gws〜エディタ）、**`monthly-report-notebooklm-patterns`**（文体・★固定）。

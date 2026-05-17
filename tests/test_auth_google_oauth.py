@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import time
+
 from cryptography.fernet import Fernet
 from fastapi import HTTPException
 from fastapi.testclient import TestClient
+import jwt
 import pytest
 
 from eb_app.auth.dependencies import CurrentUser
@@ -181,7 +184,55 @@ def test_google_auth_bridge_embeds_public_supabase_settings(monkeypatch):
     assert "https://example.supabase.co" in response.text
     assert "anon-public-key" in response.text
     assert "openid email drive.readonly" in response.text
+    assert "/auth/session-cookie" in response.text
     assert "/api/auth/google-oauth/supabase-session" in response.text
+
+
+def test_monthly_report_workshop_e2e_page_embeds_live_api_flow(monkeypatch):
+    monkeypatch.setenv("SUPABASE_URL", "https://example.supabase.co")
+    monkeypatch.setenv("SUPABASE_ANON_KEY", "anon-public-key")
+
+    client = TestClient(create_app())
+    response = client.get("/monthly-report-workshop/e2e")
+
+    assert response.status_code == 200
+    assert "Monthly Report Workshop Live E2E" in response.text
+    assert "/api/monthly-reports/jobs" in response.text
+    assert "/fetch-google-sources" in response.text
+    assert "/run-openrouter" in response.text
+    assert "/artifacts" in response.text
+    assert "/validations" in response.text
+    assert "/llm-calls" in response.text
+
+
+def test_auth_session_cookie_endpoint_sets_http_only_cookie(monkeypatch):
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+    monkeypatch.setenv("EB_ENV", "production")
+    token = _supabase_token(
+        email="member@tomonokai-corp.com",
+        sub="user-cookie-bridge-123",
+        role="authenticated",
+    )
+
+    client = TestClient(create_app())
+    response = client.post("/auth/session-cookie", json={"access_token": token})
+
+    assert response.status_code == 204
+    set_cookie = response.headers["set-cookie"]
+    assert "eb_auth_session=" in set_cookie
+    assert "HttpOnly" in set_cookie
+    assert "Secure" in set_cookie
+    assert "samesite=lax" in set_cookie.lower()
+
+
+def test_auth_session_cookie_endpoint_rejects_invalid_token_without_cookie(monkeypatch):
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+
+    client = TestClient(create_app())
+    response = client.post("/auth/session-cookie", json={"access_token": "not-a-token"})
+
+    assert response.status_code == 401
+    assert "set-cookie" not in response.headers
 
 
 def test_supabase_google_oauth_session_api_rejects_user_mismatch(monkeypatch):
@@ -279,3 +330,25 @@ def test_supabase_google_session_adapter_rejects_provider_or_email_mismatch():
     assert provider_exc.value.detail == "Google provider payload is required"
     assert email_exc.value.status_code == 403
     assert email_exc.value.detail == "Supabase provider email does not match current user"
+
+
+def _supabase_token(
+    *,
+    email: str,
+    sub: str,
+    role: str,
+    secret: str = "test-supabase-jwt-secret",
+) -> str:
+    now = int(time.time())
+    return jwt.encode(
+        {
+            "aud": "authenticated",
+            "exp": now + 300,
+            "iat": now,
+            "sub": sub,
+            "email": email,
+            "role": role,
+        },
+        secret,
+        algorithm="HS256",
+    )

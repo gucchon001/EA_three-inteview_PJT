@@ -29,7 +29,7 @@
      - Google Sheets / Docs はユーザーOAuthでサーバ取得
      - OpenRouter中心
      - 1ユーザー最大3生成ジョブ
-     - MVPは本番のみ
+     - MVPは本番のみ。stagingは本番ポータル合流タイミングでproductionと合わせて用意する
      - MVPの主目的はチューニング、ログ・スナップショット・生成物保存を必須
 
 3. **MVPの境界**
@@ -41,6 +41,13 @@
    - サービスアカウント鍵や OpenRouter API キーをフロントへ置かない。
    - PIIをログへ生出力しない。
    - ソーススナップショット・生成物・検証結果は保存するが、権限・保持期間・削除ポリシーを必ず設計対象に含める。
+
+5. **HTMX / Auth / 運用境界**
+   - レポート工房の通常画面操作は Jinja2 + HTMX のHTMLページまたはHTML断片を返す。`/api/monthly-reports/*` のJSON APIは worker、E2E、管理スクリプト、将来連携用に残すが、通常UIからDOM更新目的で直接叩かない。
+   - SSR/HTMXの本番認証は `HTTPOnly`, `Secure`, `SameSite=Lax` Cookie を正とし、POST/PUT/DELETE相当の画面操作にはCSRF対策を設計・実装する。Bearer token検証はE2E・内部API・移行中の互換経路として扱い、最終UI境界にはしない。
+   - Supabase RLSを主境界として効かせる方針に寄せる。リクエストごとにユーザーJWT付きSupabase Clientを生成する経路を第一候補とし、service role / direct DB接続は管理処理・worker・移行期の限定用途に閉じる。
+   - Cloud Run上の長時間生成は、workerの起動方式、lease timeout、stuck job再claim、再試行上限、冪等性キーを決めてから本番運用へ進める。
+   - Google Docs/Sheets由来の本文は信頼済み指示として扱わず、プロンプトインジェクション対策・送付前の人間承認・保持期間削除ジョブ・監視/費用上限を設計対象に含める。
 
 ---
 
@@ -106,7 +113,7 @@
 - ジョブ・ソーススナップショット・生成成果物・検証結果の保存
 - 1ユーザー最大3生成ジョブ
 - OpenRouter中心、本文用モデルと軽量モデルの分離
-- Cloud Run本番のみ
+- Cloud Run MVPは本番のみ。staging / productionの2環境分離は本番ポータル合流タイミングで用意する
 - チューニング期間のモデル・プロンプト・テンプレート比較
 
 ### 3.3 Workflow / Functional Spec Agent
@@ -159,6 +166,15 @@
 - 進捗更新: polling fragment
 - プレビュー差し替え: fragment swap
 - 検証結果・フィードバック保存: fragment or modal
+- 画面操作の成功・失敗レスポンスは、差し替え先にそのまま挿入できるHTML断片を優先する。JSONを受けてフロントJSでDOMを組み立てる設計にはしない。
+
+**UIコンポーネント方針**
+
+- Tailwind CSS + DaisyUIを標準とし、Jinja2 partial / HTMX fragmentへそのまま載せる。
+- Alpine.jsはモーダル、タブ、トーストなど局所状態に限定する。
+- FlowbiteはMVP標準依存にしない。DaisyUIで不足した場合のみ個別採用を判断する。
+- 業務画面はtable/section中心にし、カードはジョブ・検証項目・フィードバックなど繰り返し単位に限定する。
+- HTMX error fragmentはDaisyUI `alert` 系で返し、長文プレビューはカードではなく読み物領域として扱う。
 
 ### 3.5 API Design Agent
 
@@ -185,8 +201,9 @@
 **確認観点**
 
 - 同期 `generate` API に寄せすぎていないか。
-- UI fragment と JSON API の境界が分かるか。
+- UI fragment と JSON API の境界が分かるか。通常UIはHTML断片、JSON APIはworker/E2E/管理/将来連携用に限定されているか。
 - 429、401、403、404、422、500系の扱いがあるか。
+- POST系の冪等性、二重送信、再試行、HTMXエラー断片が定義されているか。
 
 ### 3.6 Data / Persistence Agent
 
@@ -255,8 +272,11 @@
 **確認観点**
 
 - ブラウザにAPIキーやSAキーを置かないことが明記されているか。
+- 本番UI認証がHTTPOnly/Secure/SameSite Cookie + CSRF対策として定義され、Bearer tokenはUI境界の主方式になっていないか。
+- Supabase RLSを主境界として効かせるためのユーザーJWT付きSupabase Client生成方針と、service role/direct DBの限定範囲が明記されているか。
 - Cloud Loggingへ本文や生ソースを出さない設計か。
 - Cloud Runのタイムアウト、同時実行、メモリ、Secret参照が未決なら未決事項化されているか。
+- worker lease、stuck job回収、保持期間削除、監視・費用上限が運用対象に入っているか。
 
 ### 3.9 Test / QA Agent
 
@@ -414,9 +434,47 @@
 - LLM・API・データ・セキュリティの横断変更では、軽量化より安全性と再現性を優先する。
 - 実装後の確認は focused test を先に使い、必要な場合だけ広い test / build へ進む。
 
-## 10. Phase 1 以降の実装エージェント構成
+## 10. Codex運用ベストプラクティス
 
-### 10.1 体制（実装実行）
+この節はOpenAI Codex Best Practicesをレポート工房運用へ落とした常時ルール。詳細手順は `.agents/skills/codex-operational-check/SKILL.md` を使う。
+
+### 10.1 タスク入力の4点セット
+
+大きめの実装・調査・レビューを始める前に、依頼または自分の作業メモを次の4点へ圧縮する。
+
+- Goal: 何を作る/変える/調べるか
+- Context: 関連ファイル、正本、エラー、E2E結果
+- Constraints: アーキ、セキュリティ、禁止事項、ユーザー指定
+- Done when: テスト、E2E、文書更新、受け入れ条件
+
+4点が欠けていても合理的に補える場合は進める。補うと危険な場合だけ、短く質問する。
+
+### 10.2 計画・委任・スレッド
+
+- 認証、DB/RLS、マイグレーション、Cloud Run、複数ファイル横断、曖昧な仕様は調査/計画を先に置く。
+- サブエージェントはユーザーが明示的に並行化を求めたときだけ使い、各agentのwrite scopeを分離する。
+- 1スレッドは1つの coherent task を原則にする。別テーマへ広がる場合は、handoff/compact/forkを検討する。
+
+### 10.3 Doneの定義
+
+完了報告前に、該当する最小ゲートを通す。
+
+- 実装: focused test → 必要なら広いsuite → diff確認
+- UI: HTML断片/画面確認 → 必要ならブラウザ/Playwright
+- セキュリティ/認証/RLS: 失敗系と権限境界のテスト
+- 文書/計画: 正本、decision-log、development-plan、rules/skillsの整合確認
+
+検証できなかったものは、完了報告で明示する。
+
+### 10.4 反復改善
+
+- 同じ指摘やミスが2回出たら、`agents.md` / `.cursor/rules` / skill のどれへ昇格するか判断する。
+- 毎回守る短い原則は `agents.md` または `.cursor/rules`、依頼時に使う手順はskill、安定した定期実行はautomationへ置く。
+- MCPや外部connectorは、変化する外部情報を毎回貼り付けている場合にだけ追加を検討する。最初から広げすぎない。
+
+## 11. Phase 1 以降の実装エージェント構成
+
+### 11.1 体制（実装実行）
 
 - **Phase 1 実装オーナー**
   - FastAPI基盤、認証、ジョブ実行、Google Workspace連携の全体責任を持つ
@@ -433,33 +491,52 @@
 - **QA・運用エージェント**
   - focused pytest運用、CI接続、e2e手順、pre-e2e-setupの整備
 
-### 10.2 役割の責任境界
+### 11.2 役割の責任境界
 
 - 同一ファイルの同時編集を避ける。`src/eb_app/routers`, `src/eb_app/monthly_reports`, `tests` は担当を固定し、横断変更は実装オーナーの同期確認後に着手する。
 - 仕様変更は `decision-log.md` 更新後、影響する設計文書（requirements→api-definition→development-plan）へ同時反映する。
 - 実装判断が必要な場合は `agents.md` と `decision-log.md` の優先更新で全体方針を固定する。
 
-## 11. 次のE2E優先順（Phase 1以降）
+## 12. 次の開発優先順（2026-05-17以降）
 
-### 11.1 最優先（即着手）
+### 12.1 達成済みとして固定するゲート
 
-- `Supabase Auth Google provider` からの実トークン取得
-- `POST /api/auth/google-oauth/supabase-session` と保存APIの実接続
-- `POST /api/monthly-reports/jobs/{job_id}/fetch-google-sources` を実Googleソースで通す
-- `POST /api/monthly-reports/jobs/{job_id}/run-openrouter` を1件実案件データで成功まで通す
-- `validation` と `artifact保存` を同一ジョブで確認
+- ✅ 通常UI境界は `/monthly-reports/*` のHTMLページ/HTML断片へ寄せる。通常画面から `/api/monthly-reports/*` をDOM更新目的で直接叩かない。
+- ✅ HTML actionの第一弾はHTTPOnly/SameSite Cookie + CSRF hidden tokenで守る。Bearer token経路はE2E/内部JSON API/移行互換として残す。
+- ✅ Supabase RLS主境界の第一弾として、ユーザーJWT付きSupabase client生成、実DB RLS評価テスト、通常ユーザーJSON読み取りAPIと通常UI一覧のRLS read store優先化まで完了。
+- ✅ 達成（2026-05-16、ローカル Supabase + 実 Google OAuth）: `Supabase Auth Google provider` 実トークン取得 → `POST /api/auth/google-oauth/supabase-session` 実接続 → `fetch-google-sources` 実 Google ソース通電 → `run-openrouter` 実 API 通電 → `validation` 記録（`validation_failed` 経路を含む）。詳細は [development-plan.md](docs/monthly-report-workshop/development-plan.md) と [decision-log.md](docs/monthly-report-workshop/decision-log.md) D-059 / D-060
+- ✅ 達成（2026-05-17、ライブE2E初succeeded）: 実 Google Docs + 実 OpenRouter + 決定的バリデーションで `status=succeeded`、`draft_markdown` artifact保存、`llm_call_logs` 記録まで到達。`prompt_version` / `template_hash` / `model_report` / `resolved_model_report` / `source_bundle_hash` / `app_version` は全て非null
+- ✅ 達成（2026-05-17、E2E画面成功サンプル）: job `mrj_2b15b194636a4457b590e3ef73afa5b2` をRLS/Google OAuth/OpenRouter成功サンプルとして記録。`Gemini メモ` / `Google Meetメモ` 系の配布面語彙チューニングは後続P2-11へ回す。
+- ✅ 達成（focused + ライブE2E、2026-05-17）: `/run-openrouter` / `run-mock` / claimed worker完了時に `monthly_report_jobs` の再現性メタを書き戻す。Mock/Postgres focused testとライブE2Eの両方でnull解消を確認済み
+- ✅ 一部達成（focused、2026-05-17）: P2-09として `POST /api/monthly-reports/jobs`、`/run-mock`、`/run-openrouter` に `Idempotency-Key` 対応を追加。`monthly_report_idempotency_keys` migrationとPostgres store入口、新規ジョブ作成・生成開始HTML formのhidden keyも追加し、永続冪等性へ進めた。
+- ✅ 達成（実DB focused、2026-05-17）: P2-09の `monthly_report_idempotency_keys` migrationをローカル実DBへ適用し、Postgres lookup/remember focused testを通過。
+- ✅ 一部達成（focused + 実DB、2026-05-17）: P2-10として `WorkerRunResult` / `WorkerRunStatus` とprovider実行前キャンセル境界を追加。さらに `worker_attempts`, `max_worker_attempts`, `worker_last_claimed_at` migration、stale `running/fetch_sources` 再claim、retryable failureのqueued復帰を実DB focused testで固定。
+- ✅ 一部達成（focused、2026-05-17）: P2-11として `Gemini メモ` / `Google Meetメモ` / Google生成メモ系の配布面メタ語彙をdraft artifact側で狭くsanitizationし、source evidence内の同語彙は許容する。
+- ✅ 一部達成（focused、2026-05-17）: P1-15として `eb_auth_session` HTTPOnly Cookieから検証済みSupabase JWTを受ける移行ブリッジを追加。Bearer token互換はE2E/内部JSON向けに維持する。
+- ✅ 一部達成（focused、2026-05-17）: P3-01/P3-02として詳細画面に編集後Markdown保存と再生成のHTMXフォーム/backend routeを追加。編集後Markdownは `final_markdown` artifactとして保存し、再生成は新しいqueued jobのstatus fragmentを返す。
+- ✅ 一部達成（focused、2026-05-17）: P1-16第五弾として通常HTML UIのGET detail/status/preview/sources/validation fragment読み取りをRLS read store優先へ移行し、編集後Markdown保存、再生成、source保存、Google source取得、feedback保存、生成開始の主要HTML write actionへRLS read preflight認可を追加。full RLS write化は後続。
+- ✅ 達成（focused、2026-05-16）: ES256/RS256 JWKS 検証経路の focused test を追加し、既存 HS256 テストとの併走で回帰を防ぐ
+- ✅ 達成（focused、2026-05-17）: 通常HTML UIから `POST /monthly-reports/jobs/{job_id}/fragments/google-sources` でGoogle Docs/Sheetsを取得し、sources fragmentを差し替える。通常画面から `/api/monthly-reports/*` をDOM更新目的で直接叩かない
 
-### 11.2 優先（Phase 1完了条件）
+### 12.2 次に実装する順番
 
-- `src/eb_app/monthly_reports/worker.py` を常駐実行想定へ接続し、`queued` jobの自動claim/進行を実運用で安定化
-- 3件同時実行制限（429）が実環境APIでも再現されることを確認
-- 再生成時の再現性メタ継承（prompt/version/template/model/source_hash）を監査可能に可視化
-- LLM失敗時の `error_type` 分類と再実行導線（再試行/再生成）をE2Eで整備
+1. **P2-09 冪等性 継続**: Google取得/source/artifact/feedbackへIdempotency-Keyを広げ、Cloud Run複数インスタンス/再起動でも二重保存が安全になるようにする。
+2. **P2-10 worker本番化 継続**: `src/eb_app/monthly_reports/worker.py` とstoreをCloud Run実行想定へ寄せ、起動方式、mid-LLM heartbeat、後段stageのstuck扱い、運用runbookを固める。
+3. **P1-16継続 RLS境界縮小**: full RLS write化の安全な順序とdirect DBの呼び出し元を棚卸しし、worker/管理/migration/保持削除へ用途を狭める。
+4. **P3-01/P3-02 編集保存・再生成UI**: 編集後Markdown保存、再生成API/UI、再現性メタ比較表示を通常UIへ入れる。
+5. **P3-06/P3-12 エクスポート・承認ゲート**: HTMLエクスポート、人間承認、送付前チェックを最小導線として実装する。
 
-### 11.3 仕上げ（Phase 3）
+### 12.3 並行で進めやすいPhase 2/3タスク
 
-- 編集後Markdown保存（編集可能な最小導線）を実装し、最終成果物まで保存する
-- 再生成API/UIを公開し、プロンプト版・モデル版の比較材料を表示
-- HTMLエクスポート / ファイル保存 / 送付系フローを最小実装して現行仕様との動作接続を確認
-- 現行静的プレビュー経路との接続差分を吸収し、同一画面導線へ統合
-- Playwright（最小シナリオ）でジョブ作成→取得→生成→検証→推敲まで通す
+- P2-11の配布面語彙チューニングは、成功サンプルを複数集めてから forbidden / safe replacement / warning に分類する。
+- P2-13はCIの第二弾として、migration適用チェック、RLS/static schemaチェック、Cloud Run smoke test手順を追加する。
+- P2-14はOpenRouter token cost、Google API quota、job failed率、429、CSRF拒否、費用上限の監視設計を先に文書化できる。
+- P3-10はPlaywright最小シナリオとして、ジョブ作成→Google取得→生成→検証→編集保存→エクスポートのうち、実装済み区間から順に追加する。
+
+### 12.4 環境変数の扱い
+
+- `.env` はローカル実行の正本として扱うが、値をログ・ドキュメント・完了報告へ出さない。必要な場合はキー名と用途だけを共有する。
+- Postgres/Supabase込みのfocused testは `EB_MONTHLY_REPORT_DATABASE_URL` が未設定だとskipされる。DB込みで確認する場合は `.env` をプロセス環境へ読み込んでから実行する。
+- `EB_MONTHLY_REPORT_PROMPT_VERSION` と `EB_APP_VERSION` は未設定でも既定値で動くが、ライブE2E・Cloud Run・チューニング比較では明示設定を推奨する。
+- workerの手動実行・テストでは、他ユーザーや別E2Eのqueued jobを拾わないよう `owner_user_id` filterを指定する。
+- 通常HTML UIのGoogle取得は、暫定ローカル経路なら `EB_GOOGLE_WORKSPACE_ACCESS_TOKEN`、本来の保存済みOAuth経路なら `EB_MONTHLY_REPORT_DATABASE_URL` / `GOOGLE_OAUTH_CLIENT_ID` / `GOOGLE_OAUTH_CLIENT_SECRET` / `EB_GOOGLE_TOKEN_ENCRYPTION_KEY` が必要。値はログ・文書・完了報告へ出さない。

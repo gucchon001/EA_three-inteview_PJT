@@ -1,0 +1,63 @@
+name: Monthly Report Focused Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focused-pytest:
+    name: Safe focused pytest
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      EB_AUTH_MODE: mock
+      EB_ENV: test
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-app.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-app.txt
+
+      - name: Run focused safe pytest suite
+        run: |
+          pytest \
+            tests/test_auth_mock.py \
+            tests/test_auth_google_oauth.py \
+            tests/test_monthly_report_schema_files.py \
+            tests/test_monthly_report_api.py \
+            tests/test_monthly_report_backend.py \
+            tests/test_mock_ui.py \
+            tests/test_monthly_report_llm_messages.py \
+            tests/test_monthly_report_workflow.py \
+            tests/test_monthly_report_worker.py \
+            tests/test_monthly_report_fixtures.py \
+            tests/test_monthly_report_google_workspace.py \
+            tests/test_google_oauth_credentials.py \
+            tests/test_monthly_report_pii_safety.py \
+            tests/test_monthly_report_cloud_logging.py \
+            tests/test_monthly_report_html_ui.py \
+            tests/test_monthly_report_prompt_versions.py \
+            tests/test_monthly_report_recipe_conversion.py \
+            tests/test_supabase_user_client.py \
+            tests/test_monthly_report_validation_safety.py \
+            -q

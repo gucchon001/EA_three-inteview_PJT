@@ -18,6 +18,41 @@ from eb_app.monthly_reports.postgres_store import PostgresJobStore
 
 JobStore = MockJobStore | PostgresJobStore
 FORBIDDEN_DISTRIBUTION_TERMS = ("担当CA", "教師 MTG", "NotebookLM")
+PROMPT_INJECTION_PHRASES = (
+    "以前の指示を無視",
+    "これまでの指示を無視",
+    "上記の指示を無視",
+    "ignore previous instructions",
+    "ignore all previous instructions",
+)
+INTERNAL_MEMO_EXPOSURE_TERMS = (
+    "内部メモ",
+    "管理者メモ",
+    "社内メモ",
+    "送付禁止",
+    "family-facingではない",
+    "admin only",
+    "internal memo",
+)
+# 決定論的サニタイズ: テンプレート注記がLLM出力に混入した場合の安全置換。
+# 意味を保ちながら家庭向け表現へ変換できるもののみ定義する。
+FORBIDDEN_TERM_SAFE_REPLACEMENTS: dict[str, str] = {
+    "担当CA": "担当",
+    "教師 MTG": "授業計画の確認",
+    "NotebookLM": "",
+    "Gemini メモ": "面談メモ",
+    "Geminiメモ": "面談メモ",
+    "Google Meetメモ": "面談メモ",
+    "Google Meet メモ": "面談メモ",
+    "Google Meet のメモ": "面談メモ",
+    "Google Meetのメモ": "面談メモ",
+    "Google Meet の文字起こし": "面談メモ",
+    "Google Meetの文字起こし": "面談メモ",
+    "Gemini が作成したメモ": "面談メモ",
+    "Geminiが作成したメモ": "面談メモ",
+    "Google 生成メモ": "面談メモ",
+    "Google生成メモ": "面談メモ",
+}
 logger = logging.getLogger(__name__)
 
 
@@ -135,6 +170,9 @@ def run_monthly_report_job(
     template_path: Path,
     rules_excerpt_path: Path | None = None,
     artifact: str = "md",
+    prompt_version: str | None = None,
+    model_report: str | None = None,
+    app_version: str | None = None,
 ) -> MockJob:
     job = store.start_next(job_id)
     return _run_started_monthly_report_job(
@@ -144,6 +182,9 @@ def run_monthly_report_job(
         template_path=template_path,
         rules_excerpt_path=rules_excerpt_path,
         artifact=artifact,
+        prompt_version=prompt_version,
+        model_report=model_report,
+        app_version=app_version,
     )
 
 
@@ -155,6 +196,9 @@ def run_claimed_monthly_report_job(
     template_path: Path,
     rules_excerpt_path: Path | None = None,
     artifact: str = "md",
+    prompt_version: str | None = None,
+    model_report: str | None = None,
+    app_version: str | None = None,
 ) -> MockJob:
     job = store.get(job_id)
     if job.status != "running" or job.current_stage != "fetch_sources":
@@ -166,6 +210,9 @@ def run_claimed_monthly_report_job(
         template_path=template_path,
         rules_excerpt_path=rules_excerpt_path,
         artifact=artifact,
+        prompt_version=prompt_version,
+        model_report=model_report,
+        app_version=app_version,
     )
 
 
@@ -177,9 +224,25 @@ def _run_started_monthly_report_job(
     template_path: Path,
     rules_excerpt_path: Path | None = None,
     artifact: str = "md",
+    prompt_version: str | None = None,
+    model_report: str | None = None,
+    app_version: str | None = None,
 ) -> MockJob:
+    job = store.update_reproducibility_meta(
+        job.public_id,
+        prompt_version=job.prompt_version or prompt_version,
+        model_report=job.model_report or model_report,
+        app_version=job.app_version or app_version,
+    )
     sources = store.list_sources(job.public_id)
     bundle = _bundle_sources(sources)
+    template_hash = _hash_template(template_path)
+    source_bundle_hash = _hash_text(bundle)
+    job = store.update_reproducibility_meta(
+        job.public_id,
+        template_hash=template_hash,
+        source_bundle_hash=source_bundle_hash,
+    )
     job = store.complete_current_stage(job.public_id)
     job = store.complete_current_stage(job.public_id)
 
@@ -236,6 +299,11 @@ def _run_started_monthly_report_job(
             error_message=str(exc),
         )
     latency_ms = int((perf_counter() - started_at) * 1000)
+    if completion.resolved_model is not None:
+        job = store.update_reproducibility_meta(
+            job.public_id,
+            resolved_model_report=completion.resolved_model,
+        )
     store.record_llm_call(
         job.public_id,
         prompt_kind="report",
@@ -310,6 +378,44 @@ def _run_started_monthly_report_job(
             error_message=message,
         )
 
+    if _find_prompt_injection_phrases(draft):
+        message = "draft contains prompt-injection phrase"
+        store.record_validation(
+            job.public_id,
+            rule_id="prompt_injection_phrase",
+            severity="error",
+            message=message,
+            path="artifact.markdown",
+        )
+        _emit_validation_failed_log(
+            job_id=job.public_id,
+            rule_id="prompt_injection_phrase",
+        )
+        return store.fail_current_job(
+            job.public_id,
+            error_type="validation_failed",
+            error_message=message,
+        )
+
+    if _find_internal_memo_exposure_terms(draft):
+        message = "draft exposes internal/admin memo"
+        store.record_validation(
+            job.public_id,
+            rule_id="internal_memo_exposure",
+            severity="error",
+            message=message,
+            path="artifact.markdown",
+        )
+        _emit_validation_failed_log(
+            job_id=job.public_id,
+            rule_id="internal_memo_exposure",
+        )
+        return store.fail_current_job(
+            job.public_id,
+            error_type="validation_failed",
+            error_message=message,
+        )
+
     missing_headings = _find_missing_required_headings(draft, template_path)
     if missing_headings:
         missing_text = ", ".join(missing_headings)
@@ -329,6 +435,16 @@ def _run_started_monthly_report_job(
             job.public_id,
             error_type="validation_failed",
             error_message=message,
+        )
+
+    draft, sanitized = _sanitize_draft(draft)
+    if sanitized:
+        store.record_validation(
+            job.public_id,
+            rule_id="forbidden_terms_sanitized",
+            severity="info",
+            message=f"forbidden terms auto-replaced before validation: {', '.join(sanitized)}",
+            path="artifact.markdown",
         )
 
     forbidden_terms = _find_forbidden_terms(draft)
@@ -404,6 +520,10 @@ def _hash_text(text: str) -> str:
     return f"sha256:{sha256(text.encode('utf-8')).hexdigest()}"
 
 
+def _hash_template(template_path: Path) -> str:
+    return _hash_text(template_path.read_text(encoding="utf-8"))
+
+
 def _find_excluded_scope_mention(draft: str, prompt_scope_notes: str | None) -> str | None:
     notes = (prompt_scope_notes or "").strip()
     if not notes:
@@ -415,6 +535,16 @@ def _find_excluded_scope_mention(draft: str, prompt_scope_notes: str | None) -> 
     return None
 
 
+def _find_prompt_injection_phrases(draft: str) -> list[str]:
+    normalized = draft.lower()
+    return [phrase for phrase in PROMPT_INJECTION_PHRASES if phrase.lower() in normalized]
+
+
+def _find_internal_memo_exposure_terms(draft: str) -> list[str]:
+    normalized = draft.lower()
+    return [term for term in INTERNAL_MEMO_EXPOSURE_TERMS if term.lower() in normalized]
+
+
 def _find_missing_required_headings(draft: str, template_path: Path) -> list[str]:
     template = template_path.read_text(encoding="utf-8", errors="replace")
     required = re.findall(r"^##\s+(\d{2}\s+[^\n]+)", template, flags=re.MULTILINE)
@@ -424,6 +554,20 @@ def _find_missing_required_headings(draft: str, template_path: Path) -> list[str
         re.findall(r"^##\s+(\d{2}\s+[^\n]+)", draft, flags=re.MULTILINE)
     )
     return [f"## {heading}" for heading in required if heading not in draft_headings]
+
+
+def _sanitize_draft(draft: str) -> tuple[str, list[str]]:
+    """Apply deterministic safe replacements for forbidden distribution terms.
+
+    Returns (sanitized_draft, list_of_replaced_terms). Records which terms were
+    replaced so the caller can log an info-level validation entry.
+    """
+    replaced: list[str] = []
+    for term, replacement in FORBIDDEN_TERM_SAFE_REPLACEMENTS.items():
+        if term in draft:
+            draft = draft.replace(term, replacement)
+            replaced.append(term)
+    return draft, replaced
 
 
 def _find_forbidden_terms(draft: str) -> list[str]:

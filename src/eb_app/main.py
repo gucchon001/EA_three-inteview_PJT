@@ -36,6 +36,10 @@ def create_app() -> FastAPI:
         prefix="/api/monthly-reports",
         tags=["monthly-reports"],
     )
+    app.include_router(
+        monthly_reports_router.html_router,
+        tags=["monthly-report-ui"],
+    )
 
     if settings.enable_mock_ui:
         from eb_app.routers import mock as mock_router

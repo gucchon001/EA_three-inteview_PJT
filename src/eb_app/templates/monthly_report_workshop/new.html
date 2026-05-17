@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }}</title>
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <style>
+    body { margin:0; font-family: system-ui, "Noto Sans JP", sans-serif; color:#1f2937; background:#f6f7f9; }
+    a { color:#0f5959; text-decoration:none; }
+    .wrap { max-width:900px; margin:0 auto; padding:24px; }
+    .panel { background:#fff; border:1px solid #dce1e7; border-radius:8px; padding:18px; }
+    label { display:grid; gap:6px; margin-bottom:12px; font-weight:600; }
+    input, select, textarea { width:100%; min-height:42px; border:1px solid #b9c6c6; border-radius:8px; padding:8px 10px; font:inherit; }
+    textarea { min-height:90px; }
+    .row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .btn { min-height:42px; padding:8px 14px; border-radius:8px; border:1px solid #0f5959; background:#0f5959; color:#fff; font-weight:700; cursor:pointer; }
+    .muted { color:#667085; }
+    @media (max-width: 760px) { .row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <p><a href="/monthly-reports/jobs">ジョブ一覧へ戻る</a></p>
+    <h1>{{ page_title }}</h1>
+    <section class="panel">
+      <h2>ソース指定</h2>
+      <form hx-post="/monthly-reports/jobs" hx-target="#create-result" hx-swap="innerHTML">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="idempotency_key" value="{{ idempotency_key }}" />
+        <div class="row">
+          <label>対象月
+            <input name="target_month" value="{{ target_month }}" required pattern="\d{4}-\d{2}" />
+          </label>
+          <label>対象世帯
+            <input name="household_key" value="" placeholder="demo_household" required />
+          </label>
+        </div>
+        <div class="row">
+          <label>テンプレート
+            <select name="template_key">
+              {% for template in templates %}
+              <option value="{{ template }}">{{ template }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <label>prompt_version
+            <input name="prompt_version" value="monthly-report-v20260516.1" />
+          </label>
+        </div>
+        <label>スコープ補足
+          <textarea name="prompt_scope_notes" placeholder="対象生徒、対象教科、除外する別姓＋様など"></textarea>
+        </label>
+        <button class="btn" type="submit">ジョブ作成</button>
+      </form>
+      <div id="create-result" style="margin-top:16px;" aria-live="polite"></div>
+      <p class="muted">画面操作はHTML断片で応答します。</p>
+    </section>
+  </main>
+</body>
+</html>

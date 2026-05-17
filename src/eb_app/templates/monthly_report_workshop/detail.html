@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page_title }} {{ job.public_id }}</title>
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <style>
+    body { margin:0; font-family: system-ui, "Noto Sans JP", sans-serif; color:#1f2937; background:#f6f7f9; }
+    a { color:#0f5959; text-decoration:none; }
+    .wrap { max-width:1040px; margin:0 auto; padding:24px; }
+    .panel { background:#fff; border:1px solid #dce1e7; border-radius:8px; padding:18px; margin-top:16px; }
+    .muted { color:#667085; }
+    code { font-size:0.9rem; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <p><a href="/monthly-reports/jobs">ジョブ一覧へ戻る</a></p>
+    <h1>{{ page_title }} <code>{{ job.public_id }}</code></h1>
+    <p class="muted">{{ job.target_month }} · {{ job.display_household }}</p>
+    <section class="panel">
+      <h2>生成パイプライン</h2>
+      <form
+        hx-post="/monthly-reports/jobs/{{ job.public_id }}/run"
+        hx-target="#status-panel"
+        hx-swap="innerHTML"
+        style="margin-bottom:14px;"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="idempotency_key" value="{{ run_idempotency_key }}" />
+        <input type="hidden" name="run_idempotency_key" value="{{ run_idempotency_key }}" />
+        <button type="submit" style="padding:10px 14px;border:0;border-radius:8px;background:#0f5959;color:white;">生成開始</button>
+        <button type="submit" name="run_mode" value="mock" style="padding:10px 14px;border:1px solid #0f5959;border-radius:8px;background:white;color:#0f5959;margin-left:8px;">モック生成</button>
+        <button type="submit" name="run_mode" value="openrouter" style="padding:10px 14px;border:1px solid #0f5959;border-radius:8px;background:white;color:#0f5959;margin-left:8px;">OpenRouter生成</button>
+      </form>
+      <form
+        hx-post="/monthly-reports/jobs/{{ job.public_id }}/rerun"
+        hx-target="#status-panel"
+        hx-swap="innerHTML"
+        style="margin-bottom:14px;"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="idempotency_key" value="{{ rerun_idempotency_key }}" />
+        <button type="submit" style="padding:10px 14px;border:1px solid #0f5959;border-radius:8px;background:white;color:#0f5959;">再生成</button>
+      </form>
+      <div
+        id="status-panel"
+        hx-get="{{ job.status_fragment_href }}"
+        hx-trigger="load, every 5s"
+        hx-swap="innerHTML"
+      >
+        {% include "monthly_report_workshop/fragments/status.html" %}
+      </div>
+    </section>
+    <section class="panel">
+      <h2>ソース確認</h2>
+      <div
+        id="sources-panel"
+        hx-get="/monthly-reports/jobs/{{ job.public_id }}/fragments/sources"
+        hx-trigger="load"
+        hx-swap="innerHTML"
+      ></div>
+      <form
+        hx-post="/monthly-reports/jobs/{{ job.public_id }}/fragments/sources"
+        hx-target="#sources-panel"
+        hx-swap="innerHTML"
+        style="display:grid;gap:10px;margin-top:14px;"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="idempotency_key" value="{{ source_idempotency_key }}" />
+        <label>
+          <span class="muted">種類</span><br>
+          <input name="source_type" value="doc" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
+        </label>
+        <label>
+          <span class="muted">表示名</span><br>
+          <input name="display_name" value="面談メモ" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
+        </label>
+        <label>
+          <span class="muted">本文</span><br>
+          <textarea name="snapshot_text" rows="4" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;"></textarea>
+        </label>
+        <button type="submit" style="justify-self:start;padding:10px 14px;border:0;border-radius:8px;background:#0f5959;color:white;">ソース保存</button>
+      </form>
+      <form
+        hx-post="/monthly-reports/jobs/{{ job.public_id }}/fragments/google-sources"
+        hx-target="#sources-panel"
+        hx-swap="innerHTML"
+        style="display:grid;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid #dce1e7;"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="idempotency_key" value="{{ google_sources_idempotency_key }}" />
+        <label>
+          <span class="muted">Google Docs ID / URL（複数行可）</span><br>
+          <textarea name="doc_ids" rows="3" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;"></textarea>
+        </label>
+        <label>
+          <span class="muted">Google Sheets ID / URL</span><br>
+          <input name="spreadsheet_id" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
+        </label>
+        <label>
+          <span class="muted">Sheets range</span><br>
+          <input name="range_name" placeholder="student!A1:B20" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
+        </label>
+        <label>
+          <span class="muted">Sheets表示名</span><br>
+          <input name="sheet_display_name" placeholder="学習計画表 student" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
+        </label>
+        <button type="submit" style="justify-self:start;padding:10px 14px;border:1px solid #0f5959;border-radius:8px;background:white;color:#0f5959;">Googleから取得</button>
+      </form>
+    </section>
+    <section class="panel">
+      <h2>プレビュー</h2>
+      <div
+        id="preview-panel"
+        hx-get="/monthly-reports/jobs/{{ job.public_id }}/fragments/preview"
+        hx-trigger="load, every 10s"
+        hx-swap="innerHTML"
+      ></div>
+      <form
+        hx-post="/monthly-reports/jobs/{{ job.public_id }}/fragments/edited-markdown"
+        hx-target="#preview-panel"
+        hx-swap="innerHTML"
+        style="display:grid;gap:10px;margin-top:14px;"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="idempotency_key" value="{{ edited_markdown_idempotency_key }}" />
+        <input type="hidden" name="base_content_hash" value="{{ job.latest_artifact_hash or '' }}" />
+        <label>
+          <span class="muted">編集後Markdown保存</span><br>
+          <textarea name="edited_markdown" rows="8" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;"></textarea>
+        </label>
+        <button type="submit" style="justify-self:start;padding:10px 14px;border:0;border-radius:8px;background:#0f5959;color:white;">保存</button>
+      </form>
+    </section>
+    <section class="panel">
+      <h2>検証結果</h2>
+      <div
+        hx-get="/monthly-reports/jobs/{{ job.public_id }}/fragments/validation"
+        hx-trigger="load, every 10s"
+        hx-swap="innerHTML"
+      ></div>
+    </section>
+    <section class="panel">
+      <h2>フィードバック</h2>
+      <div id="feedback-panel">
+        {% include "monthly_report_workshop/fragments/feedback.html" %}
+      </div>
+      <form
+        hx-post="/monthly-reports/jobs/{{ job.public_id }}/fragments/feedback"
+        hx-target="#feedback-panel"
+        hx-swap="innerHTML"
+        style="display:grid;gap:10px;margin-top:14px;"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="idempotency_key" value="{{ feedback_idempotency_key }}" />
+        <label>
+          <span class="muted">分類</span><br>
+          <input name="category" value="tone" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
+        </label>
+        <label>
+          <span class="muted">コメント</span><br>
+          <textarea name="comment" rows="3" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;"></textarea>
+        </label>
+        <button type="submit" style="justify-self:start;padding:10px 14px;border:0;border-radius:8px;background:#0f5959;color:white;">保存</button>
+      </form>
+    </section>
+    <section class="panel">
+      <h2>再現性メタ</h2>
+      <p><strong>prompt_version</strong><br><code>{{ job.prompt_version or "-" }}</code></p>
+      <p><strong>template_hash</strong><br><code>{{ job.template_hash or "-" }}</code></p>
+      <p><strong>model</strong><br><code>{{ job.model }}</code></p>
+      <p><strong>source_bundle_hash</strong><br><code>{{ job.source_bundle_hash or "-" }}</code></p>
+    </section>
+  </main>
+</body>
+</html>

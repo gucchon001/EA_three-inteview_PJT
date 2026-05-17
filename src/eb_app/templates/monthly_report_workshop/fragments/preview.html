@@ -1,0 +1,14 @@
+<div class="space-y-3">
+  {% if artifact %}
+  <p class="text-sm text-base-content/70">
+    artifact: <span class="badge badge-sm badge-outline">{{ artifact.artifact_type }}</span>
+    <span class="mx-1">·</span>
+    hash: <code>{{ artifact.content_hash }}</code>
+  </p>
+  <pre class="prose max-h-96 max-w-none overflow-auto whitespace-pre-wrap rounded-md bg-base-200 p-4 text-sm">{{ artifact.content }}</pre>
+  {% else %}
+  <div role="alert" class="alert rounded-md py-3 text-sm">
+    <span>まだ表示できる生成物はありません。</span>
+  </div>
+  {% endif %}
+</div>

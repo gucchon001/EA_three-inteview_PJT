@@ -110,6 +110,59 @@ def test_monthly_report_api_uses_supabase_user_as_owner_and_filters_other_users(
     assert client.post(f"/api/monthly-reports/jobs/{job_id}/cancel", headers=user_b_headers).status_code == 404
 
 
+def test_monthly_report_api_uses_rls_read_store_for_supabase_user_reads(monkeypatch):
+    monkeypatch.setenv("EB_AUTH_MODE", "supabase")
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+    monkeypatch.setenv("SUPABASE_URL", "http://127.0.0.1:56321")
+    monkeypatch.setenv("SUPABASE_ANON_KEY", "anon-key")
+    app = create_app()
+    client = TestClient(app)
+    job = monthly_reports_router.MockJob(
+        public_id="mrj_rls_owner",
+        target_month="2026-04",
+        household_key="rls_household",
+        owner_user_id="user-a",
+    )
+    read_store = _FakeRLSReadStore(job)
+
+    monkeypatch.setattr(
+        monthly_reports_router,
+        "_get_rls_read_store",
+        lambda current_user: read_store,
+    )
+    monkeypatch.setattr(monthly_reports_router, "_get_store", _raise_if_direct_store_used)
+    headers = {
+        "Authorization": f"Bearer {_supabase_token(sub='user-a', email='user-a@tomonokai-corp.com')}"
+    }
+
+    listed = client.get("/api/monthly-reports/jobs", headers=headers)
+    detail = client.get("/api/monthly-reports/jobs/mrj_rls_owner", headers=headers)
+    sources = client.get("/api/monthly-reports/jobs/mrj_rls_owner/sources", headers=headers)
+    artifacts = client.get("/api/monthly-reports/jobs/mrj_rls_owner/artifacts", headers=headers)
+    validations = client.get("/api/monthly-reports/jobs/mrj_rls_owner/validations", headers=headers)
+    llm_calls = client.get("/api/monthly-reports/jobs/mrj_rls_owner/llm-calls", headers=headers)
+
+    assert listed.status_code == 200
+    assert listed.json()["jobs"][0]["job_id"] == "mrj_rls_owner"
+    assert detail.status_code == 200
+    assert sources.json()["sources"][0]["source_id"] == "mrs_rls"
+    assert artifacts.json()["artifacts"][0]["artifact_id"] == "mra_rls"
+    assert validations.json()["validations"][0]["validation_id"] == "mrv_rls"
+    assert llm_calls.json()["llm_calls"][0]["llm_call_id"] == "mrl_rls"
+    assert read_store.calls == [
+        "list_jobs",
+        "get",
+        "get",
+        "list_sources",
+        "get",
+        "list_artifacts",
+        "get",
+        "list_validations",
+        "get",
+        "list_llm_calls",
+    ]
+
+
 def test_monthly_report_api_rejects_invalid_create_payload():
     app = create_app()
     client = TestClient(app)
@@ -148,6 +201,113 @@ def test_monthly_report_api_rejects_fourth_active_job_for_same_mock_owner():
 
     assert rejected.status_code == 429
     assert "active generation jobs" in rejected.json()["detail"]
+
+
+def test_monthly_report_api_create_job_is_idempotent_with_header_key():
+    app = create_app()
+    client = TestClient(app)
+
+    payload = {
+        "target_month": "2026-04",
+        "household_key": "demo_idempotent",
+        "owner_user_id": "owner-idempotent-api",
+    }
+    first = client.post(
+        "/api/monthly-reports/jobs",
+        headers={"Idempotency-Key": "job-create-demo-idem"},
+        json=payload,
+    )
+    second = client.post(
+        "/api/monthly-reports/jobs",
+        headers={"Idempotency-Key": "job-create-demo-idem"},
+        json=payload,
+    )
+
+    assert first.status_code == 200
+    assert second.status_code == 200
+    assert second.json()["job_id"] == first.json()["job_id"]
+
+    jobs = client.get("/api/monthly-reports/jobs")
+    matching = [
+        job
+        for job in jobs.json()["jobs"]
+        if job["owner_user_id"] == "owner-idempotent-api"
+        and job["household_key"] == "demo_idempotent"
+    ]
+    assert len(matching) == 1
+
+
+def test_monthly_report_api_idempotent_create_does_not_consume_active_limit_twice():
+    app = create_app()
+    client = TestClient(app)
+
+    payload = {
+        "target_month": "2026-04",
+        "household_key": "demo_idempotent_limit",
+        "owner_user_id": "owner-idempotent-limit-api",
+    }
+    for index in range(3):
+        response = client.post(
+            "/api/monthly-reports/jobs",
+            headers={"Idempotency-Key": f"job-create-limit-{index}"},
+            json=payload,
+        )
+        assert response.status_code == 200
+
+    duplicate = client.post(
+        "/api/monthly-reports/jobs",
+        headers={"Idempotency-Key": "job-create-limit-0"},
+        json=payload,
+    )
+    assert duplicate.status_code == 200
+
+    rejected = client.post(
+        "/api/monthly-reports/jobs",
+        headers={"Idempotency-Key": "job-create-limit-new"},
+        json=payload,
+    )
+    assert rejected.status_code == 429
+
+
+def test_monthly_report_api_run_mock_is_idempotent_with_header_key():
+    app = create_app()
+    client = TestClient(app)
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        json={
+            "target_month": "2026-04",
+            "household_key": "demo_run_idempotent",
+            "owner_user_id": "owner-run-idempotent-api",
+        },
+    )
+    job_id = created.json()["job_id"]
+
+    first = client.post(
+        f"/api/monthly-reports/jobs/{job_id}/run-mock",
+        headers={"Idempotency-Key": "run-mock-demo-idem"},
+        json={
+            "content": "\n\n".join(
+                [
+                    "## 01 基本情報\n初回生成",
+                    "## 02 塾での様子\n集中しています。",
+                    "## 03 授業内容\n復習を進めました。",
+                    "## 04 課題とアドバイス\n演習を続けます。",
+                    "## 05 学習の進捗\n基礎が定着しています。",
+                    "## 07 今後の授業計画\n次回は応用演習です。",
+                ]
+            )
+        },
+    )
+    second = client.post(
+        f"/api/monthly-reports/jobs/{job_id}/run-mock",
+        headers={"Idempotency-Key": "run-mock-demo-idem"},
+        json={"content": "## 01 基本情報\n二重送信"},
+    )
+
+    assert first.status_code == 200
+    assert second.status_code == 200
+    assert second.json()["job_id"] == first.json()["job_id"]
+    assert second.json()["status"] == "succeeded"
 
 
 def test_monthly_report_api_does_not_count_cancelled_jobs_against_mock_owner_limit():
@@ -203,6 +363,39 @@ def test_monthly_report_api_records_feedback_and_includes_feedback_count():
     assert detail.json()["feedback_count"] == 1
 
 
+def test_monthly_report_api_record_feedback_is_idempotent_with_header_key():
+    app = create_app()
+    client = TestClient(app)
+
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        json={
+            "target_month": "2026-04",
+            "household_key": "demo_feedback_idempotent",
+            "owner_user_id": "owner-feedback-idempotent-api",
+        },
+    )
+    job_id = created.json()["job_id"]
+
+    first = client.post(
+        f"/api/monthly-reports/jobs/{job_id}/feedback",
+        headers={"Idempotency-Key": "feedback-demo-idem"},
+        json={"category": "tone", "comment": "保護者向けにやや硬い"},
+    )
+    second = client.post(
+        f"/api/monthly-reports/jobs/{job_id}/feedback",
+        headers={"Idempotency-Key": "feedback-demo-idem"},
+        json={"category": "tone", "comment": "二重送信"},
+    )
+
+    assert first.status_code == 200
+    assert second.status_code == 200
+    assert second.json() == first.json()
+
+    detail = client.get(f"/api/monthly-reports/jobs/{job_id}")
+    assert detail.json()["feedback_count"] == 1
+
+
 def test_monthly_report_api_records_source_snapshot_and_artifact():
     app = create_app()
     client = TestClient(app)
@@ -253,6 +446,88 @@ def test_monthly_report_api_records_source_snapshot_and_artifact():
     artifacts = client.get(f"/api/monthly-reports/jobs/{job_id}/artifacts")
     assert artifacts.status_code == 200
     assert artifacts.json()["artifacts"] == [artifact.json()]
+
+
+def test_monthly_report_api_record_artifact_is_idempotent_with_header_key():
+    app = create_app()
+    client = TestClient(app)
+
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        json={
+            "target_month": "2026-04",
+            "household_key": "demo_artifact_idempotent",
+            "owner_user_id": "owner-artifact-idempotent-api",
+        },
+    )
+    job_id = created.json()["job_id"]
+
+    first = client.post(
+        f"/api/monthly-reports/jobs/{job_id}/artifacts",
+        headers={"Idempotency-Key": "artifact-demo-idem"},
+        json={
+            "artifact_type": "draft_markdown",
+            "content": "# 初回",
+            "content_hash": "sha256:artifact-idem",
+        },
+    )
+    second = client.post(
+        f"/api/monthly-reports/jobs/{job_id}/artifacts",
+        headers={"Idempotency-Key": "artifact-demo-idem"},
+        json={
+            "artifact_type": "draft_markdown",
+            "content": "# 二重送信",
+            "content_hash": "sha256:changed",
+        },
+    )
+
+    assert first.status_code == 200
+    assert second.status_code == 200
+    assert second.json() == first.json()
+
+    artifacts = client.get(f"/api/monthly-reports/jobs/{job_id}/artifacts")
+    assert len(artifacts.json()["artifacts"]) == 1
+    assert artifacts.json()["artifacts"][0]["content"] == "# 初回"
+
+
+def test_monthly_report_api_record_source_is_idempotent_with_header_key():
+    app = create_app()
+    client = TestClient(app)
+
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        json={
+            "target_month": "2026-04",
+            "household_key": "demo_source_idempotent",
+            "owner_user_id": "owner-source-idempotent-api",
+        },
+    )
+    job_id = created.json()["job_id"]
+    payload = {
+        "source_type": "doc",
+        "display_name": "面談メモ",
+        "snapshot_text": "4月の学習記録",
+        "content_hash": "sha256:source-idempotent",
+    }
+
+    first = client.post(
+        f"/api/monthly-reports/jobs/{job_id}/sources",
+        headers={"Idempotency-Key": "source-save-demo-idem"},
+        json=payload,
+    )
+    second = client.post(
+        f"/api/monthly-reports/jobs/{job_id}/sources",
+        headers={"Idempotency-Key": "source-save-demo-idem"},
+        json={**payload, "display_name": "二重送信"},
+    )
+
+    assert first.status_code == 200
+    assert second.status_code == 200
+    assert second.json() == first.json()
+
+    sources = client.get(f"/api/monthly-reports/jobs/{job_id}/sources")
+    assert len(sources.json()["sources"]) == 1
+    assert sources.json()["sources"][0]["display_name"] == "面談メモ"
 
 
 def test_monthly_report_api_fetches_google_workspace_sources(monkeypatch):
@@ -320,6 +595,58 @@ def test_monthly_report_api_fetches_google_workspace_sources(monkeypatch):
         "sha256:doc",
         "sha256:sheet",
     ]
+
+
+def test_monthly_report_api_fetch_google_sources_is_idempotent_before_external_fetch(
+    monkeypatch,
+):
+    monkeypatch.setenv("EB_GOOGLE_WORKSPACE_ACCESS_TOKEN", "access-token")
+    calls = {"doc": 0}
+
+    def fake_fetch_doc(self, *, document_id, display_name=None):
+        calls["doc"] += 1
+        assert document_id == "doc-id"
+        return GoogleWorkspaceSource(
+            source_type="google_doc",
+            display_name=display_name or "教師MTG",
+            snapshot_text="doc text",
+            content_hash="sha256:doc-idempotent",
+        )
+
+    monkeypatch.setattr(GoogleWorkspaceClient, "fetch_doc", fake_fetch_doc)
+
+    app = create_app()
+    client = TestClient(app)
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        json={
+            "target_month": "2026-04",
+            "household_key": "demo_gws_idempotent",
+            "owner_user_id": "owner-gws-idempotent-api",
+        },
+    )
+    job_id = created.json()["job_id"]
+    payload = {"doc_ids": ["doc-id"], "sheet_ranges": []}
+
+    first = client.post(
+        f"/api/monthly-reports/jobs/{job_id}/fetch-google-sources",
+        headers={"Idempotency-Key": "google-fetch-demo-idem"},
+        json=payload,
+    )
+    second = client.post(
+        f"/api/monthly-reports/jobs/{job_id}/fetch-google-sources",
+        headers={"Idempotency-Key": "google-fetch-demo-idem"},
+        json={"doc_ids": ["changed-doc-id"], "sheet_ranges": []},
+    )
+
+    assert first.status_code == 200
+    assert second.status_code == 200
+    assert second.json() == first.json()
+    assert calls["doc"] == 1
+
+    listed = client.get(f"/api/monthly-reports/jobs/{job_id}/sources")
+    assert len(listed.json()["sources"]) == 1
+    assert listed.json()["sources"][0]["content_hash"] == "sha256:doc-idempotent"
 
 
 def test_monthly_report_api_rejects_google_workspace_fetch_without_server_token(
@@ -671,6 +998,63 @@ def test_monthly_report_api_runs_openrouter_pipeline_and_persists_outputs(
     )
 
 
+def test_monthly_report_api_run_openrouter_fills_missing_reproducibility_meta(
+    monkeypatch,
+):
+    monkeypatch.setenv("OPENROUTER_API_KEY", "sk-test-secret")
+    monkeypatch.setenv("OPENROUTER_MODEL_REPORT", "mock/report-model")
+    monkeypatch.setenv("EB_MONTHLY_REPORT_PROMPT_VERSION", "monthly-report-vtest.1")
+    monkeypatch.setenv("EB_APP_VERSION", "test-app-version")
+
+    def fake_complete(self, *, messages, model=None):
+        assert model == "mock/report-model"
+        return LLMCompletion(
+            content=_minimal_pattern_b_markdown("OpenRouter本文です。"),
+            resolved_model="mock/resolved-model",
+        )
+
+    monkeypatch.setattr(OpenRouterMonthlyReportProvider, "complete", fake_complete)
+
+    app = create_app()
+    client = TestClient(app)
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        json={
+            "target_month": "2026-04",
+            "household_key": "demo_openrouter_meta",
+            "owner_user_id": "owner-openrouter-meta-api",
+        },
+    )
+    job_id = created.json()["job_id"]
+    client.post(
+        f"/api/monthly-reports/jobs/{job_id}/sources",
+        json={
+            "source_type": "doc",
+            "display_name": "面談メモ",
+            "snapshot_text": "4月は需要曲線の読み取りを扱った。",
+        },
+    )
+
+    response = client.post(f"/api/monthly-reports/jobs/{job_id}/run-openrouter")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["prompt_version"] == "monthly-report-vtest.1"
+    assert body["template_hash"].startswith("sha256:")
+    assert body["model_report"] == "mock/report-model"
+    assert body["resolved_model_report"] == "mock/resolved-model"
+    assert body["source_bundle_hash"].startswith("sha256:")
+    assert body["app_version"] == "test-app-version"
+
+    detail = client.get(f"/api/monthly-reports/jobs/{job_id}")
+    assert detail.json()["prompt_version"] == "monthly-report-vtest.1"
+    assert detail.json()["template_hash"] == body["template_hash"]
+    assert detail.json()["model_report"] == "mock/report-model"
+    assert detail.json()["resolved_model_report"] == "mock/resolved-model"
+    assert detail.json()["source_bundle_hash"] == body["source_bundle_hash"]
+    assert detail.json()["app_version"] == "test-app-version"
+
+
 def test_monthly_report_api_rerun_respects_owner_active_job_limit():
     app = create_app()
     client = TestClient(app)
@@ -706,6 +1090,69 @@ def _minimal_pattern_b_markdown(body: str) -> str:
             f"## 07 今後の授業計画\n{body}",
         ]
     )
+
+
+class _FakeRLSReadStore:
+    def __init__(self, job: monthly_reports_router.MockJob) -> None:
+        self.job = job
+        self.calls: list[str] = []
+
+    def list_jobs(self) -> list[monthly_reports_router.MockJob]:
+        self.calls.append("list_jobs")
+        return [self.job]
+
+    def get(self, public_id: str) -> monthly_reports_router.MockJob:
+        self.calls.append("get")
+        if public_id != self.job.public_id:
+            raise KeyError(public_id)
+        return self.job
+
+    def list_sources(self, public_id: str) -> list[monthly_reports_router.MockSource]:
+        self.calls.append("list_sources")
+        return [
+            monthly_reports_router.MockSource(
+                public_id="mrs_rls",
+                job_id=public_id,
+                source_type="google_doc",
+            )
+        ]
+
+    def list_artifacts(self, public_id: str) -> list[monthly_reports_router.MockArtifact]:
+        self.calls.append("list_artifacts")
+        return [
+            monthly_reports_router.MockArtifact(
+                public_id="mra_rls",
+                job_id=public_id,
+                artifact_type="draft_markdown",
+            )
+        ]
+
+    def list_validations(self, public_id: str) -> list[monthly_reports_router.MockValidation]:
+        self.calls.append("list_validations")
+        return [
+            monthly_reports_router.MockValidation(
+                public_id="mrv_rls",
+                job_id=public_id,
+                rule_id="non_empty_markdown",
+                severity="info",
+                message="ok",
+            )
+        ]
+
+    def list_llm_calls(self, public_id: str) -> list[monthly_reports_router.MockLLMCall]:
+        self.calls.append("list_llm_calls")
+        return [
+            monthly_reports_router.MockLLMCall(
+                public_id="mrl_rls",
+                job_id=public_id,
+                prompt_kind="report",
+                provider="openrouter",
+            )
+        ]
+
+
+def _raise_if_direct_store_used():
+    raise AssertionError("direct monthly report store should not be used for RLS reads")
 
 
 def _supabase_token(

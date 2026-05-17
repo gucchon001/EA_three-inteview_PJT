@@ -3,9 +3,11 @@ from __future__ import annotations
 import os
 import time
 
+from cryptography.hazmat.primitives.asymmetric import ec, rsa
 import jwt
 import pytest
 
+import eb_app.auth.dependencies as auth_dependencies
 from eb_app.auth.mock import get_mock_user, list_mock_users
 from eb_app.auth.safety import assert_mock_auth_allowed
 from eb_app.main import create_app
@@ -25,7 +27,9 @@ def clean_auth_env():
         "OPENROUTER_MAX_TOKENS",
         "SUPABASE_JWT_SECRET",
         "SUPABASE_JWT_AUDIENCE",
+        "SUPABASE_URL",
         "EB_ALLOWED_EMAIL_DOMAIN",
+        "EB_AUTH_SESSION_COOKIE_NAME",
     )
     old = {key: os.environ.get(key) for key in keys}
     for key in keys:
@@ -129,6 +133,85 @@ def test_monthly_report_api_accepts_supabase_jwt_user():
     assert response.status_code == 200
 
 
+def test_monthly_report_api_accepts_supabase_jwt_from_auth_cookie():
+    os.environ["SUPABASE_JWT_SECRET"] = "test-supabase-jwt-secret"
+    token = _supabase_token(
+        email="member@tomonokai-corp.com",
+        sub="user-cookie-123",
+        role="authenticated",
+    )
+
+    client = TestClient(create_app())
+    client.cookies.set("eb_auth_session", token)
+    response = client.get("/api/monthly-reports/jobs")
+
+    assert response.status_code == 200
+
+
+@pytest.mark.parametrize(
+    ("algorithm", "private_key"),
+    [
+        ("ES256", ec.generate_private_key(ec.SECP256R1())),
+        ("RS256", rsa.generate_private_key(public_exponent=65537, key_size=2048)),
+    ],
+)
+def test_monthly_report_api_accepts_supabase_jwks_token(
+    monkeypatch: pytest.MonkeyPatch,
+    algorithm: str,
+    private_key,
+):
+    os.environ["SUPABASE_URL"] = "https://example.supabase.co"
+    token = _supabase_asymmetric_token(
+        email="member@tomonokai-corp.com",
+        sub="user-jwks-123",
+        role="authenticated",
+        private_key=private_key,
+        algorithm=algorithm,
+    )
+
+    class FakeSigningKey:
+        key = private_key.public_key()
+
+    class FakeJwksClient:
+        def get_signing_key_from_jwt(self, jwt_token: str):
+            assert jwt_token == token
+            return FakeSigningKey()
+
+    monkeypatch.setattr(
+        auth_dependencies,
+        "_get_jwks_client",
+        lambda supabase_url: FakeJwksClient(),
+    )
+
+    client = TestClient(create_app())
+    response = client.get(
+        "/api/monthly-reports/jobs",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+
+    assert response.status_code == 200
+
+
+def test_monthly_report_api_requires_supabase_url_for_jwks_token():
+    private_key = ec.generate_private_key(ec.SECP256R1())
+    token = _supabase_asymmetric_token(
+        email="member@tomonokai-corp.com",
+        sub="user-jwks-123",
+        role="authenticated",
+        private_key=private_key,
+        algorithm="ES256",
+    )
+
+    client = TestClient(create_app())
+    response = client.get(
+        "/api/monthly-reports/jobs",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+
+    assert response.status_code == 503
+    assert response.json()["detail"] == "Supabase Auth verification is not configured"
+
+
 def test_monthly_report_api_rejects_supabase_jwt_wrong_domain():
     os.environ["SUPABASE_JWT_SECRET"] = "test-supabase-jwt-secret"
     token = _supabase_token(
@@ -205,4 +288,28 @@ def _supabase_token(
         },
         secret,
         algorithm="HS256",
+    )
+
+
+def _supabase_asymmetric_token(
+    *,
+    email: str,
+    sub: str,
+    role: str,
+    private_key,
+    algorithm: str,
+) -> str:
+    now = int(time.time())
+    return jwt.encode(
+        {
+            "aud": "authenticated",
+            "exp": now + 300,
+            "iat": now,
+            "sub": sub,
+            "email": email,
+            "role": role,
+        },
+        private_key,
+        algorithm=algorithm,
+        headers={"kid": "test-key"},
     )

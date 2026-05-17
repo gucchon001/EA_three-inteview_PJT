@@ -5,7 +5,7 @@
 - 正本/補助資料の区分: 月次レポート作成ツールのセキュリティ・運用設計
 - 起点: `docs/project/月次レポート_プログラム化_LLMワークフロー移行計画.md`
 - 関連文書: `requirements.md`, `data-design.md`, `api-definition.md`
-- 最終更新: 2026-05-14
+- 最終更新: 2026-05-17
 
 ## 認証
 
@@ -13,7 +13,10 @@
 - `tomonokai-corp.com` ドメインのユーザーだけを許可する。
 - Supabase AuthのセッションをFastAPI側で検証し、メールまたはGoogle provider由来の情報でドメイン制限を行う。
 - ドメイン不一致は403として扱う。
-- SSR/サーバサイド処理ではPKCE flowとsecure cookieを前提にする。
+- SSR/HTMX本番UIではPKCE flowと `HTTPOnly`, `Secure`, `SameSite=Lax` Cookieを正とする。アクセストークンをブラウザJSやlocalStorageで常用しない。
+- 移行期のSupabase callback bridgeは、Supabase access tokenをサーバ側で検証した後に `eb_auth_session` Cookieを `HTTPOnly`, `Secure`（local/dev/test以外）, `SameSite=Lax` でセットする。以後の通常UI認証はこのCookieを優先経路へ寄せる。
+- POST/PUT/DELETE相当の画面操作はCSRF対策を通す。初期方針はサーバ生成CSRF tokenをCookieまたはセッションと対応付け、HTMXフォームからhidden inputまたは `X-CSRF-Token` で送る方式とする。
+- Bearer token検証はE2E、内部JSON API、管理スクリプト、移行中の互換経路として扱い、通常UI境界の主方式にしない。
 
 ### ローカル開発
 
@@ -23,13 +26,13 @@
 - 管理者モックユーザーは `mock-admin@tomonokai-corp.com`、一般モックユーザーは `mock-user@tomonokai-corp.com` とする。
 - 本番で `mock` を有効にして起動しようとした場合は、アプリ起動時に失敗させる。
 - モック認証はGoogle provider tokenを持たないため、Google API取得もfixtureまたは手動アップロード相当のモックに切り替える。
-- 月次レポートAPIは認証依存関係を必ず通す。ローカルmockでは固定ユーザーを返し、非mock環境ではBearer tokenをSupabase JWT secretで検証する。
+- 月次レポートAPIは認証依存関係を必ず通す。ローカルmockでは固定ユーザーを返す。非mockの通常UIはCookieセッション、移行期のJSON API/E2EはBearer tokenをSupabase JWT secretで検証する。
 
 ### OAuth開始・callback
 
 Supabase AuthのOAuth開始・callbackは認証基盤側の責務とし、月次レポートAPI定義には含めない。月次レポートAPIは、認証済みユーザーと必要なGoogle API credentialが取得済みである前提で動作する。
 
-FastAPI側のMVP初期検証はHS256のSupabase JWT secretを使う。`SUPABASE_JWT_SECRET` が未設定の非mock環境では503、Bearer token不正は401、許可ドメイン外のメールは403とする。audienceは `SUPABASE_JWT_AUDIENCE`、許可ドメインは `EB_ALLOWED_EMAIL_DOMAIN` で上書きできるが、既定値はそれぞれ `authenticated` と `tomonokai-corp.com` とする。
+FastAPI側の移行期JSON API/E2E検証はHS256のSupabase JWT secretを使う。`SUPABASE_JWT_SECRET` が未設定の非mock環境では503、Bearer token不正は401、許可ドメイン外のメールは403とする。audienceは `SUPABASE_JWT_AUDIENCE`、許可ドメインは `EB_ALLOWED_EMAIL_DOMAIN` で上書きできるが、既定値はそれぞれ `authenticated` と `tomonokai-corp.com` とする。
 
 ## Google API認可
 
@@ -105,15 +108,24 @@ MVPではロール定義を最小化してよいが、Supabase Postgresを採用
 
 非mock環境では、ジョブ作成時の所有者はJWTの `sub` を使う。一般ユーザーのジョブ一覧・詳細・成果物・検証・LLM呼び出しログ・stage操作は自分のジョブだけに制限し、他ユーザーのジョブIDは404として扱う。ローカルmockでは既存モック開発の利便性を優先し、全ジョブ参照を許可する。
 
-Postgres側は主要テーブルでRLSを有効化する。FastAPI direct DB接続のMVPではAPI側認可を主境界にしつつ、将来のSupabase/PostgREST/ポータル統合に備えて、`monthly_report_jobs.created_by = auth.uid()::text` と親ジョブ所有者を基準にしたselect/insert policyを置く。`audit_logs` はclient accessなし、`google_oauth_credentials` は `user_id = auth.uid()` のみ許可する。
+Postgres側は主要テーブルでRLSを有効化する。レポート工房はSupabase RLSを主境界として効かせる方針に寄せる。アプリの通常ユーザーリクエストでは、リクエストごとに検証済みユーザーJWT付きSupabase Clientを生成し、`monthly_report_jobs.created_by = auth.uid()::text` と親ジョブ所有者を基準にしたselect/insert/update policyを通すことを第一候補とする。
+
+service role / direct DB接続は、worker、管理処理、migration、保持期間削除、RLSでは表現しにくいサーバ専用処理に限定する。これらの経路ではAPI側の所有者チェック、監査ログ、操作種別のallowlistを必須にし、通常UIリクエストの読み書き境界にはしない。`audit_logs` はclient accessなし、`google_oauth_credentials` は `user_id = auth.uid()` のみ許可する。
 
 ## Cloud Run
 
-本番Cloud Runリージョンは `asia-northeast1`（東京）とする。関連するArtifact Registry、Secret Manager、Cloud Logging / Monitoring、将来利用するCloud Tasks等も、原則として同リージョンまたは同一国内/近接リージョンに寄せる。
+MVPのCloud Run環境は本番のみとする。本番リージョンは `asia-northeast1`（東京）とする。関連するArtifact Registry、Secret Manager、Cloud Logging / Monitoring、将来利用するCloud Tasks等も、原則として同リージョンまたは同一国内/近接リージョンに寄せる。
 
 実Supabase Auth + Google OAuth + Google Workspace read flowのライブE2E前設定は [pre-e2e-setup.md](pre-e2e-setup.md) を参照する。Supabaseプロジェクトを新規作成する場合は、Cloud Runの東京リージョンとデータ所在方針に矛盾しないリージョンを選ぶ。
 
-MVPは本番のみ。
+staging / production の2環境分離は、レポート工房を本番ポータルへ合流するタイミングで用意する。その時点では、ポータル本番反映前のmigration、RLS、Google OAuth、OpenRouter、HTML UI smoke、ライブE2Eをstagingで確認する。
+
+| 環境 | 用途 | データ/Secret |
+|---|---|---|
+| local | 開発・focused test・必要時の実機OAuth E2E | `.env` とローカルSupabase。実値はログ・文書へ出さない |
+| MVP production | レポート工房MVPの実運用 | production用Supabase、production用Secret、実データ |
+| portal staging | 本番ポータル合流前のE2E、migration、RLS、OAuth、OpenRouter smoke | portal staging用Supabase、staging用Secret、テストDocs/Sheets |
+| portal production | ポータル合流後の実運用 | portal production用Supabase、production用Secret、実データ |
 
 | 項目 | 初期方針 |
 |---|---|
@@ -126,7 +138,47 @@ MVPは本番のみ。
 | Secret | Cloud Run環境変数またはSecret参照 |
 | ログ | Cloud Loggingに構造化ログ |
 
+本番ポータル合流時にstaging / productionで分けるもの:
+
+- Cloud Run service name（例: `monthly-report-workshop-staging`, `monthly-report-workshop-production`）
+- Supabase project / database URL / anon key / JWT/JWKS issuer
+- Google OAuth client またはAuthorized redirect URI
+- OpenRouter API keyまたは利用上限
+- Google token encryption key と key version
+- Cloud Logging / Monitoring のalert policy
+
 長時間生成は、MVPではDBジョブ + HTMXポーリングで扱う。Cloud Tasks、Pub/Sub、Cloud Run Jobsなどの導入は、タイムアウト・再試行・負荷の課題が見えた時点で後続検討とする。
+
+Cloud Run上でworkerを動かす場合は、実行方式を本番前に固定する。最低限、job claimのlease timeout、heartbeat/updated_at、stuck job再claim、再試行上限、手動再実行、協調的キャンセル、Idempotency-Keyまたはjob input hashによる二重実行防止を設計・テスト対象にする。
+
+### Worker実行runbook（MVP初期）
+
+MVP初期のworker entryは `python -m eb_app.monthly_reports.worker_entry` とする。HTTPサーバのプロセスメモリに依存せず、Postgres上の `queued` jobをclaimして1件または指定件数を処理する。Cloud Run Jobsまたは手動実行で使い、常駐サービス化は後続判断とする。
+
+必須環境変数:
+
+- `EB_MONTHLY_REPORT_DATABASE_URL`
+- `OPENROUTER_API_KEY`
+- `OPENROUTER_MODEL_REPORT`
+- `EB_MONTHLY_REPORT_PROMPT_VERSION`
+- `EB_APP_VERSION` または Cloud Run の `K_REVISION`
+
+任意環境変数:
+
+- `EB_WORKER_OWNER_USER_ID`: 特定ユーザー/検証ジョブだけを拾う場合に指定
+- `EB_WORKER_LEASE_TIMEOUT_SECONDS`: stale `running/fetch_sources` jobの再claim判定
+- `EB_WORKER_MAX_JOBS`: 1実行で処理する最大job数。既定は1、0はno-jobまで継続
+- `EB_WORKER_SLEEP_SECONDS`: ループ時のsleep秒数
+
+実行例:
+
+```powershell
+python -m eb_app.monthly_reports.worker_entry --max-jobs 1 --lease-timeout-seconds 900
+```
+
+出力は `status`, `claimed_job_id`, `job_id`, `job_status`, `error_type` のJSON summaryに限定し、`error_message` やprovider本文は出さない。`failed` が含まれる場合は非0終了とし、Cloud Run Jobs側の失敗検知に使う。
+
+現時点では、blockingなOpenRouter呼び出し中の真のmid-call heartbeatは未実装。`touch_worker_job` はclaim後・実行前のheartbeatであり、後段stageのstuck reclaim拡張は、artifact / validation / llm_call_logs の冪等性が揃ってから行う。
 
 ## 構造化ログ
 
@@ -142,6 +194,14 @@ MVPは本番のみ。
 - `source_size_bytes`
 - `model`
 - `prompt_version`
+
+監視・アラート:
+
+- Cloud Runの5xx率、timeout率、p95/p99レイテンシ、メモリ逼迫
+- `monthly_report_jobs` のfailed率、stuck running件数、retry上限到達件数
+- OpenRouter token使用量、概算費用、provider timeout/error率
+- Google API quota/error率、OAuth refresh失敗率
+- 429発生件数、CSRF拒否件数、403/404の急増
 
 ## 監査ログ
 
@@ -169,9 +229,19 @@ MVPは本番のみ。
 
 保持期間到来時は物理削除を基本とする。品質集計に必要なメタデータのみ、個人・世帯・ソースを特定できない形に匿名化して残せる。
 
+保持期間削除は運用ジョブとして実装する。対象はソーススナップショット、生成物、検証結果、フィードバック、LLMメタ、OAuthトークンで、削除前の対象件数ドライラン、削除後の件数確認、監査ログ記録を必須にする。退職・連携解除・管理者削除時のOAuth credential削除も同じrunbookに含める。
+
+Supabase Storageへ成果物を移す場合は、bucket policy、オブジェクトprefix、signed URLの有効期限、配布用エクスポートの閲覧期限、保持期間到来時のStorage削除バッチをPostgresメタデータと同時に設計する。
+
+## LLM入力安全
+
+Google Docs/Sheetsから取得した本文は、ユーザーや教師が書いたデータであっても信頼済み命令として扱わない。promptではソース本文を「根拠データ」として区切り、システム指示・開発者指示・本文規約を上書きできないことを明示する。プロンプトインジェクションらしい文言、対象外生徒の混入、送付禁止語、内部メモの配布面露出は検証対象にする。
+
+家庭向け送付・エクスポート前には人間承認ゲートを置く。生成成功、検証OK、編集保存済み、承認済み、送付/エクスポート済みを同一状態として扱わない。
+
 ## 未決事項
 
-なし。
+なし。上記のCookie+CSRF、RLS主境界、worker lease、保持期間削除、Storage policy、LLM入力安全は実装追跡事項として [development-plan.md](development-plan.md) で管理する。
 
 ## 受け入れ条件
 
@@ -194,3 +264,7 @@ MVPは本番のみ。
 | 2026-05-15 | 月次レポート主要テーブルのRLS有効化と所有者ベースpolicyを反映 |
 | 2026-05-15 | Cloud Logging向け構造化ログallowlistと実ログ出力のPII/secret抑止検査を反映 |
 | 2026-05-15 | ライブE2E前設定ガイドへの参照とSupabaseリージョン選定方針を追加 |
+| 2026-05-16 | 本番UIのCookie+CSRF、RLS主境界、service role限定、worker lease、保持期間削除、Storage policy、監視、LLM入力安全、人間承認ゲートを反映 |
+| 2026-05-17 | MVP初期のworker entry/runbookを追加し、Cloud Run Jobsまたは手動実行での1件/複数件処理、必須環境変数、終了コード、mid-call heartbeat未実装条件を明記 |
+| 2026-05-17 | MVPは本番のみへ戻し、staging / production の2環境分離は本番ポータル合流タイミングで用意する方針へ修正 |
+| 2026-05-17 | Supabase callback bridgeで検証済みaccess tokenからHTTPOnly auth session Cookieをセットする移行スライスを反映 |

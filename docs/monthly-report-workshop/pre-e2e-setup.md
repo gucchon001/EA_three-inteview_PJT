@@ -5,15 +5,17 @@
 - 正本/補助資料の区分: 実Supabase Auth + Google OAuth + Google Workspace read flowのライブE2E前チェックリスト
 - 起点: [security-operations.md](security-operations.md), [api-definition.md](api-definition.md), [development-plan.md](development-plan.md)
 - 関連文書: [.env.example](../../.env.example), [data-design.md](data-design.md), [test-plan.md](test-plan.md)
-- 最終更新: 2026-05-15
+- 最終更新: 2026-05-17（MVPは本番のみ、stagingは本番ポータル合流時に用意する方針へ修正）
 
 このガイドは、ローカルmockではなく実Supabase Auth、Google OAuth provider token、Google Workspace読み取り、月次レポートAPIをつないで確認する直前に使う。実シークレット値はここにも、Git管理ファイルにも、フロントエンドにも置かない。
 
 ## 決定事項
 
+- MVPは本番のみで確認する。staging / production の2環境分離は、本番ポータルへ合流するタイミングで用意する。
 - Cloud Run本番リージョンは `asia-northeast1`（東京）を使う。
 - Supabaseプロジェクトを新規作成する場合、プロジェクトリージョンはCloud Runやデータ所在方針と矛盾しないリージョンを選ぶ。既存プロジェクトを使う場合は、リージョン差分を運用リスクとして確認する。
-- 認証はSupabase Auth Google provider、API側検証はSupabase JWT secretによるBearer token検証を使う。
+- 認証はSupabase Auth Google provider。**API側検証は ES256/RS256 を本流とし、`<SUPABASE_URL>/auth/v1/.well-known/jwks.json` から取得した公開鍵で検証**する（D-059）。HS256 + `SUPABASE_JWT_SECRET` は `alg` ヘッダが HS256 のときのフォールバックとテスト互換用に残す。
+- ドメイン制限は Supabase 側ではなく **FastAPI 側の JWT email チェック（`EB_ALLOWED_EMAIL_DOMAIN`）**で担保する。Supabase Auth の signup は `enable_signup = true` で通し、許可しない email は FastAPI 層で 403（D-060）。
 - Google Workspace APIは、ブラウザやリクエストbodyではなく、サーバ側で暗号化保存したGoogle provider refresh tokenからaccess tokenを取得して読む。
 
 ## 詳細
@@ -32,6 +34,36 @@ Supabase側で以下を設定する。
 | Domain policy | API側で `tomonokai-corp.com` を許可ドメインとして検証する |
 
 E2E前に、対象ユーザーが `tomonokai-corp.com` のGoogleアカウントでログインできること、Supabase sessionのaccess tokenをFastAPIへBearer tokenとして渡せることを確認する。
+
+本番ポータル合流時にstaging / productionを分ける場合は、それぞれのCloud Run URLまたは独自ドメインをSupabase Auth Redirect URLsへ登録し、callback URLを環境間で混ぜない。
+
+#### ローカル Supabase で同等にする場合（`supabase/config.toml`）
+
+ローカル開発でライブE2Eを通すときは、`supabase/config.toml` に下記を入れて `supabase stop && supabase start` で再起動する。`client_id` / `secret` は `.env` 経由で参照させる。
+
+```toml
+[auth]
+enabled = true
+site_url = "http://127.0.0.1:8000"
+additional_redirect_urls = [
+  "http://127.0.0.1:8000",
+  "http://127.0.0.1:8000/auth/callback",
+]
+jwt_expiry = 3600
+enable_signup = true  # D-060: 初回 Google ログインを signup 扱いで通す
+
+[auth.external.google]
+enabled = true
+client_id = "env(GOOGLE_OAUTH_CLIENT_ID)"
+secret = "env(GOOGLE_OAUTH_CLIENT_SECRET)"
+redirect_uri = "http://127.0.0.1:56321/auth/v1/callback"
+skip_nonce_check = true
+```
+
+確認コマンド:
+
+- `curl -s http://127.0.0.1:56321/auth/v1/settings | jq '.disable_signup, .external.google'` → `false`, `true` を返す
+- `curl -s http://127.0.0.1:56321/auth/v1/.well-known/jwks.json | jq '.keys[0].alg'` → `"ES256"` を返す（FastAPI 側 JWKS 検証経路の前提）
 
 ### 2. Google Cloud OAuth
 
@@ -109,6 +141,17 @@ Supabase Postgresまたは同等のPostgres接続先で、月次レポート用m
 - 画面・レスポンス・ログに `provider_refresh_token` の実値は表示されない。
 - 続けて同じBearer tokenで月次レポートジョブを作成し、`/fetch-google-sources` が保存済みrefresh tokenからaccess tokenを解決できる。
 
+### 5.2 レポート工房ライブE2E画面
+
+`/auth/callback` でGoogle provider refresh token保存まで通った後、同じブラウザで `/monthly-report-workshop/e2e` を開く。この画面はSupabase sessionのBearer tokenを使い、以下を順番に実行する。
+
+1. `POST /api/monthly-reports/jobs` でジョブを作成する。
+2. `POST /api/monthly-reports/jobs/{job_id}/fetch-google-sources` でDocs / Sheetsをsource snapshotとして保存する。
+3. `POST /api/monthly-reports/jobs/{job_id}/run-openrouter` でdraft生成、validation、artifact保存まで通す。
+4. `GET /sources`, `/artifacts`, `/validations`, `/llm-calls` で結果を確認する。
+
+この画面はライブE2E用の開発導線であり、実シークレットやGoogle provider tokenの実値は表示しない。
+
 ## Not Needed Yet
 
 - ブラウザにGoogle access token / refresh tokenを保存する実装。
@@ -146,3 +189,6 @@ Supabase Postgresまたは同等のPostgres接続先で、月次レポート用m
 | 日付 | 内容 |
 |---|---|
 | 2026-05-15 | 初版作成 |
+| 2026-05-16 | `/monthly-report-workshop/e2e` のライブE2E画面を追加し、ジョブ作成からartifact確認までの手順を反映 |
+| 2026-05-16 | ローカル Supabase 実機通電を反映。`supabase/config.toml` の `[auth.external.google]` + `enable_signup = true` + `additional_redirect_urls` 追記、JWKS（ES256）経由の JWT 検証への切替、ドメイン制限の API 側担保（D-059/D-060） |
+| 2026-05-17 | MVPは本番のみへ戻し、staging / production の環境分離は本番ポータル合流タイミングで用意する方針へ修正 |

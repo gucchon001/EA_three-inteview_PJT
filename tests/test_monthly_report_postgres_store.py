@@ -9,6 +9,12 @@ psycopg = pytest.importorskip("psycopg")
 
 from eb_app.monthly_reports.jobs import JobStatus
 from eb_app.monthly_reports.postgres_store import PostgresJobStore
+from eb_app.monthly_reports.worker import (
+    WorkerRunStatus,
+    run_next_queued_monthly_report_job,
+    run_next_queued_monthly_report_job_result,
+)
+from eb_app.monthly_reports.workflow import ProviderCallError, StaticMonthlyReportProvider
 
 
 DATABASE_URL = os.environ.get("EB_MONTHLY_REPORT_DATABASE_URL")
@@ -74,6 +80,52 @@ def test_postgres_job_store_creates_lists_gets_and_cancels_job(store):
     cancelled = job_store.request_cancel(job.public_id)
     assert cancelled.status == JobStatus.CANCELLED
     assert job_store.count_active_jobs(owner) == 0
+
+
+def test_postgres_job_store_persists_idempotent_job_lookup(store):
+    job_store, owner_prefix = store
+    owner = f"{owner_prefix}-idempotent-owner"
+    job = job_store.create_job(
+        target_month="2026-04",
+        household_key="demo_postgres_idempotent",
+        owner_user_id=owner,
+    )
+
+    assert job_store.get_idempotent_job("create_job", owner, "idem-key") is None
+
+    job_store.remember_idempotent_job("create_job", owner, "idem-key", job.public_id)
+    remembered = job_store.get_idempotent_job("create_job", owner, "idem-key")
+    other_owner = job_store.get_idempotent_job("create_job", f"{owner}-other", "idem-key")
+
+    assert remembered is not None
+    assert remembered.public_id == job.public_id
+    assert other_owner is None
+
+
+def test_postgres_job_store_persists_idempotent_response_lookup(store):
+    job_store, owner_prefix = store
+    owner = f"{owner_prefix}-idempotent-response-owner"
+    response = {
+        "job_id": "mrj_response",
+        "status": "succeeded",
+        "nested": {"ok": True},
+    }
+
+    assert job_store.get_idempotent_response("run-mock:mrj_response", owner, "idem-key") is None
+
+    job_store.remember_idempotent_response(
+        "run-mock:mrj_response",
+        owner,
+        "idem-key",
+        response,
+    )
+    remembered = job_store.get_idempotent_response(
+        "run-mock:mrj_response",
+        owner,
+        "idem-key",
+    )
+
+    assert remembered == response
 
 
 def test_postgres_job_store_records_feedback_and_reruns_job(store):
@@ -302,3 +354,179 @@ def test_postgres_job_store_claims_next_queued_job_once(store):
     assert claimed_again.public_id == second.public_id
     assert claimed_again.status == JobStatus.RUNNING
     assert job_store.claim_next_queued_job(owner_user_id=owner) is None
+
+
+def test_postgres_worker_fills_missing_reproducibility_meta(store, tmp_path):
+    job_store, owner_prefix = store
+    owner = f"{owner_prefix}-worker-meta-owner"
+    template = tmp_path / "template.md"
+    template.write_text("PATTERN B CONTRACT", encoding="utf-8")
+    job = job_store.create_job(
+        target_month="2026-04",
+        household_key="demo_postgres_worker_meta",
+        owner_user_id=owner,
+    )
+    job_store.record_source(
+        job.public_id,
+        source_type="doc",
+        display_name="面談メモ",
+        snapshot_text="4月の学習記録",
+        content_hash="sha256:source-demo",
+    )
+    provider = StaticMonthlyReportProvider(
+        "# 4月度 月次レポート\n\n本文です。",
+        resolved_model="postgres/resolved-model",
+    )
+
+    result = run_next_queued_monthly_report_job(
+        job_store,
+        provider=provider,
+        template_path=template,
+        owner_user_id=owner,
+        prompt_version="monthly-report-vpostgres-worker.1",
+        model_report="postgres/report-model",
+        app_version="postgres-worker-app",
+    )
+
+    assert result is not None
+    assert result.public_id == job.public_id
+    assert result.status == JobStatus.SUCCEEDED
+    assert result.prompt_version == "monthly-report-vpostgres-worker.1"
+    assert result.template_hash is not None and result.template_hash.startswith("sha256:")
+    assert result.model_report == "postgres/report-model"
+    assert result.resolved_model_report == "postgres/resolved-model"
+    assert result.source_bundle_hash is not None and result.source_bundle_hash.startswith(
+        "sha256:"
+    )
+    assert result.app_version == "postgres-worker-app"
+    assert provider.last_model == "postgres/report-model"
+
+    fetched = job_store.get(job.public_id)
+    assert fetched.prompt_version == result.prompt_version
+    assert fetched.template_hash == result.template_hash
+    assert fetched.model_report == result.model_report
+    assert fetched.resolved_model_report == result.resolved_model_report
+    assert fetched.source_bundle_hash == result.source_bundle_hash
+    assert fetched.app_version == result.app_version
+
+
+class FailingProvider:
+    def complete(self, *, messages, model=None):
+        raise ProviderCallError("temporary provider failure")
+
+
+def test_postgres_job_store_claims_stale_fetch_sources_job_with_retry_attempt(store):
+    job_store, owner_prefix = store
+    owner = f"{owner_prefix}-lease-owner"
+    job = job_store.create_job(
+        target_month="2026-04",
+        household_key="demo_postgres_lease",
+        owner_user_id=owner,
+    )
+
+    first = job_store.claim_next_runnable_job(owner_user_id=owner)
+    assert first is not None
+    assert first.public_id == job.public_id
+    assert first.worker_attempts == 1
+
+    assert job_store.claim_next_runnable_job(
+        owner_user_id=owner,
+        lease_timeout_seconds=60,
+    ) is None
+
+    with psycopg.connect(DATABASE_URL) as conn:
+        conn.execute(
+            """
+            update public.monthly_report_jobs
+            set updated_at = now() - interval '2 minutes'
+            where public_id = %s
+            """,
+            (job.public_id,),
+        )
+
+    reclaimed = job_store.claim_next_runnable_job(
+        owner_user_id=owner,
+        lease_timeout_seconds=60,
+    )
+
+    assert reclaimed is not None
+    assert reclaimed.public_id == job.public_id
+    assert reclaimed.status == JobStatus.RUNNING
+    assert reclaimed.current_stage == "fetch_sources"
+    assert reclaimed.worker_attempts == 2
+
+
+def test_postgres_job_store_touch_worker_job_prevents_fetch_sources_reclaim(store):
+    job_store, owner_prefix = store
+    owner = f"{owner_prefix}-heartbeat-owner"
+    job = job_store.create_job(
+        target_month="2026-04",
+        household_key="demo_postgres_heartbeat",
+        owner_user_id=owner,
+    )
+
+    claimed = job_store.claim_next_runnable_job(owner_user_id=owner)
+    assert claimed is not None
+    assert claimed.public_id == job.public_id
+
+    with psycopg.connect(DATABASE_URL) as conn:
+        conn.execute(
+            """
+            update public.monthly_report_jobs
+            set updated_at = now() - interval '2 minutes',
+                worker_last_claimed_at = now() - interval '2 minutes'
+            where public_id = %s
+            """,
+            (job.public_id,),
+        )
+
+    touched = job_store.touch_worker_job(job.public_id)
+
+    assert touched.status == JobStatus.RUNNING
+    assert touched.current_stage == "fetch_sources"
+    assert touched.worker_attempts == 1
+    assert touched.worker_last_claimed_at is not None
+    assert (
+        job_store.claim_next_runnable_job(
+            owner_user_id=owner,
+            lease_timeout_seconds=60,
+        )
+        is None
+    )
+
+
+def test_postgres_worker_requeues_provider_failure_until_retry_limit(store, tmp_path):
+    job_store, owner_prefix = store
+    owner = f"{owner_prefix}-retry-owner"
+    template = tmp_path / "template.md"
+    template.write_text("PATTERN B CONTRACT", encoding="utf-8")
+    job = job_store.create_job(
+        target_month="2026-04",
+        household_key="demo_postgres_retry",
+        owner_user_id=owner,
+        max_worker_attempts=2,
+    )
+    provider = FailingProvider()
+
+    first = run_next_queued_monthly_report_job_result(
+        job_store,
+        provider=provider,
+        template_path=template,
+        owner_user_id=owner,
+    )
+    second = run_next_queued_monthly_report_job_result(
+        job_store,
+        provider=provider,
+        template_path=template,
+        owner_user_id=owner,
+    )
+
+    assert first.status == WorkerRunStatus.RETRY_SCHEDULED
+    assert first.job is not None
+    assert first.job.public_id == job.public_id
+    assert first.job.status == JobStatus.QUEUED
+    assert first.job.worker_attempts == 1
+    assert second.status == WorkerRunStatus.FAILED
+    assert second.job is not None
+    assert second.job.status == JobStatus.FAILED
+    assert second.job.worker_attempts == 2

@@ -61,6 +61,21 @@ def test_monthly_report_jobs_has_prompt_scope_notes_column():
     assert "prompt_scope_notes text" in sql
 
 
+def test_monthly_report_idempotency_keys_are_persisted_with_unique_scope():
+    sql = "\n".join(
+        path.read_text(encoding="utf-8").lower()
+        for path in sorted(MIGRATIONS_DIR.glob("*.sql"))
+    )
+
+    assert "create table public.monthly_report_idempotency_keys" in sql
+    assert "operation text not null" in sql
+    assert "idempotency_key text not null" in sql
+    assert "job_id uuid references public.monthly_report_jobs(id)" in sql
+    assert "response_json jsonb" in sql
+    assert "unique (owner_user_id, operation, idempotency_key)" in sql
+    assert "alter table public.monthly_report_idempotency_keys enable row level security" in sql
+
+
 def test_monthly_report_tables_enable_rls_and_owner_policies():
     sql = "\n".join(
         path.read_text(encoding="utf-8").lower()

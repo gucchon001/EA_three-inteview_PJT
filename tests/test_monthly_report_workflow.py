@@ -216,12 +216,13 @@ def test_run_monthly_report_job_fails_when_required_heading_is_missing(
     assert store.list_artifacts(job.public_id) == []
 
 
-def test_run_monthly_report_job_fails_when_forbidden_distribution_term_is_present(
+def test_run_monthly_report_job_sanitizes_forbidden_distribution_term_and_succeeds(
     tmp_path: Path,
 ):
+    """担当CA は「担当」への安全置換があるため、auto-sanitize して succeeded になる。"""
     template = tmp_path / "template.md"
     template.write_text("PATTERN B CONTRACT", encoding="utf-8")
-    store = MockJobStore(id_factory=_ids(["mrj_demo", "llm_demo", "mrv_demo", "mra_demo"]))
+    store = MockJobStore(id_factory=_ids(["mrj_demo", "llm_demo", "mrv_demo", "mra_demo", "mrs_demo"]))
     job = store.create_job(target_month="2026-04", household_key="demo")
     provider = StaticMonthlyReportProvider(
         "# 4月度 月次レポート\n\n担当CAとの打合せ内容をもとにしています。"
@@ -234,14 +235,16 @@ def test_run_monthly_report_job_fails_when_forbidden_distribution_term_is_presen
         template_path=template,
     )
 
-    assert result.status == JobStatus.FAILED
-    assert result.current_stage == "validate"
-    assert result.error_type == "validation_failed"
+    assert result.status == JobStatus.SUCCEEDED
     validations = store.list_validations(job.public_id)
-    assert [(v.rule_id, v.severity, v.message) for v in validations] == [
-        ("forbidden_terms", "error", "draft contains forbidden terms: 担当CA")
-    ]
-    assert store.list_artifacts(job.public_id) == []
+    sanitized_v = [v for v in validations if v.rule_id == "forbidden_terms_sanitized"]
+    assert len(sanitized_v) == 1
+    assert sanitized_v[0].severity == "info"
+    assert "担当CA" in sanitized_v[0].message
+    artifacts = store.list_artifacts(job.public_id)
+    assert len(artifacts) == 1
+    assert "担当CA" not in artifacts[0].content
+    assert "担当との打合せ" in artifacts[0].content
 
 
 def test_run_monthly_report_job_records_provider_failure_without_persisting_artifact(
@@ -341,6 +344,45 @@ def test_openrouter_provider_connection_error_uses_unknown_status():
     assert str(exc_info.value) == "OpenRouter call failed with status unknown"
     assert "socket denied" not in str(exc_info.value)
     assert "sk-test-secret" not in str(exc_info.value)
+
+
+def test_run_monthly_report_job_persists_reproducibility_meta_on_job(
+    tmp_path: Path,
+):
+    template = tmp_path / "template.md"
+    template.write_text("PATTERN B CONTRACT", encoding="utf-8")
+    store = MockJobStore(
+        id_factory=_ids(["mrj_demo", "mrs_demo", "llm_demo", "mrv_demo", "mra_demo"])
+    )
+    job = store.create_job(target_month="2026-04", household_key="demo")
+    assert job.template_hash is None
+    assert job.source_bundle_hash is None
+    assert job.resolved_model_report is None
+    store.record_source(
+        job.public_id,
+        source_type="doc",
+        display_name="面談メモ",
+        snapshot_text="4月の学習記録",
+        content_hash="sha256:source-demo",
+    )
+    provider = StaticMonthlyReportProvider(
+        "# 4月度 月次レポート\n\n本文",
+        resolved_model="openrouter/resolved-model-x",
+    )
+
+    result = run_monthly_report_job(
+        store,
+        job.public_id,
+        provider=provider,
+        template_path=template,
+    )
+
+    assert result.status == JobStatus.SUCCEEDED
+    assert result.template_hash is not None and result.template_hash.startswith("sha256:")
+    assert result.source_bundle_hash is not None and result.source_bundle_hash.startswith(
+        "sha256:"
+    )
+    assert result.resolved_model_report == "openrouter/resolved-model-x"
 
 
 def _ids(values: list[str]):

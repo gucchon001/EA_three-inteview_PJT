@@ -5,18 +5,21 @@
 - 正本/補助資料の区分: 月次レポート作成ツールのAPI定義
 - 起点: `docs/project/月次レポート_プログラム化_LLMワークフロー移行計画.md`
 - 関連文書: `functional-spec.md`, `screen-design.md`, `data-design.md`
-- 最終更新: 2026-05-14
+- 最終更新: 2026-05-16
 
 ## 方針
 
-- JSON APIは `/api/monthly-reports/*` に置く。
-- HTML fragment APIは `/monthly-reports/*/fragments/*` に置く。
+- 通常画面は `/monthly-reports/*` のHTMLページとHTML断片で構成する。Jinja2 + HTMXの差し替え先にそのまま挿入できるレスポンスを返し、フロントJSでJSONからDOMを組み立てない。
+- JSON APIは `/api/monthly-reports/*` に置く。用途は worker、E2E、管理スクリプト、将来連携に限定し、通常UIからDOM更新目的で直接叩かない。
+- HTML fragment APIは `/monthly-reports/*/fragments/*` に置く。画面のPOST操作は原則としてHTML断片、リダイレクト、またはHXヘッダーで応答する。
 - LLM生成は同期 `generate` ではなく、ジョブ作成と状態取得に分ける。
 - Supabase Authで認証済みのユーザーのみアクセス可能とする。
 - FastAPI側はSupabase Authセッションを検証し、`tomonokai-corp.com` ドメイン制限を適用する。
 - ローカル環境では `EB_AUTH_MODE=mock` のときだけ開発用モックユーザーを注入する。
-- 月次レポートAPIは `get_current_user` 相当の依存関係を通す。非mock環境ではBearer tokenをSupabase JWT secretで検証し、`aud=authenticated` と `tomonokai-corp.com` ドメインを要求する。
+- 本番SSR/HTMX UIは `HTTPOnly`, `Secure`, `SameSite=Lax` Cookieを正とし、POST/PUT/DELETE相当の画面操作はCSRF対策を通す。Bearer token検証はE2E、内部API、移行中の互換経路として扱う。
+- 月次レポートAPIは `get_current_user` 相当の依存関係を通す。移行期の非mock JSON APIではBearer tokenをSupabase JWT secretで検証し、`aud=authenticated` と `tomonokai-corp.com` ドメインを要求する。
 - 非mock環境では、ジョブ作成時の `owner_user_id` はリクエストbodyではなく認証ユーザーIDから決める。ジョブ一覧・詳細・成果物・検証・LLM呼び出しログ・stage操作は、一般ユーザーには自分のジョブだけを返す。他ユーザーのジョブIDは404として扱う。admin roleは全ジョブ参照を許可する。
+- POST系APIとHTML actionは二重送信・リロード・worker再試行に耐えるよう、Idempotency-Keyまたはjob input hashによる冪等性を設計する。
 - DB主キーはUUIDとし、API・画面・ログではprefix付きIDを使う。
 - MVPの進捗更新はHTMXポーリングに統一する。SSEは後続検討とする。
 - Supabase AuthのOAuth開始・callback APIは認証基盤側の責務とし、本API定義には含めない。
@@ -379,11 +382,26 @@ MVP初期のローカル開発では、サーバ側環境変数 `EB_GOOGLE_WORKS
 
 ## HTML fragment API
 
+通常画面の操作はこの層を優先する。エラー時もJSONを返さず、対象領域に差し込めるalert/status断片を返す。
+
 | API | 用途 |
 |---|---|
+| `GET /monthly-reports` | レポート工房トップ |
+| `GET /monthly-reports/jobs` | ジョブ一覧ページ |
+| `GET /monthly-reports/jobs/new` | 新規ジョブ作成ページ |
+| `POST /monthly-reports/jobs` | ジョブ作成後、ジョブカードまたは詳細への遷移指示を返す |
+| `GET /monthly-reports/jobs/{job_id}` | ジョブ詳細ページ |
+| `GET /monthly-reports/jobs/{job_id}/edit` | プレビュー・推敲ページ |
+| `POST /monthly-reports/jobs/{job_id}/run` | 生成開始後の進捗パネルまたはエラー断片。`run_mode=mock` はモック生成を完了まで実行し、`run_mode=openrouter` はOpenRouter生成を実行する |
+| `POST /monthly-reports/jobs/{job_id}/rerun` | 再生成ジョブ作成後の比較/進捗断片 |
+| `POST /monthly-reports/jobs/{job_id}/cancel` | キャンセル要求後の状態断片 |
 | `GET /monthly-reports/jobs/{job_id}/fragments/status` | 進捗表示 |
+| `GET /monthly-reports/jobs/{job_id}/fragments/sources` | ソース確認 |
+| `POST /monthly-reports/jobs/{job_id}/fragments/sources` | 手動ソース保存後のUI |
+| `POST /monthly-reports/jobs/{job_id}/fragments/google-sources` | Google Docs/Sheets取得後のソースUI。CSRF必須。成功時はsources断片、設定不足/取得失敗時はalert断片 |
 | `GET /monthly-reports/jobs/{job_id}/fragments/preview` | プレビュー差し替え |
 | `GET /monthly-reports/jobs/{job_id}/fragments/validation` | 検証結果 |
+| `GET /monthly-reports/jobs/{job_id}/fragments/artifacts` | 成果物一覧 |
 | `POST /monthly-reports/jobs/{job_id}/fragments/feedback` | フィードバック保存後のUI |
 
 ## エラー
@@ -429,6 +447,14 @@ MVP初期のローカル開発では、サーバ側環境変数 `EB_GOOGLE_WORKS
 
 なし。`prompt_scope_notes` はレシピ由来または手入力で初期投入し、householdメタからの自動生成は後続とする。
 
+## 実装追跡事項
+
+- `/monthly-reports/*` のHTML page/action/fragment第一弾は本番ルータへ追加済み。ジョブ一覧・新規・作成・詳細・ソース確認/手動保存/Google取得・生成開始・モック生成・OpenRouter生成・status/preview/validation/feedbackはHTMLを返す。
+- 通常UIから `/api/monthly-reports/*` をDOM更新目的で直接使わない境界は文書化・focused test済み。JSON APIはworker/E2E/管理/将来連携用として維持する。
+- JSONの `/api/monthly-reports/jobs/{job_id}/fetch-google-sources` はE2E/worker/管理/将来連携用。通常HTML UIは `POST /monthly-reports/jobs/{job_id}/fragments/google-sources` 経由でsources断片を差し替える。
+- Cookie + CSRF第一弾はジョブ作成・生成開始・ソース保存・Google取得・フィードバック保存で実装済み。残りはSupabase AuthセッションのHTTPOnly Cookie化とBearer token前提ヘルパーの棚卸し。
+- POST系に冪等性キーまたはjob input hashを導入し、二重送信・リロード・再試行時の挙動を固定する。
+
 ## 受け入れ条件
 
 - MVP画面の全操作に対応するAPIまたはfragment APIがある。
@@ -453,9 +479,12 @@ MVP初期のローカル開発では、サーバ側環境変数 `EB_GOOGLE_WORKS
 | 2026-05-14 | `required_headings` によるartifact保存前の `validation_failed` を反映 |
 | 2026-05-14 | `forbidden_terms` によるartifact保存前の `validation_failed` を反映 |
 | 2026-05-14 | Google Workspace REST APIからソースを取得する `/fetch-google-sources` を追加 |
+| 2026-05-17 | 通常HTML UI用のsources fragment、手動ソース保存、Google Docs/Sheets取得HTML actionを追加 |
+| 2026-05-17 | 通常HTML UIの `/run` actionにOpenRouter生成モードを追加 |
 | 2026-05-14 | 暗号化保存済みprovider refresh tokenからのGoogle access token解決経路を反映 |
 | 2026-05-14 | Google provider refresh token保存API `/api/auth/google-oauth/credentials` を追加 |
 | 2026-05-14 | Supabase session経由のGoogle provider refresh token保存ブリッジ `/api/auth/google-oauth/supabase-session` を追加 |
 | 2026-05-14 | Supabase JWT secretによるBearer token検証とメールドメイン制限を反映 |
 | 2026-05-15 | Supabase session保存ブリッジのprovider/email/scope検証とrefresh token秘匿を反映 |
+| 2026-05-16 | 通常UIはHTMLページ/HTML断片、JSON APIはworker/E2E/管理/将来連携用とする境界、Cookie+CSRF、冪等性追跡を反映 |
 | 2026-05-15 | 非mock環境のジョブ所有者決定と一般ユーザーのジョブアクセス制限を反映 |

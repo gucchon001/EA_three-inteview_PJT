@@ -1,0 +1,17 @@
+---
+description: Codex session hygiene: prompt shape, planning, verification, durable guidance, skills, and scoped collaboration
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Codex Best-Practice Operations
+
+- Start work by clarifying **Goal, Context, Constraints, and Done when**. If any part is missing and affects implementation risk, ask before changing code.
+- Plan first for complex, uncertain, cross-file, auth, data, migration, or externally visible changes. Keep investigation, plan, implementation, and verification distinct.
+- Treat tests, lint/typecheck/build, review, or UI verification as part of done. If verification cannot run, state that clearly with the reason.
+- Put durable project guidance in `AGENTS.md`; keep this Cursor rule concise and operational. Do not duplicate long policy here.
+- Turn repeatable workflows into skills once they are stable enough to reuse. Add automations only after the workflow is proven and low-variance.
+- Keep one coherent task per thread. Split unrelated work rather than mixing implementation, review, planning, and operations in one run.
+- Use subagents only for bounded work with clear read/write scope, expected output, and verification. Prefer direct work for small local changes.
+- Collaborate in a dirty worktree safely: inspect before editing, preserve others' changes, and never revert or overwrite unrelated edits.

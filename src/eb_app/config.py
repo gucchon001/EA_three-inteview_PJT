@@ -18,6 +18,8 @@ class Settings:
     auth_mode: str
     env: str
     monthly_report_database_url: str | None
+    monthly_report_prompt_version: str
+    app_version: str
     openrouter_api_key: str | None
     openrouter_model_report: str
     openrouter_timeout_seconds: float
@@ -42,6 +44,16 @@ class Settings:
             env=os.environ.get("EB_ENV", "local").strip().lower() or "local",
             monthly_report_database_url=(
                 os.environ.get("EB_MONTHLY_REPORT_DATABASE_URL", "").strip() or None
+            ),
+            monthly_report_prompt_version=(
+                os.environ.get("EB_MONTHLY_REPORT_PROMPT_VERSION", "").strip()
+                or "monthly-report-v20260516.1"
+            ),
+            app_version=(
+                os.environ.get("EB_APP_VERSION", "").strip()
+                or os.environ.get("K_REVISION", "").strip()
+                or os.environ.get("GITHUB_SHA", "").strip()
+                or "local"
             ),
             openrouter_api_key=(os.environ.get("OPENROUTER_API_KEY", "").strip() or None),
             openrouter_model_report=(

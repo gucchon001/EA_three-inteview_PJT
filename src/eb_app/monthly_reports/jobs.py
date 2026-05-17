@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta, timezone
 from typing import Callable
 
 from eb_app.monthly_reports.ids import PUBLIC_ID_PREFIXES, new_public_id
@@ -63,6 +64,9 @@ class MockJob:
     source_bundle_hash: str | None = None
     app_version: str | None = None
     prompt_scope_notes: str | None = None
+    worker_attempts: int = 0
+    max_worker_attempts: int = 3
+    worker_last_claimed_at: datetime | None = None
 
 
 @dataclass
@@ -145,6 +149,7 @@ class MockJobStore:
         source_bundle_hash: str | None = None,
         app_version: str | None = None,
         prompt_scope_notes: str | None = None,
+        max_worker_attempts: int = 3,
     ) -> MockJob:
         public_id = self._id_factory(PUBLIC_ID_PREFIXES.job)
         job = MockJob(
@@ -161,6 +166,7 @@ class MockJobStore:
             source_bundle_hash=source_bundle_hash,
             app_version=app_version,
             prompt_scope_notes=prompt_scope_notes,
+            max_worker_attempts=max_worker_attempts,
         )
         self._jobs[public_id] = job
         return job
@@ -181,6 +187,7 @@ class MockJobStore:
         source_bundle_hash: str | None = None,
         app_version: str | None = None,
         prompt_scope_notes: str | None = None,
+        max_worker_attempts: int = 3,
     ) -> MockJob:
         if self.count_active_jobs(owner_user_id) >= max_active_jobs:
             raise JobLimitExceeded("user already has 3 active generation jobs")
@@ -197,10 +204,37 @@ class MockJobStore:
             source_bundle_hash=source_bundle_hash,
             app_version=app_version,
             prompt_scope_notes=prompt_scope_notes,
+            max_worker_attempts=max_worker_attempts,
         )
 
     def get(self, public_id: str) -> MockJob:
         return self._jobs[public_id]
+
+    def update_reproducibility_meta(
+        self,
+        public_id: str,
+        *,
+        prompt_version: str | None = None,
+        template_hash: str | None = None,
+        model_report: str | None = None,
+        resolved_model_report: str | None = None,
+        source_bundle_hash: str | None = None,
+        app_version: str | None = None,
+    ) -> MockJob:
+        job = self.get(public_id)
+        if prompt_version is not None:
+            job.prompt_version = prompt_version
+        if template_hash is not None:
+            job.template_hash = template_hash
+        if model_report is not None:
+            job.model_report = model_report
+        if resolved_model_report is not None:
+            job.resolved_model_report = resolved_model_report
+        if source_bundle_hash is not None:
+            job.source_bundle_hash = source_bundle_hash
+        if app_version is not None:
+            job.app_version = app_version
+        return job
 
     def list_jobs(self) -> list[MockJob]:
         return list(self._jobs.values())
@@ -213,14 +247,61 @@ class MockJobStore:
         )
 
     def claim_next_queued_job(self, owner_user_id: str | None = None) -> MockJob | None:
+        return self.claim_next_runnable_job(owner_user_id=owner_user_id)
+
+    def claim_next_runnable_job(
+        self,
+        owner_user_id: str | None = None,
+        *,
+        lease_timeout_seconds: int | None = None,
+    ) -> MockJob | None:
+        now = datetime.now(timezone.utc)
         for job in self._jobs.values():
-            if job.status == JobStatus.QUEUED and (
-                owner_user_id is None or job.owner_user_id == owner_user_id
-            ):
-                job.status = JobStatus.RUNNING
-                job.current_stage = PIPELINE_STAGES[0]
-                return job
+            if owner_user_id is not None and job.owner_user_id != owner_user_id:
+                continue
+            if not _is_runnable_job(job, now, lease_timeout_seconds):
+                continue
+            job.status = JobStatus.RUNNING
+            job.current_stage = PIPELINE_STAGES[0]
+            job.worker_attempts += 1
+            job.worker_last_claimed_at = now
+            job.error_type = None
+            job.error_message = None
+            return job
         return None
+
+    def retry_current_job(
+        self,
+        public_id: str,
+        *,
+        error_type: str,
+        error_message: str,
+    ) -> MockJob:
+        job = self.get(public_id)
+        if job.status not in {JobStatus.RUNNING, JobStatus.FAILED}:
+            raise StatusTransitionError(f"cannot retry job from {job.status}")
+        if job.worker_attempts >= job.max_worker_attempts:
+            if job.status == JobStatus.FAILED:
+                job.error_type = error_type
+                job.error_message = error_message
+                return job
+            return self.fail_current_job(
+                public_id,
+                error_type=error_type,
+                error_message=error_message,
+            )
+        job.status = JobStatus.QUEUED
+        job.current_stage = None
+        job.error_type = error_type
+        job.error_message = error_message
+        return job
+
+    def touch_worker_job(self, public_id: str) -> MockJob:
+        job = self.get(public_id)
+        if job.status != JobStatus.RUNNING:
+            raise StatusTransitionError(f"cannot touch worker job from {job.status}")
+        job.worker_last_claimed_at = datetime.now(timezone.utc)
+        return job
 
     def record_feedback(
         self,
@@ -369,6 +450,7 @@ class MockJobStore:
             source_bundle_hash=source.source_bundle_hash,
             app_version=source.app_version,
             prompt_scope_notes=source.prompt_scope_notes,
+            max_worker_attempts=source.max_worker_attempts,
         )
 
     def start_next(self, public_id: str) -> MockJob:
@@ -428,3 +510,25 @@ class MockJobStore:
             job.status = JobStatus.CANCEL_REQUESTED
             return job
         return job
+
+
+def _is_runnable_job(
+    job: MockJob,
+    now: datetime,
+    lease_timeout_seconds: int | None,
+) -> bool:
+    if job.status == JobStatus.QUEUED:
+        return job.worker_attempts < job.max_worker_attempts
+    if (
+        job.status == JobStatus.RUNNING
+        and job.current_stage == PIPELINE_STAGES[0]
+        and lease_timeout_seconds is not None
+        and job.worker_attempts < job.max_worker_attempts
+    ):
+        claimed_at = job.worker_last_claimed_at
+        if claimed_at is None:
+            return True
+        if claimed_at.tzinfo is None:
+            claimed_at = claimed_at.replace(tzinfo=timezone.utc)
+        return claimed_at <= now - timedelta(seconds=lease_timeout_seconds)
+    return False

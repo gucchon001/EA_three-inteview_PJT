@@ -5,7 +5,7 @@
 - 正本/補助資料の区分: 月次レポート作成ツールの決定事項・未決事項ログ
 - 起点: `docs/project/月次レポート_プログラム化_LLMワークフロー移行計画.md`
 - 関連文書: `README.md`, `requirements.md`, `development-plan.md`, `AUTOMATION_NORTH_STAR.md`
-- 最終更新: 2026-05-14（D-049・worker claim境界）
+- 最終更新: 2026-05-17（D-063・UIコンポーネント方針）
 
 ## 決定事項
 
@@ -19,7 +19,7 @@
 | D-006 | 2026-05-13 | 当面のLLMプロバイダはOpenRouter中心 | 移行計画書 |
 | D-007 | 2026-05-13 | 本文生成モデルと軽量モデルを分ける | 移行計画書 |
 | D-008 | 2026-05-13 | 1ユーザー最大3生成ジョブ | 移行計画書 |
-| D-009 | 2026-05-13 | MVPは本番のみ。ステージングは切らない | 移行計画書 |
+| D-009 | 2026-05-13 | MVPは本番のみ。ステージングはMVPでは切らない | 移行計画書・2026-05-17再確認 |
 | D-010 | 2026-05-13 | MVPはチューニング重視。ログ・スナップショット・生成物保存を必須とする | 移行計画書 |
 | D-011 | 2026-05-13 | 推敲・プレビュー画面は現行 `monthly_report_full_editor.html` のHTML全文エディタをベースにする | ユーザー合意 |
 | D-012 | 2026-05-13 | 現行エディタ由来の送付エクスポート、ファイル保存、HTMLソース編集などは後続扱いでもMVP内の必須機能とする | ユーザー合意 |
@@ -37,6 +37,19 @@
 | D-047 | 2026-05-14 | 静的レシピ `prompts.scope_reminder` 相当のジョブ/APIフィールド名は `prompt_scope_notes` とする | ユーザー合意 |
 | D-048 | 2026-05-14 | `prompt_scope_notes` の初期投入はレシピ由来 + 手入力可能とし、householdメタからの自動生成は後続に回す | ユーザー合意 |
 | D-049 | 2026-05-14 | 非同期workerの初期境界はDB-backed claim方式とし、Postgresでは `FOR UPDATE SKIP LOCKED` で `queued` jobを原子的に `running` へ進める。Cloud Tasks等の外部キューは後続検討とする | 実装方針 |
+| D-050 | 2026-05-16 | レポート工房の通常画面操作はJinja2 + HTMXのHTMLページ/HTML断片を返す。`/api/monthly-reports/*` のJSON APIはworker、E2E、管理スクリプト、将来連携用に残し、通常UIからDOM更新目的で直接叩かない | 方針レビュー反映 |
+| D-051 | 2026-05-16 | SSR/HTMX本番UIの認証は `HTTPOnly`, `Secure`, `SameSite=Lax` Cookie + CSRF対策を正とする。Bearer token検証はE2E、内部JSON API、移行中の互換経路として扱う | 方針レビュー反映 |
+| D-052 | 2026-05-16 | Supabase RLSを主境界として効かせる方針に寄せる。通常ユーザーリクエストはユーザーJWT付きSupabase Clientを第一候補とし、service role/direct DBはworker、管理、migration、保持期間削除など限定用途に閉じる | 方針レビュー反映 |
+| D-053 | 2026-05-16 | Cloud Run worker本番化前に、lease timeout、heartbeat/updated_at、stuck job再claim、再試行上限、手動再実行、協調的キャンセル、冪等性を設計・テストする | 方針レビュー反映 |
+| D-054 | 2026-05-16 | POST系API/HTML actionはIdempotency-Keyまたはjob input hashにより、二重送信・リロード・worker再試行に耐える設計にする | 方針レビュー反映 |
+| D-055 | 2026-05-16 | Supabase Storageへ成果物を移す場合は、bucket policy、object prefix、signed URL期限、配布用エクスポート閲覧期限、Storage削除バッチをPostgresメタデータと同時に設計する | 方針レビュー反映 |
+| D-056 | 2026-05-16 | 保持期間削除は運用ジョブとして実装し、ドライラン件数確認、削除後件数確認、監査ログ、OAuth credential削除runbookを含める | 方針レビュー反映 |
+| D-057 | 2026-05-16 | Google Docs/Sheets由来の本文は信頼済み命令として扱わず、プロンプトインジェクション対策・対象外生徒混入・内部メモ露出・送付禁止語を検証対象にする | 方針レビュー反映 |
+| D-058 | 2026-05-16 | 家庭向け送付・エクスポート前に人間承認ゲートを置き、生成成功・検証OK・編集保存済み・承認済み・送付済みを分けて扱う | 方針レビュー反映 |
+| D-059 | 2026-05-16 | Supabase 発行 access token の検証は **JWKS 経由の ES256/RS256 を本流**とし、`alg` ヘッダで分岐する。HS256 + 対称 `SUPABASE_JWT_SECRET` 経路はテスト互換と内部用途のために残す。ローカル Supabase / Supabase Cloud いずれも新 signing keys（asymmetric）で JWT を発行するため、`<SUPABASE_URL>/auth/v1/.well-known/jwks.json` の公開鍵で検証する | ライブE2E通電時の実機切り分け（ES256 token が HS256-only 検証で 401 になっていた） |
+| D-060 | 2026-05-16 | ローカル Supabase（`supabase/config.toml`）では `[auth.external.google]`（`client_id`/`secret` は env(...) 参照）と `additional_redirect_urls` に `http://127.0.0.1:8000/auth/callback` を設定し、初回 Google ログインが signup 扱いで通るよう `enable_signup = true` にする。ドメイン制限は FastAPI 側 JWT email チェック（`EB_ALLOWED_EMAIL_DOMAIN`）で担保する。Cloud Supabase（本番）に移行する場合も同じ「provider 有効化 + email domain ガードは API 側」の構造を引き継ぐ | ライブE2E通電時の `422: Signups not allowed for this instance` を解消した実機判断 |
+| D-062 | 2026-05-17 | staging / production の2環境分離はMVPでは行わず、本番ポータルへ合流するタイミングで用意する。その時点ではCloud Run service、Supabase project/DB、OAuth redirect URI、Secret、E2Eデータを分離する | ユーザー再確認 |
+| D-063 | 2026-05-17 | レポート工房のUIコンポーネントはTailwind CSS + DaisyUIを標準にする。Alpine.jsは局所状態に限定し、FlowbiteはMVP標準依存にしない。業務画面はtable/section中心、カードは繰り返し単位に限定する | UI方針レビュー |
 | D-018 | 2026-05-13 | 長時間生成はMVPではDBジョブ + HTMXポーリングで扱い、Cloud Tasks等は後続検討とする | ユーザー合意 |
 | D-019 | 2026-05-13 | GoogleログインはSupabase AuthのGoogle providerを使う | ユーザー合意 |
 | D-020 | 2026-05-13 | Google API読取に必要なprovider token / provider refresh tokenはサーバ側で安全に保存・更新する | Supabase公式方針を踏まえた設計 |
@@ -90,6 +103,7 @@
 | U-023 | 解決 | ローカルMVPの `owner_user_id` は暫定値。Supabase Auth後は認証ユーザーIDへ差し替える | `api-definition.md`, `security-operations.md` |
 | U-024 | 解決 | 再生成はAPI/保存モデルをMVP内、UIをPhase 3で実装する | `functional-spec.md`, `api-definition.md`, `development-plan.md` |
 | U-025 | 解決 | 工房側 `build_messages` と `scripts/monthly_report_draft_openrouter.py` の **`build_prompts` は共通Pythonモジュール化を第一候補として実装する**。静的レシピの `prompts.scope_reminder` 相当のジョブ/APIフィールド名は `prompt_scope_notes` とする。初期投入はレシピ由来 + 手入力可能、householdメタからの自動生成は後続 | [`HANDOFF_STATIC_POC_TUNING.md`](HANDOFF_STATIC_POC_TUNING.md), [`llm-design.md`](llm-design.md), [`api-definition.md`](api-definition.md), [`functional-spec.md`](functional-spec.md) |
+| U-026 | 解決 | UI/Auth/RLS/worker/冪等性/Storage/保持削除/監視/プロンプトインジェクション/人間承認の横断方針を正本へ反映する | `agents.md`, `.cursor/rules/monthly-report-north-star.mdc`, `api-definition.md`, `security-operations.md`, `development-plan.md` |
 
 ## 参考扱いの文書
 
@@ -108,3 +122,7 @@
 | 2026-05-14 | D-047を追加し、`prompt_scope_notes` を正式フィールド名として決定。U-025を一部解決へ更新 |
 | 2026-05-14 | D-048を追加し、`prompt_scope_notes` の初期投入方針を決定。U-025を解決へ更新 |
 | 2026-05-14 | D-049を追加し、DB-backed worker claim境界を決定事項として反映 |
+| 2026-05-16 | D-050〜D-058、U-026を追加し、HTML断片UI、Cookie+CSRF、RLS主境界、worker lease、冪等性、Storage、保持削除、監視、LLM入力安全、人間承認ゲートを反映 |
+| 2026-05-16 | D-059（Supabase JWT は ES256/RS256 JWKS 検証を本流とし HS256 はテスト互換用に残す）、D-060（ローカル Supabase config.toml の Google provider 有効化と enable_signup=true、ドメイン制限は API 側）を追加 |
+| 2026-05-17 | D-009を再確認し、MVPは本番のみへ戻した。D-062は本番ポータル合流時のstaging / production分離方針として整理 |
+| 2026-05-17 | D-063を追加し、Tailwind CSS + DaisyUI主軸、Flowbite保留、業務画面table/section中心のUIコンポーネント方針を記録 |

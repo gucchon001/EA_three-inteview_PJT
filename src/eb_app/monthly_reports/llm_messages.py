@@ -4,6 +4,12 @@ from pathlib import Path
 
 Message = dict[str, str]
 
+PROMPT_FRAGMENT_DIR = Path(__file__).resolve().parents[1] / "prompts" / "monthly"
+
+
+def _read_monthly_prompt_fragment(name: str) -> str:
+    return (PROMPT_FRAGMENT_DIR / name).read_text(encoding="utf-8").strip()
+
 
 def build_monthly_report_messages(
     *,
@@ -16,6 +22,9 @@ def build_monthly_report_messages(
     prompt_scope_notes: str | None = None,
 ) -> list[Message]:
     template_text = template_path.read_text(encoding="utf-8", errors="replace")
+    canonical_system = _read_monthly_prompt_fragment("report_system.md")
+    canonical_tone = _read_monthly_prompt_fragment("tone_family_facing.md")
+    validation_repair = _read_monthly_prompt_fragment("validation_repair.md")
     tone = ""
     if rules_excerpt_path and rules_excerpt_path.is_file():
         tone = "\n--- family-facing-tone.md（抜粋） ---\n" + rules_excerpt_path.read_text(
@@ -23,7 +32,12 @@ def build_monthly_report_messages(
         )
 
     if artifact == "html":
+        artifact_guidance = _read_monthly_prompt_fragment("artifact_html.md")
         system_parts: list[str] = [
+            canonical_system,
+            canonical_tone,
+            artifact_guidance,
+            validation_repair,
             "あなたは塾の担当教師側のライターです。根拠ソースに無い事実・数値・評価は書かない。",
             "**同一 MTG に複数生徒または複数教科が混在**しても、テンプレ（コンテンツ契約）に定めるとおり対象生徒・主題教科に関係しない文は事実として採らないこと。",
             "出力は**完全な1ファイルの UTF-8 HTML**（Markdown 禁止）。ブラウザでそのまま表示できる単一ページ。",
@@ -45,6 +59,8 @@ def build_monthly_report_messages(
             tone.strip(),
         ]
         instruct = (
+            artifact_guidance
+            + "\n"
             "上記ソースのみを根拠に、Pattern B の**HTML 全体**を一括出力する。\n"
             "- **03 授業内容**：`data-table` の学習単元 `<td>` は **参考 HTML と同じマークアップ型**にする。"
             " **禁止**: `class=\"unit-main\"` / `class=\"unit-subtopics\"` / 任意の `<div class=\"unit-subtopics\">`。"
@@ -56,16 +72,26 @@ def build_monthly_report_messages(
             "コードフェンスや説明文は出力しない。"
         )
     else:
+        artifact_guidance = _read_monthly_prompt_fragment("artifact_markdown.md")
         system_parts = [
+            canonical_system,
+            canonical_tone,
+            artifact_guidance,
+            validation_repair,
             "あなたは塾の担当教師側のライターです。入力はすべて「根拠ソース」であり、ソースに無いことは創作しない。",
             "**同一 MTG に複数生徒または複数教科が混在**しても、テンプレ（コンテンツ契約）に定めるとおり対象外の文は採用しない。",
             "出力は「月次 Pattern B」の正本 Markdown 案。フロントマター（YAML）から始める。",
             "文体・禁止語・セクション構成は、渡されたコンテンツ契約ファイルに完全準拠する。",
             "第三者調査調の語（「記載があります」「挙がっております」「推奨されております」だけの連続など）は禁止。",
-            "配布面では「担当CA」「教師 MTG」「Gemini メモ」「NotebookLM」を使わず、担当者は「担当」とする。",
+            "【出力絶対禁止語】以下の文字列はソース・テンプレートのどこに出現していても出力に1文字も書いてはならない: 「担当CA」「教師 MTG」「教師MTG」「Gemini メモ」「NotebookLM」。"
+            "担当者の呼称は「担当」または「講師」を使う。違反があれば採用されない。",
+            "【テンプレート注記の転記禁止】コンテンツ契約（テンプレート）の括弧書きコメント（「こう書かない」「禁止」「可」「配布 HTML の表では〜」「社内のみ〜」等の注記）は構造のガイドラインとして読むだけで出力に転記してはならない。"
+            "特に表のセル内にある指示文（例：「担当CA という語は配布しない」など）は家庭向け本文に出さないこと。",
             tone.strip(),
         ]
         instruct = (
+            artifact_guidance
+            + "\n"
             "上記ソースのみを根拠に、`monthly_pattern_b_content.template.md` の構成に沿った"
             " 月次レポート Markdown を一括出力。**03 直下の★の目安5行など、テンプレで原文指定のブロックは改変しない**。"
         )

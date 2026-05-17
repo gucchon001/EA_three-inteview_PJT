@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="space-y-6">
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p class="text-sm font-medium text-base-content/60">FastAPI Base Project</p>
+      <h1 class="text-3xl font-semibold tracking-normal">{{ current_user.email }}</h1>
+      <p class="mt-2 text-sm text-base-content/70">
+        Role: <span class="badge badge-outline">{{ current_user.role }}</span>
+      </p>
+    </div>
+    <button
+      hx-get="/fragments/summary"
+      hx-target="#summary"
+      hx-swap="innerHTML"
+      class="btn btn-primary"
+    >
+      Refresh summary
+    </button>
+  </div>
+
+  <div id="summary">
+    {% include "fragments/summary.html" %}
+  </div>
+</section>
+{% endblock %}
