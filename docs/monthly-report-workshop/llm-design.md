@@ -34,8 +34,11 @@
 |---|---|---|
 | `report` | 月次レポート本文生成 | Sonnet / Opus相当 |
 | `light` | 構造化抽出、タグ付け、下準備 | 廉価モデル |
+| `source_summary` | 文字起こし・Docs・Sheets取得内容の確認用サマリー | `OPENROUTER_MODEL_LIGHT` |
 | `repair` | 検証エラー修正 | MVPでは任意 |
 | `auto_experiment` | Auto Router比較 | `openrouter/auto` |
+
+`source_summary` は配布面本文ではなく、本文生成前の確認用artifactを作る用途に限定する。出力は `取得内容サマリー`、`対象・期間・科目の確認`、`ズレ/不足の可能性` を含むMarkdownとし、Google Meetメモや文字起こしの取得範囲が対象生徒・対象月から外れていないかを人間が素早く確認するために使う。
 
 ## Auto Router
 

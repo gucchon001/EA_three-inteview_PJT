@@ -5,13 +5,13 @@
 - 正本/補助資料の区分: 実Supabase Auth + Google OAuth + Google Workspace read flowのライブE2E前チェックリスト
 - 起点: [security-operations.md](security-operations.md), [api-definition.md](api-definition.md), [development-plan.md](development-plan.md)
 - 関連文書: [.env.example](../../.env.example), [data-design.md](data-design.md), [test-plan.md](test-plan.md)
-- 最終更新: 2026-05-17（MVPは本番のみ、stagingは本番ポータル合流時に用意する方針へ修正）
+- 最終更新: 2026-05-18（MVPからstaging / productionの2環境を用意する方針へ修正）
 
 このガイドは、ローカルmockではなく実Supabase Auth、Google OAuth provider token、Google Workspace読み取り、月次レポートAPIをつないで確認する直前に使う。実シークレット値はここにも、Git管理ファイルにも、フロントエンドにも置かない。
 
 ## 決定事項
 
-- MVPは本番のみで確認する。staging / production の2環境分離は、本番ポータルへ合流するタイミングで用意する。
+- MVPからstaging / production の2環境を用意する。Google OAuth、Google Workspace read flow、OpenRouter smoke、migration/RLS確認、HTML UI smoke、ライブE2Eはstagingで先に確認し、productionへ昇格する。
 - Cloud Run本番リージョンは `asia-northeast1`（東京）を使う。
 - Supabaseプロジェクトを新規作成する場合、プロジェクトリージョンはCloud Runやデータ所在方針と矛盾しないリージョンを選ぶ。既存プロジェクトを使う場合は、リージョン差分を運用リスクとして確認する。
 - 認証はSupabase Auth Google provider。**API側検証は ES256/RS256 を本流とし、`<SUPABASE_URL>/auth/v1/.well-known/jwks.json` から取得した公開鍵で検証**する（D-059）。HS256 + `SUPABASE_JWT_SECRET` は `alg` ヘッダが HS256 のときのフォールバックとテスト互換用に残す。
@@ -35,7 +35,7 @@ Supabase側で以下を設定する。
 
 E2E前に、対象ユーザーが `tomonokai-corp.com` のGoogleアカウントでログインできること、Supabase sessionのaccess tokenをFastAPIへBearer tokenとして渡せることを確認する。
 
-本番ポータル合流時にstaging / productionを分ける場合は、それぞれのCloud Run URLまたは独自ドメインをSupabase Auth Redirect URLsへ登録し、callback URLを環境間で混ぜない。
+staging / production それぞれのCloud Run URLまたは独自ドメインをSupabase Auth Redirect URLsへ登録し、callback URLを環境間で混ぜない。
 
 #### ローカル Supabase で同等にする場合（`supabase/config.toml`）
 
@@ -174,9 +174,9 @@ Supabase Postgresまたは同等のPostgres接続先で、月次レポート用m
 
 ## 未決事項
 
-- Cloud Runの正式URLとSupabase Auth redirect URLの本番値。
-- Supabaseプロジェクトを新規作成する場合の正式リージョン。
-- ライブE2Eで使うテストユーザー、テストDocs / Sheets、保持期間到来前の削除手順。
+- Cloud Runのstaging / production正式URLと、それぞれのSupabase Auth redirect URL。
+- staging / production のSupabaseプロジェクトを新規作成する場合の正式リージョン。
+- stagingライブE2Eで使うテストユーザー、テストDocs / Sheets、保持期間到来前の削除手順。
 
 ## 受け入れ条件
 
@@ -192,3 +192,4 @@ Supabase Postgresまたは同等のPostgres接続先で、月次レポート用m
 | 2026-05-16 | `/monthly-report-workshop/e2e` のライブE2E画面を追加し、ジョブ作成からartifact確認までの手順を反映 |
 | 2026-05-16 | ローカル Supabase 実機通電を反映。`supabase/config.toml` の `[auth.external.google]` + `enable_signup = true` + `additional_redirect_urls` 追記、JWKS（ES256）経由の JWT 検証への切替、ドメイン制限の API 側担保（D-059/D-060） |
 | 2026-05-17 | MVPは本番のみへ戻し、staging / production の環境分離は本番ポータル合流タイミングで用意する方針へ修正 |
+| 2026-05-18 | MVPからstaging / productionの2環境を用意する方針へ再更新。OAuth redirect URL、Secret、Supabase、E2Eデータを環境ごとに分け、staging確認後にproductionへ昇格する前提へ修正 |

@@ -1,0 +1,32 @@
+{% include "monthly_report_workshop/fragments/sources.html" %}
+{% if generated %}
+<div id="status-panel" hx-swap-oob="innerHTML">
+  {% include "monthly_report_workshop/fragments/status.html" %}
+</div>
+<div id="preview-panel" hx-swap-oob="innerHTML">
+  {% include "monthly_report_workshop/fragments/preview.html" %}
+</div>
+<div id="validation-panel" hx-swap-oob="innerHTML">
+  {% include "monthly_report_workshop/fragments/validation.html" %}
+</div>
+<div id="operation-log-panel" hx-swap-oob="innerHTML">
+  {% include "monthly_report_workshop/fragments/operation_log.html" %}
+</div>
+<div id="source-summary-panel" hx-swap-oob="innerHTML">
+  <div role="alert" class="alert alert-success rounded-md py-3 text-sm">
+    <span>Googleソースを取得し、レポートドラフトを生成しました。プレビューを確認してください。</span>
+  </div>
+</div>
+{% elif queue_requested %}
+<div id="status-panel" hx-swap-oob="innerHTML">
+  {% include "monthly_report_workshop/fragments/status.html" %}
+</div>
+<div id="operation-log-panel" hx-swap-oob="innerHTML">
+  {% include "monthly_report_workshop/fragments/operation_log.html" %}
+</div>
+<div id="source-summary-panel" hx-swap-oob="innerHTML">
+  <div role="alert" class="alert alert-info rounded-md py-3 text-sm">
+    <span>Googleソースを取得し、worker へレポート生成を依頼しました。進捗パネルを更新してください。</span>
+  </div>
+</div>
+{% endif %}

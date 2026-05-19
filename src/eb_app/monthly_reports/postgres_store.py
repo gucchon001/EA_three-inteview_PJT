@@ -12,6 +12,7 @@ from eb_app.monthly_reports.jobs import (
     DEFAULT_MOCK_OWNER_USER_ID,
     PIPELINE_STAGES,
     JobStatus,
+    MockAuditLog,
     JobLimitExceeded,
     MockArtifact,
     MockFeedback,
@@ -77,6 +78,8 @@ class PostgresJobStore:
             worker_attempts=row.get("worker_attempts") or 0,
             max_worker_attempts=row.get("max_worker_attempts") or 3,
             worker_last_claimed_at=row.get("worker_last_claimed_at"),
+            created_at=row.get("created_at"),
+            updated_at=row.get("updated_at") or row.get("created_at"),
         )
 
     def create_job(
@@ -391,6 +394,20 @@ class PostgresJobStore:
             )
         return claimed
 
+    def claim_job_for_worker(
+        self,
+        public_id: str,
+        *,
+        lease_timeout_seconds: int | None = None,
+    ) -> MockJob | None:
+        try:
+            return self._claim_specific_runnable_job(
+                public_id,
+                lease_timeout_seconds=lease_timeout_seconds,
+            )
+        except psycopg.errors.UndefinedColumn:
+            return self._claim_specific_queued_job_without_worker_attempts(public_id)
+
     def claim_next_runnable_job(
         self,
         owner_user_id: str | None = None,
@@ -484,6 +501,95 @@ class PostgresJobStore:
                 return None
             return self._row_to_job(conn, row)
 
+    def _claim_specific_runnable_job(
+        self,
+        public_id: str,
+        *,
+        lease_timeout_seconds: int | None = None,
+    ) -> MockJob | None:
+        with self._connect() as conn:
+            row = conn.execute(
+                """
+                with candidate as (
+                    select id
+                    from public.monthly_report_jobs
+                    where public_id = %s
+                      and (
+                            status = %s
+                            or (
+                                status = %s
+                                and current_stage = %s
+                                and %s::integer is not null
+                                and updated_at <= now() - make_interval(secs => %s::integer)
+                            )
+                        )
+                      and deleted_at is null
+                      and worker_attempts < max_worker_attempts
+                    for update skip locked
+                    limit 1
+                )
+                update public.monthly_report_jobs j
+                set status = %s,
+                    current_stage = %s,
+                    worker_attempts = j.worker_attempts + 1,
+                    worker_last_claimed_at = now(),
+                    error_type = null,
+                    error_message = null,
+                    updated_at = now()
+                from candidate
+                where j.id = candidate.id
+                returning j.*
+                """,
+                (
+                    public_id,
+                    JobStatus.QUEUED,
+                    JobStatus.RUNNING,
+                    PIPELINE_STAGES[0],
+                    lease_timeout_seconds,
+                    lease_timeout_seconds,
+                    JobStatus.RUNNING,
+                    PIPELINE_STAGES[0],
+                ),
+            ).fetchone()
+            if row is None:
+                return None
+            return self._row_to_job(conn, row)
+
+    def _claim_specific_queued_job_without_worker_attempts(
+        self,
+        public_id: str,
+    ) -> MockJob | None:
+        with self._connect() as conn:
+            row = conn.execute(
+                """
+                with candidate as (
+                    select id
+                    from public.monthly_report_jobs
+                    where public_id = %s
+                      and status = %s
+                      and deleted_at is null
+                    for update skip locked
+                    limit 1
+                )
+                update public.monthly_report_jobs j
+                set status = %s,
+                    current_stage = %s,
+                    updated_at = now()
+                from candidate
+                where j.id = candidate.id
+                returning j.*
+                """,
+                (
+                    public_id,
+                    JobStatus.QUEUED,
+                    JobStatus.RUNNING,
+                    PIPELINE_STAGES[0],
+                ),
+            ).fetchone()
+            if row is None:
+                return None
+            return self._row_to_job(conn, row)
+
     def record_feedback(
         self,
         public_id: str,
@@ -543,7 +649,7 @@ class PostgresJobStore:
                 insert into public.monthly_report_sources
                     (public_id, job_id, source_type, display_name, snapshot_text, content_hash)
                 values (%s, %s, %s, %s, %s, %s)
-                returning public_id, source_type, display_name, snapshot_text, content_hash
+                returning public_id, source_type, display_name, snapshot_text, content_hash, created_at
                 """,
                 (
                     self._id_factory(PUBLIC_ID_PREFIXES.source),
@@ -562,6 +668,7 @@ class PostgresJobStore:
                 display_name=row["display_name"],
                 snapshot_text=row["snapshot_text"],
                 content_hash=row["content_hash"],
+                created_at=row["created_at"],
             )
 
     def list_sources(self, public_id: str) -> list[MockSource]:
@@ -574,7 +681,7 @@ class PostgresJobStore:
                 raise KeyError(public_id)
             rows = conn.execute(
                 """
-                select public_id, source_type, display_name, snapshot_text, content_hash
+                select public_id, source_type, display_name, snapshot_text, content_hash, created_at
                 from public.monthly_report_sources
                 where job_id = %s and deleted_at is null
                 order by created_at, public_id
@@ -589,6 +696,7 @@ class PostgresJobStore:
                     display_name=row["display_name"],
                     snapshot_text=row["snapshot_text"],
                     content_hash=row["content_hash"],
+                    created_at=row["created_at"],
                 )
                 for row in rows
             ]
@@ -613,7 +721,7 @@ class PostgresJobStore:
                 insert into public.monthly_report_artifacts
                     (public_id, job_id, artifact_type, content, content_hash)
                 values (%s, %s, %s, %s, %s)
-                returning public_id, artifact_type, content, content_hash
+                returning public_id, artifact_type, content, content_hash, created_at
                 """,
                 (
                     self._id_factory(PUBLIC_ID_PREFIXES.artifact),
@@ -630,6 +738,7 @@ class PostgresJobStore:
                 artifact_type=row["artifact_type"],
                 content=row["content"],
                 content_hash=row["content_hash"],
+                created_at=row["created_at"],
             )
 
     def list_artifacts(self, public_id: str) -> list[MockArtifact]:
@@ -642,7 +751,7 @@ class PostgresJobStore:
                 raise KeyError(public_id)
             rows = conn.execute(
                 """
-                select public_id, artifact_type, content, content_hash
+                select public_id, artifact_type, content, content_hash, created_at
                 from public.monthly_report_artifacts
                 where job_id = %s and deleted_at is null
                 order by created_at, public_id
@@ -656,6 +765,7 @@ class PostgresJobStore:
                     artifact_type=row["artifact_type"],
                     content=row["content"],
                     content_hash=row["content_hash"],
+                    created_at=row["created_at"],
                 )
                 for row in rows
             ]
@@ -681,7 +791,7 @@ class PostgresJobStore:
                 insert into public.monthly_report_validations
                     (public_id, job_id, rule_id, severity, message, path)
                 values (%s, %s, %s, %s, %s, %s)
-                returning public_id, rule_id, severity, message, path
+                returning public_id, rule_id, severity, message, path, created_at
                 """,
                 (
                     self._id_factory(PUBLIC_ID_PREFIXES.validation),
@@ -700,6 +810,7 @@ class PostgresJobStore:
                 severity=row["severity"],
                 message=row["message"],
                 path=row["path"],
+                created_at=row["created_at"],
             )
 
     def list_validations(self, public_id: str) -> list[MockValidation]:
@@ -712,7 +823,7 @@ class PostgresJobStore:
                 raise KeyError(public_id)
             rows = conn.execute(
                 """
-                select public_id, rule_id, severity, message, path
+                select public_id, rule_id, severity, message, path, created_at
                 from public.monthly_report_validations
                 where job_id = %s
                 order by created_at, public_id
@@ -727,6 +838,7 @@ class PostgresJobStore:
                     severity=row["severity"],
                     message=row["message"],
                     path=row["path"],
+                    created_at=row["created_at"],
                 )
                 for row in rows
             ]
@@ -816,6 +928,67 @@ class PostgresJobStore:
             ).fetchall()
             return [self._row_to_llm_call(job_row["public_id"], row) for row in rows]
 
+    def record_audit_log(
+        self,
+        *,
+        actor_id: str,
+        action: str,
+        target_type: str,
+        target_id: str,
+        metadata: dict[str, Any] | None = None,
+    ) -> MockAuditLog:
+        with self._connect() as conn:
+            row = conn.execute(
+                """
+                insert into public.audit_logs
+                    (public_id, actor_id, action, target_type, target_id, metadata)
+                values (%s, %s, %s, %s, %s, %s)
+                returning public_id, actor_id, action, target_type, target_id, metadata, created_at
+                """,
+                (
+                    self._id_factory("aud"),
+                    actor_id,
+                    action,
+                    target_type,
+                    target_id,
+                    Jsonb(metadata or {}),
+                ),
+            ).fetchone()
+            assert row is not None
+            return MockAuditLog(
+                public_id=row["public_id"],
+                actor_id=row["actor_id"],
+                action=row["action"],
+                target_type=row["target_type"],
+                target_id=row["target_id"],
+                metadata=dict(row["metadata"] or {}),
+                created_at=row["created_at"],
+            )
+
+    def list_audit_logs(self, public_id: str) -> list[MockAuditLog]:
+        with self._connect() as conn:
+            rows = conn.execute(
+                """
+                select public_id, actor_id, action, target_type, target_id, metadata, created_at
+                from public.audit_logs
+                where target_type = %s and target_id = %s
+                order by created_at, public_id
+                """,
+                ("monthly_report_job", public_id),
+            ).fetchall()
+            return [
+                MockAuditLog(
+                    public_id=row["public_id"],
+                    actor_id=row["actor_id"],
+                    action=row["action"],
+                    target_type=row["target_type"],
+                    target_id=row["target_id"],
+                    metadata=dict(row["metadata"] or {}),
+                    created_at=row["created_at"],
+                )
+                for row in rows
+            ]
+
     def _row_to_llm_call(self, job_public_id: str, row: dict[str, Any]) -> MockLLMCall:
         return MockLLMCall(
             public_id=row["public_id"],
@@ -832,6 +1005,7 @@ class PostgresJobStore:
             output_tokens=row["output_tokens"],
             finish_reason=row["finish_reason"],
             error_type=row["error_type"],
+            created_at=row["created_at"],
         )
 
     def rerun_job(self, public_id: str) -> MockJob:

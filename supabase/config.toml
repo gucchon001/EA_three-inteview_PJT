@@ -9,7 +9,7 @@ max_rows = 1000
 
 [db]
 port = 56322
-major_version = 15
+major_version = 17
 
 [studio]
 enabled = true

@@ -112,6 +112,39 @@ def test_google_workspace_client_fetches_sheet_values_as_json_snapshot():
     )
 
 
+def test_google_workspace_client_fetches_sheet_titles():
+    requests: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        assert request.headers["authorization"] == "Bearer access-token"
+        return httpx.Response(
+            200,
+            json={
+                "sheets": [
+                    {"properties": {"title": "student"}},
+                    {"properties": {"title": "lesson plan"}},
+                    {"properties": {"title": "月次メモ"}},
+                ]
+            },
+        )
+
+    client = GoogleWorkspaceClient(
+        access_token="access-token",
+        http_client=httpx.Client(transport=httpx.MockTransport(handler)),
+    )
+
+    assert client.fetch_sheet_titles(spreadsheet_id="sheet-id") == [
+        "student",
+        "lesson plan",
+        "月次メモ",
+    ]
+    assert (
+        str(requests[0].url)
+        == "https://sheets.googleapis.com/v4/spreadsheets/sheet-id?fields=sheets.properties.title"
+    )
+
+
 def test_google_workspace_fetch_error_does_not_include_access_token_or_body():
     client = GoogleWorkspaceClient(
         access_token="secret-access-token",

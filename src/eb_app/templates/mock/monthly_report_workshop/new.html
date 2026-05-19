@@ -29,6 +29,10 @@
     <div class="mvp-page-wrap">
       <section class="mvp-panel">
         <h2 style="margin-top:0;">ソース指定</h2>
+        <p class="mvp-muted">
+          これは静的モックです。この画面のボタンは固定デモジョブへ移動するだけで、Google取得やOpenRouter生成は実行しません。
+          実データで確認する場合は <a href="/monthly-reports/jobs/new">実装本体の新規読み込み</a> を使ってください。
+        </p>
         <div class="form-grid">
           <label>対象月<input value="{{ target_month }}" /></label>
           <label>対象世帯<input value="{{ household }}" /></label>
@@ -39,7 +43,8 @@
           <label class="wide">メモ<textarea rows="4">現行HTML全文エディタへ接続するモックジョブ</textarea></label>
         </div>
         <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem;">
-          <a class="btn mvp-primary-btn" href="/mock/monthly-report-workshop/jobs/mrj_demo_001">ソース取得して生成へ</a>
+          <a class="btn mvp-primary-btn" href="/monthly-reports/jobs/new">実装本体で新規読み込み</a>
+          <a class="btn mvp-secondary-btn" href="/mock/monthly-report-workshop/jobs/mrj_demo_001">固定デモジョブを見る</a>
           <a class="btn mvp-secondary-btn" href="/mock/monthly-report-workshop/jobs">一覧へ戻る</a>
         </div>
       </section>

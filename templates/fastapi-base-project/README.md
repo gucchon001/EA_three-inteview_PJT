@@ -23,9 +23,11 @@ Open:
 ## Checks
 
 ```powershell
-python -m compileall src tests
-pytest
+python scripts/check.py
 ```
+
+The check script runs `python -m compileall src tests` and `python -m pytest` from
+the scaffold root, so copied projects have one consistent local quality entrypoint.
 
 ## UI Components
 

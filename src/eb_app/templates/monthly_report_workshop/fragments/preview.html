@@ -1,14 +1,37 @@
 <div class="space-y-3">
+  {% if job.status == 'running' %}
+  <div role="status" class="alert alert-info rounded-md py-3 text-sm">
+    <span>生成処理中です。完了するとこのレポートビューにドラフトが表示されます。</span>
+  </div>
+  {% elif job.status == 'failed' %}
+  <div role="alert" class="alert alert-error rounded-md py-3 text-sm">
+    <span>生成に失敗しました。実行状況・ログとエラー内容を確認してください。</span>
+  </div>
+  {% elif artifact and job.validation_error_count %}
+  <div role="alert" class="alert alert-warning rounded-md py-3 text-sm">
+    <span>レポートは生成済みですが、検証エラーがあります。承認前に検証結果を確認してください。</span>
+  </div>
+  {% elif artifact %}
+  <div role="status" class="alert alert-success rounded-md py-3 text-sm">
+    <span>レポートビューに生成物を反映済みです。編集して保存すると承認対象になります。</span>
+  </div>
+  {% endif %}
   {% if artifact %}
   <p class="text-sm text-base-content/70">
-    artifact: <span class="badge badge-sm badge-outline">{{ artifact.artifact_type }}</span>
+    表示中:
+    <span class="badge badge-sm {% if artifact.artifact_type == 'final_markdown' %}badge-primary{% else %}badge-outline{% endif %}">{{ artifact.artifact_type }}</span>
+    {% if artifact.artifact_type == 'final_markdown' %}
+    <span class="badge badge-sm badge-success">編集保存済み</span>
+    {% elif artifact.artifact_type == 'draft_markdown' %}
+    <span class="badge badge-sm badge-warning">生成ドラフト</span>
+    {% endif %}
     <span class="mx-1">·</span>
     hash: <code>{{ artifact.content_hash }}</code>
   </p>
   <pre class="prose max-h-96 max-w-none overflow-auto whitespace-pre-wrap rounded-md bg-base-200 p-4 text-sm">{{ artifact.content }}</pre>
   {% else %}
   <div role="alert" class="alert rounded-md py-3 text-sm">
-    <span>まだ表示できる生成物はありません。</span>
+    <span>まだレポートビューに表示できる生成物はありません。データソース登録で Google Docs / Sheets を取得し、「取得してレポート生成」を実行すると、ここにドラフトが表示されます。</span>
   </div>
   {% endif %}
 </div>

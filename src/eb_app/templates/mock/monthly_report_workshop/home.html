@@ -106,7 +106,8 @@
         <h1 class="mvp-page-title">レポート工房</h1>
       </div>
       <div class="mvp-topbar-actions">
-        <a class="btn mvp-secondary-btn" href="/mock/monthly-report-workshop/jobs/mrj_demo_001/edit">レポートビュー</a>
+        <a class="btn mvp-primary-btn" href="/monthly-reports/jobs">実装本体を開く</a>
+        <a class="btn mvp-secondary-btn" href="/mock/monthly-report-workshop/jobs/mrj_demo_001/edit">静的レポートビュー</a>
         <a class="btn mvp-secondary-btn" href="/mock/">モック索引</a>
       </div>
     </div>
@@ -118,6 +119,7 @@
           <h1 id="workshop-title">{{ page_title }}</h1>
           <p class="hero-copy">
             Google Sheets / Docs のソース確認から、LLM生成、規約検証、推敲までをひとつの作業面で進めるためのMVPモックです。
+            実Google取得やOpenRouter生成を確認する場合は、実装本体を開いてください。
           </p>
           <div class="action-row">
             {% for action in primary_actions %}
@@ -153,6 +155,7 @@
           <h2 style="margin-top:0;">次に見るもの</h2>
           <p>初回レビューでは、新規生成からではなく既存デモジョブを開いて、進捗・検証・推敲の一連の作業面を確認します。</p>
           <div class="action-row">
+            <a class="btn mvp-primary-btn" href="/monthly-reports/jobs">実装本体を開く</a>
             <a class="btn mvp-primary-btn" href="/mock/monthly-report-workshop/jobs/mrj_demo_001">デモジョブを開く</a>
             <a class="btn mvp-secondary-btn" href="/mock/monthly-report-workshop/jobs/new">入力画面を見る</a>
           </div>

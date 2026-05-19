@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+.git
+.pytest_cache
+__pycache__/
+*.pyc
+node_modules/
+tmp/
+server-*.log
+server-*.ps1
+*_tmp*
+_tmp*
+config/*.json
+credentials*.json
+secrets/

@@ -129,3 +129,207 @@ def test_monthly_report_rls_allows_only_own_job_insert_for_authenticated_user():
                 "delete from public.monthly_report_jobs where public_id in (%s, %s)",
                 ("mrj_rls_own_insert", "mrj_rls_spoof_insert"),
             )
+
+
+def test_monthly_report_rls_allows_only_owner_feedback_insert():
+    assert DATABASE_URL is not None
+    user_a = str(uuid4())
+    user_b = str(uuid4())
+    suffix = uuid4().hex[:8]
+    job_public_id = f"mrj_rls_feedback_{suffix}"
+    owner_feedback_id = f"mrf_rls_owner_{suffix}"
+    other_feedback_id = f"mrf_rls_other_{suffix}"
+
+    with psycopg.connect(DATABASE_URL) as admin_conn:
+        job_id = admin_conn.execute(
+            """
+            insert into public.monthly_report_jobs
+                (public_id, created_by, target_month, household_key, status)
+            values (%s, %s, '2026-04', 'rls_feedback', 'queued')
+            returning id
+            """,
+            (job_public_id, user_a),
+        ).fetchone()[0]
+
+    try:
+        with connect_as_authenticated_user(DATABASE_URL, user_id=user_a) as user_conn:
+            inserted = user_conn.execute(
+                """
+                insert into public.monthly_report_feedback
+                    (public_id, job_id, created_by, category, comment)
+                values (%s, %s, %s, 'tone', 'owner feedback')
+                returning public_id
+                """,
+                (owner_feedback_id, job_id, user_a),
+            ).fetchone()
+            assert inserted["public_id"] == owner_feedback_id
+
+        with connect_as_authenticated_user(DATABASE_URL, user_id=user_b) as user_conn:
+            with pytest.raises(psycopg.errors.InsufficientPrivilege):
+                user_conn.execute(
+                    """
+                    insert into public.monthly_report_feedback
+                        (public_id, job_id, created_by, category, comment)
+                    values (%s, %s, %s, 'tone', 'other feedback')
+                    """,
+                    (other_feedback_id, job_id, user_b),
+                )
+        with connect_as_authenticated_user(DATABASE_URL, user_id=user_b) as user_conn:
+            visible_feedback = user_conn.execute(
+                """
+                select public_id
+                from public.monthly_report_feedback
+                where job_id = %s
+                """,
+                (job_id,),
+            ).fetchall()
+            assert visible_feedback == []
+    finally:
+        with psycopg.connect(DATABASE_URL) as admin_conn:
+            admin_conn.execute(
+                "delete from public.monthly_report_jobs where public_id = %s",
+                (job_public_id,),
+            )
+
+
+@pytest.mark.parametrize(
+    ("table_name", "public_id_prefix", "insert_sql", "insert_params_factory"),
+    [
+        (
+            "monthly_report_sources",
+            "mrs",
+            """
+            insert into public.monthly_report_sources
+                (public_id, job_id, source_type, display_name, snapshot_text)
+            values (%s, %s, 'doc', 'owner source', 'owner snapshot')
+            returning public_id
+            """,
+            lambda public_id, job_id: (public_id, job_id),
+        ),
+        (
+            "monthly_report_artifacts",
+            "mra",
+            """
+            insert into public.monthly_report_artifacts
+                (public_id, job_id, artifact_type, content)
+            values (%s, %s, 'draft_markdown', '# owner artifact')
+            returning public_id
+            """,
+            lambda public_id, job_id: (public_id, job_id),
+        ),
+    ],
+)
+def test_monthly_report_rls_allows_only_owner_source_and_artifact_insert(
+    table_name: str,
+    public_id_prefix: str,
+    insert_sql: str,
+    insert_params_factory,
+):
+    assert DATABASE_URL is not None
+    user_a = str(uuid4())
+    user_b = str(uuid4())
+    suffix = uuid4().hex[:8]
+    job_public_id = f"mrj_rls_{public_id_prefix}_{suffix}"
+    owner_row_id = f"{public_id_prefix}_rls_owner_{suffix}"
+    other_row_id = f"{public_id_prefix}_rls_other_{suffix}"
+
+    with psycopg.connect(DATABASE_URL) as admin_conn:
+        job_id = admin_conn.execute(
+            """
+            insert into public.monthly_report_jobs
+                (public_id, created_by, target_month, household_key, status)
+            values (%s, %s, '2026-04', 'rls_child_write', 'queued')
+            returning id
+            """,
+            (job_public_id, user_a),
+        ).fetchone()[0]
+
+    try:
+        with connect_as_authenticated_user(DATABASE_URL, user_id=user_a) as user_conn:
+            inserted = user_conn.execute(
+                insert_sql,
+                insert_params_factory(owner_row_id, job_id),
+            ).fetchone()
+            assert inserted["public_id"] == owner_row_id
+
+        with connect_as_authenticated_user(DATABASE_URL, user_id=user_b) as user_conn:
+            with pytest.raises(psycopg.errors.InsufficientPrivilege):
+                user_conn.execute(
+                    insert_sql,
+                    insert_params_factory(other_row_id, job_id),
+                )
+
+        with connect_as_authenticated_user(DATABASE_URL, user_id=user_b) as user_conn:
+            visible_rows = user_conn.execute(
+                f"select public_id from public.{table_name} where job_id = %s",
+                (job_id,),
+            ).fetchall()
+            assert visible_rows == []
+    finally:
+        with psycopg.connect(DATABASE_URL) as admin_conn:
+            admin_conn.execute(
+                "delete from public.monthly_report_jobs where public_id = %s",
+                (job_public_id,),
+            )
+
+
+def test_monthly_report_rls_allows_only_owner_validation_insert():
+    assert DATABASE_URL is not None
+    user_a = str(uuid4())
+    user_b = str(uuid4())
+    suffix = uuid4().hex[:8]
+    job_public_id = f"mrj_rls_validation_{suffix}"
+    owner_validation_id = f"mrv_rls_owner_{suffix}"
+    other_validation_id = f"mrv_rls_other_{suffix}"
+
+    with psycopg.connect(DATABASE_URL) as admin_conn:
+        job_id = admin_conn.execute(
+            """
+            insert into public.monthly_report_jobs
+                (public_id, created_by, target_month, household_key, status)
+            values (%s, %s, '2026-04', 'rls_validation', 'queued')
+            returning id
+            """,
+            (job_public_id, user_a),
+        ).fetchone()[0]
+
+    try:
+        with connect_as_authenticated_user(DATABASE_URL, user_id=user_a) as user_conn:
+            inserted = user_conn.execute(
+                """
+                insert into public.monthly_report_validations
+                    (public_id, job_id, rule_id, severity, message)
+                values (%s, %s, 'required-heading', 'info', 'owner validation')
+                returning public_id
+                """,
+                (owner_validation_id, job_id),
+            ).fetchone()
+            assert inserted["public_id"] == owner_validation_id
+
+        with connect_as_authenticated_user(DATABASE_URL, user_id=user_b) as user_conn:
+            with pytest.raises(psycopg.errors.InsufficientPrivilege):
+                user_conn.execute(
+                    """
+                    insert into public.monthly_report_validations
+                        (public_id, job_id, rule_id, severity, message)
+                    values (%s, %s, 'required-heading', 'info', 'other validation')
+                    """,
+                    (other_validation_id, job_id),
+                )
+
+        with connect_as_authenticated_user(DATABASE_URL, user_id=user_b) as user_conn:
+            visible_validations = user_conn.execute(
+                """
+                select public_id
+                from public.monthly_report_validations
+                where job_id = %s
+                """,
+                (job_id,),
+            ).fetchall()
+            assert visible_validations == []
+    finally:
+        with psycopg.connect(DATABASE_URL) as admin_conn:
+            admin_conn.execute(
+                "delete from public.monthly_report_jobs where public_id = %s",
+                (job_public_id,),
+            )

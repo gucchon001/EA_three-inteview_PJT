@@ -14,6 +14,10 @@ _MOCK_USERS: tuple[dict[str, str], ...] = (
         "email": "mock-user@tomonokai-corp.com",
         "role": "user",
     },
+    {
+        "email": "y-haraguchi@tomonokai-corp.com",
+        "role": "admin",
+    },
 )
 
 _MOCK_USERS_BY_EMAIL: Mapping[str, MockUser] = MappingProxyType(

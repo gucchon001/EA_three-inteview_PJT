@@ -4,6 +4,27 @@
     <span class="mx-1">·</span>
     current stage: <strong>{{ job.current_stage or "-" }}</strong>
   </p>
+  {% if job.error_type or job.error_message %}
+  <div role="alert" class="alert alert-error rounded-md py-3 text-sm">
+    <span>
+      {{ job.error_type or "error" }}:
+      {{ job.error_message or "処理に失敗しました" }}
+    </span>
+  </div>
+  {% endif %}
+  {% if job.queued_for_worker %}
+  <div role="status" class="alert alert-info rounded-md py-3 text-sm">
+    <span>{{ job.queued_for_worker_message }}</span>
+  </div>
+  {% endif %}
+  {% if job.show_running_recovery %}
+  <div role="status" class="alert {% if job.running_recovery_tone == 'warning' %}alert-warning{% else %}alert-info{% endif %} rounded-md py-3 text-sm">
+    <span>
+      <strong>{{ job.running_recovery_message }}</strong>
+      <span>{{ job.running_recovery_detail }}</span>
+    </span>
+  </div>
+  {% endif %}
   <div class="overflow-x-auto">
     <table class="table table-xs table-zebra">
       <thead>

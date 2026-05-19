@@ -1,0 +1,112 @@
+<div class="space-y-3">
+  <div class="stats stats-vertical lg:stats-horizontal shadow-sm border border-base-200 w-full">
+    <div class="stat py-4">
+      <div class="stat-title">HTML export</div>
+      <div class="stat-value text-lg">
+        {% if export_artifact %}
+          準備済み
+        {% else %}
+          未作成
+        {% endif %}
+      </div>
+      <div class="stat-desc">
+        {% if export_artifact %}
+          ダウンロードや送付用固定に使う元データです
+        {% else %}
+          先にエクスポートパネルでHTMLを作成してください
+        {% endif %}
+      </div>
+    </div>
+    <div class="stat py-4">
+      <div class="stat-title">送付用固定</div>
+      <div class="stat-value text-lg">
+        {% if distribution_package %}
+          固定済み
+        {% else %}
+          未固定
+        {% endif %}
+      </div>
+      <div class="stat-desc">
+        {% if distribution_package %}
+          {{ distribution_package.distribution_status }}
+        {% else %}
+          まだ送付用パッケージは作成されていません
+        {% endif %}
+      </div>
+    </div>
+    <div class="stat py-4">
+      <div class="stat-title">次の操作</div>
+      <div class="stat-value text-lg">
+        {% if distribution_blockers %}
+          export確認
+        {% elif distribution_package %}
+          手動送付
+        {% else %}
+          送付用固定
+        {% endif %}
+      </div>
+      <div class="stat-desc">
+        {% if distribution_blockers %}
+          blocker解消後に固定できます
+        {% elif distribution_package %}
+          固定済みHTMLをダウンロードして配布します
+        {% else %}
+          送付前に配布対象HTMLを固定します
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-info">
+    <span>最後に、実際に配布する版をここで固定します。固定後は HTML を保存して手動送付します。</span>
+  </div>
+
+  {% if distribution_blockers %}
+    <div class="alert alert-warning">
+      <div>
+        <p class="font-semibold">送付エクスポートはまだ準備できません。</p>
+        <ul class="list-disc pl-5">
+          {% for blocker in distribution_blockers %}
+            <li>{{ blocker }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% else %}
+    <div class="alert alert-success">
+      <span>承認済みHTMLを手動送付用に固定できます。固定後は保存したHTMLをそのまま配布対象として扱います。</span>
+    </div>
+  {% endif %}
+
+  <div class="overflow-x-auto">
+    <table class="table table-sm">
+      <tbody>
+        <tr><th>最新export</th><td>{{ export_artifact.artifact_id if export_artifact else "-" }}</td></tr>
+        <tr><th>export hash</th><td><code>{{ export_artifact.content_hash if export_artifact else "-" }}</code></td></tr>
+        <tr><th>送付パッケージ</th><td>{{ distribution_package.artifact_id if distribution_package else "-" }}</td></tr>
+        <tr><th>状態</th><td>{{ distribution_package.distribution_status if distribution_package else "-" }}</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  {% if export_artifact %}
+    <a
+      class="btn btn-outline"
+      href="/monthly-reports/jobs/{{ job.public_id }}/download/export-html"
+    >HTMLを保存</a>
+  {% endif %}
+
+  <form
+    hx-post="/monthly-reports/jobs/{{ job.public_id }}/fragments/distribution"
+    hx-target="#distribution-panel"
+    hx-swap="innerHTML"
+    style="display:inline-grid;gap:10px;"
+  >
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <input type="hidden" name="idempotency_key" value="{{ distribution_idempotency_key }}" />
+    <input type="hidden" name="export_hash" value="{{ export_artifact.content_hash if export_artifact else '' }}" />
+    <button type="submit" class="btn btn-primary" {% if not can_prepare_distribution %}disabled{% endif %}>
+      {% if distribution_package %}送付用固定を更新{% else %}送付用に固定{% endif %}
+    </button>
+  </form>
+</div>

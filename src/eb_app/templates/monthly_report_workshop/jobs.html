@@ -9,48 +9,98 @@
     body { margin:0; font-family: system-ui, "Noto Sans JP", sans-serif; color:#1f2937; background:#f6f7f9; }
     a { color:#0f5959; text-decoration:none; }
     a:hover { text-decoration:underline; }
-    .shell { display:grid; grid-template-columns: 220px 1fr; min-height:100vh; }
+    .shell { display:grid; grid-template-columns:240px minmax(0, 1fr); min-height:100vh; }
     .side { background:#fff; border-right:1px solid #dce1e7; padding:18px; }
     .brand { font-weight:700; color:#1f2937; display:block; margin-bottom:18px; }
     .nav { display:grid; gap:8px; }
     .nav a { padding:10px 12px; border-radius:8px; background:#f2f5f7; }
-    .main { padding:24px; }
-    .top { display:flex; justify-content:space-between; gap:16px; align-items:center; margin-bottom:20px; }
+    .nav a.primary { background:#eef4f4; color:#0f5959; font-weight:700; }
+    .main { max-width:1180px; padding:24px; }
+    .hero { display:grid; gap:14px; margin-bottom:20px; }
+    .top { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; }
     .muted { color:#667085; font-size:0.9rem; }
     .btn { display:inline-flex; align-items:center; justify-content:center; min-height:40px; padding:8px 12px; border-radius:8px; border:1px solid #b9c6c6; background:#fff; color:#0f5959; font-weight:600; }
     .primary { background:#0f5959; color:#fff; border-color:#0f5959; }
     .grid { display:grid; gap:14px; }
+    .cta { display:flex; justify-content:space-between; gap:14px; align-items:center; flex-wrap:wrap; border:1px solid #b9c6c6; border-radius:8px; padding:14px; background:#f8fbfb; }
+    .section-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
+    .section-head h2, .section-head h3 { margin:0; font-size:1rem; }
+    .journey { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px; }
+    .journey-step { background:#fff; border:1px solid #dce1e7; border-radius:8px; padding:12px; }
+    .journey-step b { display:block; color:#0f5959; margin-bottom:4px; }
     .metrics { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px; }
     .metric, .panel { background:#fff; border:1px solid #dce1e7; border-radius:8px; padding:14px; }
     .metric strong { display:block; font-size:1.8rem; }
+    .filters { display:grid; grid-template-columns:minmax(220px, 1fr) 180px auto auto; gap:10px; align-items:end; }
+    .field { display:grid; gap:6px; }
+    label { font-weight:700; color:#344054; }
+    input, select { min-height:40px; border:1px solid #b9c6c6; border-radius:8px; padding:8px 10px; font:inherit; background:#fff; }
     table { width:100%; border-collapse:collapse; background:#fff; }
     th, td { text-align:left; padding:12px; border-bottom:1px solid #e4e7ec; vertical-align:top; }
     th { color:#667085; font-size:0.82rem; }
+    .badge { display:inline-flex; align-items:center; min-height:24px; padding:2px 8px; border-radius:999px; background:#eef4f4; color:#0f5959; font-weight:700; font-size:0.78rem; }
+    .badge.error { background:#fff1f0; color:#b42318; }
+    .badge.done { background:#ecfdf3; color:#027a48; }
+    .next { display:grid; gap:4px; min-width:160px; }
+    .table-wrap { overflow-x:auto; }
+    .table-meta { display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:12px; flex-wrap:wrap; }
+    .job-link { display:grid; gap:4px; font-weight:700; }
+    .job-link code { color:#667085; font-size:0.78rem; }
+    tbody tr:hover { background:#fafcfc; }
     code { font-size:0.85rem; }
     .empty { padding:28px; text-align:center; color:#667085; }
-    @media (max-width: 820px) { .shell { grid-template-columns:1fr; } .side { border-right:0; border-bottom:1px solid #dce1e7; } .top { align-items:flex-start; flex-direction:column; } }
+    @media (max-width: 820px) { .shell { grid-template-columns:1fr; } .side { border-right:0; border-bottom:1px solid #dce1e7; } .top { align-items:flex-start; flex-direction:column; } .filters { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
+  {% include "monthly_report_workshop/fragments/htmx_loading.html" %}
   <div class="shell">
     <aside class="side">
       <a class="brand" href="/monthly-reports">月次レポートMVP</a>
       <nav class="nav" aria-label="レポート工房">
-        <a href="/monthly-reports/jobs">ジョブ一覧</a>
+        <a class="primary" href="/monthly-reports/jobs">ジョブ一覧</a>
         <a href="/monthly-reports/jobs/new">新規読み込み</a>
       </nav>
       <p class="muted">通常UIはHTML断片で更新します。</p>
     </aside>
     <main class="main">
-      <div class="top">
-        <div>
-          <p class="muted" style="margin:0;">{{ current_user.email }} · HTMX HTML fragments</p>
-          <h1 style="margin:4px 0 0;">{{ page_title }}</h1>
+      <div class="hero">
+        <div class="top">
+          <div>
+            <p class="muted" style="margin:0;">{{ current_user.email }} · HTMX HTML fragments</p>
+            <h1 style="margin:4px 0 0;">{{ page_title }}</h1>
+          </div>
+          <a class="btn primary" href="/monthly-reports/jobs/new">新規読み込み</a>
         </div>
-        <a class="btn primary" href="/monthly-reports/jobs/new">新規読み込み</a>
+        <div class="cta">
+          <div>
+            <strong>この画面の役割</strong>
+            <div class="muted">ジョブの現在地を見比べて、次に開くべき詳細画面へ迷わず進むための一覧です。</div>
+          </div>
+          <span class="badge">P3-14 jobs list</span>
+        </div>
       </div>
 
       <div class="grid">
+        <section class="journey" aria-label="通常の進め方">
+          <div class="journey-step">
+            <b>1. 新規読み込み</b>
+            <span class="muted">対象月と世帯を登録して、ジョブを作ります。</span>
+          </div>
+          <div class="journey-step">
+            <b>2. データソース登録</b>
+            <span class="muted">Google Docs / Sheets を登録して取得内容を確認します。</span>
+          </div>
+          <div class="journey-step">
+            <b>3. レポート生成</b>
+            <span class="muted">OpenRouter でドラフトを作り、検証結果を見ます。</span>
+          </div>
+          <div class="journey-step">
+            <b>4. 編集・承認・出力</b>
+            <span class="muted">本文を直して承認し、配布用 HTML を作成します。</span>
+          </div>
+        </section>
+
         <section class="metrics" aria-label="ジョブ指標">
           {% for metric in metrics %}
           <div class="metric">
@@ -60,30 +110,95 @@
           {% endfor %}
         </section>
 
-        <section class="panel" style="overflow-x:auto;">
+        <section class="panel" aria-label="ジョブ絞り込み">
+          <div class="section-head">
+            <div>
+              <h2>検索と絞り込み</h2>
+              <p class="muted" style="margin:4px 0 0;">世帯、ジョブID、対象月、状態から確認対象を絞ります。</p>
+            </div>
+            <span class="badge">表示 {{ filters.filtered_count if filters else jobs|length }} 件</span>
+          </div>
+          <form class="filters" method="get" action="/monthly-reports/jobs">
+            <div class="field">
+              <label for="job-q">検索</label>
+              <input id="job-q" type="search" name="q" value="{{ filters.q if filters else '' }}" placeholder="世帯・ジョブID・対象月・モデル" />
+            </div>
+            <div class="field">
+              <label for="job-status">状態</label>
+              <select id="job-status" name="status">
+                <option value="" {% if not filters or not filters.status %}selected{% endif %}>すべて</option>
+                {% for status in ["queued", "running", "succeeded", "failed", "cancelled"] %}
+                <option value="{{ status }}" {% if filters and filters.status == status %}selected{% endif %}>{{ status }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button class="btn primary" type="submit">絞り込み</button>
+            <a class="btn" href="/monthly-reports/jobs">クリア</a>
+          </form>
+          <p class="muted" style="margin:10px 0 0;">表示 {{ filters.filtered_count if filters else jobs|length }} 件 / 全 {{ metrics[-1].value }} 件</p>
+        </section>
+
+        <section class="panel">
+          <div class="table-meta">
+            <div>
+              <h2 style="margin:0;">ジョブ一覧</h2>
+              <p class="muted" style="margin:4px 0 0;">次の操作、素材数、最新成果物を横断で見比べられます。</p>
+            </div>
+            <span class="badge">全 {{ metrics[-1].value }} 件</span>
+          </div>
           {% if jobs %}
-          <table>
-            <thead>
-              <tr>
-                <th>ジョブ</th>
-                <th>対象</th>
-                <th>状態</th>
-                <th>モデル</th>
-                <th>prompt_version</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for job in jobs %}
-              <tr>
-                <td><a href="{{ job.detail_href }}">{{ job.public_id }}</a></td>
-                <td>{{ job.target_month }}<br><span class="muted">{{ job.display_household }}</span></td>
-                <td>{{ job.status }}</td>
-                <td>{{ job.model }}</td>
-                <td><code>{{ job.prompt_version or "-" }}</code></td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ジョブ</th>
+                  <th>対象</th>
+                  <th>状態</th>
+                  <th>次の操作</th>
+                  <th>素材/成果物</th>
+                  <th>モデル</th>
+                  <th>prompt_version</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for job in jobs %}
+                <tr>
+                  <td>
+                    <a class="job-link" href="{{ job.detail_href }}">
+                      <span>{{ job.public_id }}</span>
+                      <code>{{ job.detail_href }}</code>
+                    </a>
+                  </td>
+                  <td>{{ job.target_month }}<br><span class="muted">{{ job.display_household }}</span></td>
+                  <td>
+                    <span class="badge {% if job.status == 'failed' %}error{% elif job.status == 'succeeded' %}done{% endif %}">{{ job.status }}</span>
+                    {% if job.validation_error_count %}
+                    <br><span class="badge error">{{ job.validation_error_count }} validation error</span>
+                    {% endif %}
+                  </td>
+                  <td class="next">
+                    <a href="{{ job.detail_href }}{{ job.next_action_anchor }}">{{ job.next_action_label }}</a>
+                    <span class="muted">今見る場所</span>
+                  </td>
+                  <td>
+                    source {{ job.source_count }} / artifact {{ job.artifact_count }}
+                    <br>
+                    <span class="muted">
+                      latest:
+                      {% if job.latest_artifact_type %}
+                      {{ job.latest_artifact_type }} <code>{{ job.latest_artifact_hash }}</code>
+                      {% else %}
+                      -
+                      {% endif %}
+                    </span>
+                  </td>
+                  <td>{{ job.model }}</td>
+                  <td><code>{{ job.prompt_version or "-" }}</code></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
           {% else %}
           <div class="empty">
             <p>まだジョブはありません。</p>

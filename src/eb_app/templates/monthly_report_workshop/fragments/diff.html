@@ -1,0 +1,36 @@
+<div class="space-y-3">
+  {% if draft_artifact and final_artifact %}
+  <div class="flex flex-wrap items-center gap-2 text-sm text-base-content/70">
+    <span>draft <code>{{ draft_artifact.content_hash }}</code></span>
+    <span>final <code>{{ final_artifact.content_hash }}</code></span>
+    <span class="badge badge-sm badge-success">+{{ added_count }}</span>
+    <span class="badge badge-sm badge-error">-{{ removed_count }}</span>
+  </div>
+  <div class="overflow-auto rounded-md border border-base-300">
+    <table class="table table-xs">
+      <tbody>
+        {% for row in diff_rows %}
+        <tr class="{% if row.kind == 'added' %}bg-success/10{% elif row.kind == 'removed' %}bg-error/10{% endif %}">
+          <td class="w-10 font-mono">
+            {% if row.kind == 'added' %}+{% elif row.kind == 'removed' %}-{% else %}&nbsp;{% endif %}
+          </td>
+          <td class="whitespace-pre-wrap font-mono">{{ row.text|safe }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% elif final_artifact %}
+  <div role="alert" class="alert rounded-md py-3 text-sm">
+    <span>比較元の draft_markdown がありません。final_markdown は保存済みです。</span>
+  </div>
+  {% elif draft_artifact %}
+  <div role="alert" class="alert rounded-md py-3 text-sm">
+    <span>final_markdown がまだありません。編集内容を保存すると差分を表示できます。</span>
+  </div>
+  {% else %}
+  <div role="alert" class="alert rounded-md py-3 text-sm">
+    <span>比較できる生成物はまだありません。</span>
+  </div>
+  {% endif %}
+</div>

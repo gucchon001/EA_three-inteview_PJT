@@ -30,6 +30,7 @@ DEFAULT_MONTHLY_REPORT_TEMPLATE = (
 def run_worker_once(
     *,
     settings: Settings | None = None,
+    public_id: str | None = None,
     owner_user_id: str | None = None,
     lease_timeout_seconds: int | None = None,
     template_path: Path = DEFAULT_MONTHLY_REPORT_TEMPLATE,
@@ -48,6 +49,7 @@ def run_worker_once(
             max_tokens=settings.openrouter_max_tokens,
         ),
         template_path=template_path,
+        public_id=public_id,
         owner_user_id=owner_user_id,
         lease_timeout_seconds=lease_timeout_seconds,
         prompt_version=settings.monthly_report_prompt_version,
@@ -60,6 +62,7 @@ def run_worker_batch(
     *,
     max_jobs: int,
     sleep_seconds: float,
+    public_id: str | None = None,
     owner_user_id: str | None = None,
     lease_timeout_seconds: int | None = None,
     settings: Settings | None = None,
@@ -68,29 +71,37 @@ def run_worker_batch(
     while max_jobs <= 0 or len(results) < max_jobs:
         result = run_worker_once(
             settings=settings,
+            public_id=public_id,
             owner_user_id=owner_user_id,
             lease_timeout_seconds=lease_timeout_seconds,
         )
         results.append(result)
-        if result.status == WorkerRunStatus.NO_JOB:
+        if result.status in {
+            WorkerRunStatus.NO_JOB,
+            WorkerRunStatus.MANUAL_RECOVERY_REQUIRED,
+        }:
             break
         if max_jobs <= 0 and sleep_seconds > 0:
             time.sleep(sleep_seconds)
     return results
 
 
-def worker_result_summary(result: WorkerRunResult) -> dict[str, str | None]:
+def worker_result_summary(result: WorkerRunResult) -> dict[str, int | str | None]:
     return {
         "status": result.status,
         "claimed_job_id": result.claimed_job_id,
         "job_id": result.job.public_id if result.job else None,
         "job_status": result.job.status if result.job else None,
+        "job_stage": result.job.current_stage if result.job else None,
         "error_type": result.error_type,
+        "manual_recovery_job_count": result.manual_recovery_job_count,
+        "manual_recovery_stages": ",".join(result.manual_recovery_stages) or None,
     }
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run monthly report worker jobs.")
+    parser.add_argument("--job-id", default=os.environ.get("EB_WORKER_JOB_ID"))
     parser.add_argument("--owner-user-id", default=os.environ.get("EB_WORKER_OWNER_USER_ID"))
     parser.add_argument(
         "--lease-timeout-seconds",
@@ -113,11 +124,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     results = run_worker_batch(
         max_jobs=args.max_jobs,
         sleep_seconds=args.sleep_seconds,
+        public_id=args.job_id,
         owner_user_id=args.owner_user_id,
         lease_timeout_seconds=args.lease_timeout_seconds,
     )
     print(json.dumps([worker_result_summary(result) for result in results], ensure_ascii=False))
-    if any(result.status == WorkerRunStatus.FAILED for result in results):
+    if any(
+        result.status
+        in {WorkerRunStatus.FAILED, WorkerRunStatus.MANUAL_RECOVERY_REQUIRED}
+        for result in results
+    ):
         return 1
     return 0
 

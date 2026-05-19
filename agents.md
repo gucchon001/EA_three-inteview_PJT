@@ -29,13 +29,14 @@
      - Google Sheets / Docs はユーザーOAuthでサーバ取得
      - OpenRouter中心
      - 1ユーザー最大3生成ジョブ
-     - MVPは本番のみ。stagingは本番ポータル合流タイミングでproductionと合わせて用意する
+     - 今回プロジェクトの完了条件はレポート工房MVPのstaging環境動作確認とする。production昇格と指導管理ポータル統合は後続スコープ
      - MVPの主目的はチューニング、ログ・スナップショット・生成物保存を必須
 
 3. **MVPの境界**
    - 「エディタのみ」ではない。
    - スコープは、データソース取込・LLM生成・規約検証・推敲（プレビュー／エディタ）を一体で扱う。
    - 既存の静的HTML/Vercel配信は当面維持してよいが、レポート工房本体は Cloud Run 上の FastAPI とする。
+   - `draft_markdown` / `final_markdown` は再現性・差分・承認基準のための中間成果物として保存するが、通常運用ユーザーにMarkdown直編集を要求しない。主編集対象は配布面プレビュー/HTML側とする。
 
 4. **セキュリティ**
    - サービスアカウント鍵や OpenRouter API キーをフロントへ置かない。
@@ -113,7 +114,7 @@
 - ジョブ・ソーススナップショット・生成成果物・検証結果の保存
 - 1ユーザー最大3生成ジョブ
 - OpenRouter中心、本文用モデルと軽量モデルの分離
-- Cloud Run MVPは本番のみ。staging / productionの2環境分離は本番ポータル合流タイミングで用意する
+- Cloud Run MVPでは staging 環境を必須で用意し、migration、RLS、Google OAuth、OpenRouter、HTML UI smoke、ライブE2Eをstagingで確認する。今回プロジェクトの完了条件はstaging動作確認までで、production昇格は後続とする
 - チューニング期間のモデル・プロンプト・テンプレート比較
 
 ### 3.3 Workflow / Functional Spec Agent
@@ -317,7 +318,7 @@
 - Phase 1: MVP、チューニング記録、ジョブ保存、モック応答
 - Phase 2: 決定的バリデーション、テスト、エラーハンドリング
 - Phase 3: プレビュー、再生成、プロンプト版切替、HTMLエクスポート
-- Phase 4: Supabaseポータル統合
+- Phase 4: Supabaseポータル統合（今回プロジェクトの完了条件外）
 
 ---
 
@@ -497,7 +498,7 @@
 - 仕様変更は `decision-log.md` 更新後、影響する設計文書（requirements→api-definition→development-plan）へ同時反映する。
 - 実装判断が必要な場合は `agents.md` と `decision-log.md` の優先更新で全体方針を固定する。
 
-## 12. 次の開発優先順（2026-05-17以降）
+## 12. 次の開発優先順（2026-05-19時点）
 
 ### 12.1 達成済みとして固定するゲート
 
@@ -517,21 +518,90 @@
 - ✅ 一部達成（focused、2026-05-17）: P1-16第五弾として通常HTML UIのGET detail/status/preview/sources/validation fragment読み取りをRLS read store優先へ移行し、編集後Markdown保存、再生成、source保存、Google source取得、feedback保存、生成開始の主要HTML write actionへRLS read preflight認可を追加。full RLS write化は後続。
 - ✅ 達成（focused、2026-05-16）: ES256/RS256 JWKS 検証経路の focused test を追加し、既存 HS256 テストとの併走で回帰を防ぐ
 - ✅ 達成（focused、2026-05-17）: 通常HTML UIから `POST /monthly-reports/jobs/{job_id}/fragments/google-sources` でGoogle Docs/Sheetsを取得し、sources fragmentを差し替える。通常画面から `/api/monthly-reports/*` をDOM更新目的で直接叩かない
+- ✅ 達成（Playwright、2026-05-17）: detail画面の押せる/押せない制御、共通ローディング、Google source表示、空Sheets URL時のリクエスト抑止、Sheets URL入力時のsheet-selector成功を実ブラウザ相当で確認。`tests/test_monthly_report_playwright_smoke.py` を追加し、通常はskip、`MONTHLY_REPORT_PLAYWRIGHT_SMOKE=1` + `MONTHLY_REPORT_JOB_ID` でローカルライブスモークを実行できる。
+- ✅ 達成（focused、2026-05-17）: P3-06/P3-12として通常UIに `POST /fragments/approval` と `POST /fragments/export` を追加。承認はCSRF、RLS read preflight、Idempotency-Key、生成成功、validation errorなし、最新配布artifact hash一致を要求し、HTML exportは現行承認がある場合のみ `export_html` artifactを作成する。
+- ✅ 達成（CI/docs、2026-05-17）: P2-13として `.github/workflows/monthly-report-operational-guardrails.yml` を追加。PR/pushでは実Secretなしでmigration危険操作、RLS policy存在、schema/PII/logging/worker entry focused testを実行し、Cloud Run smokeは手動dispatch + repository secret時だけ実行する。
+- ✅ 一部達成（focused、2026-05-17）: P1-11としてジョブ一覧・詳細・プレビューの実運用導線を強化。次の操作、source/artifact件数、最新artifact、validation error、承認/export状態、ショートカット、preview artifact種別、編集欄prefillを通常UIへ追加。
+- ✅ 一部達成（focused、2026-05-17）: P3-01/P3-02としてプレビュー/編集を2ペイン化し、`final_markdown` 優先表示、未保存変更、base hash、保存済み/ドラフト状態を通常UIへ追加。
+- ✅ 一部達成（focused、2026-05-17）: P1-14として通常HTML UIにキャンセルactionを追加。CSRF、RLS read preflight、Idempotency-Keyを必須にし、queued/runningのみキャンセル可能にした。
+- ✅ 一部達成（focused、2026-05-17）: P3-03として新規ジョブ作成と再生成フォームにadmin限定の `prompt_version` / `model_report` / `model_light` overrideを追加。一般ユーザーの直接投稿値は破棄し、再生成比較fragmentで変更メタを確認できる。
+- ✅ 一部達成（focused + Playwright、2026-05-17）: P3-10として自己完結Playwright smokeを、手動source保存→mock生成→final Markdown保存→承認→HTML export→リロード復元→distribution package固定→rerun comparisonまで拡張済み。残りは実Google取得/要約を含むライブE2E。
+- ✅ 一部達成（focused、2026-05-17）: P3-11として既存 `monthly_report_full_editor.html` を同一オリジンで開く互換routeと、最新 `export_html` artifactをlocalStorageへ投入して既存全文エディタを開くbridgeを追加。
+- ✅ 一部達成（focused + Playwright、2026-05-17）: P3-13として承認/export/html source/distribution panelを定期pollingから `monthly-report-refresh` イベント更新へ変更し、共通 `htmx-error-banner` と編集保存のstale base hash 409 conflictを追加。
+- ✅ 達成（focused + Playwright、2026-05-19）: P3-12として approval / export / HTML source edit / distribution package の server-side 監査ログを追加し、artifact write は RLS write store、audit は direct store へ分離した。さらに管理者/一般ユーザーのチューニング欄表示差分を self-contained Playwright で固定し、承認/export/distribution の状態遷移を focused + Playwright で確認済み。
+- ✅ 一部達成（Playwright、2026-05-19）: P3-14として detail 画面の workflow board / summary / quick nav / operation log / sources / preview / validation / approval / advanced compare / distribution の連続 UI 確認を self-contained Playwright で追加し、主要パネルの空状態・再読込復元・HTML fragment 更新が崩れないことを確認した。
+- ✅ 一部達成（focused、2026-05-17）: P2-09としてvalidation保存にも `Idempotency-Key` を追加し、同一キー再送時にvalidationを二重登録しない。
+- ✅ 一部達成（focused、2026-05-17）: P2-10としてlease指定時のprovider call中best-effort heartbeat、後段stageの自動再claim禁止、`manual_recovery_required` summary、worker entry runbookを固定。
+- ✅ 一部達成（unit/docs、2026-05-17）: P2-12として保持期間削除planner/executorと `retention_entry` を追加。既定dry-run、`--delete` 明示、PII-safe JSON summary、監査metadataをsecret不要unit testで固定。
+- ✅ 一部達成（focused、2026-05-17）: P3-01/P3-02として再生成時に新しいqueued jobの作成通知と新ジョブ詳細リンクを返し、`rerun-comparison` は同一世帯/同一ユーザーの比較候補をdatalistで選べるようにした。
+- ✅ 一部達成（focused + Playwright、2026-05-17）: P3-01/P3-02として `rerun-diff` fragmentを追加し、元/比較先ジョブの最新Markdown本文を行単位で比較できるようにした。active job再生成拒否、同一世帯比較制約、Markdown専用diff、同一Idempotency-Key二重送信ロックもfocused testで固定し、自己完結Playwright smokeにも接続済み。
+- ✅ 一部達成（focused、2026-05-17）: P3-13としてrunning中のstatus fragmentに「ページを閉じても処理継続/自動更新/再読み込み復元」を表示し、後段stageで長時間heartbeatがない場合はworker runbook確認を促す。
+- ✅ 達成（focused + Playwright、2026-05-18）: P1-11/P3-14として詳細画面のファーストビューをMVP検証ワークベンチから、左サイドバー + 確認ガイド + 折りたたみ式の登録/生成/確認/管理セクションへ整理。自己完結Playwrightと起動中ローカル画面smokeで確認済み。
+- ✅ 達成（focused + Cloud Run smoke、2026-05-19）: Cloud Run HTTP smoke用の安全なhealth endpointを `/health` に変更し、ローカル互換として `/healthz` も維持。Cloud Runでは末尾 `z` 系の予約URLにより `/healthz` がGoogle Frontend HTML 404となりrevisionへ到達しないため、staging/prod smokeでは `/health` を使う。`tests/test_health.py` は2件通過。
+- ✅ 達成（Playwright live、2026-05-18）: 実Google Docs/Sheets取得 + source summary（実OpenRouter light経路）を通常UIライブsmokeで確認。実入力がある場合のみ `MONTHLY_REPORT_LIVE_GOOGLE_E2E=1` / `MONTHLY_REPORT_LIVE_SOURCE_SUMMARY=1` で実行する。
+- ✅ 達成（APIライブE2E、2026-05-18）: job `mrj_d3e6e1e884ba4cb4b44c2c9d2044250b` で実 Google Docs 1件 + Sheets 2件（`student`, `lesson plan`）取得、実 OpenRouter report生成、`status=succeeded`、`draft_markdown` artifact、validation 2件、llm_call 1件、再現性メタ非nullを確認。本文・ソース本文・Secret値は記録しない。
+- ✅ 達成（Cloud Run staging、2026-05-19）: image `asia-northeast1-docker.pkg.dev/gen-lang-client-0360012476/monthly-report-workshop/monthly-report-workshop:01c993a-health-20260519` をbuild/pushし、service revision `monthly-report-workshop-staging-00003-mg6` へdeploy。staging smokeは `/health` 200、`/monthly-reports/jobs` 401（未認証として期待通り）、`/auth/google` 200を確認。
+- ✅ 達成（Cloud Run Jobs worker smoke、2026-05-19）: worker jobを同imageへ再deployし、smoke execution `monthly-report-worker-staging-fpfks` が成功完了。
+- ✅ 達成（staging API live E2E、2026-05-19）: image packaging 漏れで `run-openrouter` が `/app/docs/samples/monthly-reports/monthly_pattern_b_content.template.md` を読めず 500 になることを特定し、`Dockerfile` に template copy を追加。image `asia-northeast1-docker.pkg.dev/gen-lang-client-0360012476/monthly-report-workshop/monthly-report-workshop:01c993a-templatefix-20260519`、service revision `monthly-report-workshop-staging-00004-9vt` へ更新後、seeded real Google OAuth refresh token を使う staging API live E2E job `mrj_b2695817af474330a2eed6b43cc3be00` が `status=succeeded`。Google source 3件、`draft_markdown` artifact 1件、validation 2件、llm_call 1件、`resolved_model=anthropic/claude-4.6-sonnet-20260217` を確認。
 
 ### 12.2 次に実装する順番
 
-1. **P2-09 冪等性 継続**: Google取得/source/artifact/feedbackへIdempotency-Keyを広げ、Cloud Run複数インスタンス/再起動でも二重保存が安全になるようにする。
-2. **P2-10 worker本番化 継続**: `src/eb_app/monthly_reports/worker.py` とstoreをCloud Run実行想定へ寄せ、起動方式、mid-LLM heartbeat、後段stageのstuck扱い、運用runbookを固める。
-3. **P1-16継続 RLS境界縮小**: full RLS write化の安全な順序とdirect DBの呼び出し元を棚卸しし、worker/管理/migration/保持削除へ用途を狭める。
-4. **P3-01/P3-02 編集保存・再生成UI**: 編集後Markdown保存、再生成API/UI、再現性メタ比較表示を通常UIへ入れる。
-5. **P3-06/P3-12 エクスポート・承認ゲート**: HTMLエクスポート、人間承認、送付前チェックを最小導線として実装する。
+1. **P1-11/P3-14 UI/UX整理 継続**: 現在の詳細画面はMVP検証ワークベンチ。次は「データソース登録 → 取得内容確認 → 生成 → 編集/承認」の通常業務導線をさらに絞り、一覧/新規作成/詳細のDaisyUI統一、検索/フィルタ、確認すべき項目のガイドを整える。
+2. **P3-01/P3-02 編集保存・再生成UI 継続**: 保存後の次アクション導線、再生成比較の見た目調整、実Google取得済みジョブ同士の比較確認を通常UIへ入れる。
+3. **P1-16 RLS client化 継続**: source / artifact / feedback / validation / final Markdown までは user-JWT 側へ寄せた。残りの direct DB 用途を worker・admin・migration・retention・audit に限定したまま固定し、通常ユーザー経路に generic direct write を残さない。
+4. **P2-10 worker本番化 継続**: Cloud Run Jobsのstaging smokeは成功済み。`manual-recovery/fail` の最小管理入口と monitoring helper script までは追加済み。残りは Cloud Monitoring policy の実反映、通知先設定、必要なら管理操作入口の追加。
+5. **P2-14 / P2-12 運用**: monitoring helper script、保持削除 planner / executor / entry の契約までは揃った。残りは alert policy apply、日次token/cost集計、保持削除の実DB dry-run/delete確認、OAuth credential削除の管理入口を入れる。
+
+### 12.2.1 一部完了タスクの管理
+
+- `development-plan.md` の状態を `一部完了` にする場合は、同じ文書の「一部完了タスクの済条件」表へ必ず済条件を1行で追加・更新する。
+- 済条件は「残り作業」ではなく、「この確認が通れば状態を `済` に変更してよい」という判定基準として書く。
+- ライブE2E、staging smoke、Cloud Run Jobs、RLS実DB、UI Playwrightなど外部状態を含む条件は、検証結果を `verification-log.md` に残してから `済` に変更する。
+
+### 12.2.2 開発期間の目安
+
+- ローカルMVPを手動UIレビューしやすい状態: 2〜4開発日。
+- staging投入前のコード準備: Cloud Run service/jobのbuild・deploy・基本smoke、template packaging fix、worker monitoring helper script までは完了。残る外部ブロッカーは browser `/auth/google` 実同意確認の client-side blocker 解消と、Cloud Monitoring policy の実反映。
+- stagingでのMVP実証: service smoke / worker smoke / seeded real Google OAuth refresh token による staging API live E2E は完了。browser `/auth/google` 実同意確認は client-side blocker 解消後の追加確認項目。Cloud Monitoring は script apply と通知着弾確認が残る。
+- production MVP昇格: 後続 2〜4開発日。
+- 指導管理ポータル統合は今回プロジェクトの完了条件外。ポータル本体の要件・DB・権限設計後に別枠で2〜4週間以上を見込む。
+- 外部環境なしで進める優先は P1-11/P3-14、P3-01/P3-02、P1-16、P2-09、P3-12。外部環境がないと `済` に上げにくいものは P2-05、P2-06、P2-10、P2-13、P2-14、P3-10。
+
+### 12.2.3 実装終了までの残り
+
+今回スコープで「実装終了」と言えるために、最低限あとこれが揃っていることを正とする。
+
+1. **通常ユーザー経路の残件整理**
+   - P1-11/P3-14 と P3-01/P3-02 の仕上げで、一覧/新規作成/詳細/保存/再生成/承認/export の通常導線が迷わず辿れる。
+2. **RLS / direct DB 境界の固定**
+   - 通常ユーザー経路に generic direct write を残さず、direct DB は worker/admin/migration/retention/audit に閉じる。
+3. **運用入口の実反映**
+   - `scripts/staging/monthly_report_staging_monitoring.ps1` を使った alert policy / notification channel / runbook URL の実反映。
+   - retention の実DB dry-run / delete 確認と、必要なら OAuth credential削除入口の追加。
+4. **手動ブラウザ確認**
+   - 通常UIの主要導線レビュー。
+   - browser `/auth/google` 実同意確認は client-side blocker 解消後の追加確認として扱う。
+
+### 12.2.4 手動ブラウザレビュー開始の目安
+
+あなた側で手動ブラウザレビューを始めてよいタイミングは、次の2段階で考える。
+
+1. **今すぐ始めてよいレビュー**
+   - ローカルまたは staging で、一覧/新規作成/詳細/ソース登録/生成開始/preview/validation/編集保存/承認/export の通常導線確認。
+   - 2026-05-19時点で service smoke、worker smoke、seeded real Google OAuth refresh token による staging API live E2E は成功済みなので、通常UIの使い勝手レビューはもう始めてよい。
+2. **追加で待った方がよいレビュー**
+   - browser `/auth/google` の実同意確認。
+   - Cloud Monitoring alert の実通知確認。
+   - retention の実削除確認。
+
+つまり、**UI/導線レビューはもう開始可**、**運用通知/OAuth実同意の最終レビューは残件反映後**、という整理にする。
 
 ### 12.3 並行で進めやすいPhase 2/3タスク
 
 - P2-11の配布面語彙チューニングは、成功サンプルを複数集めてから forbidden / safe replacement / warning に分類する。
-- P2-13はCIの第二弾として、migration適用チェック、RLS/static schemaチェック、Cloud Run smoke test手順を追加する。
-- P2-14はOpenRouter token cost、Google API quota、job failed率、429、CSRF拒否、費用上限の監視設計を先に文書化できる。
-- P3-10はPlaywright最小シナリオとして、ジョブ作成→Google取得→生成→検証→編集保存→エクスポートのうち、実装済み区間から順に追加する。
+- P2-13はsecret不要のCI guardrailまで完了。2026-05-19時点でstaging service smokeとworker smokeは手動確認済み。Cloud Runの `/healthz` はGoogle Frontend 404になるため、manual smoke / staging-prod smokeは `/health` を正とする。
+- P2-14はMVP監視runbookを文書化済み。残りはCloud Monitoring alert policy、ログベースmetric、日次token/cost集計、budget guardrail停止手順を実装する。
+- P3-10は `tests/test_monthly_report_playwright_smoke.py` を入口にする。自己完結smokeはsource保存からdistribution/rerun comparison/rerun diffまで通過済み。ライブGoogle取得/source summaryも通過済み。CIではskipを既定とし、ライブ確認時だけ `MONTHLY_REPORT_PLAYWRIGHT_SMOKE=1`、`MONTHLY_REPORT_LIVE_GOOGLE_E2E=1`、`MONTHLY_REPORT_JOB_ID`、`MONTHLY_REPORT_GOOGLE_DOC_IDS` / `MONTHLY_REPORT_SHEET_URL`、source summary時のみ `MONTHLY_REPORT_LIVE_SOURCE_SUMMARY=1` を指定する。
 
 ### 12.4 環境変数の扱い
 

@@ -1,0 +1,60 @@
+<div class="space-y-4">
+  <div class="overflow-x-auto">
+    <table class="table table-sm table-zebra">
+      <thead>
+        <tr>
+          <th>工程</th>
+          <th>状態</th>
+          <th>最終更新</th>
+          <th>見る場所 / 次にやること</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for step in steps %}
+        <tr>
+          <td class="font-semibold">{{ step.name }}</td>
+          <td>
+            <span class="badge badge-sm {% if step.state.tone == 'done' %}badge-success{% elif step.state.tone == 'running' %}badge-info{% elif step.state.tone == 'error' %}badge-error{% else %}badge-ghost{% endif %}">
+              {{ step.state.label }}
+            </span>
+          </td>
+          <td><code>{{ step.time }}</code></td>
+          <td>{{ step.detail }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if events %}
+  <details open>
+    <summary class="cursor-pointer font-semibold text-primary">実行イベント</summary>
+    <div class="mt-2 overflow-x-auto">
+      <table class="table table-xs">
+        <thead>
+          <tr>
+            <th>日時</th>
+            <th>種別</th>
+            <th>内容</th>
+            <th>hash / model / message</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for event in events %}
+          <tr>
+            <td><code>{{ event.time }}</code></td>
+            <td><span class="badge badge-xs badge-outline">{{ event.kind }}</span></td>
+            <td class="font-semibold">{{ event.label }}</td>
+            <td>{{ event.detail }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+  {% else %}
+  <div role="alert" class="alert rounded-md py-3 text-sm">
+    <span>まだ実行イベントはありません。ジョブ作成後、Google取得や生成を実行するとここに日時つきで表示されます。</span>
+  </div>
+  {% endif %}
+</div>

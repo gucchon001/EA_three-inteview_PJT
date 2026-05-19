@@ -60,15 +60,17 @@
 | T-25 | Supabase JWT検証 | Bearer tokenの署名/audience/email domainを検証し、正常系は200、不正tokenは401、ドメイン外は403、secret未設定は503にする |
 | T-26 | ジョブ所有者アクセス制限 | 非mock環境では作成者をJWT subから決め、他ユーザーの一覧・詳細・操作から見えない |
 | T-27 | Supabase RLS migration | 主要テーブルでRLSを有効化し、ジョブ所有者とcredential所有者に基づくpolicyが定義されている |
-| T-28 | HTML断片UI | 第一弾としてジョブ一覧・新規・作成・詳細・ソース確認/手動保存/Google取得・生成開始・モック生成・OpenRouter生成・status/preview/validation/feedbackがHTMLページ/HTML断片を返し、通常UIが `/api/monthly-reports/*` のJSONをDOM更新目的で直接使わないことを確認済み |
+| T-28 | HTML断片UI | 第一弾としてジョブ一覧・新規・作成・詳細・ソース確認/手動保存/Google取得・生成開始・モック生成・OpenRouter生成・status/preview/validation/feedback、編集保存、再生成、承認、HTML export、HTML source、distribution、rerun comparison、rerun diff、legacy full editor bridgeがHTMLページ/HTML断片を返し、通常UIが `/api/monthly-reports/*` のJSONをDOM更新目的で直接使わないことを確認済み |
 | T-29 | Cookie + CSRF | 第一弾としてジョブ作成・生成開始・ソース保存・Google取得・フィードバック保存がCSRF tokenなしで拒否され、正しいtokenで成功することを確認済み。CSRF cookieはHTTPOnly/SameSite=Lax、非local環境でSecure、複数タブでは既存tokenを再利用する。HTTPOnly Auth Cookie化は継続対象 |
 | T-30 | RLS主境界 | ユーザーJWT付きSupabase Clientで自分のジョブだけを読み書きでき、他ユーザーのジョブはDB policyでも拒否される |
-| T-31 | 冪等性 | ジョブ作成、生成開始、Google取得、再生成で二重送信・リロード・retry時に重複実行や重複artifactが発生しない |
-| T-32 | worker lease / stuck再claim | runningのまま止まったjobをlease timeout後に再claimでき、retry上限到達時はfailedへ分類される |
+| T-31 | 冪等性 | ジョブ作成、生成開始、Google取得、再生成、artifact保存、validation保存、feedback保存、編集保存、source summary、承認、HTML export、HTML source、distributionで二重送信・リロード・retry時に重複実行や重複artifactが発生しない |
+| T-32 | worker lease / stuck再claim | `fetch_sources` のrunning jobをlease timeout後に再claimでき、retry上限到達時はfailedへ分類される。provider call中はbest-effort heartbeatでleaseを更新し、後段stageのstale jobは自動再claimせず `manual_recovery_required` summaryを返す。手動回復runbookでは検知、安全確認、retry/requeue/cancel判断、監査、保持削除との相互作用、エスカレーションをPII-safeに定義済み |
 | T-33 | プロンプトインジェクション | Google Docs/Sheets本文に命令文が含まれても、本文規約・対象範囲・送付禁止情報の扱いが上書きされない |
 | T-34 | 人間承認ゲート | 生成成功・検証OKだけでは送付/エクスポートできず、承認済み状態を経由する |
-| T-35 | 保持期間削除 | ドライラン件数確認、削除実行、削除後件数確認、監査ログ、OAuth credential削除runbookを検証する |
+| T-35 | 保持期間削除 | planner/executorと `retention_entry` の既定dry-run、`--delete` 明示、PII-safe JSON summary、監査metadataをunit testで検証済み。残りは実DBでの削除後件数確認、OAuth credential削除runbook、Storage object削除連動 |
 | T-36 | 監視・費用上限 | failed率、timeout率、OpenRouter token/費用、Google API quota、429、CSRF拒否のメトリクス/アラート条件を検査する |
+| T-37 | P3-10自己完結/ライブPlaywright | FastAPI/Uvicornをテスト内起動し、HTMX stubでdetail page → source保存 → mock生成 → final Markdown保存 → 承認 → HTML export → reload recovery → distribution package → rerun comparison → rerun diffまで確認済み。ライブGoogle取得は `MONTHLY_REPORT_PLAYWRIGHT_SMOKE=1` + `MONTHLY_REPORT_LIVE_GOOGLE_E2E=1` + `MONTHLY_REPORT_JOB_ID` + `MONTHLY_REPORT_GOOGLE_DOC_IDS` または `MONTHLY_REPORT_SHEET_URL` が揃う時だけ実行する。source summaryはさらに `MONTHLY_REPORT_LIVE_SOURCE_SUMMARY=1` の時だけ実OpenRouterを叩く。通常CIではskipを既定にする。残りはrunning復帰表示のPlaywright接続 |
+| T-38 | P3-13 UI復旧/競合 | `monthly-report-refresh` event更新、共通HTMX error banner、stale `base_content_hash` 409 conflict、同一Idempotency-Key再送優先、リロード後の状態復元、複数タブで古い編集保存が最新finalを上書きしないこと、running中/長時間heartbeatなしの復帰案内を確認する |
 
 ## ゴールデンフィクスチャ
 
@@ -152,6 +154,7 @@ tests/fixtures/monthly_reports/economics_multistudent_scope/
 | 2026-05-15 | Supabase RLS migrationの静的テスト観点 T-27 を追加 |
 | 2026-05-15 | T-09にCloud Logging向け実ログ出力のallowlist検査を追加 |
 | 2026-05-16 | HTML断片UI、Cookie+CSRF、RLS主境界、冪等性、worker lease、プロンプトインジェクション、人間承認、保持削除、監視のテスト観点 T-28〜T-36 を追加 |
+| 2026-05-17 | P2-09 validation idempotency、P2-10 provider call中heartbeat/manual recovery、P2-12 retention entry、P3-10自己完結Playwrightのrerun diff接続、P3-13 refresh/error/conflict/running復帰案内を反映 |
 | 2026-05-17 | 通常HTML UIのソース確認/手動保存/Google取得action、CSRF拒否、設定不足エラーを T-19/T-28/T-29 に反映 |
 | 2026-05-17 | 通常HTML UIのOpenRouter生成action、設定不足エラー、再現性メタ保存を T-28 に反映 |
 | 2026-05-17 | CSRF cookie Secure属性、複数タブtoken再利用、Google取得HTML actionの秘匿エラーを T-20/T-29 に反映 |

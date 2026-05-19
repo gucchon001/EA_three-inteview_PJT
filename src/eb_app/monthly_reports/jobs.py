@@ -33,6 +33,7 @@ PIPELINE_STAGES = (
     "validate",
     "persist",
 )
+WORKER_STALE_RECLAIM_STAGES = (PIPELINE_STAGES[0],)
 
 
 class StatusTransitionError(RuntimeError):
@@ -67,6 +68,8 @@ class MockJob:
     worker_attempts: int = 0
     max_worker_attempts: int = 3
     worker_last_claimed_at: datetime | None = None
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 @dataclass
@@ -75,6 +78,7 @@ class MockFeedback:
     job_id: str
     category: str
     comment: str
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 @dataclass
@@ -85,6 +89,7 @@ class MockSource:
     display_name: str | None = None
     snapshot_text: str | None = None
     content_hash: str | None = None
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 @dataclass
@@ -94,6 +99,7 @@ class MockArtifact:
     artifact_type: str
     content: str | None = None
     content_hash: str | None = None
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 @dataclass
@@ -104,6 +110,7 @@ class MockValidation:
     severity: str
     message: str
     path: str | None = None
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 @dataclass
@@ -122,6 +129,18 @@ class MockLLMCall:
     output_tokens: int | None = None
     finish_reason: str | None = None
     error_type: str | None = None
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+@dataclass
+class MockAuditLog:
+    public_id: str
+    actor_id: str
+    action: str
+    target_type: str
+    target_id: str
+    metadata: dict[str, object] = field(default_factory=dict)
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class MockJobStore:
@@ -132,6 +151,7 @@ class MockJobStore:
         self._artifacts: dict[str, list[MockArtifact]] = {}
         self._validations: dict[str, list[MockValidation]] = {}
         self._llm_calls: dict[str, list[MockLLMCall]] = {}
+        self._audit_logs: dict[str, list[MockAuditLog]] = {}
         self._feedback_sequence = 0
 
     def create_job(
@@ -248,6 +268,24 @@ class MockJobStore:
 
     def claim_next_queued_job(self, owner_user_id: str | None = None) -> MockJob | None:
         return self.claim_next_runnable_job(owner_user_id=owner_user_id)
+
+    def claim_job_for_worker(
+        self,
+        public_id: str,
+        *,
+        lease_timeout_seconds: int | None = None,
+    ) -> MockJob | None:
+        job = self.get(public_id)
+        now = datetime.now(timezone.utc)
+        if not _is_runnable_job(job, now, lease_timeout_seconds):
+            return None
+        job.status = JobStatus.RUNNING
+        job.current_stage = PIPELINE_STAGES[0]
+        job.worker_attempts += 1
+        job.worker_last_claimed_at = now
+        job.error_type = None
+        job.error_message = None
+        return job
 
     def claim_next_runnable_job(
         self,
@@ -435,6 +473,33 @@ class MockJobStore:
         job = self.get(public_id)
         return list(self._llm_calls.get(job.public_id, []))
 
+    def record_audit_log(
+        self,
+        *,
+        actor_id: str,
+        action: str,
+        target_type: str,
+        target_id: str,
+        metadata: dict[str, object] | None = None,
+    ) -> MockAuditLog:
+        target_public_id = target_id
+        if target_type == "monthly_report_job":
+            self.get(target_id)
+        audit_log = MockAuditLog(
+            public_id=self._id_factory("aud"),
+            actor_id=actor_id,
+            action=action,
+            target_type=target_type,
+            target_id=target_public_id,
+            metadata=dict(metadata or {}),
+        )
+        self._audit_logs.setdefault(target_public_id, []).append(audit_log)
+        return audit_log
+
+    def list_audit_logs(self, public_id: str) -> list[MockAuditLog]:
+        self.get(public_id)
+        return list(self._audit_logs.get(public_id, []))
+
     def rerun_job(self, public_id: str) -> MockJob:
         source = self.get(public_id)
         return self.create_job(
@@ -521,7 +586,7 @@ def _is_runnable_job(
         return job.worker_attempts < job.max_worker_attempts
     if (
         job.status == JobStatus.RUNNING
-        and job.current_stage == PIPELINE_STAGES[0]
+        and job.current_stage in WORKER_STALE_RECLAIM_STAGES
         and lease_timeout_seconds is not None
         and job.worker_attempts < job.max_worker_attempts
     ):

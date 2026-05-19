@@ -1,0 +1,29 @@
+<div style="display:grid;gap:10px;">
+  <p class="muted" style="margin:0;">範囲指定は不要です。選択したシートの使用範囲全体を取得します。</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;">
+    <label>
+      <span class="muted">基本情報シート</span><br>
+      {% if sheet_names %}
+        <select name="student_sheet_name" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
+          {% for sheet_name in sheet_names %}
+            <option value="{{ sheet_name }}" {% if sheet_name == student_default %}selected{% endif %}>{{ sheet_name }}</option>
+          {% endfor %}
+        </select>
+      {% else %}
+        <input name="student_sheet_name" value="{{ student_default|default('student') }}" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
+      {% endif %}
+    </label>
+    <label>
+      <span class="muted">学習計画表シート</span><br>
+      {% if sheet_names %}
+        <select name="lesson_plan_sheet_name" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
+          {% for sheet_name in sheet_names %}
+            <option value="{{ sheet_name }}" {% if sheet_name == lesson_plan_default %}selected{% endif %}>{{ sheet_name }}</option>
+          {% endfor %}
+        </select>
+      {% else %}
+        <input name="lesson_plan_sheet_name" value="{{ lesson_plan_default|default('lesson plan') }}" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
+      {% endif %}
+    </label>
+  </div>
+</div>

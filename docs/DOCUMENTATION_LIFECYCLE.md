@@ -15,7 +15,10 @@
 | 2 | `docs/monthly-report-workshop/README.md` | 月次レポート作成ツールの開発ドキュメント入口 |
 | 3 | `docs/project/月次レポート_プログラム化_LLMワークフロー移行計画.md` | レポート工房の最新決定事項 |
 | 4 | `docs/requirements/v0.3.md` | 指導管理ポータル全体の既存要件 |
-| 5 | `HANDOFF.md` | 次スレッド・次作業への引き継ぎ |
+| 5 | `docs/web-app/screen-design.md` | 指導管理ポータルの画面設計 |
+| 6 | `docs/sheets-migration/parser-spec.md` | 指導管理ポータルへの既存Sheets/外部実績データ移行仕様 |
+| 7 | `docs/instruction-portal-transfer/README.md` | 指導管理ポータルの別プロジェクト移管計画 |
+| 8 | `HANDOFF.md` | 次スレッド・次作業への引き継ぎ |
 
 ## 更新トリガー
 
@@ -34,6 +37,10 @@
 | `docs/monthly-report-workshop/test-plan.md` | テスト、フィクスチャ、品質ゲートが変わったとき | event |
 | `docs/monthly-report-workshop/development-plan.md` | フェーズ、WBS、状態、完了条件が変わったとき | milestone |
 | `docs/monthly-report-workshop/decision-log.md` | 決定・未決事項が増減したとき | event |
+| `docs/requirements/v0.3.md` | 指導管理ポータルのスコープ、データソース、段階移行、ロール、機能要件が変わったとき | event |
+| `docs/web-app/screen-design.md` | 指導管理ポータルの画面、URL、ナビ、データソース表示が変わったとき | event |
+| `docs/sheets-migration/parser-spec.md` | 指導モニタリング管理表、BigQuery指導報告書、FileMaker/基幹情報、学習計画表の取込方針が変わったとき | event |
+| `docs/instruction-portal-transfer/README.md` | 指導管理ポータルの移管対象、カットオフ条件、移管先、統合順序が変わったとき | milestone |
 | `HANDOFF.md` | 作業状態や次アクションを引き継ぐとき | milestone |
 
 ## 周期レビュー
@@ -42,6 +49,7 @@
 |---|---|
 | スプリント開始時 | `development-plan.md` と `decision-log.md` の未決事項を確認 |
 | MVP実案件投入後 | `requirements.md`, `llm-design.md`, `test-plan.md` を実運用結果で更新 |
+| 指導ポータル設計開始時 | `docs/requirements/v0.3.md`, `docs/web-app/screen-design.md`, `docs/sheets-migration/parser-spec.md` の境界とデータソース責務を確認 |
 | 本番デプロイ前 | `security-operations.md`, `api-definition.md`, `test-plan.md` を確認 |
 
 ## 横断更新ルール
@@ -56,5 +64,6 @@
 
 | 日付 | 内容 |
 |---|---|
+| 2026-05-17 | 指導管理ポータル正本とSheets/BigQuery移行仕様を正本スタック・更新トリガーに追加 |
+| 2026-05-17 | 指導管理ポータルの別プロジェクト移管計画を正本スタック・更新トリガーに追加 |
 | 2026-05-13 | 初版作成 |
-

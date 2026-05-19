@@ -1,0 +1,64 @@
+<div class="space-y-3">
+  <div class="alert alert-info">
+    <span>再生成本文差分</span>
+  </div>
+
+  <form
+    hx-get="/monthly-reports/jobs/{{ base_job.public_id }}/fragments/rerun-diff"
+    hx-target="#rerun-diff-panel"
+    hx-swap="innerHTML"
+    class="flex flex-wrap items-end gap-2"
+  >
+    <label class="form-control">
+      <span class="label-text">比較先ジョブID</span>
+      <input
+        class="input input-bordered input-sm"
+        name="compare_job_id"
+        value="{{ compare_job.public_id if compare_job else '' }}"
+        placeholder="mrj_..."
+        list="rerun-diff-candidates-{{ base_job.public_id }}"
+      />
+    </label>
+    {% if compare_candidates %}
+    <datalist id="rerun-diff-candidates-{{ base_job.public_id }}">
+      {% for candidate in compare_candidates %}
+      <option value="{{ candidate.job_id }}">{{ candidate.label }}</option>
+      {% endfor %}
+    </datalist>
+    {% endif %}
+    <button class="btn btn-sm btn-outline" type="submit">本文差分</button>
+  </form>
+
+  {% if base_artifact and compare_artifact %}
+  <div class="flex flex-wrap items-center gap-2 text-sm text-base-content/70">
+    <span>base <code>{{ base_job.public_id }}</code> / {{ base_artifact.artifact_type }} <code>{{ base_artifact.content_hash }}</code></span>
+    <span>compare <code>{{ compare_job.public_id }}</code> / {{ compare_artifact.artifact_type }} <code>{{ compare_artifact.content_hash }}</code></span>
+    <span class="badge badge-sm badge-success">+{{ added_count }}</span>
+    <span class="badge badge-sm badge-error">-{{ removed_count }}</span>
+  </div>
+  <div class="overflow-auto rounded-md border border-base-300">
+    <table class="table table-xs">
+      <tbody>
+        {% for row in diff_rows %}
+        <tr class="{% if row.kind == 'added' %}bg-success/10{% elif row.kind == 'removed' %}bg-error/10{% endif %}">
+          <td class="w-10 font-mono">
+            {% if row.kind == 'added' %}+{% elif row.kind == 'removed' %}-{% else %}&nbsp;{% endif %}
+          </td>
+          <td class="whitespace-pre-wrap font-mono">{{ row.text|safe }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% elif compare_job and not compare_artifact %}
+  <div role="alert" class="alert rounded-md py-3 text-sm">
+    <span>比較先ジョブに draft_markdown / final_markdown がまだありません。</span>
+  </div>
+  {% elif not base_artifact %}
+  <div role="alert" class="alert rounded-md py-3 text-sm">
+    <span>元ジョブに比較できる draft_markdown / final_markdown がまだありません。</span>
+  </div>
+  {% else %}
+  <p class="text-sm text-base-content/70">比較先ジョブIDを入力すると、最新の配布面Markdown同士を比較できます。</p>
+  {% endif %}
+</div>

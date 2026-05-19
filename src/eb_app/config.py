@@ -22,8 +22,14 @@ class Settings:
     app_version: str
     openrouter_api_key: str | None
     openrouter_model_report: str
+    openrouter_model_light: str
     openrouter_timeout_seconds: float
     openrouter_max_tokens: int | None
+    cloud_run_worker_job_project_id: str | None
+    cloud_run_worker_job_region: str | None
+    cloud_run_worker_job_name: str | None
+    cloud_run_worker_trigger_access_token: str | None
+    cloud_run_worker_trigger_timeout_seconds: float
     google_workspace_access_token: str | None
     google_oauth_client_id: str | None
     google_oauth_client_secret: str | None
@@ -61,10 +67,32 @@ class Settings:
                 or os.environ.get("OPENROUTER_MODEL", "").strip()
                 or "anthropic/claude-sonnet-4.6"
             ),
+            openrouter_model_light=(
+                os.environ.get("OPENROUTER_MODEL_LIGHT", "").strip()
+                or os.environ.get("OPENROUTER_MODEL", "").strip()
+                or "openai/gpt-4.1-mini"
+            ),
             openrouter_timeout_seconds=float(
                 os.environ.get("OPENROUTER_TIMEOUT", "").strip() or "120"
             ),
             openrouter_max_tokens=_optional_int(os.environ.get("OPENROUTER_MAX_TOKENS")),
+            cloud_run_worker_job_project_id=(
+                os.environ.get("EB_CLOUD_RUN_WORKER_JOB_PROJECT_ID", "").strip() or None
+            ),
+            cloud_run_worker_job_region=(
+                os.environ.get("EB_CLOUD_RUN_WORKER_JOB_REGION", "").strip() or None
+            ),
+            cloud_run_worker_job_name=(
+                os.environ.get("EB_CLOUD_RUN_WORKER_JOB_NAME", "").strip() or None
+            ),
+            cloud_run_worker_trigger_access_token=(
+                os.environ.get("EB_CLOUD_RUN_WORKER_TRIGGER_ACCESS_TOKEN", "").strip()
+                or None
+            ),
+            cloud_run_worker_trigger_timeout_seconds=float(
+                os.environ.get("EB_CLOUD_RUN_WORKER_TRIGGER_TIMEOUT_SECONDS", "").strip()
+                or "15"
+            ),
             google_workspace_access_token=(
                 os.environ.get("EB_GOOGLE_WORKSPACE_ACCESS_TOKEN", "").strip() or None
             ),

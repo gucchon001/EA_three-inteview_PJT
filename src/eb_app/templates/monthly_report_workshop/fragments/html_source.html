@@ -1,0 +1,73 @@
+<div class="space-y-3">
+  {% if html_source_message %}
+    <div class="alert alert-success">
+      <span>{{ html_source_message }}</span>
+    </div>
+  {% endif %}
+
+  {% if html_source_blockers %}
+    <div class="alert alert-warning">
+      <div>
+        <p class="font-semibold">HTMLソース編集はまだ実行できません。</p>
+        <ul class="list-disc pl-5">
+          {% for blocker in html_source_blockers %}
+            <li>{{ blocker }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% else %}
+    <div class="alert alert-info">
+      <span>最新のHTML export artifactをソースとして編集できます。</span>
+    </div>
+  {% endif %}
+
+  <div class="overflow-x-auto">
+    <table class="table table-sm">
+      <tbody>
+        <tr><th>編集対象export</th><td>{{ export_artifact.artifact_id if export_artifact else "-" }}</td></tr>
+        <tr><th>export hash</th><td><code>{{ export_artifact.content_hash if export_artifact else "-" }}</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <form
+    hx-post="/monthly-reports/jobs/{{ job.public_id }}/fragments/html-source"
+    hx-target="#html-source-panel"
+    hx-swap="innerHTML"
+    style="display:grid;gap:10px;"
+  >
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <input type="hidden" name="idempotency_key" value="{{ html_source_idempotency_key }}" />
+    <input type="hidden" name="base_export_hash" value="{{ export_artifact.content_hash if export_artifact else '' }}" />
+    <label>
+      <span class="muted">HTMLソース</span><br>
+      <textarea
+        name="html_source"
+        rows="14"
+        style="width:100%;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;padding:10px;border:1px solid #dce1e7;border-radius:8px;"
+        {% if not can_edit_html_source %}disabled{% endif %}
+      >{{ export_artifact.content if export_artifact else "" }}</textarea>
+    </label>
+    <button type="submit" class="btn btn-secondary" {% if not can_edit_html_source %}disabled{% endif %}>HTMLソースを保存</button>
+  </form>
+
+  {% if can_edit_html_source %}
+    <div class="border border-base-300 rounded-lg overflow-hidden">
+      <div class="flex items-center justify-between gap-2 bg-base-200 px-3 py-2">
+        <span class="font-semibold">HTMLプレビュー</span>
+        <div class="flex items-center gap-2">
+          <a class="btn btn-xs btn-outline" href="/monthly-reports/legacy-full-editor" target="_blank" rel="noopener">既存全文エディタ</a>
+          <a class="btn btn-xs btn-outline" href="/monthly-reports/jobs/{{ job.public_id }}/legacy-full-editor" target="_blank" rel="noopener">exportを既存エディタで開く</a>
+          <span class="badge badge-outline">iframe</span>
+        </div>
+      </div>
+      <iframe
+        title="HTML export preview"
+        sandbox=""
+        srcdoc="{{ export_artifact.content | e }}"
+        style="width:100%;height:360px;border:0;background:white;"
+      ></iframe>
+    </div>
+  {% endif %}
+</div>

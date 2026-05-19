@@ -5,83 +5,23 @@
 - 正本/補助資料の区分: 月次レポート作成ツールの開発計画
 - 起点: `docs/project/月次レポート_プログラム化_LLMワークフロー移行計画.md`
 - 関連文書: `requirements.md`, `functional-spec.md`, `test-plan.md`, `decision-log.md`, `AUTOMATION_NORTH_STAR.md`
-- 最終更新: 2026-05-17
+- 最終更新: 2026-05-19
 
 ## 現在位置
 
-2026-05-16時点では、移行計画書から開発ドキュメント初版を作成し、MVP実装の土台に着手済み。2026-05-16の方針レビューで、HTML断片UI、Cookie+CSRF、Supabase RLS主境界、Cloud Run worker lease、冪等性、Storage/保持削除、監視、プロンプトインジェクション対策、人間承認ゲートをMVP前後の横断ゲートとして追加した。
+レポート工房は、静的POCの知見をFastAPI + Jinja2 + HTMXの通常UIへ寄せる段階に入っている。開発計画本文は「現在状態、次優先、フェーズ、未完了タスク」を読むための正本とし、詳細な日次ログは [development-history.md](development-history.md)、検証コマンド履歴は [verification-log.md](verification-log.md) に分離する。
 
-実装済み・確認済みの範囲:
+現在の要点:
 
-- FastAPIへ月次レポートAPIスタブを登録済み: `POST /api/monthly-reports/jobs`, `GET /api/monthly-reports/jobs`, `GET /api/monthly-reports/jobs/{job_id}`, `POST /api/monthly-reports/jobs/{job_id}/cancel`
-- ジョブ状態モデル、prefix付き公開ID、モックジョブストアを実装済み
-- `EB_ENABLE_MOCK_UI=1` のときに、レポート工房のジョブ一覧・新規作成・詳細・推敲エディタ・status fragment のモックUIを表示可能
-- ローカル開発用モック認証の基本ユーザーを実装済み
-- 非mock環境向けにSupabase JWT secretによるBearer token検証を実装済み。`aud=authenticated`、メールドメイン `tomonokai-corp.com`、不正token 401、ドメイン外 403、secret未設定 503 を確認済み
-- 非mock環境ではジョブ作成時の `owner_user_id` をJWT `sub` から決め、一般ユーザーの一覧・詳細・成果物・検証・LLM呼び出しログ・stage操作を自分のジョブに制限する境界を実装済み。ローカルmockでは従来どおり全件参照を許可
-- Supabase Postgres向け初期migrationとRLS migrationを作成済み。主要テーブルでRLSを有効化し、ジョブ所有者・credential所有者ベースのpolicyを静的テストで確認済み
-- 2026-05-16の方針更新により、RLSは将来統合用の補助境界ではなく主境界として効かせる方向へ寄せる。通常ユーザーリクエストではユーザーJWT付きSupabase Clientを第一候補とし、service role/direct DBはworker・管理・migration・保持期間削除に限定する計画へ更新済み
-- Supabase CLIでローカルDBを起動し、初期migrationを適用済み。WindowsのAnalytics health checkを避けるため、ローカル設定ではAnalyticsを無効化
-- `EB_MONTHLY_REPORT_DATABASE_URL` 設定時に、月次レポートAPIがPostgres storeを使う経路を実装済み
-- 明示的なジョブ進行APIを実装済み: `POST /api/monthly-reports/jobs/{job_id}/start`, `POST /api/monthly-reports/jobs/{job_id}/complete-stage`, `POST /api/monthly-reports/jobs/{job_id}/fail`
-- Mock/Postgres storeで `queued -> running -> succeeded` のstage進行と、失敗時の `failed`・`error_type`・`error_message` 記録を実装済み。Postgresでは `monthly_report_jobs.error_type` / `error_message` に失敗詳細を明示保存し、監査ログにも失敗イベントを残す
-- ソーススナップショットと生成成果物の保存/一覧APIを実装済み。Mock storeとPostgres storeの両方で `monthly_report_sources` / `monthly_report_artifacts` へ接続する最小経路を確認済み
-- Google Workspace REST APIクライアントを追加済み。`gws` CLIには依存せず、Docs API / Sheets APIから取得した本文・valuesをソーススナップショットとして保存する `POST /api/monthly-reports/jobs/{job_id}/fetch-google-sources` を実装済み。ローカル疎通はサーバ側 `EB_GOOGLE_WORKSPACE_ACCESS_TOKEN` のみで行い、リクエストbodyやエラー本文には出さない
-- Google provider refresh tokenのFernet暗号化保存境界とPostgres `google_oauth_credentials` upsertを実装済み。保存済みrefresh tokenからGoogle OAuth token endpointでaccess tokenを再取得し、`/fetch-google-sources` に渡せる解決経路を追加済み
-- 認証済みユーザーに紐づくGoogle provider refresh token保存API `POST /api/auth/google-oauth/credentials` を追加済み。Supabase Auth callbackで取得したrefresh tokenを、このAPI経由で暗号化保存する前提
-- Supabase session由来のGoogle provider refresh token保存ブリッジ `POST /api/auth/google-oauth/supabase-session` を追加済み。payloadのSupabase user id、provider、provider email、refresh token、scopeをサーバ側adapterで検証し、現在ユーザーID/メールと一致する場合だけ保存する。refresh tokenはrepr/レスポンス/エラー本文に出さない
-- ライブE2E用の開発画面 `/monthly-report-workshop/e2e` を追加済み。Supabase sessionのBearer tokenでジョブ作成、Google source取得、OpenRouter実行、sources/artifacts/validations/llm-calls確認を1画面から順に実行できる
-- 2026-05-16の方針更新により、Bearer token前提のE2E画面は移行期/検証用として維持しつつ、通常UIは `/monthly-reports/*` のHTMLページ/HTML断片、HTTPOnly/Secure/SameSite Cookie + CSRFへ寄せる
-- 通常UIの第一弾として、`/monthly-reports`, `/monthly-reports/jobs`, `/monthly-reports/jobs/new`, `POST /monthly-reports/jobs`, `/monthly-reports/jobs/{job_id}`, `POST /monthly-reports/jobs/{job_id}/run`, `/monthly-reports/jobs/{job_id}/fragments/status`, `/monthly-reports/jobs/{job_id}/fragments/sources`, `/monthly-reports/jobs/{job_id}/fragments/preview`, `/monthly-reports/jobs/{job_id}/fragments/validation`, `POST /monthly-reports/jobs/{job_id}/fragments/sources`, `POST /monthly-reports/jobs/{job_id}/fragments/google-sources`, `POST /monthly-reports/jobs/{job_id}/fragments/feedback` を追加済み。ジョブ一覧・作成・詳細・ソース確認/手動保存/Google取得・生成開始・モック生成完了・OpenRouter生成・status/preview/validation/feedback fragmentはHTMLを返し、通常UIから `/api/monthly-reports/*` をDOM更新目的で使わないテストを追加済み
-- HTML actionの第一弾として、`POST /monthly-reports/jobs`, `POST /monthly-reports/jobs/{job_id}/run`, `POST /monthly-reports/jobs/{job_id}/fragments/sources`, `POST /monthly-reports/jobs/{job_id}/fragments/google-sources`, `POST /monthly-reports/jobs/{job_id}/fragments/feedback` にCSRF token検証を追加済み。`GET /monthly-reports/jobs/new` と `GET /monthly-reports/jobs/{job_id}` は `HTTPOnly`, `SameSite=Lax`, `/monthly-reports` pathのCSRF cookieとhidden inputを発行し、非local環境では `Secure` を付ける。既存cookieがある場合は再利用し、tokenなしPOSTはHTML error fragmentで403を返す
-- 検証結果の保存/一覧APIを実装済み。`monthly_report_validations` へ保存し、Mock/Postgres/API経由で確認済み
-- ジョブ作成時に `prompt_version`, `template_hash`, `resolved_model_report`, `source_bundle_hash`, `app_version` などの再現性メタを保存・返却する経路を実装済み
-- 月次レポートAPIに認証依存関係を接続済み。ローカルmockは固定ユーザー、非mockはSupabase JWT secretでBearer tokenを検証する
-- 3件同時実行制限はStore側の `create_job_with_active_limit` へ寄せ、Postgresではユーザー単位のadvisory lockを使う経路を実装済み
-- 編集画面に成果物保存パネルと `app_version` 表示を追加済み
-- 再生成ジョブは対象月・世帯・作成者に加えて、template / prompt / model / source bundle / app version の再現性メタを引き継ぐ
-- 静的POCの `build_prompts` を `src/eb_app/monthly_reports/llm_messages.py` へ共通化し、CLIは薄いラッパとして同じ関数を呼ぶ形に変更済み
-- `prompt_scope_notes` をジョブ作成API、HTML新規作成フォーム、Mock/Postgres store、再生成コピー、レスポンスに追加済み。静的レシピ `prompts.scope_reminder` から工房ジョブ投入用 `prompt_scope_notes` への変換helperも追加済み。ローカルSupabaseには `202605140002_add_monthly_report_prompt_scope_notes.sql` を適用済み
-- `src/eb_app/monthly_reports/workflow.py` で `build_messages -> provider mock -> validate -> persist` を1ジョブ通電済み。開発用API `POST /api/monthly-reports/jobs/{job_id}/run-mock` からも通せる
-- OpenRouter APIキーのキー情報エンドポイント疎通は確認済み。OpenRouter `chat/completions` 用provider抽象はHTTPモックで実装済み。工房本体の `POST /api/monthly-reports/jobs/{job_id}/run-openrouter` から実ネットワーク通電し、`succeeded` / `draft_markdown` / `non_empty_markdown` 保存まで確認済み
-- `llm_call_logs` へLLM呼び出しメタを保存する経路を実装済み。Mock/Postgres storeと `GET /api/monthly-reports/jobs/{job_id}/llm-calls` で、本文・プロンプト全文を出さずにhash、requested/resolved model、token、finish reason、error_typeを確認できる
-- 非同期実行へ進める前段として、Store共通の `claim_next_queued_job()` と `src/eb_app/monthly_reports/worker.py` の `run_next_queued_monthly_report_job()` を実装済み。Postgresでは `FOR UPDATE SKIP LOCKED` で最古のqueued jobを原子的にclaimし、claim済みjobは `run_claimed_monthly_report_job()` で二重startせず実行する。worker入口には `owner_user_id` filterを追加し、同一DB内の別ユーザー/別E2E残ジョブを拾わない実行単位を指定できる
-- Cloud Run worker本番化には、lease timeout、heartbeat/updated_at、stuck job再claim、再試行上限、手動再実行、協調的キャンセル、Idempotency-Keyまたはjob input hashによる二重実行防止が未実装
-- Economics 複数生徒MTGの匿名化フィクスチャを `tests/fixtures/monthly_reports/economics_multistudent_scope/` に追加し、`prompt_scope_notes` が根拠ソースより前にプロンプトへ入る回帰テストへ接続済み
-- 決定的バリデーション `required_headings`, `forbidden_terms`, `multistudent_scope_exclusion` の第一弾を実装済み。テンプレートから抽出した `## 01...` 形式の必須見出し欠落、配布面禁止語、または `prompt_scope_notes` に明記された `対象外...様` のdraft混入がある場合、artifact保存前に `validation_failed` として停止する
-- 静的POCの `HANDOFF_STATIC_POC_TUNING.md` をP0/P1/P2へ組み込み、`build_prompts` の塊順を工房側 `build_messages` の実装前提に追加済み
-- クラウド本番リージョンは `asia-northeast1`（東京）を基本とする方針を決定済み
-- 2026-05-16 ライブE2E通電完了: ローカル Supabase Google provider ログイン → `provider_refresh_token` 取得 → `/api/auth/google-oauth/supabase-session` 経由でFernet暗号化保存（`google_oauth_credentials.encrypted_provider_refresh_token` 228byte、`encryption_key_version=local-v1`）→ 月次レポートジョブ作成 → `fetch-google-sources` → `run-openrouter` → 決定的バリデーション → 失敗時 `monthly_report_jobs.error_type=validation_failed` + `monthly_report_validations` 保存 → `llm_call_logs` に `resolved_model=anthropic/claude-4.6-sonnet-...` / token / hash 記録、まで実ブラウザで通電
-- 2026-05-16 ローカル Supabase Auth の Google provider 設定を `supabase/config.toml` の `[auth.external.google]` ブロック + `additional_redirect_urls` に `http://127.0.0.1:8000/auth/callback` 追加 + `enable_signup = true`（初回 Google ログインを signup 扱いで通すため）で実装。Google Cloud Console 側は OAuth consent + Web client（redirect URI `http://127.0.0.1:56321/auth/v1/callback`）を手動作成。Docs/Sheets/Drive API は `gen-lang-client-0360012476` で有効化済み
-- 2026-05-16 FastAPI の Supabase JWT 検証を JWKS 経由の ES256/RS256 対応に拡張。`src/eb_app/auth/dependencies.py` で `alg` ヘッダを見て HS256 は symmetric secret（テスト互換）、ES256/RS256 は `<SUPABASE_URL>/auth/v1/.well-known/jwks.json` から取得した公開鍵で検証する。ローカル Supabase が新 signing keys（ES256）で発行する access token が `Bearer` 検証を通過することを実機確認済み
-- 2026-05-16 ライブE2E結果のジョブレスポンスで `prompt_version`, `template_hash`, `model_report`, `resolved_model_report`, `source_bundle_hash`, `app_version` が null のまま返ることを確認。`llm_call_logs` には `resolved_model` が記録されているため、`/run-openrouter` 経由でジョブ本体（`monthly_report_jobs`）への再現性メタ書き戻しが未実装の状態。Phase 1 完了条件にギャップあり
-- 2026-05-16 P1-17として、`OPENROUTER_MODEL_REPORT`, `EB_MONTHLY_REPORT_PROMPT_VERSION`, `EB_APP_VERSION` / `K_REVISION` / `GITHUB_SHA` 由来の既定値を設定へ追加し、`/run-openrouter` / `/run-mock` 実行前に欠けている `prompt_version`, `model_report`, `app_version` をジョブへ書き戻す経路を追加済み。さらに `run_next_queued_monthly_report_job()` / `run_claimed_monthly_report_job()` も同じ既定メタを受け取れるようにし、Cloud Run worker化時に設定値を注入できる入口を用意した。`template_hash`, `source_bundle_hash`, `resolved_model_report` はworkflow内の既存書き戻しを利用する。Mock store/API/worker focused、Postgres worker focused、2026-05-17ライブE2E初succeededでジョブ本体への永続化とレスポンス非nullを確認済み
-- 2026-05-16 P1-18として、Supabase AuthのES256/RS256 JWKS検証経路をfocused testで固定済み。PyJWKClient相当のfakeから公開鍵を返し、ES256/RS256署名tokenが `/api/monthly-reports/jobs` を通過すること、JWKS tokenで `SUPABASE_URL` がない場合は503になることを確認済み。既存HS256 secret検証テストも併走する
-- 2026-05-17 ライブE2E再確認: ローカル Supabase Google provider の保存済みrefresh tokenからGoogle access tokenを再取得し、実Google Docs 1件 + Sheets 2 rangeを `fetch-google-sources` で保存（3 sources）→ `run-mock` でartifact/validation/llm_call_logs保存 → `.env` の `OPENROUTER_API_KEY` / `OPENROUTER_MODEL_REPORT` を確認後、別ジョブで `run-openrouter` を実行し `status=succeeded`、`resolved_model_report=anthropic/claude-4.6-sonnet-20260217`、再現性メタ非null、artifact 1件、validation 2件、llm_call_logs 1件を確認済み。`.env` のOpenRouter設定確認では `^OPENROUTER_` 前方一致で見ること（`^(OPENROUTER_)=` のような誤った正規表現は `OPENROUTER_API_KEY` を拾えない）
-- 2026-05-17 P1-16第一弾として、`CurrentUser` に検証済みSupabase access tokenを保持し、`src/eb_app/auth/supabase_client.py` にユーザーJWT付きSupabase anon client生成ヘルパーを追加済み。あわせて `src/eb_app/monthly_reports/rls.py` にPostgres `authenticated` role + `request.jwt.claim.sub` でRLSを評価するテスト用セッションヘルパーを追加し、実DBで「自分のjob/sourceのみ見える」「他ユーザー名義insertはRLSで拒否」「audit_logsはクライアント不可」を確認済み。通常APIの全面置換は後続で、direct DBはworker・管理・migration・保持削除に限定していく
-- 2026-05-17 P1-16第二弾として、通常ユーザーの読み取り系を段階的にRLS経由へ寄せるため、ユーザーJWT付きSupabase clientを使う `SupabaseMonthlyReportReadStore` を追加し、JSON APIの `GET /jobs`, `GET /jobs/{job_id}`, `GET /sources`, `GET /artifacts`, `GET /validations`, `GET /llm-calls` と通常UI一覧の読み取りをRLS read store優先へ変更。mock/admin/設定不足時は既存storeへフォールバックし、書き込み・worker・管理系は次段階までdirect DBを維持する
-- 2026-05-17 P2-09第一弾として、`POST /api/monthly-reports/jobs` と `/run-mock` / `/run-openrouter` に `Idempotency-Key` 対応を追加。ジョブ作成の二重送信は同一jobを返し、active limitを二重消費しない。生成開始の二重送信は同一キーなら初回応答を返す。さらに `monthly_report_idempotency_keys` migrationとPostgres store lookup/rememberを追加し、Cloud Run複数インスタンス/再起動でも永続化できる入口を用意した。migrationはローカル実DBへ適用し、Postgres focused testも通過済み
-- 2026-05-17 P2-10第一弾として、workerに `WorkerRunResult` / `WorkerRunStatus` を追加し、既存 `run_next_queued_monthly_report_job()` の戻り値互換を保ったまま、claim後の実行サマリとprovider実行前キャンセル境界をfocused testで固定。さらにworker attempt/lease migration、stale `running/fetch_sources` 再claim、retryable failureのqueued復帰を実DB focused testで固定済み
-- 2026-05-17 P3-01/P3-02として、通常UI詳細画面に `/monthly-reports/jobs/{job_id}/rerun` と `/monthly-reports/jobs/{job_id}/fragments/edited-markdown` 向けHTMXフォームを追加し、backend routeも実装。編集後Markdownは `final_markdown` artifactとして保存し、再生成actionは新しいqueued jobのstatus fragmentを返す。編集内容prefill、差分表示、再現性メタ比較は後続
-- 2026-05-17 環境方針を再確認し、MVPは本番のみへ戻した。staging / production の2環境分離は、本番ポータルへ合流するタイミングで用意する
-- 2026-05-17 P2-09の `monthly_report_idempotency_keys` migrationをローカル実DBへ適用し、Postgres focused testで永続冪等性のlookup/rememberを確認済み
-- 2026-05-17 P1-16第三弾として、通常HTML UIのGET detail/status/preview/sources/validation fragment読み取りをRLS read store優先へ移行。書き込み系HTML actionは次段階までdirect storeを維持する
-- 2026-05-17 P2-09追加として、新規ジョブ作成フォームと生成開始フォームにhidden `idempotency_key` を追加し、HTML actionの二重送信をfocused testで固定。生成開始HTML actionは同一job/run_mode/idempotency_keyなら初回job状態を返す
-- 2026-05-17 P2-10追加として、`worker_attempts`, `max_worker_attempts`, `worker_last_claimed_at` migrationを追加し、実DBへ適用済み。`claim_next_runnable_job()` でqueued jobとlease timeout後のstale `running/fetch_sources` jobをclaimでき、retryable failureは上限までqueuedへ戻す。Postgres focused testも実DBで通過済み
-- 2026-05-17 P2-09追加として、source保存とGoogle source取得のJSON API/HTMX actionにIdempotency-Keyを追加。Google取得は同一キー再送時にGoogle Workspace APIを再実行せず、保存済みsources fragment/JSON responseを返す
-- 2026-05-17 P2-10追加として、claimed worker jobのheartbeat/touch primitiveをMock/Postgres storeへ追加し、worker実行前に `updated_at` / `worker_last_claimed_at` を更新できるようにした。stale reclaim拡張前の誤回収防止をfocused testで固定
-- 2026-05-17 P1-16第四弾として、HTML write actionのうち編集後Markdown保存と再生成でRLS read-store preflight認可を追加。実writeは既存direct storeのまま維持し、full RLS write化はP2-09完了後に回す
-- 2026-05-17 P2-09追加として、artifact保存、feedback保存、編集後Markdown保存のJSON API/HTMX actionにIdempotency-Keyを追加。同一キー再送時は初回artifact/feedback/final_markdownだけを返し、二重保存しないfocused testを追加
-- 2026-05-17 P2-10追加として、`python -m eb_app.monthly_reports.worker_entry` のCloud Run worker entryを追加。Postgres + OpenRouter設定から1件/複数件のqueued jobを処理し、PIIを含まないJSON summaryと失敗時非0終了を返す。runbookは `security-operations.md` に追記
-- 2026-05-17 P1-16第五弾として、HTML write actionのうちsource保存、Google source取得、feedback保存、生成開始にもRLS read-store preflight認可を追加。通常HTML UIの主要write actionはpreflight済みになった。実writeは既存direct storeのまま維持し、full RLS write化とdirect DB用途棚卸しを次段階へ回す
-- 2026-05-17 P2-11追加として、`Gemini メモ` / `Google Meetメモ` / Google生成メモ系の配布面メタ語彙をdraft artifact側で狭くsanitizationし、source evidence内の同語彙は許容するfocused testを追加済み
-- 2026-05-17 P1-15追加として、`eb_auth_session` HTTPOnly Cookieから検証済みSupabase JWTを受ける移行ブリッジを追加。Bearer token互換はE2E/内部JSON向けに維持する。server-side session refresh/rotationは後続
-- 2026-05-17 UIコンポーネント方針として、Tailwind CSS + DaisyUIをレポート工房の標準にし、FlowbiteはMVP標準依存にしないことを決定。業務画面はtable/section中心、カードは繰り返し単位に限定し、HTMX errorもDaisyUI alert断片で返す
-- 2026-05-17 P3-14第一弾として、alert/status/validation/feedback/sources/preview fragmentsをDaisyUI `alert` / `badge` / `table` / `prose` 中心へ標準化。router/storeには触れずHTML UI focused testで通過
-- 2026-05-17 Phase 2並行実装として、GitHub Actionsの安全なfocused pytest workflowを追加。実Google/OpenRouter secretやSupabase Dockerを要求せず、mock/test envで月次レポート主要テスト、Supabase user client、validation safetyを実行する
-- 2026-05-17 P2-11第一弾として、生成draft側に残った明示的なプロンプトインジェクション文言と内部/管理メモ露出を決定的validationで検出し、`validation_failed` として停止する focused test を追加
-- 2026-05-17 E2E画面でRLS/Google OAuth/OpenRouter成功サンプルを記録。job `mrj_2b15b194636a4457b590e3ef73afa5b2` は `/monthly-report-workshop/e2e` からGoogle Doc 1件取得、OpenRouter実行、`status=succeeded`、`prompt_version=monthly-report-v20260517.1`、`resolved_model_report=anthropic/claude-4.6-sonnet-20260217`、artifact/validation/llm_call_logs保存まで通過。出力内に残った `Gemini メモ` / `Google Meetメモ` 系の配布面語彙チューニングはP2-11の後続サンプル蓄積後にまとめて扱う
-- 最新の広いmock focused suiteは `179 passed, 1 skipped`、RLS実DB/schema focusedは `8 passed`。`.pytest_cache` やLF→CRLF warningのみで、機能失敗は未確認
+- 今回プロジェクトの完了条件は **レポート工房MVPがstaging環境で動くこと** とする。指導管理ポータル統合、およびproduction昇格は今回の完了条件ではなく後続フェーズに分ける。
+- MVPでは staging を必須環境として用意する。migration、RLS、Google OAuth、OpenRouter、HTML UI smoke、Cloud Run Jobs worker smoke、ライブE2Eはstagingで確認する。production環境はstaging完了後の昇格先として設計対象に残すが、今回プロジェクトの完了判定には含めない。
+- Phase 0は完了。プロンプト断片、`prompt_version`、静的レシピ連携、ジョブ表現の基礎は固定済み。
+- Phase 1は骨格実装済み。Supabase Auth + Google OAuth + Google Docs/Sheets取得 + OpenRouter生成 + artifact/validation/llm_call_logs保存のライブE2E成功サンプルがある。2026-05-18には実Google Docs 1件 + Sheets 2件 + 実OpenRouterで `status=succeeded` のAPIライブE2Eを再確認済み。
+- Phase 2は進行中。冪等性、worker lease/retry、RLS read store、PII/logging safety、保持削除、operational guardrailを段階的に固定している。
+- Phase 3は進行中。編集後Markdown保存、再生成、承認、HTML export、distribution package、既存全文エディタ連携、自己完結Playwright smoke、起動中ローカルUI smoke、実Google/source summary smokeまで第一弾が通っている。
+- Phase 4は今回プロジェクトのスコープ外。指導管理ポータルへ合流する時点では、MVPで用意したstaging成果をポータル基盤へ接続し、production昇格手順・権限・監視を統合する。
+
+直近の詳細な実装メモと2026-05-17の細かい達成ログは [development-history.md#詳細な現在位置ログ移動前の現在位置](development-history.md#詳細な現在位置ログ移動前の現在位置) を参照する。
 
 ### 実装体制（Phase 1以降）
 
@@ -101,30 +41,69 @@
 - ✅ 達成（一部）: 通常UIの第一弾を `/monthly-reports/*` のHTML page/action/fragmentへ寄せ、ジョブ一覧・作成・詳細・生成開始・preview・validation・feedbackでJSON API直接DOM更新を外した
 - ✅ 達成（一部）: HTML action用CSRF cookie + hidden token検証をジョブ作成・生成開始・フィードバック保存へ追加し、Bearer token前提経路との役割分担を開始した
 - ✅ 達成（一部）: Supabase RLSを主境界にするため、ユーザーJWT付きSupabase Client経路を作成し、通常ユーザー読み取り系とHTML detail fragmentをRLS read store優先へ移行。主要HTML write actionはRLS read preflight認可まで追加済み
-- ✅ 達成: ライブE2Eを実Google Docsで成功（緑）させ、決定的バリデーションを通過する1ジョブを保存。本データでのチューニング比較土台を作成
+- ✅ 達成: ライブE2Eを実Google Docs/Sheets + 実OpenRouterで成功（緑）させ、決定的バリデーションを通過するジョブを保存。本データでのチューニング比較土台を作成。2026-05-18の成功サンプルは job `mrj_d3e6e1e884ba4cb4b44c2c9d2044250b`
 - 優先: worker常駐実行接続、lease/stuck再claim/retry/冪等性、3件制限の実環境再現、LLM失敗時の再試行/再生成導線をE2Eで閉じる
 - 優先: Storage移行policy、保持期間削除ジョブ、監視・費用上限アラート、プロンプトインジェクション検証、人間承認ゲートを設計・テストへ入れる
 - 仕上げ: 編集後Markdown保存、再生成API/UI、モデル版比較、HTMLエクスポート/保存/送付の最小導線、Playwright最小シナリオで体験を通す
 
-### 今後の開発計画（2026-05-17更新）
+### 今後の開発計画（2026-05-19更新）
 
 直近の開発は、ライブE2Eで確認済みの「OAuth取得・Google source保存・OpenRouter生成・artifact/validation/llm_call_logs保存」を土台に、通常UIと運用境界を固める。新しいモデル/語彙チューニングは、サンプルを増やしてからP2-11でまとめて扱う。
 
 | 順位 | タスク | 理由 | 完了条件 |
 |---|---|---|---|
-| 1 | P2-10 worker本番化 継続 | Cloud Run worker entry後に、true mid-LLM heartbeatと後段stage stuck扱いを固定する | mid-LLM heartbeat方針、後段stuck扱いのfocused testまたは明示的保留条件がある |
-| 2 | P1-16 RLS継続 | 通常ユーザー操作をRLS clientへ寄せ、direct DBをworker/管理/migration/保持削除へ狭める | full RLS write化の安全な順序、direct DB用途棚卸し、worker/管理境界の明文化が通る |
-| 3 | P3-14 UI標準化 継続 | fragments標準化後、detail/list/new本体のDaisyUI化で通常UIの品質を上げる | detail/list/newがtable/form/steps/alert中心になり、HTML UI focused testが通る |
-| 4 | P3-01/P3-02 編集保存・再生成UI 継続 | MVP体験として生成後の推敲、保存、再生成比較が必要 | 最新artifact prefill、再現性メタ比較、差分表示のfocused testが通る |
-| 5 | P3-06/P3-12 エクスポート・承認ゲート | 家庭向けレポートでは生成成功と送付可能を分ける必要がある | HTMLエクスポート、人間承認、送付前チェックの最小導線をPlaywrightまたはfocused UI testで確認 |
+| 1 | P1-11/P3-14 UI/UX整理 継続 | 現在の詳細画面はMVP検証ワークベンチで、通常ユーザーにはまだ複雑 | 一覧/新規作成/詳細をDaisyUIで統一し、データソース登録→取得内容確認→生成→編集/承認の導線が手動UIレビューで迷わない。2026-05-18にURL投入→Google取得→OpenRouter生成→プレビュー/検証OOB反映の通常UI縦切りを追加済み |
+| 2 | P3-01/P3-02 編集保存・再生成UI 継続 | MVP体験として生成後の推敲、保存、再生成比較が必要 | 保存後の次アクション導線、実Google取得済みジョブ同士の比較、再生成比較の見た目調整が通る |
+| 3 | P1-16 RLS client化 継続 | 通常ユーザー操作をRLS主境界へ寄せ切る | source / artifact / feedback / validation / final Markdown までは user-JWT write化済み。残りの direct DB / direct store 用途が worker/admin/migration/retention/idempotency/audit/telemetry に固定され、通常ユーザー経路に generic direct write が残らない |
+| 4 | P2-10 worker本番化 継続 | Cloud Run運用でstuck jobを残さない | Cloud Run Jobsのcommand/env例、期待JSON summary、manual recovery非0終了、HTTP smokeとの役割分担、admin-only `manual-recovery/fail`、monitoring helper script は固定済み。残りは Cloud Monitoring alert policy の実反映、通知先設定、必要なら管理操作入口の追加 |
+| 5 | P2-14 / P2-12 運用 | MVP本番で費用・保持・削除を人手だけにしない | monitoring helper script、ログベースmetric、保持削除 entry 契約は揃った。残りは alert policy apply、日次token/cost集計、保持削除の実DB dry-run/delete確認、OAuth credential削除の管理操作入口 |
+| 6 | browser `/auth/google` 追加確認 | staging core gate は閉じたが、ブラウザ実同意だけ client-side blocker で残っている | clean profile または blocker 解消後に `/auth/google -> /auth/callback` を再確認し、client-side issue と app issue を完全に切り分けて検証ログへ残す |
+| 7 | production昇格準備 | staging成功状態を同一imageでproductionへ持ち上げられるようにする | [production-promotion-checklist.md](production-promotion-checklist.md) を正本に、same-image deploy、secret/OAuth分離、smoke、rollback を固定し、運用者が実行できる状態にする |
 
 並行で進めやすいタスク:
 
 - P2-11: `Gemini メモ` / `Google Meetメモ` 系を含む入力由来メタ語彙のチューニング。ただし、成功サンプルを複数蓄積してから forbidden / safe replacement / warning に分類する。
-- P2-13: GitHub Actions第二弾として migration適用チェック、RLS/static schemaチェック、Cloud Run smoke test手順を追加する。
-- Phase 4: 本番ポータル合流時に staging / production のCloud Run・Supabase・Secret分離、staging E2E、production promotion checklistを整備する。
-- P2-14: OpenRouter token cost、Google API quota、job failed率、429、CSRF拒否、費用上限の監視設計を文書化する。
-- P3-10: Playwright最小シナリオを、実装済み区間から段階的に追加する。
+- P2-13: GitHub Actions第二弾として、secret不要のmigration/static schema/RLS guardrail workflowを追加済み。Cloud Run serviceのHTTP smokeはmanual dispatchのみで、実Secretがある環境で実行する。2026-05-19にstaging service smoke（`/health` 200、`/monthly-reports/jobs` 401、`/auth/google` 200）とCloud Run Jobs worker smokeを手動確認済み。`/healthz` はCloud Run予約URL挙動によりGoogle Frontend HTML 404になるため、staging/prod smokeでは使わない。
+- Phase 4: 指導管理ポータル構築後にレポート工房を組み込む。これは今回プロジェクトの完了条件ではなく、staging MVP完了後の後続統合枠とする。指導枠ごとのデータソース一元管理、学習計画表、BigQuery指導報告書、FileMaker/基幹情報との接続は指導ポータル側の正本に従う。
+- P2-14: MVP初期の監視runbookに加え、ログベースmetric名・label・filter、alert threshold、日次token/cost summary contract、budget guardrail停止手順を固定済み。2026-05-19のstaging worker smoke成功を基準サンプルに、HTTP smokeはservice疎通、worker smokeはJSON summaryと終了コード、manual recovery/stuck jobはCloud Monitoring alertからrunbookへ遷移する責務分担を明文化した。さらに `scripts/staging/monthly_report_staging_monitoring.ps1` を追加し、`monthly_report_worker_failed_count` metric と `monthly-report-staging-worker-manual-recovery` / `monthly-report-staging-worker-failed-spike` / `monthly-report-staging-worker-fetch-sources-stale` の policy JSON 生成と apply 入口まで揃えた。残りはCloud Monitoring alert policy実反映、日次集計job/SQL、quota dashboard、新規OpenRouter実行停止feature flagまたは管理操作入口。
+- P3-10: `tests/test_monthly_report_playwright_smoke.py` を入口にする。自己完結smokeはsource保存からdistribution/rerun comparison/rerun diffまで通過済み。ライブGoogle取得/source summary smokeとAPIライブE2Eもローカルで通過済み。2026-05-19にstagingのservice/job smokeに加え、seeded real Google OAuth refresh tokenを使うstaging API live E2Eも成功した。通常CIではskipを既定にし、残るブラウザ `/auth/google` 実同意確認は client-side blocker が外れた時点で追加確認する。
+- Staging deploy: [staging-deploy-runbook.md](staging-deploy-runbook.md) を入口にする。Project ID は `gen-lang-client-0360012476`、region は `asia-northeast1`。2026-05-19時点で image `asia-northeast1-docker.pkg.dev/gen-lang-client-0360012476/monthly-report-workshop/monthly-report-workshop:01c993a-templatefix-20260519` をbuild/pushし、service revision `monthly-report-workshop-staging-00004-9vt` とworker jobへdeploy済み。service smokeは `/health` 200、未認証 `/monthly-reports/jobs` 401、`/auth/google` 200、worker smoke execution `monthly-report-worker-staging-fpfks` 成功。さらに staging API live E2E job `mrj_b2695817af474330a2eed6b43cc3be00` が `status=succeeded`、Google source 3件、`draft_markdown` artifact 1件、validation 2件、llm_call 1件で完了した。`/healthz` はCloud RunではGoogle Frontend HTML 404になるため、ローカル互換endpointとしてのみ扱う。
+
+### 開発期間の見通し
+
+現時点では、ローカルMVPの中核パイプラインは通っている。残りは「通常ユーザーが迷わないUI/UX」「RLS write化と運用境界」「staging環境での実証」の3束に分かれる。下記は1人の実装者が継続して進める前提の目安で、レビュー・手動確認・外部環境作成待ちを含む。
+
+| 到達点 | 目安 | 含むもの | 主な外部依存 |
+|---|---:|---|---|
+| ローカルMVPを手動UIレビューしやすい状態 | 2〜4開発日 | P1-11/P3-14の画面整理、P3-01/P3-02の保存後導線、再生成比較の見た目、P3-12承認導線の整理 | なし。ローカルDBと既存E2Eデータで進行可能 |
+| staging投入前のコード準備 | 完了 | P1-16の次write slice、P2-09のatomic化補強、P2-12/P2-14の運用入口整理は継続。Cloud Run service/jobのbuild・deploy・基本smoke、template packaging fix、monitoring helper script 追加まで完了 | なし |
+| stagingでのMVP実証 | core live E2E完了 | migration適用、Cloud Run service smoke、Cloud Run Jobs worker smoke、Google OAuth入口、HTML UI未認証境界、seeded real Google OAuth refresh token による staging API live E2E は確認済み | ブラウザ `/auth/google` 実同意確認と Cloud Monitoring policy 実反映 |
+| レポート工房MVP完了 | ほぼ到達 | stagingでHTTP smoke、worker smoke、RLS、OpenRouter、HTML UI smoke、seeded real Google OAuth refresh token を使うライブE2E、最小監視/runbookの script 入口までは記録済み。残りは Cloud Monitoring policy の実反映と通知着弾確認、通常UIの仕上げ、browser `/auth/google` 実同意確認を追加項目として扱う | Cloud Monitoring 実反映、通常UI仕上げ、ブラウザ OAuth 追加確認 |
+| production昇格 | 後続 2〜4開発日 | production promotion checklist、Secret/OAuth分離、最小監視、rollback/runbook、production smoke | 今回プロジェクトの完了条件外。production Cloud Run/Supabase/Secret、運用者承認 |
+| 指導管理ポータル統合 | 後続別枠 2〜4週間以上 | Phase 4。ポータル側の認証/指導枠/データソース管理/履歴統合へ組み込む | 今回プロジェクトの完了条件外。ポータル本体の要件・DB・権限設計 |
+
+最短で「MVPとして試せる」状態を増やすなら、次の順に進める。
+
+1. P1-11/P3-14: UI/UXを通常業務導線へ整理する。
+2. P3-01/P3-02/P3-12: 編集保存、再生成比較、承認/exportの次アクションを1本の流れにする。
+3. P1-16: feedback以外のappend-only writeをRLS write化する。
+4. browser `/auth/google`: core staging gate とは切り分けて、client-side blocker 解消後の追加確認を行う。
+
+### 手動ブラウザレビュー開始ライン
+
+手動ブラウザレビューは、目的を分ければ **今から開始してよい**。
+
+1. **今すぐ始めてよい**
+   - 一覧/新規作成/詳細/ソース登録/生成開始/preview/validation/編集保存/承認/export の通常導線レビュー
+   - staging URL 上の未認証境界、ジョブ詳細、既存導線の見た目と操作感の確認
+2. **残件反映後にやる**
+   - browser `/auth/google` の実同意確認
+   - Cloud Monitoring alert の実通知確認
+   - retention の実削除確認
+
+つまり、UI/導線のレビューはもう始めてよく、運用通知とブラウザOAuthの最終レビューは残件処理後に回す。
+
+外部環境がない状態で「済」に近づけられる主なタスクは、P1-11/P3-14、P3-01/P3-02、P1-16、P2-09、P3-12。外部環境が必要で「済」判定まで進められない主なタスクは、P2-05、P2-06、P2-10、P2-13、P2-14、browser `/auth/google` 追加確認。
 
 ## マイルストーン
 
@@ -133,8 +112,54 @@
 | Phase 0: 整備 | 済 | プロンプト断片正本化、prompt_version、ジョブ表現スタブ | スクリプトとアプリが同じプロンプト断片を参照できる |
 | Phase 1: MVP | 骨格実装済み・ライブE2E成功・通常UI/RLS第一弾済み | Supabase Postgres、OAuth取得、ジョブ保存、モックLLM、Markdown生成、検証、フィードバック、HTML断片UI、Cookie+CSRF、RLS主境界 | 実案件でチューニング記録を残しながら生成できる。残りは通常UIの編集/再生成/承認へ寄せる |
 | Phase 2: 品質 | 進行中 | 決定的バリデーション拡充、pytest、provider mock、GitHub Actions、エラーハンドリング、冪等性、worker lease、保持削除、監視 | CIでモック生成パイプラインが通り、二重送信・stuck job・PII/secret・プロンプトインジェクション・保持削除を検証できる |
-| Phase 3: MVP体験完成 | 次着手 | 現行HTML全文エディタ相当の推敲、HTMLエクスポート、ファイル保存、送付エクスポート、再生成、版切替、人間承認ゲート、Playwright | 現行全文エディタの必須操作をサーバ保存前提で内包し、承認後の送付/エクスポートまでPlaywrightで確認できる |
-| Phase 4: 統合 | 未着手 | Supabaseポータル統合、ジョブ履歴一本化 | ポータル計画と矛盾しない形で統合 |
+| Phase 3: MVP体験完成 | 進行中 | 編集後Markdown保存、再生成、再生成メタ比較、複数タブ競合防止、running復帰表示、HTMLエクスポート、ファイル保存、送付エクスポート、既存全文エディタbridge、人間承認ゲート、Playwright | 現行全文エディタの必須操作をサーバ保存前提で内包し、承認後の送付/エクスポートまでPlaywrightで確認できる。stagingのHTTP smoke / worker smoke / seeded real Google OAuth refresh token による live E2E は通過済みで、残る browser `/auth/google` 実同意確認は client-side blocker 解消後の追加確認とする |
+| Phase 4: 統合 | 後続スコープ外 | 指導管理ポータルへの組み込み、ジョブ履歴一本化、指導枠ごとのデータソース一元管理、production昇格 | 今回プロジェクトの完了条件ではない。staging MVP完了後に別計画として扱う |
+
+## 一部完了タスクの済条件
+
+この表は、各タスクの状態を `一部完了` から `済` へ上げるための判定条件を固定する。細かい実装履歴は各タスク行と [verification-log.md](verification-log.md) を正とし、この表では「何ができれば済か」だけを見る。
+
+| ID | 済へ上げる条件 |
+|---|---|
+| P1-02 | mock認証の利用範囲がlocal/test限定として文書化され、Cookie/CSRF/RLSありの通常UIテストとBearer互換APIテストの両方で、mock/admin/userの権限差分がfocused testで固定される |
+| P1-03 | staging Supabaseへ全migrationを適用し、Supabase Auth role + RLSでowner閲覧/非owner拒否/管理用途の境界を実DB E2Eで確認し、production適用手順をrunbook化する |
+| P1-06 | Docs/Sheets/手入力/source summaryのsnapshot保存、content_hash/source_bundle_hash、重複防止、RLS可視性、PII-safe logging、再実行時の同一source再利用がfocused + ライブE2Eで確認される |
+| P1-07 | 3件制限、queued/running/succeeded/failed/cancelled、claim/lease/retry/cancel、Cloud Run Jobs実行、stagingでのstuck recovery smokeが通り、通常UIから状態復帰を確認できる |
+| P1-08 | OpenRouter report/lightの通常経路、timeout/retryable/non-retryable分類、token/cost記録、model fallback、Secret非露出がmock + 実API smokeで固定される |
+| P1-09 | `draft_markdown` / `final_markdown` の保存、hash、版管理、RLS可視性、編集競合、再生成比較、承認対象hashの一貫性がfocused + Playwrightで確認される |
+| P1-10 | 必須見出し、禁止語、対象外生徒、数値/日付、内部メモ露出、source evidence境界、warning/error/infoの扱いが決まり、承認ゲートと連動する |
+| P1-11 | ジョブ一覧・新規作成・詳細・プレビューがDaisyUI標準で統一され、検索/フィルタ/ページング、次アクション表示、空/失敗/権限なし状態、Playwright連続E2Eが通る |
+| P1-12 | feedback作成/一覧/監査/RLS write、再生成への反映、重複送信防止、一般ユーザーと管理者の見え方がfocused testで固定される |
+| P1-14 | 通常UIで必要な画面操作がすべてHTML page/action/fragmentで完結し、失敗時専用error fragment、running/cancel復帰、JSON API非依存がPlaywrightで確認される |
+| P1-15 | server-side session refresh/rotation、logout、Cookie失効、CSRF再発行、Bearer UI経路の棚卸し完了、staging HTTPS Cookie動作確認が済む |
+| P1-16 | feedback以外のappend-only writeもuser-JWT Supabase client経由へ移し、通常ユーザー操作のread/writeがRLS主境界で通り、direct DB用途がworker/admin/migration/retentionに限定される |
+| P2-01 | 匿名化ゴールデンフィクスチャを複数科目/複数家庭/失敗ケースまで揃え、prompt build、validation、source summary、snapshot再現テストへ接続する |
+| P2-03 | validation rule setのseverity、表示文、承認ブロック条件、repair/手動修正の扱いが固定され、代表fixtureで期待結果が安定する |
+| P2-04 | 各stageの `error_type` / retryable / user_action_required / manual_recovery_required が列挙され、API/HTML/worker/logの表示が同じ分類を使う |
+| P2-05 | Cloud Run実ログでPII/secret/source本文が出ないことを確認し、失敗系ログもallowlist構造化ログだけになる |
+| P2-06 | GitHub ActionsでPR/pushのfocused suite、manual staging smoke、失敗時artifact/log閲覧手順が固定され、必須branch protectionへ接続できる |
+| P2-07 | 匿名化手順、再匿名化チェック、元データ参照禁止、fixture更新レビュー手順が文書化され、CIでfixture内PII検査が走る |
+| P2-08 | 複数生徒/複数家庭/別姓/同姓/兄弟姉妹の混入防止fixtureが揃い、source summaryとdraft生成の両方で対象外情報が配布面へ出ない |
+| P2-09 | Cloud Run複数インスタンスでもidempotency recordがatomicに効き、approval/export/distribution/worker成果物がhash upsertまたは一意制約で二重作成されない |
+| P2-10 | staging Cloud Run Jobs worker smokeは2026-05-19に成功済み。成功/no_job/failed/manual_recovery_requiredの終了コードと監視alert/runbook接続を検証ログに残す |
+| P2-11 | ライブ成功/失敗サンプルを複数蓄積し、禁止語・置換・warningの辞書と承認ブロック条件を更新、回帰fixtureに追加する |
+| P2-12 | staging/実DBでdry-run件数確認→delete→削除後確認→監査ログ確認を実施し、OAuth credential削除とStorage object削除の管理入口/runbookを用意する |
+| P2-13 | stagingへのmigration適用、Cloud Run service HTTP smoke、Cloud Run Jobs worker smoke、production promotion checklistがCI/runbook/verification-logでつながる。Cloud Run service/job smokeは2026-05-19に手動確認済み |
+| P2-14 | Cloud Monitoring alert policy、日次token/cost集計job、quota dashboard、budget guardrailの停止feature flagまたは管理操作入口がstagingで確認される |
+| P3-01 | 保存後の次アクション、承認/exportへの導線、runningからの復帰表示、final/draft切替、古い保存拒否が通常UI Playwrightで通る |
+| P3-02 | 再生成後の新ジョブ遷移、比較候補選択、差分表示、実Google取得済みジョブ同士の比較、active job拒否がPlaywright/ライブE2Eで確認される |
+| P3-03 | 管理者設定画面でprompt/model既定値を管理でき、一般ユーザー非表示、監査ログ、再生成比較への反映が確認される |
+| P3-04 | iframe内直接編集、書式ツールバー、プレビュー更新、保存/差分/承認への反映がPlaywrightで確認される |
+| P3-05 | HTML編集プレビュー、HTML差分、保存競合、download/distribution連携、承認hash再確認がfocused + Playwrightで通る |
+| P3-06 | 既存静的プレビュー相当のHTML体裁、download、distribution package、承認済みhashとの一致、未承認/validation errorブロックが確認される |
+| P3-07 | ローカル保存名、ファイルから開く、PDF/ZIPなどMVP配布形式、失敗時表示が通常UIで確認される |
+| P3-08 | 送付先管理、送付履歴、差戻し、外部送信を行わない手動送付監査フロー、将来メール送信境界が固定される |
+| P3-09 | draft/final/html export/別ジョブ再生成の差分が同一UIで見られ、Playwrightで比較操作が通る |
+| P3-10 | 自己完結Playwright、起動中ローカルsmoke、実Google/source summary、実OpenRouter APIライブE2E、staging service/worker smoke、staging live E2Eをすべて検証ログに残す |
+| P3-11 | 既存サンプルmanifestとの対応、legacy editorでの編集結果再取込、静的プレビューとの差分吸収が確認される |
+| P3-12 | 承認監査ログ、再承認条件、送付/export/distributionとの状態遷移、管理者/一般ユーザー権限差分がfocused + Playwrightで通る |
+| P3-13 | running復帰表示、HTMXエラー通知、timeout/sendError/responseError、複数タブ保存競合をPlaywrightで確認し、見た目もDaisyUIで統一する |
+| P3-14 | ジョブ一覧、新規作成、detail page本体、approval/export/source登録がDaisyUI table/form/steps/modal中心に統一され、手動UIレビューで「何を確認すればよいか」が明確になる |
 
 ## Phase 0 タスク
 
@@ -162,12 +187,12 @@
 | P1-08 | 一部完了 | OpenRouter呼び出し抽象。まずprovider mockで `call_llm` を通し、その後少量 `chat/completions` で工房本体から疎通確認する |
 | P1-09 | 一部完了 | Markdown草稿保存 |
 | P1-10 | 一部完了 | 最低限の決定的バリデーション。空出力、必須見出し、配布面禁止語、複数生徒スコープ混入の第一弾を実装済み |
-| P1-11 | 一部着手 | ジョブ一覧・詳細・プレビュー画面 |
+| P1-11 | 一部完了 | ジョブ一覧・詳細・プレビュー画面。通常UIの一覧/詳細/preview fragmentを実装し、一覧に次の操作、source/artifact件数、最新artifact、validation errorを表示。詳細画面に現在位置サマリー、次操作、承認/export状態、ショートカット導線を追加し、プレビューは表示中artifact種別を明示。編集保存フォームは最新preview artifactでprefillする。2026-05-18に一覧の検索/状態フィルタ、Google Docs/Sheets URL投入からOpenRouter生成まで進める「取得してレポート生成」導線、ジョブ作成/ソース取得/要約/生成/検証の状態と日時が見える実行状況ログ、ソース本文の折りたたみ表示を追加済み。同日に通常UIから実Google Docs/Sheets + 実OpenRouterで `status=succeeded`、ソース3件、レポートビュー反映、validation表示まで確認。残りはページ全体のDaisyUI統一、ページング、staging URLでの連続E2E |
 | P1-12 | 一部完了 | フィードバック保存 |
 | P1-13 | 済 | 肥大化時にSupabase Storageへ移すための `storage_path` カラムを初期スキーマに含める |
-| P1-14 | 一部完了 | 通常UI用の `/monthly-reports/*` HTML page/action/fragmentルータを本番側へ追加し、ジョブ作成・ソース確認/手動保存/Google取得・生成開始・モック生成完了・OpenRouter生成・進捗・プレビュー・検証・フィードバック・エラーをHTML断片で返す。第一弾として一覧・新規・作成・詳細・sources/status/preview/validation/feedback fragment、Google Docs/Sheets取得HTML action、生成開始、モック生成、OpenRouter生成を実装済み。残りは再生成、キャンセル、失敗時専用エラー断片、編集保存導線 |
+| P1-14 | 一部完了 | 通常UI用の `/monthly-reports/*` HTML page/action/fragmentルータを本番側へ追加し、ジョブ作成・ソース確認/手動保存/Google取得・取得内容要約・生成開始・モック生成完了・OpenRouter生成・進捗・プレビュー・検証・フィードバック・編集保存・再生成・キャンセル・承認・HTMLエクスポート・エラーをHTML断片で返す。Google取得actionはソース一覧だけでなく、`mock/admin` では任意でOpenRouter即時生成まで実行し、通常Supabaseユーザーでは worker-owned workflow request として queued job を worker 待ちへ進める。残りは失敗時専用エラー断片の整理、ページ全体のDaisyUI統一、キャンセル中running jobのpolling復帰表示 |
 | P1-15 | 一部完了 | HTTPOnly/Secure/SameSite Cookie + CSRFを本番UI認証境界として実装し、Bearer token前提の経路をE2E/内部JSON API/移行互換へ限定する。HTML action用CSRF cookie + hidden token検証をジョブ作成・生成開始・ソース保存・Google取得・フィードバック保存へ追加済み。さらに `eb_auth_session` HTTPOnly CookieからSupabase JWTを検証する移行ブリッジを追加済み。残りはserver-side session refresh/rotation、Cookie失効/ログアウト、Bearer UI棚卸し |
-| P1-16 | 一部完了 | Supabase RLSを主境界にするため、ユーザーJWT付きSupabase Client生成を導入し、service role/direct DBの用途をworker・管理・migration・保持削除へ限定する。第一弾として検証済みaccess tokenを `CurrentUser` に保持し、ユーザーJWT付きSupabase anon client生成ヘルパーとRLS実効Postgresテストを追加済み。第二弾として通常ユーザーのJSON読み取りAPI（jobs/detail/sources/artifacts/validations/llm-calls）と通常UI一覧をRLS read store優先へ移行済み。第三弾として通常HTML UIのGET detail/status/preview/sources/validation fragment読み取りをRLS read store優先へ移行済み。第四弾として編集後Markdown保存/再生成、第五弾としてsource保存/Google source取得/feedback保存/生成開始のHTML write actionへRLS read preflight認可を追加済み。残りはfull RLS write化、direct DB用途棚卸し、worker/管理/migration/保持削除境界の固定 |
+| P1-16 | 一部完了 | Supabase RLSを主境界にするため、ユーザーJWT付きSupabase Client生成を導入し、service role/direct DBの用途をworker・管理・migration・保持削除へ限定する。第一弾として検証済みaccess tokenを `CurrentUser` に保持し、ユーザーJWT付きSupabase anon client生成ヘルパーとRLS実効Postgresテストを追加済み。第二弾として通常ユーザーのJSON読み取りAPI（jobs/detail/sources/artifacts/validations/llm-calls）と通常UI一覧をRLS read store優先へ移行済み。第三弾として通常HTML UIのGET detail/status/preview/sources/validation fragment読み取りをRLS read store優先へ移行済み。第四弾として編集後Markdown保存/再生成、第五弾としてsource保存/Google source取得/feedback保存/生成開始のHTML write action、第六弾として通常JSON write APIへRLS read preflight認可を追加済み。第七弾としてfeedback保存を最初のfull RLS write POCにし、通常Supabaseユーザーはuser-JWT Supabase client経由で `monthly_report_feedback` へinsert、mock/adminはdirect fallbackを維持する。第八弾として artifact append-only write の一部を user-JWT Supabase client へ拡張し、通常Supabaseユーザーの `approval` / `export_html` / `distribution_package` と HTMLソース編集、および `POST /api/monthly-reports/jobs/{job_id}/artifacts` を RLS write store 経由で保存できるようにした。第九弾として通常HTML UIの `final_markdown` 保存と `source_summary_markdown` 保存も RLS write store 経由へ移行し、source summaryのソース読み取りもRLS read store優先にした。第十弾として通常HTML UI / 通常JSON API の手動source保存と Google source取得も RLS write store 経由へ移行した。第十一弾として direct DB state mutation JSON route (`start` / `complete-stage` / `fail` / `cancel` / `run-*` / `rerun`) に `X-EB-Caller-Intent` guard を追加し、内部/管理/E2E 用として明示した。第十二弾として通常JSON API の validation 保存も user-JWT Supabase client 経由の RLS write store へ移し、idempotent response 記録だけ direct store に残す形へ分離した。第十三弾として `source-summary` HTML action の artifact/RLS write と `llm_call_logs` / idempotency / audit / workflow state mutation の direct 境界を棚卸しし、`llm_call_logs` は server-owned telemetry として残す前提を test と設計文書へ反映した。第十四弾として通常UIから到達できる service-owned workflow 実行（`/run`, `after_fetch_action=generate_openrouter`）を helper と server-side audit log で明示し、focused test で direct workflow 境界を固定した。第十五弾として通常Supabaseユーザーにはこの direct workflow 実行を開放せず、`mock/admin` 補助導線に限定する backend guard と detail UI の disable/説明文を追加した。第十六弾として通常Supabaseユーザーの既定 `run_mode=stage` と `after_fetch_action=generate_openrouter` を worker-owned workflow request へ切り替え、queued job のまま worker 待ちに進める監査ログ・status文言・operation log を追加した。第十七弾として Cloud Run Jobs `jobs.run` を server-side trigger する executor と、`EB_WORKER_JOB_ID` override を使う targeted worker 起動を追加し、通常UIからの queued request がそのまま該当 job の worker 実行へつながる経路を実装した。残りは trigger 設定の staging/prod 反映、失敗時 monitoring/runbook、worker/管理/migration/保持削除境界の固定。並行化する場合は、A: user-content write/RLS、B: direct workflow 実行の縮退、C: direct telemetry/idempotency/audit 文書化と focused test、の3トラックに分割して進める |
 | P1-17 | 済 | `/run-openrouter` / `run-mock` / `workflow.run_claimed_monthly_report_job` 完了時に `monthly_report_jobs` の `prompt_version`, `template_hash`, `model_report`, `resolved_model_report`, `source_bundle_hash`, `app_version` を書き戻し、ジョブレスポンスとPostgres双方でnullにならないことをMock/Postgres focused testと2026-05-17ライブE2Eで固定済み |
 | P1-18 | 済 | Supabase ES256/RS256 JWT検証のfocused testを追加。`PyJWKClient` 相当をfakeし、ES256/RS256 keypairでtoken発行→API認証通過を確認。HS256 既存テスト（`test_auth_mock.py`）との併走で回帰を防ぐ |
 
@@ -183,143 +208,46 @@
 | P2-06 | 一部完了 | GitHub Actionsでpytestを実行。第一弾として `.github/workflows/monthly-report-focused-tests.yml` を追加し、secret不要・Supabase Docker不要の安全なfocused suiteをPython 3.12で実行する |
 | P2-07 | 一部完了 | 匿名化済みゴールデンフィクスチャ作成 |
 | P2-08 | 一部完了 | 複数生徒MTG混入防止テスト。`prompt_scope_notes` により対象外の別姓＋様の評価文が家庭向け本文へ混入しないことを確認 |
-| P2-09 | 一部完了 | POST系API/HTML actionにIdempotency-Keyまたはjob input hashを導入し、二重送信・リロード・worker再試行時の挙動を固定する。job作成、`run-mock`、`run-openrouter`、source保存、Google source取得、artifact保存、feedback保存、編集後Markdown保存の冪等性を実装し、Google取得の同一キー再送では外部APIを再実行しないfocused testも追加済み。Postgres永続化用 `monthly_report_idempotency_keys` migration/storeとHTML hidden keyも追加済み。残りはvalidation保存や将来export/approval actionの冪等性 |
-| P2-10 | 一部完了 | Cloud Run worker本番化に向け、lease timeout、heartbeat/updated_at、stuck job再claim、retry上限、手動再実行、協調的キャンセルを実装・テストする。worker実行結果サマリ、provider実行前キャンセル境界、worker attempt/max attempt、lease timeout後のstale `running/fetch_sources` reclaim、retryable failureのqueued復帰、worker heartbeat/touch primitive、Cloud Run worker entry/runbookを実装し、実DB Postgres focused testも通過済み。残りはtrue mid-LLM heartbeat方針、後段stageの安全なstuck扱い |
+| P2-09 | 一部完了 | POST系API/HTML actionにIdempotency-Keyまたはjob input hashを導入し、二重送信・リロード・worker再試行時の挙動を固定する。job作成、`run-mock`、`run-openrouter`、source保存、Google source取得、artifact保存、validation保存、feedback保存、編集後Markdown保存、source summary、approval保存、HTML export作成、distribution package固定の冪等性を実装し、Google取得の同一キー再送では外部APIを再実行しないfocused testも追加済み。approval/export/distributionは同一プロセス内の同一key同時実行をlockし、Postgres永続化用 `monthly_report_idempotency_keys` migration/storeとHTML hidden keyも追加済み。残りはCloud Run複数インスタンスでのapproval/export/distribution完全atomic化、worker再試行時の成果物単位hash upsert |
+| P2-10 | 一部完了 | Cloud Run worker本番化に向け、lease timeout、heartbeat/updated_at、stuck job再claim、retry上限、手動再実行、協調的キャンセルを実装・テストする。worker実行結果サマリ、provider実行前キャンセル境界、worker attempt/max attempt、lease timeout後のstale `running/fetch_sources` reclaim、retryable failureのqueued復帰、worker heartbeat/touch primitive、lease指定時のprovider call中best-effort heartbeat、Cloud Run worker entry/runbookを実装し、実DB Postgres focused testも通過済み。後段stageは自動再claimしない方針をfocused testで固定し、stale後段jobはPII-safeな `manual_recovery_required` summaryと非0終了で検知する。手動回復runbookは、検知、安全確認、retry/requeue/cancel判断、監査、保持削除との相互作用、エスカレーションまで `security-operations.md` に具体化済み。2026-05-18にCloud Run Jobsの作成/更新/実行コマンド例、必要env/secret、期待JSON summary、`no_job`/`failed`/`manual_recovery_required` の判定、GitHub Actions manual HTTP smokeとの役割分担を追記済み。2026-05-19にworker jobをimage `asia-northeast1-docker.pkg.dev/gen-lang-client-0360012476/monthly-report-workshop/monthly-report-workshop:01c993a-templatefix-20260519` へ再deployし、smoke execution `monthly-report-worker-staging-fpfks` が成功。追加で、stuck `running` job を `manual_recovery_required` で閉じる admin-only JSON route `POST /api/monthly-reports/jobs/{job_id}/manual-recovery/fail` を実装し、PII-safe audit log を残す最小の管理操作入口を用意した。残りは Cloud Monitoring の worker failed / manual recovery / stale job alert policy 作成、通知先設定、runbookへの運用導線固定、必要なら管理操作入口の拡張 |
 | P2-11 | 一部完了 | Google Docs/Sheets由来のプロンプトインジェクション、内部メモ露出、送付禁止語、対象外生徒混入の検証を拡充する。明示的なプロンプトインジェクション文言、内部/管理メモ露出、`Gemini メモ` / `Google Meetメモ` / Google生成メモ系配布面メタ語彙のsanitizationをfocused testで固定済み。残りはE2Eサンプルを増やした語彙variant追加と承認ゲート連動 |
-| P2-12 | 未着手 | 保持期間削除ジョブを設計・実装し、ドライラン件数確認、削除後確認、監査ログ、OAuth credential削除runbookを含める |
-| P2-13 | 未着手 | GitHub Actionsにmigration適用チェック、RLS/static schemaチェック、Cloud Run smoke test手順を追加する |
-| P2-14 | 未着手 | Cloud Run/OpenRouter/Google API/job failed率/429/CSRF拒否/費用上限の監視・アラートを設計する |
+| P2-12 | 一部完了 | 保持期間削除ジョブを設計・実装し、ドライラン件数確認、削除後確認、監査ログ、OAuth credential削除runbookを含める。第一弾として `src/eb_app/monthly_reports/retention.py` にDB非依存のplanner/executor、Postgres用repository、dry-run/delete監査ログmetadataを追加し、unit testで外部Secretなしに対象件数・削除順・PIIを含まない監査metadataを固定済み。追加で `src/eb_app/monthly_reports/retention_entry.py` にCloud Run Jobs向けentryを追加し、既定dry-run、JSON summary、DB URL不足/失敗時非0、PII-safe出力をsecret不要unit testで固定済み。2026-05-18に `--delete` は `--confirm-total-eligible-count` 必須へ強化し、削除直前dry-runの総対象件数と一致しない場合は非破壊で終了する契約をfocused testで固定済み。残りは実DBでの削除後確認、OAuth credential削除の管理操作入口、Storage移行後のobject削除連動 |
+| P2-13 | 済 | GitHub Actionsにmigration/static schema/RLS guardrailを追加済み。既定のPR/pushでは実Secret・Supabase Docker不要で静的SQLチェックとfocused pytestを実行する。Cloud Run serviceのHTTP smokeは `workflow_dispatch` + `run_cloud_run_smoke=true` の手動実行に限定し、repository secret `CLOUD_RUN_SMOKE_URL` と任意の `CLOUD_RUN_SMOKE_BEARER_TOKEN` を使う。Cloud Run Jobs worker smokeはActionsではなく運用者の手動実行として扱い、PII-safe summaryと終了コードを検証ログに残す。2026-05-19に `/health` 200、未認証 `/monthly-reports/jobs` 401、`/auth/google` 200のstaging service smoke、worker smoke execution `monthly-report-worker-staging-fpfks`、seeded real Google OAuth refresh token による staging API live E2E success を確認し、[production-promotion-checklist.md](production-promotion-checklist.md) を追加済み。`/healthz` はCloud Run予約URL挙動でGoogle Frontend HTML 404になるため、staging/prod smoke対象外。ブラウザ `/auth/google` 実同意確認は app 未達成項目ではなく、client-side blocker 解消後の追加確認として別管理に切り分ける |
+| P2-14 | 一部完了 | Cloud Run 5xx/timeout/latency/memory、worker failed/stuck/retry、OpenRouter token/cost/error、Google API quota/OAuth refresh失敗、429/CSRF/403 spike、budget guardrailのMVP監視runbookを `security-operations.md` に追加済み。2026-05-18に第二弾として `src/eb_app/monthly_reports/observability.py` へsecret-freeなログベースmetric定義と日次token/cost summary contractを追加し、metric名・label・filter、alert threshold、budget guardrail停止手順を文書で固定した。2026-05-19時点で staging の worker smoke execution `monthly-report-worker-staging-fpfks` を監視配線前の正常系基準として残し、`manual_recovery_required` と stale fetch_sources を alert policy で検知して `security-operations.md` / `staging-deploy-runbook.md` の runbook へ遷移する前提を固定した。残りはCloud Monitoring alert policy実作成、日次集計job/SQL、quota dashboard、新規OpenRouter実行停止feature flagまたは管理操作入口 |
 
 ## Phase 3 タスク
 
 | ID | 状態 | タスク |
 |---|---|---|
-| P3-01 | 一部完了 | 編集後Markdown保存。通常UI詳細画面にHTMX保存フォームとbackend routeを追加し、`final_markdown` artifact保存とpreview fragment更新をfocused testで固定済み。最新artifact prefillは後続 |
-| P3-02 | 一部完了 | 再生成API/UI。通常UI詳細画面にHTMX再生成フォームとbackend routeを追加し、新しいqueued jobのstatus fragment返却をfocused testで固定済み。再現性メタ比較表示、差分表示は後続 |
-| P3-03 | 未着手 | 管理者向けprompt/model override |
-| P3-04 | モック着手 | 現行HTML全文エディタ由来のiframe編集領域と1行ツールバー |
-| P3-05 | モック着手 | HTMLソース直接編集 |
-| P3-06 | モック着手 | HTMLエクスポート |
-| P3-07 | モック着手 | ファイル保存・ファイルから開く |
-| P3-08 | モック着手 | 送付エクスポート |
-| P3-09 | 未着手 | 生成物と最終編集後HTML/Markdownの簡易テキスト差分表示 |
-| P3-10 | 未着手 | Playwrightによるエディタ体験・保存・差分・送付エクスポートE2E |
-| P3-11 | 未着手 | 既存静的プレビュー経路との接続 |
-| P3-12 | 未着手 | 生成成功、検証OK、編集保存済み、承認済み、送付/エクスポート済みを分ける人間承認ゲートを実装する |
-| P3-13 | 未着手 | 複数タブ編集、保存競合、HTMX polling失敗、長時間生成中のリロード復帰をUI仕様・Playwrightで確認する |
-| P3-14 | 一部完了 | Tailwind CSS + DaisyUIのUIコンポーネント標準化。第一弾としてalert/status/validation/feedback/sources/preview fragmentsをDaisyUI `alert` / `badge` / `table` / `prose` 中心へ整理済み。残りはジョブ一覧、新規作成、detail page本体、approvalをtable/form/steps/modal中心へ整理する |
+| P3-01 | 一部完了 | 編集後Markdown保存。通常UI詳細画面にHTMX保存フォームとbackend routeを追加し、`final_markdown` artifact保存とpreview fragment更新をfocused testで固定済み。`draft_markdown` / `final_markdown` は引き続き再現性・差分・承認基準のための中間成果物として保持する。一方で、通常運用ユーザーにMarkdown直編集を要求しない方針へ切り替え、詳細画面では配布面プレビューを主領域、Markdown保存は補助領域へ降ろした。保存競合と複数タブの古い保存拒否はfocused/Playwrightで固定済み。running中はページを閉じても処理継続/自動更新/再読み込み復元の案内を出し、後段stageで長時間heartbeatがない場合はworker runbook確認を促す。残りは保存後の次アクション導線、running復帰表示のPlaywright確認、HTML主編集面との接続整理 |
+| P3-02 | 一部完了 | 再生成API/UI。通常UI詳細画面にHTMX再生成フォームとbackend routeを追加し、新しいqueued jobの作成通知と新ジョブ詳細リンクを専用panelへ返す。admin再生成override時も新しいqueued jobを作成する。さらに `rerun-comparison` fragmentで元/比較先ジョブの再現性メタを横並び表示し、同一世帯/同一ユーザーの比較候補をdatalistで選べる。`rerun-diff` fragmentでは元/比較先ジョブの最新Markdown同士を行単位で比較し、自己完結Playwrightにも接続済み。backend側でもactive job再生成拒否、同一世帯比較制約、Markdown専用diff、同一Idempotency-Key二重送信ロックをfocused testで固定済み。残りは比較結果の見た目調整と実Google取得を含むライブE2E |
+| P3-03 | 一部完了 | 管理者向けprompt/model override。新規ジョブ作成UIと再生成フォームにadmin限定の `prompt_version` / `model_report` / `model_light` 入力欄を追加し、一般ユーザーには非表示かつフォーム投稿値も破棄するfocused testを追加。比較fragmentで変更メタを確認可能。残りはadmin設定画面 |
+| P3-04 | 一部完了 | 現行HTML全文エディタ由来のiframe編集領域と1行ツールバー。第一弾としてHTMLソース編集fragmentにsandbox iframeプレビューと簡易ツールバーを追加し、export済みHTMLを同じ画面で確認できる。主編集対象はMarkdownではなくHTML/配布面側に寄せる。残りはiframe内直接編集、書式ツールバー、プレビュー更新の操作性改善 |
+| P3-05 | 一部完了 | HTMLソース直接編集。`GET /monthly-reports/jobs/{job_id}/fragments/html-source` で最新 `export_html` artifactをtextarea表示し、未export時はHTML断片でブロック理由を返す。`POST /fragments/html-source` はCSRF、RLS read preflight、Idempotency-Key、非空本文、最新export hash一致を要求し、編集済みHTMLを新しい `export_html` artifactとして保存する。Markdownは生成安定化用の中間成果物として残しつつ、最終的な人手修正導線はHTML側へ集約する。残りはHTMLプレビューとの並列表示、差分、ファイル保存/送付導線との接続 |
+| P3-06 | 一部完了 | HTMLエクスポート。`GET /monthly-reports/jobs/{job_id}/fragments/export` とdetail panel、`POST /fragments/export` を追加済み。現行承認がある場合のみ最新配布artifactから `export_html` artifactを作成し、未承認、validation errorあり、承認対象hash不一致ではHTML error fragmentを返す。Idempotency-Keyで二重作成を防ぐ。残りは既存静的プレビュー相当のHTML体裁、ファイル保存/送付エクスポートとの接続 |
+| P3-07 | 一部完了 | ファイル保存・ファイルから開く。第一弾として最新 `export_html` artifactをHTML attachmentとして保存する `/download/export-html` を追加し、通常UIの送付/配布panelからリンクできる。残りはファイルから開く、ローカル保存名のUI調整、PDF/ZIPなど配布形式 |
+| P3-08 | 一部完了 | 送付エクスポート。第一弾として承認済みHTML exportを `distribution_package` artifactとして固定するHTMX fragment/actionを追加。実メール送信は行わず、手動送付用の監査可能な成果物を残す。残りは送付先管理、メール/外部送信、送付履歴、差戻し |
+| P3-09 | 一部完了 | 生成物と最終編集後HTML/Markdownの簡易テキスト差分表示。依存なしの行単位Markdown diff helper、`GET /monthly-reports/jobs/{job_id}/fragments/diff`、detail画面の差分panelを追加し、`unchanged` / `added` / `removed` の構造化行とHTML escaped済みplain text payload、draft/final不足時のHTML表示をfocused testで固定済み。残りはHTML exportとの差分、再生成job間比較、Playwright連続E2E |
+| P3-10 | 済 | Playwrightによるエディタ体験・保存・差分・送付エクスポートE2E。第一弾として `tests/test_monthly_report_playwright_smoke.py` を追加し、ローカル実サーバのdetail画面で押せる/押せない制御、required、Google source表示、sheet-selectorを確認できる。第二弾としてsecret不要の自己完結ローカルPlaywrightで、detail page → 手動ソース保存 → mock生成 → final Markdown保存 → 承認 → HTML exportまで通過済み。第三弾として送付用 `distribution_package` 固定と `rerun-comparison` 比較フォーム送信まで拡張。第四弾としてリロード後のstatus/final preview/承認/export/distribution復元を確認。第五弾として `rerun-diff` の本文差分フォーム送信まで確認。第六弾として実Google/source summaryの通常UIライブsmokeと、実Google Docs/Sheets + 実OpenRouterのAPIライブE2Eを2026-05-18に確認済み。第七弾として通常UIの「取得してレポート生成」から実Google Docs/Sheets取得、OpenRouter生成、プレビュー反映、operation log/validation復元表示まで確認済み。2026-05-19にstaging service smoke、worker smoke、seeded real Google OAuth refresh token による staging API live E2Eが完了し、done条件に含めていた検証ログ記録も揃った。ブラウザ `/auth/google` 実同意確認は client-side blocker 解消後の追加確認として別管理に切り分ける |
+| P3-11 | 一部完了 | 既存静的プレビュー経路との接続。`docs/samples/monthly-reports/tools/monthly_report_full_editor.html` を `/monthly-reports/legacy-full-editor` から同一オリジンで提供し、HTMLソース編集パネルから開ける互換リンクを追加。さらに `/monthly-reports/jobs/{job_id}/legacy-full-editor` で最新 `export_html` artifactを既存全文エディタのlocalStorageへ投入して開けるbridgeを追加。残りは既存サンプルmanifestとの対応付け、静的プレビューとの差分吸収、編集後の工房再取込 |
+| P3-12 | 済 | 生成成功、検証OK、編集保存済み、承認済み、送付/エクスポート済みを分ける人間承認ゲートを実装する。`GET /monthly-reports/jobs/{job_id}/fragments/approval` とdetail panel、`POST /fragments/approval` を追加済み。最新 `final_markdown` 優先の承認対象artifact hash、validation/生成状態のブロック理由、承認保存、配布artifact更新後の再承認必須表示をHTML断片で返す。2026-05-18に detail 画面へ `承認 -> HTMLエクスポート -> 送付用固定` の一本道ガイドと、各fragmentの「次の操作」案内を追加済み。2026-05-19に approval / export / HTML source edit / distribution package の server-side 監査ログを追加し、artifact write はRLS write store・audit は direct store で分離した。さらに管理者/一般ユーザーのチューニング欄表示差分を self-contained Playwright で固定し、承認/export/distribution の状態遷移は focused + Playwright で通過済み |
+| P3-13 | 一部完了 | 複数タブ編集、保存競合、HTMX polling失敗、長時間生成中のリロード復帰をUI仕様・Playwrightで確認する。第一弾として編集Markdown保存の `base_content_hash` が提示されており、かつ最新preview artifact hashと一致しない場合は409で拒否し、同じIdempotency-Key再送は初回結果を返すfocused testを追加。承認/export/html source/distributionは定期pollingではなく `monthly-report-refresh` イベント更新にして入力中の再描画消失を避ける。さらに `htmx:responseError` / `sendError` / `timeout` を共通エラーバナーで表示し、自己完結Playwrightでリロード後の操作状態復元、複数タブの古い保存拒否、running中の復帰案内、stale後段stageのworker runbook案内まで確認済み。残りはエラー通知の見た目調整 |
+| P3-14 | 一部完了 | Tailwind CSS + DaisyUIのUIコンポーネント標準化。第一弾としてalert/status/validation/feedback/sources/preview fragmentsをDaisyUI `alert` / `badge` / `table` / `prose` 中心へ整理済み。2026-05-19に detail 画面の workflow board / summary / quick nav / operation log / sources / preview / validation / approval / advanced compare / distribution の連続 UI 確認を self-contained Playwright で追加し、主要パネルの空状態・再読込復元・HTML fragment 更新が崩れないことを確認した。さらに同日に `jobs.html` / `new.html` / `fragments/approval.html` を detail ページ寄りの骨格へ寄せ、一覧の役割説明、作成画面の進行ガイド、承認状態の要約を追加し、`detail.html` の生成操作・ソース登録・フィードバック周辺も共通ボタン/フォームクラスへ寄せた。2026-05-20時点で、Markdown編集を主領域に置く暫定ワークベンチから、配布面プレビューとHTML側導線を主とし、Markdownを補助領域へ下げる方向へ方針転換した。残りは detail page本体と approval/export 周辺の見た目統一、HTML主編集面の操作性改善 |
 
 ## 現時点の検証
 
-| 日付 | コマンド | 結果 |
+詳細な検証コマンド履歴は [verification-log.md](verification-log.md) を正とする。開発計画本文では、次の判断に必要な代表値だけを残す。
+
+| 区分 | 最新の代表結果 | 意味 |
 |---|---|---|
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py -q` | 43 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py -q` | 56 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `EB_MONTHLY_REPORT_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:56322/postgres pytest tests/test_monthly_report_postgres_store.py tests/test_monthly_report_api_postgres.py -q` | 3 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_monthly_report_api.py tests/test_monthly_report_backend.py -q` | 26 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `EB_MONTHLY_REPORT_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:56322/postgres pytest tests/test_monthly_report_postgres_store.py tests/test_monthly_report_api_postgres.py -q` | 5 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_monthly_report_schema_files.py -q` | 3 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `EB_MONTHLY_REPORT_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:56322/postgres pytest tests/test_monthly_report_postgres_store.py tests/test_monthly_report_api_postgres.py -q` | 5 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py -q` | 60 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_monthly_report_api.py -q` | 14 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `EB_MONTHLY_REPORT_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:56322/postgres pytest tests/test_monthly_report_postgres_store.py -q` | 4 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `EB_MONTHLY_REPORT_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:56322/postgres pytest tests/test_monthly_report_api_postgres.py -q` | 3 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_monthly_report_api.py -q` | 15 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `EB_MONTHLY_REPORT_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:56322/postgres pytest tests/test_monthly_report_postgres_store.py -q` | 5 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `EB_MONTHLY_REPORT_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:56322/postgres pytest tests/test_monthly_report_api_postgres.py -q` | 3 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_monthly_report_api.py -q` | 24 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_monthly_report_backend.py tests/test_monthly_report_api.py -q` | 28 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `EB_MONTHLY_REPORT_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:56322/postgres pytest tests/test_monthly_report_postgres_store.py tests/test_monthly_report_api_postgres.py -q` | 8 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_mock_ui.py -q` | 25 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_monthly_report_llm_messages.py -q` | 2 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_monthly_report_schema_files.py -q` | 32 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `EB_MONTHLY_REPORT_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:56322/postgres pytest tests/test_monthly_report_postgres_store.py tests/test_monthly_report_api_postgres.py -q` | 8 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_llm_messages.py -q` | 68 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `python scripts/monthly_report_draft_openrouter.py --help` | CLIが共通 `llm_messages` モジュールをimportできることを確認 |
-| 2026-05-14 | `pytest tests/test_monthly_report_workflow.py -q` | 4 passed。provider mock通電とOpenRouter provider HTTPモックを確認 |
-| 2026-05-14 | `pytest tests/test_monthly_report_workflow.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_monthly_report_llm_messages.py -q` | 33 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_llm_messages.py tests/test_monthly_report_workflow.py -q` | 73 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `POST /api/monthly-reports/jobs/{job_id}/run-openrouter` via TestClient + `.env` | OpenRouter実provider通電成功。`status=succeeded`, `draft_markdown` 1件, validation info 1件。キーと本文全文は出力せず |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_llm_messages.py tests/test_monthly_report_workflow.py -q` | 79 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_monthly_report_backend.py tests/test_monthly_report_workflow.py tests/test_monthly_report_api.py -q` | 38 passed。LLMログ保存と取得APIを確認 |
-| 2026-05-14 | `EB_MONTHLY_REPORT_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:56322/postgres pytest tests/test_monthly_report_postgres_store.py tests/test_monthly_report_api_postgres.py -q` | 9 passed。Postgres `llm_call_logs` 保存を確認 |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_llm_messages.py tests/test_monthly_report_workflow.py -q` | 80 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_monthly_report_llm_messages.py tests/test_monthly_report_fixtures.py -q` | 4 passed。Economics 複数生徒MTGの匿名化フィクスチャと `prompt_scope_notes` のプロンプト挿入順を確認 |
-| 2026-05-14 | `pytest tests/test_monthly_report_backend.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_api.py -q` | 42 passed。worker claim境界、claim済みjob実行、API既存経路を確認 |
-| 2026-05-14 | `EB_MONTHLY_REPORT_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:56322/postgres pytest tests/test_monthly_report_postgres_store.py tests/test_monthly_report_api_postgres.py -q` | 10 passed。Postgres `FOR UPDATE SKIP LOCKED` claim境界を確認 |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_llm_messages.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_fixtures.py -q` | 86 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_monthly_report_workflow.py -q` | 8 passed。`multistudent_scope_exclusion` 第一弾を確認 |
-| 2026-05-14 | `pytest tests/test_monthly_report_backend.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_api.py -q` | 43 passed。複数生徒混入検知追加後もAPI/worker focusedが通過 |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_llm_messages.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_fixtures.py -q` | 87 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_monthly_report_workflow.py -q` | 9 passed。`required_headings` 第一弾を確認 |
-| 2026-05-14 | `pytest tests/test_monthly_report_backend.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_api.py -q` | 44 passed。必須見出し検証追加後もAPI/worker focusedが通過 |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_llm_messages.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_fixtures.py -q` | 88 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_monthly_report_workflow.py -q` | 10 passed。`forbidden_terms` 第一弾を確認 |
-| 2026-05-14 | `pytest tests/test_monthly_report_backend.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_api.py -q` | 45 passed。禁止語検証追加後もAPI/worker focusedが通過 |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_llm_messages.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_fixtures.py -q` | 89 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_monthly_report_google_workspace.py -q` | 5 passed。Google Workspace REST APIクライアント、ID抽出、Docs/Sets取得、token非露出エラーを確認 |
-| 2026-05-14 | `pytest tests/test_monthly_report_google_workspace.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py -q` | 52 passed。GWS取得API追加後もbackend/API/worker focusedが通過 |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_llm_messages.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_fixtures.py tests/test_monthly_report_google_workspace.py -q` | 96 passed。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `EB_MONTHLY_REPORT_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:56322/postgres pytest tests/test_google_oauth_credentials.py tests/test_monthly_report_postgres_store.py tests/test_monthly_report_api_postgres.py -q` | 16 passed。Postgres `google_oauth_credentials` への暗号化refresh token upsertを確認 |
-| 2026-05-14 | `pytest tests/test_google_oauth_credentials.py tests/test_monthly_report_google_workspace.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py -q` | 58 passed, 1 skipped。OAuth/GWS/API/backend/worker focusedが通過 |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_llm_messages.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_fixtures.py tests/test_monthly_report_google_workspace.py tests/test_google_oauth_credentials.py -q` | 102 passed, 1 skipped。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_auth_google_oauth.py -q` | 3 passed。Google provider refresh token保存APIの設定チェック、認証必須、保存呼び出しを確認 |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_auth_google_oauth.py tests/test_google_oauth_credentials.py tests/test_monthly_report_google_workspace.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py -q` | 72 passed, 1 skipped。Auth/OAuth/GWS/API/backend/worker focusedが通過 |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_auth_google_oauth.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_llm_messages.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_fixtures.py tests/test_monthly_report_google_workspace.py tests/test_google_oauth_credentials.py -q` | 105 passed, 1 skipped。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_auth_google_oauth.py -q` | 5 passed。Google provider refresh token保存APIに加え、Supabase session保存ブリッジのuser id一致/不一致を確認 |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_auth_google_oauth.py tests/test_google_oauth_credentials.py tests/test_monthly_report_google_workspace.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py -q` | 74 passed, 1 skipped。Auth/OAuth/GWS/API/backend/worker focusedが通過 |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_auth_google_oauth.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_llm_messages.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_fixtures.py tests/test_monthly_report_google_workspace.py tests/test_google_oauth_credentials.py -q` | 107 passed, 1 skipped。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-14 | `pytest tests/test_auth_mock.py::test_monthly_report_api_accepts_supabase_jwt_user tests/test_auth_mock.py::test_monthly_report_api_rejects_supabase_jwt_wrong_domain tests/test_auth_mock.py::test_monthly_report_api_rejects_invalid_supabase_jwt tests/test_auth_mock.py::test_monthly_report_api_requires_supabase_jwt_secret_when_token_is_present -q` | 4 passed。Supabase JWT検証、ドメイン制限、secret未設定時503を確認 |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_auth_google_oauth.py tests/test_google_oauth_credentials.py tests/test_monthly_report_google_workspace.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py -q` | 78 passed, 1 skipped。Supabase JWT検証追加後もAuth/OAuth/GWS/API/backend/worker focusedが通過 |
-| 2026-05-14 | `pytest tests/test_auth_mock.py tests/test_auth_google_oauth.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_llm_messages.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_fixtures.py tests/test_monthly_report_google_workspace.py tests/test_google_oauth_credentials.py -q` | 111 passed, 1 skipped。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-15 | `pytest tests/test_monthly_report_pii_safety.py -q` | 4 passed。OpenRouter/GWS/OAuth/validation失敗時のPII/secret外向きエラー抑止を確認 |
-| 2026-05-15 | `pytest tests/test_auth_mock.py tests/test_auth_google_oauth.py tests/test_monthly_report_pii_safety.py -q` | 27 passed。Supabase session adapterとPII/secret抑止のfocusedが通過 |
-| 2026-05-15 | `pytest tests/test_auth_mock.py tests/test_auth_google_oauth.py tests/test_monthly_report_pii_safety.py tests/test_google_oauth_credentials.py tests/test_monthly_report_google_workspace.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py -q` | 85 passed, 1 skipped。PII/Auth/OAuth/GWS/API/backend/worker focusedが通過 |
-| 2026-05-15 | `pytest tests/test_monthly_report_api.py::test_monthly_report_api_uses_supabase_user_as_owner_and_filters_other_users -q` | 1 passed。非mock環境でJWT subをownerにし、他ユーザーの一覧・詳細・操作から隠すことを確認 |
-| 2026-05-15 | `pytest tests/test_monthly_report_api.py -q` | 22 passed。所有者アクセス制限追加後も月次レポートAPI focusedが通過 |
-| 2026-05-15 | `pytest tests/test_auth_mock.py tests/test_auth_google_oauth.py tests/test_monthly_report_pii_safety.py tests/test_google_oauth_credentials.py tests/test_monthly_report_google_workspace.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py -q` | 86 passed, 1 skipped。所有者アクセス制限追加後もPII/Auth/OAuth/GWS/API/backend/worker focusedが通過 |
-| 2026-05-15 | `pytest tests/test_monthly_report_schema_files.py -q` | 5 passed。RLS有効化と所有者policyのmigration静的テストが通過 |
-| 2026-05-15 | `EB_MONTHLY_REPORT_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:56322/postgres pytest tests/test_google_oauth_credentials.py tests/test_monthly_report_postgres_store.py tests/test_monthly_report_api_postgres.py -q` | 16 passed。RLS migration追加後もPostgres store/API focusedが通過 |
-| 2026-05-15 | `pytest tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_auth_mock.py tests/test_auth_google_oauth.py tests/test_monthly_report_pii_safety.py -q` | 54 passed。schema/API/Auth/PII focusedが通過 |
-| 2026-05-15 | `pytest tests/test_monthly_report_cloud_logging.py -q` | 4 passed。Cloud Logging向け構造化ログallowlistとworkflowのprovider/validation失敗ログがPII/secretを含まないことを確認 |
-| 2026-05-15 | `pytest tests/test_monthly_report_cloud_logging.py tests/test_monthly_report_pii_safety.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_api.py -q` | 42 passed。Cloud Logging/PII/workflow/API focusedが通過 |
-| 2026-05-15 | `pytest tests/test_monthly_report_cloud_logging.py tests/test_monthly_report_pii_safety.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_api.py tests/test_auth_mock.py tests/test_auth_google_oauth.py -q` | 65 passed。Cloud Logging/PII/workflow/API/Auth focusedが通過 |
-| 2026-05-16 | `pytest tests/test_monthly_report_html_ui.py -q` | 3 passed。通常UIのHTML page/action/status fragment境界を確認。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-16 | `pytest tests/test_monthly_report_html_ui.py tests/test_monthly_report_api.py tests/test_mock_ui.py -q` | 50 passed。HTML UI追加後もJSON APIとmock UIのfocusedが通過。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-17 | `pytest tests/test_monthly_report_recipe_conversion.py tests/test_monthly_report_html_ui.py tests/test_monthly_report_api.py tests/test_monthly_report_llm_messages.py -q` | 48 passed。静的レシピ `prompts.scope_reminder` → `prompt_scope_notes` 変換、HTML手入力保存、API、LLM message挿入順を確認 |
-| 2026-05-16 | `pytest tests/test_monthly_report_html_ui.py -q` | 4 passed。HTML actionのCSRF token必須化を確認。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-16 | `pytest tests/test_auth_mock.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_html_ui.py -q` | 86 passed。HTML UI/CSRF追加後もauth/schema/API/backend/mock focusedが通過。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-16 | `pytest tests/test_monthly_report_html_ui.py -q` | 8 passed。通常UIの生成開始、preview、validation、feedback HTML fragmentとCSRF境界を確認。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-16 | `pytest tests/test_monthly_report_html_ui.py tests/test_monthly_report_api.py tests/test_mock_ui.py -q` | 55 passed。HTML fragment拡張後もJSON APIとmock UIのfocusedが通過。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-17 | `pytest tests/test_monthly_report_html_ui.py -q` | 19 passed。通常HTML UIのソース確認/手動保存/Google取得fragment、Google取得設定不足/秘匿エラー、CSRF拒否/Secure cookie/複数タブtoken再利用、モック生成/OpenRouter生成完了導線、status=succeeded、preview artifact、validation fragment、再現性メタ保存を確認 |
-| 2026-05-17 | `pytest tests/test_auth_mock.py tests/test_monthly_report_google_workspace.py tests/test_monthly_report_worker.py tests/test_monthly_report_workflow.py tests/test_monthly_report_api.py tests/test_monthly_report_html_ui.py tests/test_mock_ui.py -q` | 105 passed。HTML UI Google取得/OpenRouter生成、CSRF hardening、Auth/API/worker/workflow/mock UI focusedが通過 |
-| 2026-05-17 | `pytest tests/test_monthly_report_prompt_versions.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_api.py::test_monthly_report_api_run_openrouter_fills_missing_reproducibility_meta -q` | 32 passed。P0-03の `monthly-report-vYYYYMMDD.N` 検証、静的レシピID/template_hash/Git SHA/app versionメタデータ対応付け、既存workflow/worker/API再現性メタ経路の回帰なしを確認 |
-| 2026-05-17 | `pytest tests/test_supabase_user_client.py -q` | 3 passed。ユーザーJWT付きSupabase anon client生成、設定不足503、access token不足401を確認 |
-| 2026-05-17 | `EB_MONTHLY_REPORT_DATABASE_URL=... pytest tests/test_monthly_report_rls_postgres.py -q` | 3 passed。Postgres `authenticated` role + `request.jwt.claim.sub` でRLSを評価し、job/source所有者filter、他ユーザー名義insert拒否、audit_logs非公開を確認 |
-| 2026-05-17 | `pytest tests/test_auth_mock.py tests/test_supabase_user_client.py -q` | 21 passed。CurrentUser access_token追加後も既存Supabase JWT/Mock認証テストが通過 |
-| 2026-05-17 | `EB_MONTHLY_REPORT_DATABASE_URL=... pytest tests/test_monthly_report_rls_postgres.py tests/test_monthly_report_schema_files.py -q` | 8 passed。RLS migration静的確認と実DB RLS評価テストが通過 |
-| 2026-05-16 | `pytest tests/test_monthly_report_api.py::test_monthly_report_api_run_openrouter_fills_missing_reproducibility_meta -q` | 1 passed。`/run-openrouter` 実行時に欠けていた `prompt_version`, `model_report`, `app_version` を設定由来で書き戻し、`template_hash`, `source_bundle_hash`, `resolved_model_report` もレスポンス/詳細でnullにならないことを確認 |
-| 2026-05-16 | `pytest tests/test_monthly_report_api.py tests/test_monthly_report_html_ui.py tests/test_mock_ui.py -q` | 56 passed。P1-17第一弾後もAPI/HTML UI/mock UI focusedが通過。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-16 | `pytest tests/test_monthly_report_workflow.py tests/test_monthly_report_backend.py -q` | 26 passed。workflow/backend focusedが通過。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-16 | `pytest tests/test_monthly_report_worker.py::test_run_next_queued_monthly_report_job_fills_missing_reproducibility_meta -q` | 1 passed。claimed worker経路で `prompt_version`, `model_report`, `app_version` を注入し、`template_hash`, `source_bundle_hash`, `resolved_model_report` とともにジョブへ残ることを確認 |
-| 2026-05-16 | `pytest tests/test_monthly_report_worker.py tests/test_monthly_report_workflow.py tests/test_monthly_report_api.py -q` | 37 passed。P1-17 worker経路追加後もworker/workflow/API focusedが通過。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-16 | `pytest tests/test_auth_mock.py tests/test_monthly_report_api.py -q` | 37 passed。ES256/JWKS分岐をdependencies.pyへ追加後、HS256既存テストが回帰なしで通過 |
-| 2026-05-16 | `pytest tests/test_auth_mock.py -q` | 18 passed。ES256/RS256 JWKS token、JWKS設定不足503、HS256既存token検証をfocused testで確認。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-16 | `pytest tests/test_auth_mock.py tests/test_monthly_report_api.py -q` | 41 passed。JWKS focused追加後も月次レポートAPI所有者境界を含むAuth/API focusedが通過。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-16 | ブラウザ実E2E（uvicorn 127.0.0.1:8000 + ローカル Supabase 127.0.0.1:56321 + 実Google OAuth） | Google ログイン→`/auth/callback` 表示 `credential_id=goc_c77721c7f4c44619af79b0aa8142c687` / Postgres `google_oauth_credentials` 行追加（user_id=`ab8bafb6-...`, scope全部入り, encryption_key_version=`local-v1`, 暗号文228byte）。続けて `/monthly-report-workshop/e2e` で 1ジョブ作成→`fetch-google-sources` 空sources→`run-openrouter`（OpenRouter `anthropic/claude-4.6-sonnet-...`, 10,750入力/225出力token, 5.8s）→`validation_failed`（`required_headings` ルール）→`monthly_report_validations` 1行記録→`llm_call_logs` 1行記録（hashのみ） |
-| 2026-05-17 | ブラウザ実E2E **初 succeeded**（実 Google Docs + 実 OpenRouter + 決定論的バリデーション） | job `mrj_aa9c...` が `status=succeeded`。`template_hash`, `source_bundle_hash`, `resolved_model_report`, `model_report`, `prompt_version`, `app_version` すべて非null。`forbidden_terms_sanitized` info で `担当CA→担当` 自動置換を記録。`non_empty_markdown` info OK。artifacts に `draft_markdown`（content_hash `sha256:b8ee...`）1件保存。llm_calls: `anthropic/claude-4.6-sonnet-20260217` 実呼び出し, 15,171入力/4,014出力token, 81s。広林様フィジックス月次レポートの構造（01〜07、推敲ログ、人間チェックリスト）を生成。 |
-| 2026-05-17 | APIライブE2E（実 Google Docs/Sheets + 保存済みGoogle OAuth + 実 OpenRouter） | job `mrj_529b2fe35c874c99a2325946859dfae3` が `status=succeeded`。Google source 3件保存、`resolved_model_report=anthropic/claude-4.6-sonnet-20260217`、`prompt_version` / `template_hash` / `source_bundle_hash` 非null。artifacts 1件、validations 2件、llm_calls 1件（hashのみ）を確認。 |
-| 2026-05-17 | E2E画面ライブ成功サンプル（RLS/Google OAuth/OpenRouter） | job `mrj_2b15b194636a4457b590e3ef73afa5b2` が `status=succeeded`。Google Doc source 1件、artifact `draft_markdown` 1件、validation info 2件（`forbidden_terms_sanitized`, `non_empty_markdown`）、llm_call_logs 1件を保存。`prompt_version=monthly-report-v20260517.1`、`template_hash` / `source_bundle_hash` 非null、`model_report=anthropic/claude-sonnet-4.6`、`resolved_model_report=anthropic/claude-4.6-sonnet-20260217`、`app_version=local-dev`。成果物内の `Gemini メモ` 系配布語彙は後続P2-11 tuningへ回す |
-| 2026-05-17 | `pytest tests/test_auth_mock.py tests/test_auth_google_oauth.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_llm_messages.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_fixtures.py tests/test_monthly_report_google_workspace.py tests/test_google_oauth_credentials.py tests/test_monthly_report_pii_safety.py tests/test_monthly_report_cloud_logging.py tests/test_monthly_report_html_ui.py tests/test_monthly_report_prompt_versions.py tests/test_monthly_report_recipe_conversion.py tests/test_supabase_user_client.py tests/test_monthly_report_validation_safety.py -q` | **179 passed, 1 skipped**。RLS read store移行、Phase 2 CI対象suite、プロンプトインジェクション/内部メモ露出validationを含むmock focusedが通過 |
-| 2026-05-17 | `EB_MONTHLY_REPORT_DATABASE_URL=... pytest tests/test_monthly_report_rls_postgres.py tests/test_monthly_report_schema_files.py -q` | **8 passed**。実DB RLS評価とRLS migration静的確認が通過 |
-| 2026-05-17 | `pytest tests/test_monthly_report_api.py tests/test_monthly_report_html_ui.py -q` | **58 passed**。source保存/Google source取得のJSON API・HTMX action冪等性、RLS read preflight、DaisyUI fragment標準化後のHTML UIが通過 |
-| 2026-05-17 | `pytest tests/test_monthly_report_api.py tests/test_monthly_report_html_ui.py tests/test_monthly_report_worker.py tests/test_monthly_report_worker_entry.py -q` | **83 passed**。source保存/Google source取得/feedback保存/生成開始HTML actionのRLS read preflight追加後もAPI・HTML UI・worker focusedが通過 |
-| 2026-05-17 | `pytest tests/test_monthly_report_worker.py -q` | **12 passed**。worker heartbeat/touch primitive追加後もworker focusedが通過 |
-| 2026-05-17 | `.env 読込後 pytest tests/test_monthly_report_postgres_store.py -q` | **13 passed**。Postgres idempotency、worker attempt/lease/retry、heartbeat/touch primitiveが実DBで通過 |
-| 2026-05-17 | `pytest tests/test_monthly_report_api.py tests/test_monthly_report_html_ui.py tests/test_monthly_report_worker.py tests/test_monthly_report_worker_entry.py -q` | **79 passed**。artifact/feedback/edited-markdown冪等性、Cloud Run worker entry、既存API/HTML UI/worker focusedが通過 |
-| 2026-05-17 | `.env 読込後 pytest tests/test_monthly_report_postgres_store.py -q` | **13 passed**。worker entry追加後もPostgres store実DB focusedが通過 |
-| 2026-05-16 | 全focused suite（mock）: `pytest tests/test_auth_mock.py tests/test_auth_google_oauth.py tests/test_monthly_report_schema_files.py tests/test_monthly_report_api.py tests/test_monthly_report_backend.py tests/test_mock_ui.py tests/test_monthly_report_llm_messages.py tests/test_monthly_report_workflow.py tests/test_monthly_report_worker.py tests/test_monthly_report_fixtures.py tests/test_monthly_report_google_workspace.py tests/test_google_oauth_credentials.py tests/test_monthly_report_pii_safety.py tests/test_monthly_report_cloud_logging.py tests/test_monthly_report_html_ui.py -q` | **142 passed, 1 skipped**。P1-17（再現性メタ書き戻し）・P1-18（ES256/RS256 JWKS focused）含む全mock focusedが通過。`.pytest_cache` 書き込み権限warningのみ |
-| 2026-05-16 | Postgres統合suite: `EB_MONTHLY_REPORT_DATABASE_URL=... pytest tests/test_google_oauth_credentials.py tests/test_monthly_report_postgres_store.py tests/test_monthly_report_api_postgres.py -q` | **17 passed**。`test_postgres_worker_fills_missing_reproducibility_meta`（P1-17 Postgres経路）含む全Postgres focusedが通過 |
+| 広いmock focused suite | 2026-05-17時点で **179 passed, 1 skipped** | RLS read store移行、Phase 2 CI対象suite、プロンプトインジェクション/内部メモ露出validationを含むmock focusedが通過 |
+| RLS / schema 実DB focused | 2026-05-17時点で **8 passed** | 実DB RLS評価とRLS migration静的確認が通過 |
+| 通常UI / API / worker focused | 2026-05-18時点で **18 passed** のRLS/feedback focused、P3/P2統合は直近 **135 passed, 1 skipped** まで確認 | worker stale reclaim境界、承認/HTML export GET fragment、API・HTML UI・worker focusedが通過。再生成リンク、比較候補、rerun diff、running復帰表示、再生成actionのbackend guard、feedback full RLS write POCも確認済み |
+| Observability focused | 2026-05-18時点で `tests/test_monthly_report_cloud_logging.py` **7 passed** | P2-14のログallowlist、ログベースmetric定義、日次token/cost summary contractがPII/secret fieldを含まないことを確認 |
+| Playwright smoke | 2026-05-18時点で自己完結smoke、起動中ローカルUI smoke、実Google/source summary smokeが通過。2026-05-19にstaging service smoke（`/health` 200、未認証jobs 401、`/auth/google` 200）とworker smokeが通過 | browser `/auth/google` 実同意の client-side blocker 解消後に追加確認 |
+| ライブE2E | 2026-05-18時点で実Google Docs/Sheets + 実OpenRouter + validation succeededの保存サンプルあり | job `mrj_d3e6e1e884ba4cb4b44c2c9d2044250b` を成功サンプルとして記録。本文・ソース本文・Secret値は記録しない |
+
+今回の文書整理ではコード・テストは変更しない。Markdown差分の整合確認として `git diff --check` を実行する。
 
 ## 依存関係
 
@@ -327,7 +255,7 @@
 - 月次レポートAPIは認証依存関係を通す。ローカルMVPでは `owner_user_id` 暫定値を許可し、Supabase Auth接続時は認証ユーザーIDへ差し替える。2026-05-16以降の本番UI方針はCookie+CSRF、内部/E2E/移行期JSON APIはBearer token互換とする。
 - 通常UIはHTML page/action/fragmentを優先する。既存JSON APIはworker/E2E/管理/将来連携用として残すが、UIのDOM更新はHTML断片で行う。
 - RLSは主境界へ寄せる。ユーザーJWT付きSupabase Client経路の導入前は、direct DB/API側認可が暫定境界であることを明示し、本番UI完成条件にしない。
-- P1-16第五弾で通常ユーザーJSON読み取りAPI、通常UI一覧、HTML detail/status/preview/sources/validation fragment読み取り、主要HTML write actionのRLS read preflight認可まで移行済み。次はfull RLS write化の順序設計と、Postgres direct storeの呼び出し元をworker・管理・migration・保持削除へ狭める。
+- P1-16は通常ユーザーJSON読み取りAPI、通常UI一覧、HTML detail/status/preview/sources/validation fragment読み取り、主要HTML write actionのRLS read preflight認可に加え、feedback / artifact / final_markdown / source_summary / source / Google source取得 / validation 保存まで user-JWT Supabase client 経由の write を順次拡張済み。残りは `llm_call_logs` を含む direct DB呼び出しの棚卸しと、worker・管理・migration・保持削除への境界固定。
 - prompt_version管理が決まらないと、チューニング比較が曖昧になる。
 - U-025は解決済み。静的POCの `prompts.scope_reminder` は工房ジョブ/APIでは `prompt_scope_notes` とする。初期投入はレシピ由来 + 手入力可能、householdメタからの自動生成は後続に回す。
 - ジョブ状態モデル、モックAPI、DB永続化、3件制限、`prompt_scope_notes` 保存、provider mock通電、実OpenRouter少量通電、LLM呼び出しメタ保存、DB-backed workerのclaim境界は骨格実装済み。次は常駐worker/Cloud Run実行方式と、実案件ソースでのチューニング比較UIが必要。
@@ -336,7 +264,7 @@
 - Auth & OAuth Agentの初手として、`/auth/google` と `/auth/callback` のE2Eブリッジを追加済み。`SUPABASE_URL` / `SUPABASE_ANON_KEY` だけをブラウザへ渡し、Supabase sessionの `provider_refresh_token` は `/api/auth/google-oauth/supabase-session` へ送って暗号化保存する。
 - `/monthly-report-workshop/e2e` はライブE2E用の開発導線として使う。`/auth/callback` でcredential保存後、同じSupabase sessionで `create job -> fetch-google-sources -> run-openrouter -> result確認` を実行する。
 - 実装体制として、Phase 1以降は実装オーナー＋Backend/Auth/LLM/Validation/UI/QAの役割分担を固定し、同一ファイルの同時編集を避ける運用で進める。
-- 次の開発優先順は「artifact/feedback冪等性」「worker Cloud Run entry/runbookとmid-LLM heartbeat方針」「通常ユーザーwrite actionのRLS preflight継続」「detail/list/newのDaisyUI標準化」「エクスポート/承認ゲート」「最小Playwright導線」の順で固定。
+- 次の開発優先順は「P1-11/P3-14 UI/UX整理」「P3-01/P3-02 編集保存・再生成UI継続」「P2-10 worker本番化継続」「P1-16 RLS client化継続」「P2-14/P2-12 運用」「browser `/auth/google` 追加確認」の順で固定。
 
 ## 環境変数ガイド
 
@@ -349,6 +277,7 @@
 | Supabase Auth/JWKS E2E | `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_JWT_SECRET` | `SUPABASE_JWT_SECRET` はHS256互換テスト用、ES256/RS256はJWKS経由 |
 | OpenRouter実通電 | `OPENROUTER_API_KEY`, `OPENROUTER_MODEL_REPORT` | 通常のpytestでは実APIを叩かず、provider mockを使う |
 | 通常HTML UIのGoogle取得 | `EB_GOOGLE_WORKSPACE_ACCESS_TOKEN` または `EB_MONTHLY_REPORT_DATABASE_URL`, `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`, `EB_GOOGLE_TOKEN_ENCRYPTION_KEY` | 前者は暫定ローカル経路。後者は保存済みGoogle OAuth refresh tokenからaccess tokenを再取得する本来経路 |
+| P3-10 PlaywrightライブGoogle取得 | `MONTHLY_REPORT_PLAYWRIGHT_SMOKE=1`, `MONTHLY_REPORT_LIVE_GOOGLE_E2E=1`, `MONTHLY_REPORT_JOB_ID`, `MONTHLY_REPORT_GOOGLE_DOC_IDS` または `MONTHLY_REPORT_SHEET_URL` | 既定skip。source summaryまで確認する場合だけ `MONTHLY_REPORT_LIVE_SOURCE_SUMMARY=1` とOpenRouter設定済みサーバを使う |
 | 再現性メタ | `EB_MONTHLY_REPORT_PROMPT_VERSION`, `EB_APP_VERSION` | 未設定時はコード既定値を使う。Cloud Runでは `K_REVISION` / `GITHUB_SHA` も `app_version` 候補 |
 
 PowerShellで `.env` を現在プロセスに読み込んでfocused testを実行する例:
@@ -373,60 +302,8 @@ pytest tests/test_monthly_report_postgres_store.py -q
 
 ## 改訂履歴
 
+詳細な改訂履歴は [development-history.md#改訂履歴](development-history.md#改訂履歴) へ分離した。以後、この文書には計画の読解に必要な大きな構造変更だけを残す。
+
 | 日付 | 内容 |
 |---|---|
-| 2026-05-13 | 初版作成 |
-| 2026-05-14 | 実装済みのAPIスタブ、ジョブモデル、モックUI、モック認証、Supabase初期migration、focused pytest結果に合わせて進捗を更新 |
-| 2026-05-14 | Supabase CLIローカル起動、Postgres store、DB経由APIテスト、フィードバック保存APIの進捗を反映 |
-| 2026-05-14 | クラウド本番リージョン `asia-northeast1`（東京）を反映 |
-| 2026-05-14 | 明示的なジョブ進行API、失敗記録、Mock/Postgresテスト結果を反映 |
-| 2026-05-14 | ジョブ失敗詳細を `monthly_report_jobs` の明示カラムへ保存する方針と実装状況を反映 |
-| 2026-05-14 | ソーススナップショット・生成成果物の保存/一覧APIとテスト結果を反映 |
-| 2026-05-14 | レビュー反映として、検証結果API、再現性メタ保存、API/機能仕様/アクティビティ図の整合を反映 |
-| 2026-05-14 | 認証依存関係、Store側3件制限、編集画面の成果物保存パネルを反映 |
-| 2026-05-14 | Phase 1/2の現在地表現を具体化し、再生成ジョブが再現性メタを引き継ぐ実装状況を反映 |
-| 2026-05-14 | HANDOFF_STATIC_POC_TUNING.md を踏まえ、静的POCの build_prompts / scope_reminder / EconomicsゴールデンをP0/P1/P2へ組み込み |
-| 2026-05-14 | `prompt_scope_notes` を正式フィールド名として反映し、U-025の残論点を初期投入方法へ絞り込み |
-| 2026-05-14 | `prompt_scope_notes` の初期投入方針をレシピ由来 + 手入力可能に決定し、U-025を解決済みとして反映 |
-| 2026-05-14 | 静的POCの `build_prompts` 共通化、`prompt_scope_notes` 保存/再生成コピー、Supabase migration適用、テスト結果を反映 |
-| 2026-05-14 | provider mockによる1ジョブ通電、開発用 `/run-mock` API、OpenRouter provider抽象、テスト結果を反映 |
-| 2026-05-14 | `/run-openrouter` API、OpenRouter実provider少量通電、接続エラー処理、テスト結果を反映 |
-| 2026-05-14 | `llm_call_logs` 保存/取得API、provider成功/失敗時のhash/メタ記録、テスト結果を反映 |
-| 2026-05-14 | Store共通のqueued job claim境界、Postgres `FOR UPDATE SKIP LOCKED`、worker実行関数、Economics匿名化フィクスチャとテスト結果を反映 |
-| 2026-05-14 | `multistudent_scope_exclusion` 第一弾とPhase 2のバリデーション進捗を反映 |
-| 2026-05-14 | `required_headings` 第一弾と最新テスト結果を反映 |
-| 2026-05-14 | `forbidden_terms` 第一弾と最新テスト結果を反映 |
-| 2026-05-14 | Google Workspace REST APIクライアント、`/fetch-google-sources`、P1-05の一部完了、最新テスト結果を反映 |
-| 2026-05-14 | Google provider refresh tokenのFernet暗号化保存、Postgres credential store、access token refresh経路、最新テスト結果を反映 |
-| 2026-05-14 | Google provider refresh token保存API、Auth/OAuth focused検証、最新テスト結果を反映 |
-| 2026-05-14 | Supabase session経由のGoogle provider refresh token保存ブリッジ、user id一致チェック、最新テスト結果を反映 |
-| 2026-05-14 | Supabase JWT secretによるBearer token検証、ドメイン制限、最新テスト結果を反映 |
-| 2026-05-15 | Supabase session保存adapterのprovider/email/scope検証、PII/secret外向きエラー抑止テスト、最新テスト結果を反映 |
-| 2026-05-15 | 非mock環境のジョブ所有者決定と一般ユーザーアクセス制限、最新テスト結果を反映 |
-| 2026-05-15 | Supabase RLS migration、所有者ベースpolicy、schema/Postgres focusedテスト結果を反映 |
-| 2026-05-15 | ライブE2E前設定ガイドへの参照を追加 |
-| 2026-05-15 | Cloud Logging向け構造化ログallowlist、workflowログ接続、実ログ出力テスト結果を反映 |
-| 2026-05-16 | `agents.md` のPhase 1以降の実装エージェント構成と次のE2E優先順を現在位置・依存関係へ反映 |
-| 2026-05-16 | ローカル Supabase Google provider 設定（config.toml `[auth.external.google]`、`enable_signup=true`、redirect URLs）と FastAPI 側 ES256/RS256 JWKS 検証経路を実装。実ブラウザでログイン→refresh token暗号化保存→1ジョブE2E通電（validation_failed まで）を確認し、P1-01/P1-04/P1-05 をローカル完了へ更新。P1-17（再現性メタ書き戻し）・P1-18（ES256 focused test）を追加 |
-| 2026-05-16 | Auth & OAuth Agentの初手として `/auth/google`・`/auth/callback` のE2Eブリッジ、Supabase公開設定、pre-e2e手順、focusedテスト結果を反映 |
-| 2026-05-16 | `/monthly-report-workshop/e2e` のライブE2E画面を追加し、ジョブ作成からGoogle取得、OpenRouter実行、artifact/validation確認までの開発導線を反映 |
-| 2026-05-16 | HTML断片UI、Cookie+CSRF、RLS主境界、worker lease、冪等性、Storage/保持削除、監視、プロンプトインジェクション、人間承認ゲートをPhase 1〜3の計画へ追加 |
-| 2026-05-16 | P1-14の第一弾として `/monthly-reports/*` のHTML一覧・新規・作成・詳細・status fragmentとfocusedテストを追加 |
-| 2026-05-16 | P1-15の第一弾としてHTML action用CSRF cookie + hidden token検証とfocusedテストを追加 |
-| 2026-05-16 | P1-14を継続し、通常UIに生成開始・preview・validation・feedback HTML fragmentを追加。P1-15のCSRF対象を生成開始・フィードバック保存へ拡張 |
-| 2026-05-16 | P1-17の第一弾として `/run-openrouter` / `/run-mock` 実行前の再現性メタ既定値補完を追加し、OpenRouter経路のfocused testを追加 |
-| 2026-05-16 | P1-17を継続し、`run_next_queued_monthly_report_job()` / `run_claimed_monthly_report_job()` に再現性メタ既定値を渡せる入口とworker focused testを追加 |
-| 2026-05-16 | P1-17をPostgres worker focusedまで拡張し、workerの `owner_user_id` filter、Postgres永続化テスト、`.env` 読み込みガイドを追加 |
-| 2026-05-16 | P1-18としてES256/RS256 JWKS検証のfocused testを追加し、HS256既存検証との併走を確認 |
-| 2026-05-17 | ライブE2E初succeededを受けてP1-17を済へ更新し、P1-14として通常HTML UIのソース確認/手動保存/Google取得fragment、モック生成/OpenRouter生成完了導線、focusedテストを追加 |
-| 2026-05-17 | 保存済みGoogle OAuth credentialからの実Google Docs/Sheets取得、モック生成、実OpenRouter生成のAPIライブE2E再確認結果を追記 |
-| 2026-05-17 | P0-03として `prompt_version` 形式検証と静的レシピID/template_hash/Git SHA/app versionのメタデータregistryを追加し、focusedテスト結果を反映 |
-| 2026-05-17 | P1-16第二弾として通常ユーザー読み取り系をSupabase RLS read store優先へ移行。P2-06 GitHub Actions focused pytest、P2-11 prompt injection/internal memo validation第一弾を追加 |
-| 2026-05-17 | E2E画面でjob `mrj_2b15b194636a4457b590e3ef73afa5b2` のRLS/Google OAuth/OpenRouter成功サンプルを記録。`Gemini メモ` / `Google Meetメモ` 系の配布面語彙チューニングはP2-11後続へ延期 |
-| 2026-05-17 | P1-16第一弾としてユーザーJWT付きSupabase client生成ヘルパー、RLS実効Postgresセッションヘルパー、RLS focused testsを追加 |
-| 2026-05-17 | `agents.md` と開発計画を最新化。Phase 0を済、Phase 1をライブE2E成功済みのMVP骨格、Phase 2を進行中、Phase 3を次着手へ整理し、次の開発優先順をP2-09→P2-10→P1-16継続→P3-01/P3-02→P3-06/P3-12へ更新 |
-| 2026-05-17 | P2-09第一弾（job作成/run-mock/run-openrouterのIdempotency-Key対応、Postgres永続化migration/store入口）、P2-10第一弾（WorkerRunResultとキャンセル境界）、P3-01/P3-02（編集保存/再生成HTMXフォームとbackend route）を追加 |
-| 2026-05-17 | MVPは本番のみへ戻し、staging / production の2環境分離は本番ポータル合流タイミングで用意する方針へ修正 |
-| 2026-05-17 | P2-09 idempotency migrationを実DBへ適用しPostgres focused test通過。P1-16第三弾としてHTML GET detail/fragmentsをRLS read store優先へ移行 |
-| 2026-05-17 | 並列実装でP2-09 HTML hidden idempotency、P2-10 worker lease/attempt/retry、P2-11 Gemini/Meet語彙sanitization、P1-15 auth cookie bridgeを追加。関連focused 111件、Postgres実DB 12件通過 |
-| 2026-05-17 | UIコンポーネント方針を追加。Tailwind CSS + DaisyUIを標準、Flowbiteは保留、業務画面はtable/section中心、カードは繰り返し単位に限定 |
+| 2026-05-17 | 読みやすさ改善のため、詳細な現在位置ログを `development-history.md`、検証コマンド履歴を `verification-log.md` へ分離。`development-plan.md` は現在状態、次優先、フェーズ、未完了タスク中心へ整理 |

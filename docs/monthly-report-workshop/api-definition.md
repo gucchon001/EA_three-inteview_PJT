@@ -5,7 +5,7 @@
 - 正本/補助資料の区分: 月次レポート作成ツールのAPI定義
 - 起点: `docs/project/月次レポート_プログラム化_LLMワークフロー移行計画.md`
 - 関連文書: `functional-spec.md`, `screen-design.md`, `data-design.md`
-- 最終更新: 2026-05-16
+- 最終更新: 2026-05-19
 
 ## 方針
 
@@ -23,6 +23,51 @@
 - DB主キーはUUIDとし、API・画面・ログではprefix付きIDを使う。
 - MVPの進捗更新はHTMXポーリングに統一する。SSEは後続検討とする。
 - Supabase AuthのOAuth開始・callback APIは認証基盤側の責務とし、本API定義には含めない。
+
+## JSON Write API Caller Intent
+
+JSON write APIs are kept for worker, E2E, admin scripts, and future integration. They are not the normal UI DOM update path. Until each route is fully moved behind RLS write clients or server RPC, every JSON write route must declare the intended caller and whether it may be exposed to a normal Supabase user.
+
+For direct DB state mutation routes, nonmock callers must send `X-EB-Caller-Intent`. The currently accepted values are `e2e` and `admin`; `admin` also requires an authenticated admin role.
+
+| API | Intended caller | Current boundary | Normal user exposure | Next P1-16 action |
+|---|---|---|---|---|
+| `POST /api/monthly-reports/jobs` | Normal integration / E2E / admin script | Service-owned direct insert. Auth user becomes owner in nonmock; active-limit and idempotency are enforced in the service layer, not via user-JWT write. | Allowed for future integration, not used by normal HTMX UI | Keep as service-owned create command unless product pressure justifies create-job RPC |
+| `POST /api/monthly-reports/jobs/{job_id}/feedback` | Normal integration / E2E | RLS read preflight, then user-JWT Supabase write when available; mock/admin fallback direct | Allowed | Keep as first full-RLS write POC and add real Supabase/Postgres smoke |
+| `POST /api/monthly-reports/jobs/{job_id}/sources` | E2E / admin script / future integration | RLS read preflight, then user-JWT Supabase source write when available; mock/admin fallback direct | Allowed for future integration, not used by normal HTMX UI | Keep owner/non-owner/idempotency smoke and decide whether to freeze here or move to RPC for Storage migration |
+| `POST /api/monthly-reports/jobs/{job_id}/fetch-google-sources` | E2E / admin script / future integration | RLS read preflight, server-side Google token resolution, then user-JWT Supabase source write when available; mock/admin fallback direct | Transitional; normal UI uses HTML fragment route | Keep token handling server-side and leave only token refresh / workflow paths on direct DB |
+| `POST /api/monthly-reports/jobs/{job_id}/artifacts` | E2E / admin script / future integration | RLS read preflight, then user-JWT Supabase artifact write for append-only artifact paths when available; mock/admin fallback direct | Transitional; do not expose as normal user editing boundary | Continue narrowing to direct DB only for worker/stateful paths and decide whether remaining artifact writes need RPC |
+| `POST /api/monthly-reports/jobs/{job_id}/validations` | Worker / E2E / admin script | RLS read preflight, then user-JWT Supabase validation write when available; mock/admin fallback direct; idempotency remains service-owned/direct. Nonmock requires `X-EB-Caller-Intent: e2e|admin`. | Not exposed as normal user JSON API | Keep worker/admin intent explicit and decide whether validation persistence should stay mixed-boundary or move behind worker-only paths |
+| `POST /api/monthly-reports/jobs/{job_id}/start` | E2E / admin script / legacy manual control | RLS read preflight, then direct state mutation. Nonmock requires `X-EB-Caller-Intent: e2e|admin`. | Not exposed as normal user JSON API; normal UI uses HTML actions | Move to worker-only/server-owned workflow boundary before production hardening |
+| `POST /api/monthly-reports/jobs/{job_id}/complete-stage` | E2E / admin script / legacy manual control | RLS read preflight, then direct state mutation. Nonmock requires `X-EB-Caller-Intent: e2e|admin`. | Not exposed as normal user JSON API | Worker-only or admin-only route before production exposure |
+| `POST /api/monthly-reports/jobs/{job_id}/fail` | Worker / admin recovery / E2E | RLS read preflight, then direct state mutation. Nonmock requires `X-EB-Caller-Intent: e2e|admin`. | Not exposed as normal user JSON API | Move worker failure persistence behind worker-only code path and keep admin recovery explicit |
+| `POST /api/monthly-reports/jobs/{job_id}/manual-recovery/fail` | Admin recovery only | RLS read preflight, then direct fail transition with `manual_recovery_required` and PII-safe server-side audit log. Nonmock requires `X-EB-Caller-Intent: admin`. Only `running` jobs are accepted. | Not exposed as normal user JSON API | Keep as the explicit stuck-job recovery command until a fuller admin/worker maintenance surface exists |
+| `POST /api/monthly-reports/jobs/{job_id}/cancel` | E2E / admin script | RLS read preflight, then direct cancel request. Nonmock requires `X-EB-Caller-Intent: e2e|admin`. | Not exposed as normal user JSON API; normal UI uses HTML action | Later move to RLS/RPC or server-owned cancel command |
+| `POST /api/monthly-reports/jobs/{job_id}/run-mock` | E2E / local tuning / admin script | RLS read preflight, direct workflow execution. Nonmock requires `X-EB-Caller-Intent: e2e|admin`. | E2E/admin only | Keep disabled from normal user JSON flows; later move to worker-owned path |
+| `POST /api/monthly-reports/jobs/{job_id}/run-openrouter` | E2E / local tuning / admin script | RLS read preflight, direct workflow execution with server-held OpenRouter key. Nonmock requires `X-EB-Caller-Intent: e2e|admin`. | E2E/admin only | Worker-owned path before broader production exposure |
+| `POST /api/monthly-reports/jobs/{job_id}/rerun` | E2E / admin script | RLS read preflight, then direct job clone. Nonmock requires `X-EB-Caller-Intent: e2e|admin`. | Not exposed as normal user JSON API; normal UI uses HTML action | Move clone semantics and active-limit check behind RLS/RPC or service layer |
+| `POST /api/monthly-reports/jobs/{job_id}/validate` | Future integration / E2E | Not part of the current primary implementation | Not exposed until implemented | Define caller intent before implementation |
+
+### Direct DB / direct store を許容するカテゴリ
+
+RLS 主境界へ寄せた後も、以下は server-owned として direct DB / direct store を残す。
+
+| カテゴリ | 代表箇所 | 理由 | 通常ユーザー可視性 |
+|---|---|---|---|
+| idempotency record / response | `monthly_report_idempotency_keys`, idempotent response 記録 | 二重送信・再試行の横断制御を service-owned に保つため | 直接は見えない |
+| audit_logs | approval / export / HTML source / distribution / workflow request/start の監査 | 監査イベントをクライアント可視境界から分離し、worker-owned request と service-owned workflow 実行の入口記録も server-side に寄せるため | 直接は見えない |
+| llm_call_logs | source summary / worker generation の LLM call metadata | token / model / request hash 等の運用・再現性メタを server-owned telemetry として扱うため | GET API ではメタのみ可視、本文やプロンプト全文は返さない |
+| worker/state mutation | `start` / `complete-stage` / `fail` / `cancel` / `run-*` / `rerun` | 状態遷移、lease、retry、OpenRouter key 保持を service-owned workflow に閉じるため | 通常UIの編集境界ではない |
+| job creation | `POST /api/monthly-reports/jobs` | active-limit / owner 決定 / idempotency を service command として一元化するため | 将来連携用。通常 HTMX UI のDOM更新には使わない |
+
+### 通常UIでなお direct store を併用する経路
+
+- `POST /monthly-reports/jobs/{job_id}/fragments/source-summary`
+  source 読み取りは RLS read、`source_summary_markdown` 保存は RLS write、`llm_call_logs` だけ direct telemetry。
+- `POST /monthly-reports/jobs/{job_id}/fragments/google-sources` with `after_fetch_action=generate_openrouter`
+  source 保存までは RLS write。`mock/admin` はそのまま service-owned workflow で即時生成するが、通常Supabaseユーザーは source 保存後に worker-owned workflow request を監査ログへ記録し、`EB_CLOUD_RUN_WORKER_JOB_*` が設定されている環境では Cloud Run Jobs `jobs.run` を server-side trigger しつつ、queued job のまま worker 処理待ちへ進める。
+- `POST /monthly-reports/jobs/{job_id}/run`
+  通常UIの実行入口。`run_mode=mock|openrouter` は `mock/admin` の補助導線として service-owned workflow を即時実行し、通常Supabaseユーザーの既定 `run_mode=stage` は worker-owned workflow request を記録し、Cloud Run worker trigger が設定済みなら `EB_WORKER_JOB_ID=<job_id>` override 付きで worker job を起動する。
 
 ## ID形式
 
@@ -257,12 +302,21 @@ MVP初期のローカル開発では、サーバ側環境変数 `EB_GOOGLE_WORKS
   "sheet_ranges": [
     {
       "spreadsheet_id": "1sheet...",
-      "range_name": "student!A1:Z200",
-      "display_name": "学習計画表 student"
+      "range_name": "student",
+      "display_name": "基本情報 student"
+    },
+    {
+      "spreadsheet_id": "1sheet...",
+      "range_name": "'lesson plan'",
+      "display_name": "学習計画表 lesson plan"
     }
   ]
 }
 ```
+
+通常HTML UIでは、ユーザーに `range_name` を入力させない。Spreadsheet URL/IDだけを受け取り、既定では `student` と `lesson plan` の使用範囲全体を取得する。シート名が異なる場合は `GET /monthly-reports/jobs/{job_id}/fragments/sheet-selector` でシート名一覧を取得し、基本情報シートと学習計画表シートを選択する。
+
+取得後の確認用に、通常HTML UIは `POST /monthly-reports/jobs/{job_id}/fragments/source-summary` を提供する。保存済みソースを `OPENROUTER_MODEL_LIGHT` で要約し、HTML fragmentで `取得内容サマリー`、`対象・期間・科目の確認`、`ズレ/不足の可能性` を返す。結果は `source_summary_markdown` artifactとして保存し、LLM呼び出しメタは `llm_call_logs.prompt_kind=source_summary` へ保存する。未取得時は422、OpenRouter APIキー未設定時は503、provider失敗時は502のHTML error fragmentを返す。
 
 成功時:
 
@@ -392,8 +446,8 @@ MVP初期のローカル開発では、サーバ側環境変数 `EB_GOOGLE_WORKS
 | `POST /monthly-reports/jobs` | ジョブ作成後、ジョブカードまたは詳細への遷移指示を返す |
 | `GET /monthly-reports/jobs/{job_id}` | ジョブ詳細ページ |
 | `GET /monthly-reports/jobs/{job_id}/edit` | プレビュー・推敲ページ |
-| `POST /monthly-reports/jobs/{job_id}/run` | 生成開始後の進捗パネルまたはエラー断片。`run_mode=mock` はモック生成を完了まで実行し、`run_mode=openrouter` はOpenRouter生成を実行する |
-| `POST /monthly-reports/jobs/{job_id}/rerun` | 再生成ジョブ作成後の比較/進捗断片 |
+| `POST /monthly-reports/jobs/{job_id}/run` | 生成開始後の進捗パネルまたはエラー断片。通常 `run_mode=stage` は queued job を worker-owned workflow へ渡す依頼として扱い、`run_mode=mock` はモック生成を完了まで実行し、`run_mode=openrouter` はOpenRouter生成を実行する |
+| `POST /monthly-reports/jobs/{job_id}/rerun` | 再生成ジョブ作成後の作成通知、新ジョブ詳細リンク、進捗断片 |
 | `POST /monthly-reports/jobs/{job_id}/cancel` | キャンセル要求後の状態断片 |
 | `GET /monthly-reports/jobs/{job_id}/fragments/status` | 進捗表示 |
 | `GET /monthly-reports/jobs/{job_id}/fragments/sources` | ソース確認 |
@@ -403,6 +457,20 @@ MVP初期のローカル開発では、サーバ側環境変数 `EB_GOOGLE_WORKS
 | `GET /monthly-reports/jobs/{job_id}/fragments/validation` | 検証結果 |
 | `GET /monthly-reports/jobs/{job_id}/fragments/artifacts` | 成果物一覧 |
 | `POST /monthly-reports/jobs/{job_id}/fragments/feedback` | フィードバック保存後のUI |
+| `POST /monthly-reports/jobs/{job_id}/fragments/edited-markdown` | 編集後Markdown保存後のpreview/edit UI。`base_content_hash` が古い場合は409相当のHTML error fragment |
+| `GET /monthly-reports/jobs/{job_id}/fragments/diff` | draft/finalの簡易テキスト差分 |
+| `GET /monthly-reports/jobs/{job_id}/fragments/approval` | 承認状態、ブロック理由、承認フォーム |
+| `POST /monthly-reports/jobs/{job_id}/fragments/approval` | 人間承認保存後の承認panel |
+| `GET /monthly-reports/jobs/{job_id}/fragments/export` | HTMLエクスポート状態/成果物 |
+| `POST /monthly-reports/jobs/{job_id}/fragments/export` | 承認済み配布artifactから `export_html` artifactを作成 |
+| `GET /monthly-reports/jobs/{job_id}/fragments/html-source` | 最新 `export_html` のHTMLソース編集panel |
+| `POST /monthly-reports/jobs/{job_id}/fragments/html-source` | 編集済みHTMLを新しい `export_html` artifactとして保存 |
+| `GET /monthly-reports/jobs/{job_id}/fragments/distribution` | 手動送付用distribution package状態 |
+| `POST /monthly-reports/jobs/{job_id}/fragments/distribution` | 承認済みHTML exportを `distribution_package` artifactとして固定 |
+| `GET /monthly-reports/jobs/{job_id}/fragments/rerun-comparison` | 比較先ジョブIDを受け、prompt/model/template/source hash/app versionを横並び表示。同一世帯/同一ユーザーの比較候補も返す |
+| `GET /monthly-reports/jobs/{job_id}/fragments/rerun-diff` | 比較先ジョブIDを受け、元/比較先ジョブの最新Markdown本文を行単位で比較 |
+| `GET /monthly-reports/legacy-full-editor` | 既存全文エディタを同一オリジンで開く互換route |
+| `GET /monthly-reports/jobs/{job_id}/legacy-full-editor` | 最新 `export_html` artifactを既存全文エディタのlocalStorageへ投入して開くbridge |
 
 ## エラー
 
@@ -449,11 +517,14 @@ MVP初期のローカル開発では、サーバ側環境変数 `EB_GOOGLE_WORKS
 
 ## 実装追跡事項
 
-- `/monthly-reports/*` のHTML page/action/fragment第一弾は本番ルータへ追加済み。ジョブ一覧・新規・作成・詳細・ソース確認/手動保存/Google取得・生成開始・モック生成・OpenRouter生成・status/preview/validation/feedbackはHTMLを返す。
+- `/monthly-reports/*` のHTML page/action/fragment第一弾は本番ルータへ追加済み。ジョブ一覧・新規・作成・詳細・ソース確認/手動保存/Google取得・取得内容要約・生成開始・モック生成・OpenRouter生成・status/preview/validation/feedback、編集保存、再生成、承認、HTML export、HTML source、distribution package、rerun comparison、rerun diff、legacy full editor bridgeはHTMLを返す。
 - 通常UIから `/api/monthly-reports/*` をDOM更新目的で直接使わない境界は文書化・focused test済み。JSON APIはworker/E2E/管理/将来連携用として維持する。
 - JSONの `/api/monthly-reports/jobs/{job_id}/fetch-google-sources` はE2E/worker/管理/将来連携用。通常HTML UIは `POST /monthly-reports/jobs/{job_id}/fragments/google-sources` 経由でsources断片を差し替える。
-- Cookie + CSRF第一弾はジョブ作成・生成開始・ソース保存・Google取得・フィードバック保存で実装済み。残りはSupabase AuthセッションのHTTPOnly Cookie化とBearer token前提ヘルパーの棚卸し。
-- POST系に冪等性キーまたはjob input hashを導入し、二重送信・リロード・再試行時の挙動を固定する。
+- Cookie + CSRF第一弾はジョブ作成・生成開始・ソース保存・Google取得・フィードバック保存・編集保存・再生成・キャンセル・承認・HTML export・HTML source・distribution packageで実装済み。残りはserver-side session refresh/rotationとBearer token前提ヘルパーの棚卸し。
+- POST系に冪等性キーまたはjob input hashを導入済み。job作成、生成開始、source保存、Google取得、artifact保存、validation保存、feedback保存、編集保存、再生成、承認、HTML export、HTML source、distribution packageは同一キー再送で重複作成しないことをfocused testで確認済み。
+- 承認/export/html source/distributionなど入力フォームを含むpanelは定期pollingせず、`monthly-report-refresh` イベントで更新する。進捗statusは従来通りHTMX pollingで扱う。
+- `running` のstatus fragmentは、ページを閉じても処理継続、自動更新、再読み込み後の状態復元を案内する。後段stageで長時間heartbeatがない場合は、後段stageを自動再claimしないworker運用に合わせてrunbook確認を促す。
+- 2026-05-19に admin recovery の最小入口として `POST /api/monthly-reports/jobs/{job_id}/manual-recovery/fail` を追加した。stuck `running` job を `manual_recovery_required` で閉じる専用JSON routeで、通常ユーザーや `e2e` caller intent では使えない。
 
 ## 受け入れ条件
 
@@ -481,6 +552,7 @@ MVP初期のローカル開発では、サーバ側環境変数 `EB_GOOGLE_WORKS
 | 2026-05-14 | Google Workspace REST APIからソースを取得する `/fetch-google-sources` を追加 |
 | 2026-05-17 | 通常HTML UI用のsources fragment、手動ソース保存、Google Docs/Sheets取得HTML actionを追加 |
 | 2026-05-17 | 通常HTML UIの `/run` actionにOpenRouter生成モードを追加 |
+| 2026-05-17 | 編集保存、差分、承認、HTML export、HTML source、distribution、rerun comparison、rerun diff、比較候補、再生成ジョブリンク、legacy full editor bridge、running復帰案内のHTML fragment APIと冪等性/refresh方針を反映 |
 | 2026-05-14 | 暗号化保存済みprovider refresh tokenからのGoogle access token解決経路を反映 |
 | 2026-05-14 | Google provider refresh token保存API `/api/auth/google-oauth/credentials` を追加 |
 | 2026-05-14 | Supabase session経由のGoogle provider refresh token保存ブリッジ `/api/auth/google-oauth/supabase-session` を追加 |
@@ -488,3 +560,6 @@ MVP初期のローカル開発では、サーバ側環境変数 `EB_GOOGLE_WORKS
 | 2026-05-15 | Supabase session保存ブリッジのprovider/email/scope検証とrefresh token秘匿を反映 |
 | 2026-05-16 | 通常UIはHTMLページ/HTML断片、JSON APIはworker/E2E/管理/将来連携用とする境界、Cookie+CSRF、冪等性追跡を反映 |
 | 2026-05-15 | 非mock環境のジョブ所有者決定と一般ユーザーのジョブアクセス制限を反映 |
+| 2026-05-18 | JSON write APIのcaller intent、RLS/direct DB境界、通常ユーザー露出可否を表で固定 |
+| 2026-05-19 | direct DB state mutation JSON routeに `X-EB-Caller-Intent` を導入し、`start` / `complete-stage` / `fail` / `cancel` / `run-*` / `rerun` を内部/管理/E2E 用として明示 |
+| 2026-05-19 | stuck `running` job を `manual_recovery_required` で閉じる admin-only JSON route `/manual-recovery/fail` を追加 |

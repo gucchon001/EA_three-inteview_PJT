@@ -8,41 +8,329 @@
   <style>
     body { margin:0; font-family: system-ui, "Noto Sans JP", sans-serif; color:#1f2937; background:#f6f7f9; }
     a { color:#0f5959; text-decoration:none; }
-    .wrap { max-width:1040px; margin:0 auto; padding:24px; }
+    .app-shell { display:grid; grid-template-columns:260px minmax(0, 1fr); gap:24px; max-width:1320px; margin:0 auto; padding:24px; }
+    .side-nav { position:sticky; top:18px; align-self:start; background:#fff; border:1px solid #dce1e7; border-radius:8px; padding:16px; }
+    .side-nav h2 { margin:0 0 8px; font-size:1rem; }
+    .side-nav .nav-group { border-top:1px solid #e4e7ec; margin-top:12px; padding-top:12px; }
+    .side-nav .nav-label { display:block; color:#667085; font-size:0.78rem; font-weight:800; margin-bottom:6px; }
+    .side-nav a { display:flex; justify-content:space-between; gap:8px; padding:9px 10px; border-radius:8px; color:#344054; font-weight:650; }
+    .side-nav a:hover, .side-nav a.primary { background:#eef4f4; color:#0f5959; }
+    .side-nav .status-pill { display:inline-flex; align-items:center; padding:1px 6px; border-radius:999px; background:#f2f4f7; color:#667085; font-size:0.72rem; font-weight:800; }
+    .workspace { min-width:0; }
     .panel { background:#fff; border:1px solid #dce1e7; border-radius:8px; padding:18px; margin-top:16px; }
     .muted { color:#667085; }
+    .summary { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:10px; margin-top:14px; }
+    .summary-item { border:1px solid #e4e7ec; border-radius:8px; padding:12px; background:#fff; }
+    .summary-item strong { display:block; margin-top:4px; }
+    .review-guide { display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:12px; margin-top:14px; }
+    .review-step { border:1px solid #d0d5dd; border-radius:8px; padding:14px; background:#fff; }
+    .review-step b { display:block; color:#0f5959; margin-bottom:4px; }
+    .review-step a { display:inline-flex; margin-top:8px; font-weight:700; }
+    .workflow-board { display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:12px; margin-top:14px; }
+    .workflow-card { border:1px solid #d0d5dd; border-radius:8px; padding:14px; background:#fff; }
+    .workflow-card.active { border-color:#0f5959; background:#f8fbfb; box-shadow: inset 0 0 0 1px #cfe0df; }
+    .workflow-card.done { border-color:#b7d9c6; background:#f3fbf6; }
+    .workflow-card b { display:block; color:#0f5959; margin-bottom:4px; }
+    .workflow-card .state { display:inline-flex; margin-top:8px; padding:2px 8px; border-radius:999px; background:#f2f4f7; color:#667085; font-size:0.76rem; font-weight:800; }
+    .workflow-card.done .state { background:#ecfdf3; color:#027a48; }
+    .workflow-card.active .state { background:#eef4f4; color:#0f5959; }
+    .primary-next { margin-top:14px; border:1px solid #b9c6c6; border-radius:8px; padding:14px; background:#f8fbfb; display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; }
+    .primary-next strong { display:block; margin-bottom:4px; }
+    .primary-next a { display:inline-flex; align-items:center; padding:10px 14px; border-radius:8px; background:#0f5959; color:#fff; font-weight:700; }
+    .action-form { margin-bottom:14px; }
+    .stack-form { display:grid; gap:10px; margin-top:14px; }
+    .form-note { margin:8px 0 0; }
+    .subsection { margin-top:14px; }
+    .subsection-grid { display:grid; gap:14px; margin-top:12px; }
+    .split-row { display:flex; gap:8px; flex-wrap:wrap; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; padding:10px 14px; border-radius:8px; border:1px solid #0f5959; background:#fff; color:#0f5959; font-weight:700; cursor:pointer; }
+    .btn:disabled { cursor:not-allowed; opacity:0.6; }
+    .btn-primary { background:#0f5959; color:#fff; border-color:#0f5959; }
+    .btn-deep { background:#0a4545; color:#fff; border-color:#0a4545; }
+    .btn-danger { border-color:#b42318; color:#b42318; }
+    .input-field { width:100%; padding:10px; border:1px solid #dce1e7; border-radius:8px; }
+    .editor-textarea { width:100%; min-height:520px; padding:10px; border:1px solid #dce1e7; border-radius:8px; font-family:ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .source-guide { display:grid; gap:10px; margin:12px 0 14px; }
+    .source-guide-item { border:1px solid #e4e7ec; border-radius:8px; padding:12px; background:#fff; }
+    .source-guide-item b { display:block; margin-bottom:4px; }
+    .source-guide-item.primary { border-color:#b9c6c6; background:#f8fbfb; }
+    .delivery-rail { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin:14px 0; }
+    .delivery-step { border:1px solid #d0d5dd; border-radius:8px; padding:14px; background:#fff; }
+    .delivery-step b { display:block; color:#0f5959; margin-bottom:4px; }
+    .quick-nav { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+    .quick-nav a { border:1px solid #b9c6c6; border-radius:8px; padding:8px 10px; background:#fff; font-weight:600; }
+    details.panel { padding:0; overflow:hidden; }
+    details.panel > summary { cursor:pointer; padding:18px; font-size:1.15rem; font-weight:800; list-style:none; }
+    details.panel > summary::-webkit-details-marker { display:none; }
+    details.panel > summary::after { content:"開く"; float:right; color:#667085; font-size:0.9rem; font-weight:700; }
+    details.panel[open] > summary::after { content:"閉じる"; }
+    .details-body { border-top:1px solid #e4e7ec; padding:18px; }
+    .badge { display:inline-flex; align-items:center; min-height:24px; padding:2px 8px; border-radius:999px; background:#eef4f4; color:#0f5959; font-weight:700; font-size:0.78rem; }
+    .badge.error { background:#fff1f0; color:#b42318; }
+    .badge.done { background:#ecfdf3; color:#027a48; }
+    .editor-grid { display:grid; grid-template-columns:minmax(0, 1fr) minmax(320px, 0.95fr); gap:16px; align-items:start; }
+    .editor-pane { min-width:0; border:1px solid #e4e7ec; border-radius:8px; background:#fff; padding:14px; }
+    .editor-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; }
+    .editor-head h3 { margin:0; font-size:1rem; }
+    .editor-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .unsaved { display:none; color:#b42318; font-weight:700; }
+    .editor-pane:has(textarea:focus) .editing-hint { color:#0f5959; }
+    .diff-panel { margin-top:16px; border:1px solid #e4e7ec; border-radius:8px; padding:14px; background:#fff; }
+    .tuning { display:grid; gap:8px; margin:0 0 12px; padding:12px; border:1px dashed #9fb3b3; border-radius:8px; background:#f8fbfb; }
+    .tuning legend { font-weight:700; }
+    .subsection-summary { cursor:pointer; font-weight:700; color:#0f5959; }
     code { font-size:0.9rem; }
+    @media (max-width: 920px) {
+      .app-shell { grid-template-columns:1fr; padding:16px; }
+      .side-nav { position:static; }
+      .editor-grid { grid-template-columns:1fr; }
+    }
   </style>
 </head>
 <body>
-  <main class="wrap">
+  {% include "monthly_report_workshop/fragments/htmx_loading.html" %}
+  <div class="app-shell">
+  <aside class="side-nav" aria-label="レポート工房メニュー">
+    <h2>レポート工房</h2>
+    <p class="muted" style="margin:0;">{{ job.target_month }} · {{ job.display_household }}</p>
+    <div class="nav-group">
+      <span class="nav-label">登録</span>
+      <a href="/monthly-reports/jobs/new">新規ジョブ登録 <span class="status-pill">new</span></a>
+      <a href="#sources-section">データソース登録 <span class="status-pill">{{ job.source_count }}</span></a>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">生成</span>
+      <a href="#pipeline-section">生成・再生成 <span class="status-pill">{{ job.status }}</span></a>
+      <a href="#validation-section">検証結果 <span class="status-pill">{{ job.validation_error_count }}</span></a>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">確認</span>
+      <a class="primary" href="#review-guide-section">確認ガイド</a>
+      <a href="#preview-section">プレビュー・編集</a>
+      <a href="#approval-section">承認・出力</a>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">管理</span>
+      <a href="#advanced-compare">差分・再生成比較</a>
+      <a href="#feedback-section">チューニングメモ</a>
+      <a href="#meta-section">再現性メタ</a>
+    </div>
+    <div class="nav-group">
+      <a href="/monthly-reports/jobs">ジョブ一覧へ戻る</a>
+    </div>
+  </aside>
+  <main class="workspace">
     <p><a href="/monthly-reports/jobs">ジョブ一覧へ戻る</a></p>
     <h1>{{ page_title }} <code>{{ job.public_id }}</code></h1>
     <p class="muted">{{ job.target_month }} · {{ job.display_household }}</p>
-    <section class="panel">
-      <h2>生成パイプライン</h2>
+    <section class="panel" aria-label="ジョブ概要">
+      <h2>現在位置</h2>
+      <p>
+        <span class="badge {% if job.status == 'failed' %}error{% elif job.status == 'succeeded' %}done{% endif %}">{{ job.status }}</span>
+        <strong style="margin-left:8px;">次の操作: {{ job.next_action_label }}</strong>
+      </p>
+      <div class="primary-next">
+        <div>
+          <strong>おすすめの次アクション</strong>
+          <span class="muted">
+            {% if job.source_count == 0 %}
+            まずは Google Docs / Sheets を登録して、入力ソースをそろえます。
+            {% elif not latest_preview_artifact %}
+            取得したソースを確認してからドラフト生成へ進みます。
+            {% elif latest_preview_artifact.artifact_type != 'final_markdown' %}
+            配布面を確認して、必要なら編集保存して承認準備へ進みます。
+            {% elif not job.approval_current %}
+            編集済みの配布面を確認し、送付前承認へ進みます。
+            {% elif not job.has_export %}
+            承認済みの内容から HTML エクスポートを作成します。
+            {% else %}
+            配布用成果物はそろっています。必要なら再生成比較や送付用確認へ進んでください。
+            {% endif %}
+          </span>
+        </div>
+        <a href="{{ job.next_action_anchor }}">{{ job.next_action_label }}</a>
+      </div>
+      <div class="workflow-board" aria-label="通常の進め方">
+        <div class="workflow-card {% if job.source_count > 0 %}done{% elif job.source_count == 0 %}active{% endif %}">
+          <b>1. ソース登録</b>
+          <span class="muted">Docs URL と Sheets URL を登録し、対象生徒の材料をそろえます。</span>
+          <span class="state">{% if job.source_count > 0 %}完了{% else %}作業中{% endif %}</span>
+        </div>
+        <div class="workflow-card {% if latest_preview_artifact %}done{% elif job.source_count > 0 %}active{% endif %}">
+          <b>2. レポート生成</b>
+          <span class="muted">「取得してレポート生成」または OpenRouter 生成でドラフトを出します。</span>
+          <span class="state">{% if latest_preview_artifact %}完了{% elif job.source_count > 0 %}次にここ{% else %}待機{% endif %}</span>
+        </div>
+        <div class="workflow-card {% if latest_preview_artifact and latest_preview_artifact.artifact_type == 'final_markdown' %}done{% elif latest_preview_artifact %}active{% endif %}">
+          <b>3. 編集と確認</b>
+          <span class="muted">プレビューを見ながら本文を直し、配布面として保存します。</span>
+          <span class="state">{% if latest_preview_artifact and latest_preview_artifact.artifact_type == 'final_markdown' %}完了{% elif latest_preview_artifact %}次にここ{% else %}待機{% endif %}</span>
+        </div>
+        <div class="workflow-card {% if job.approval_current and job.has_export %}done{% elif latest_preview_artifact and latest_preview_artifact.artifact_type == 'final_markdown' %}active{% endif %}">
+          <b>4. 承認と出力</b>
+          <span class="muted">承認後に HTML エクスポートを作成し、送付前の最終確認をします。</span>
+          <span class="state">{% if job.approval_current and job.has_export %}完了{% elif latest_preview_artifact and latest_preview_artifact.artifact_type == 'final_markdown' %}次にここ{% else %}待機{% endif %}</span>
+        </div>
+      </div>
+      <div class="summary">
+        <div class="summary-item">
+          <span class="muted">ソース</span>
+          <strong>{{ job.source_count }}</strong>
+        </div>
+        <div class="summary-item">
+          <span class="muted">成果物</span>
+          <strong>{{ job.artifact_count }}</strong>
+        </div>
+        <div class="summary-item">
+          <span class="muted">validation error</span>
+          <strong>{{ job.validation_error_count }}</strong>
+        </div>
+        <div class="summary-item">
+          <span class="muted">最新プレビュー</span>
+          <strong>{{ job.latest_artifact_type or "-" }}</strong>
+          {% if job.latest_artifact_hash %}<code>{{ job.latest_artifact_hash }}</code>{% endif %}
+        </div>
+        <div class="summary-item">
+          <span class="muted">承認</span>
+          <strong>{% if job.approval_current %}現在の配布面を承認済み{% else %}未承認/再承認必要{% endif %}</strong>
+        </div>
+        <div class="summary-item">
+          <span class="muted">HTML export</span>
+          <strong>{% if job.has_export %}作成済み{% else %}未作成{% endif %}</strong>
+        </div>
+      </div>
+      <nav class="quick-nav" aria-label="次の操作ショートカット">
+        <a href="#operation-log-section">実行状況</a>
+        <a href="#sources-panel">ソース確認</a>
+        <a href="#status-panel">生成状態</a>
+        <a href="#preview-section">プレビュー/編集</a>
+        <a href="#validation-section">検証結果</a>
+        <a href="#approval-panel">承認</a>
+        <a href="#export-panel">エクスポート</a>
+      </nav>
+    </section>
+    <section id="review-guide-section" class="panel" aria-label="確認ガイド">
+      <h2>まず確認すること</h2>
+      {% if job.source_count == 0 and not latest_preview_artifact %}
+      <div role="alert" class="source-guide-item primary" style="margin-bottom:12px;">
+        <b>まだレポートは生成されていません</b>
+        <span class="muted">この画面では、先にGoogle Docs / Sheetsを登録します。その後「取得してレポート生成」を押すと、下のプレビューにドラフトが表示されます。</span>
+      </div>
+      {% elif job.source_count > 0 and not latest_preview_artifact %}
+      <div role="alert" class="source-guide-item primary" style="margin-bottom:12px;">
+        <b>ソース取得済み・レポート未生成</b>
+        <span class="muted">ソース内容を確認し、生成操作の「OpenRouter生成」またはデータソース登録の「取得してレポート生成」でドラフトを作成してください。</span>
+      </div>
+      {% endif %}
+      <div class="review-guide">
+        <div class="review-step">
+          <b>1. 入力は合っているか</b>
+          <span class="muted">面談メモ・学習計画表・対象生徒にズレがないかを見る。</span>
+          <a href="#sources-panel">ソースを見る</a>
+        </div>
+        <div class="review-step">
+          <b>2. 配布文面は自然か</b>
+          <span class="muted">保護者向けの文体、長さ、事実の言い切りを確認する。</span>
+          <a href="#preview-section">プレビューを見る</a>
+        </div>
+        <div class="review-step">
+          <b>3. 送付してよいか</b>
+          <span class="muted">検証エラー、禁止語、承認状態を確認する。</span>
+          <a href="#approval-panel">承認へ進む</a>
+        </div>
+        <div class="review-step">
+          <b>4. 比較・再生成は必要か</b>
+          <span class="muted">必要な時だけ差分や再生成メタを見る。</span>
+          <a href="#advanced-compare">高度な比較を開く</a>
+        </div>
+      </div>
+    </section>
+    <details id="operation-log-section" class="panel" {% if job.status == 'running' or job.status == 'failed' %}open{% endif %}>
+      <summary>実行状況・ログ</summary>
+      <div class="details-body">
+      <p class="muted">未実行・処理中・完了・失敗を工程ごとに確認できます。日時は最後に保存された時刻です。</p>
+      <div
+        id="operation-log-panel"
+        hx-get="/monthly-reports/jobs/{{ job.public_id }}/fragments/operation-log"
+        hx-trigger="load, every 10s, monthly-report-refresh from:body"
+        hx-swap="innerHTML"
+      ></div>
+      </div>
+    </details>
+    <details id="pipeline-section" class="panel" {% if job.can_run or job.status == 'running' %}open{% endif %}>
+      <summary>生成操作・進捗</summary>
+      <div class="details-body">
+      {% set stage_run_disabled = not job.can_run %}
+      {% set stage_run_title = job.run_disabled_reason %}
+      {% set service_owned_disabled = (not service_owned_workflow_allowed) or (not job.can_run) %}
+      {% set service_owned_title = service_owned_workflow_reason if not service_owned_workflow_allowed else job.run_disabled_reason %}
       <form
         hx-post="/monthly-reports/jobs/{{ job.public_id }}/run"
         hx-target="#status-panel"
         hx-swap="innerHTML"
-        style="margin-bottom:14px;"
+        class="action-form"
       >
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="idempotency_key" value="{{ run_idempotency_key }}" />
         <input type="hidden" name="run_idempotency_key" value="{{ run_idempotency_key }}" />
-        <button type="submit" style="padding:10px 14px;border:0;border-radius:8px;background:#0f5959;color:white;">生成開始</button>
-        <button type="submit" name="run_mode" value="mock" style="padding:10px 14px;border:1px solid #0f5959;border-radius:8px;background:white;color:#0f5959;margin-left:8px;">モック生成</button>
-        <button type="submit" name="run_mode" value="openrouter" style="padding:10px 14px;border:1px solid #0f5959;border-radius:8px;background:white;color:#0f5959;margin-left:8px;">OpenRouter生成</button>
+        <div class="split-row">
+          <button type="submit" class="btn btn-primary" {% if stage_run_disabled %}disabled title="{{ stage_run_title }}"{% endif %}>生成開始</button>
+          <button type="submit" name="run_mode" value="mock" class="btn" {% if service_owned_disabled %}disabled title="{{ service_owned_title }}"{% endif %}>モック生成</button>
+          <button type="submit" name="run_mode" value="openrouter" class="btn" {% if service_owned_disabled %}disabled title="{{ service_owned_title }}"{% endif %}>OpenRouter生成</button>
+        </div>
+        {% if job.queued_for_worker %}
+        <p class="muted form-note">{{ job.queued_for_worker_message }}</p>
+        {% elif not service_owned_workflow_allowed %}
+        <p class="muted form-note">{{ service_owned_workflow_reason }}</p>
+        {% elif not job.can_run %}
+        <p class="muted form-note">{{ job.run_disabled_reason }}</p>
+        {% endif %}
       </form>
       <form
         hx-post="/monthly-reports/jobs/{{ job.public_id }}/rerun"
-        hx-target="#status-panel"
+        hx-target="#rerun-created-panel"
         hx-swap="innerHTML"
-        style="margin-bottom:14px;"
+        class="action-form"
       >
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="idempotency_key" value="{{ rerun_idempotency_key }}" />
-        <button type="submit" style="padding:10px 14px;border:1px solid #0f5959;border-radius:8px;background:white;color:#0f5959;">再生成</button>
+        {% if can_tune %}
+        <fieldset class="tuning">
+          <legend>再生成チューニング</legend>
+          <label>
+            <span class="muted">prompt_version</span><br>
+            <input class="input-field" name="rerun_prompt_version" value="{{ job.prompt_version or '' }}">
+          </label>
+          <div class="row">
+            <label>
+              <span class="muted">本文モデル</span><br>
+              <input class="input-field" name="rerun_model_report" value="{{ job.model_report or '' }}">
+            </label>
+            <label>
+              <span class="muted">軽量モデル</span><br>
+              <input class="input-field" name="rerun_model_light" value="{{ job.model_light or '' }}">
+            </label>
+          </div>
+        </fieldset>
+        {% endif %}
+        <button type="submit" class="btn" {% if not can_rerun %}disabled title="{{ rerun_disabled_reason }}"{% endif %}>再生成</button>
+        {% if not can_rerun %}
+        <p class="muted form-note">{{ rerun_disabled_reason }}</p>
+        {% endif %}
+      </form>
+      <div id="rerun-created-panel" class="action-form"></div>
+      <form
+        hx-post="/monthly-reports/jobs/{{ job.public_id }}/cancel"
+        hx-target="#status-panel"
+        hx-swap="innerHTML"
+        class="action-form"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="idempotency_key" value="{{ cancel_idempotency_key }}" />
+        <button type="submit" class="btn btn-danger" {% if not job.can_cancel %}disabled title="{{ job.cancel_disabled_reason }}"{% endif %}>キャンセル</button>
+        {% if not job.can_cancel %}
+        <p class="muted form-note">{{ job.cancel_disabled_reason }}</p>
+        {% endif %}
       </form>
       <div
         id="status-panel"
@@ -52,9 +340,25 @@
       >
         {% include "monthly_report_workshop/fragments/status.html" %}
       </div>
-    </section>
-    <section class="panel">
-      <h2>ソース確認</h2>
+      </div>
+    </details>
+    <section id="sources-section" class="panel">
+      <h2>データソース登録・確認</h2>
+      <p class="muted">まず Google Docs の面談メモと Google Sheets の基本情報・学習計画表を取得します。保存済みソースを確認してから生成へ進んでください。</p>
+      <div class="source-guide" aria-label="データソース投入の手順">
+        <div class="source-guide-item primary">
+          <b>通常はこちら: Googleから取得</b>
+          <span class="muted">Docs URL は複数行、Sheets URL は1件。Sheets は既定で student と lesson plan の使用範囲全体を取得します。</span>
+        </div>
+        <div class="source-guide-item">
+          <b>例外対応: 手入力で保存</b>
+          <span class="muted">Google取得が使えない時だけ、面談メモなどの本文を直接貼り付けます。</span>
+        </div>
+        <div class="source-guide-item">
+          <b>取得後: 内容を要約</b>
+          <span class="muted">対象生徒・期間・科目のズレや取得漏れを生成前に確認します。</span>
+        </div>
+      </div>
       <div
         id="sources-panel"
         hx-get="/monthly-reports/jobs/{{ job.public_id }}/fragments/sources"
@@ -62,88 +366,278 @@
         hx-swap="innerHTML"
       ></div>
       <form
-        hx-post="/monthly-reports/jobs/{{ job.public_id }}/fragments/sources"
-        hx-target="#sources-panel"
+        hx-post="/monthly-reports/jobs/{{ job.public_id }}/fragments/source-summary"
+        hx-target="#source-summary-panel"
         hx-swap="innerHTML"
-        style="display:grid;gap:10px;margin-top:14px;"
+        class="subsection"
       >
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <input type="hidden" name="idempotency_key" value="{{ source_idempotency_key }}" />
-        <label>
-          <span class="muted">種類</span><br>
-          <input name="source_type" value="doc" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
-        </label>
-        <label>
-          <span class="muted">表示名</span><br>
-          <input name="display_name" value="面談メモ" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
-        </label>
-        <label>
-          <span class="muted">本文</span><br>
-          <textarea name="snapshot_text" rows="4" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;"></textarea>
-        </label>
-        <button type="submit" style="justify-self:start;padding:10px 14px;border:0;border-radius:8px;background:#0f5959;color:white;">ソース保存</button>
+        <input type="hidden" name="idempotency_key" value="{{ source_summary_idempotency_key }}" />
+        <button type="submit" class="btn">取得内容を要約</button>
       </form>
+      <div id="source-summary-panel" class="subsection"></div>
+      <details class="subsection" {% if job.source_count == 0 %}open{% endif %}>
+        <summary class="subsection-summary">Google Docs / Sheets を投入する</summary>
+        <div class="subsection-grid">
       <form
+        id="google-sources-form"
         hx-post="/monthly-reports/jobs/{{ job.public_id }}/fragments/google-sources"
         hx-target="#sources-panel"
         hx-swap="innerHTML"
-        style="display:grid;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid #dce1e7;"
+        class="stack-form"
       >
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="idempotency_key" value="{{ google_sources_idempotency_key }}" />
         <label>
-          <span class="muted">Google Docs ID / URL（複数行可）</span><br>
-          <textarea name="doc_ids" rows="3" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;"></textarea>
+          <span class="muted">面談メモ Google Docs URL（複数行可）</span><br>
+          <textarea class="input-field" name="doc_ids" rows="3" placeholder="https://docs.google.com/document/d/..."></textarea>
         </label>
         <label>
-          <span class="muted">Google Sheets ID / URL</span><br>
-          <input name="spreadsheet_id" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
+          <span class="muted">基本情報・学習計画表 Google Sheets URL（student と lesson plan を全範囲取得）</span><br>
+          <input class="input-field" name="spreadsheet_id" placeholder="https://docs.google.com/spreadsheets/d/...">
         </label>
-        <label>
-          <span class="muted">Sheets range</span><br>
-          <input name="range_name" placeholder="student!A1:B20" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
-        </label>
-        <label>
-          <span class="muted">Sheets表示名</span><br>
-          <input name="sheet_display_name" placeholder="学習計画表 student" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
-        </label>
-        <button type="submit" style="justify-self:start;padding:10px 14px;border:1px solid #0f5959;border-radius:8px;background:white;color:#0f5959;">Googleから取得</button>
+        <div id="sheet-selector-panel">
+          {% include "monthly_report_workshop/fragments/sheet_selector.html" %}
+        </div>
+        <div class="split-row">
+            <button
+              type="button"
+              hx-post="/monthly-reports/jobs/{{ job.public_id }}/fragments/sheet-selector"
+              hx-include="#google-sources-form"
+              hx-target="#sheet-selector-panel"
+            hx-swap="innerHTML"
+            hx-on::before-request="const input=this.form.elements['spreadsheet_id']; if (!input.value.trim()) { input.setCustomValidity('Google Sheets ID / URLを入力してください'); input.reportValidity(); setTimeout(() => input.setCustomValidity(''), 0); event.preventDefault(); }"
+            class="btn"
+          >シート名を確認</button>
+          <button type="submit" class="btn btn-primary">Googleからソース取得</button>
+          <button
+            type="submit"
+            name="after_fetch_action"
+            value="generate_openrouter"
+            {% if stage_run_disabled %}disabled title="{{ stage_run_title }}"{% endif %}
+            class="btn btn-deep"
+          >取得してレポート生成</button>
+        </div>
+        <p class="muted">
+          {% if service_owned_workflow_allowed %}
+          生成まで進めると、ソース取得後にOpenRouterでドラフトを作成し、プレビューへ反映します。
+          {% else %}
+          生成まで進めると、ソース取得後に worker へドラフト生成を依頼し、処理が完了するとプレビューへ反映されます。
+          {% endif %}
+          {% if job.queued_for_worker %}{{ job.queued_for_worker_message }}{% elif not service_owned_workflow_allowed %}{{ service_owned_workflow_reason }}{% elif not job.can_run %}{{ job.run_disabled_reason }}{% endif %}
+        </p>
       </form>
+        </div>
+      </details>
+      <details class="subsection">
+        <summary class="subsection-summary">手入力でソースを保存する</summary>
+        <form
+          hx-post="/monthly-reports/jobs/{{ job.public_id }}/fragments/sources"
+          hx-target="#sources-panel"
+          hx-swap="innerHTML"
+          class="stack-form"
+        >
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+          <input type="hidden" name="idempotency_key" value="{{ source_idempotency_key }}" />
+          <label>
+            <span class="muted">種類</span><br>
+            <input class="input-field" name="source_type" value="doc">
+          </label>
+          <label>
+            <span class="muted">表示名</span><br>
+            <input class="input-field" name="display_name" value="面談メモ">
+          </label>
+          <label>
+            <span class="muted">本文</span><br>
+            <textarea class="input-field" name="snapshot_text" rows="4" required></textarea>
+          </label>
+          <button type="submit" class="btn" style="justify-self:start;">手入力ソースを保存</button>
+        </form>
+      </details>
     </section>
-    <section class="panel">
-      <h2>プレビュー</h2>
-      <div
-        id="preview-panel"
-        hx-get="/monthly-reports/jobs/{{ job.public_id }}/fragments/preview"
-        hx-trigger="load, every 10s"
-        hx-swap="innerHTML"
-      ></div>
-      <form
-        hx-post="/monthly-reports/jobs/{{ job.public_id }}/fragments/edited-markdown"
-        hx-target="#preview-panel"
-        hx-swap="innerHTML"
-        style="display:grid;gap:10px;margin-top:14px;"
-      >
-        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <input type="hidden" name="idempotency_key" value="{{ edited_markdown_idempotency_key }}" />
-        <input type="hidden" name="base_content_hash" value="{{ job.latest_artifact_hash or '' }}" />
-        <label>
-          <span class="muted">編集後Markdown保存</span><br>
-          <textarea name="edited_markdown" rows="8" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;"></textarea>
-        </label>
-        <button type="submit" style="justify-self:start;padding:10px 14px;border:0;border-radius:8px;background:#0f5959;color:white;">保存</button>
-      </form>
+    <section id="preview-section" class="panel">
+      <h2>プレビュー / 編集</h2>
+      <p class="muted">主に確認するのは配布面プレビューです。生成Markdownは再現性のための中間成果物として保持し、必要なときだけ下の補助領域で確認します。</p>
+      <div class="editor-grid">
+        <div class="editor-pane">
+          <div class="editor-head">
+            <h3>配布面プレビュー</h3>
+            {% if latest_preview_artifact %}
+            <span class="badge {% if latest_preview_artifact.artifact_type == 'final_markdown' %}done{% endif %}">{{ latest_preview_artifact.artifact_type }}</span>
+            {% endif %}
+          </div>
+          <div
+            id="preview-panel"
+            hx-get="/monthly-reports/jobs/{{ job.public_id }}/fragments/preview"
+            hx-trigger="load, every 10s"
+            hx-swap="innerHTML"
+          ></div>
+        </div>
+        <div class="editor-pane">
+          <div class="editor-head">
+            <h3>配布面の確定と編集</h3>
+            <span class="badge">HTML優先</span>
+          </div>
+          <div class="source-guide">
+            <div class="source-guide-item primary">
+              <b>1. 配布面を確認する</b>
+              <span class="muted">左のプレビューで、保護者向けの見え方と内容を確認します。</span>
+            </div>
+            <div class="source-guide-item">
+              <b>2. HTML側で整える</b>
+              <span class="muted">承認・エクスポートの下にあるHTMLソース編集や既存全文エディタ導線で、最終的な配布面を整えます。</span>
+            </div>
+            <div class="source-guide-item">
+              <b>3. 送付版を固定する</b>
+              <span class="muted">承認、HTMLエクスポート、送付用固定の順で進めます。</span>
+            </div>
+          </div>
+          <div class="editor-actions" style="margin-top:14px;">
+            <a href="#approval-panel" class="btn btn-primary">承認・エクスポートへ進む</a>
+            <a href="#html-source-panel" class="btn">HTMLソースを確認</a>
+            <a href="#advanced-compare" class="btn">生成Markdownと差分を見る</a>
+          </div>
+        </div>
+      </div>
+      <details style="margin-top:16px;">
+        <summary style="cursor:pointer;font-weight:700;color:#0f5959;">生成Markdown（中間成果物）を確認・保存する</summary>
+        <form
+          class="editor-pane"
+          style="margin-top:12px;"
+          hx-post="/monthly-reports/jobs/{{ job.public_id }}/fragments/edited-markdown"
+          hx-target="#preview-panel"
+          hx-swap="innerHTML"
+          hx-on::after-request="if (event.detail.successful) { this.dataset.dirty = 'false'; this.querySelector('.unsaved').style.display = 'none'; document.body.dispatchEvent(new Event('monthly-report-refresh')); }"
+        >
+          <div class="editor-head">
+            <h3>生成Markdown（中間成果物）</h3>
+            <span class="badge {% if latest_preview_artifact and latest_preview_artifact.artifact_type == 'final_markdown' %}done{% endif %}">
+              {% if latest_preview_artifact and latest_preview_artifact.artifact_type == 'final_markdown' %}保存済み{% else %}ドラフト{% endif %}
+            </span>
+          </div>
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+          <input type="hidden" name="idempotency_key" value="{{ edited_markdown_idempotency_key }}" />
+          <input type="hidden" name="base_content_hash" value="{{ job.latest_artifact_hash or '' }}" />
+          <label>
+            <span class="muted editing-hint">Markdownは中間成果物として保存します。保存すると `final_markdown` として扱われ、承認対象になります。</span><br>
+            <textarea
+              class="editor-textarea"
+              name="edited_markdown"
+              rows="18"
+              required
+              aria-label="生成Markdown（中間成果物）"
+              oninput="this.form.dataset.dirty='true'; this.form.querySelector('.unsaved').style.display='inline-flex';"
+            >{{ latest_preview_artifact.content if latest_preview_artifact else "" }}</textarea>
+          </label>
+          <div class="editor-actions">
+            <button type="submit" class="btn btn-primary">生成Markdownを保存</button>
+            <span class="unsaved badge error">未保存の変更</span>
+            {% if job.latest_artifact_hash %}<span class="muted">base <code>{{ job.latest_artifact_hash }}</code></span>{% endif %}
+          </div>
+        </form>
+      </details>
+      <details id="advanced-compare" style="margin-top:16px;">
+        <summary style="cursor:pointer;font-weight:700;color:#0f5959;">差分・再生成比較を確認する</summary>
+        <div style="display:grid;gap:16px;margin-top:12px;">
+      <div class="diff-panel">
+        <div class="editor-head">
+          <h3>draft / final 差分</h3>
+          <span class="muted">編集保存後に更新されます</span>
+        </div>
+        <div
+          id="diff-panel"
+          hx-get="/monthly-reports/jobs/{{ job.public_id }}/fragments/diff"
+          hx-trigger="load, every 10s"
+          hx-swap="innerHTML"
+        ></div>
+      </div>
+      <div class="diff-panel">
+        <div class="editor-head">
+          <h3>再生成メタ比較</h3>
+          <span class="muted">prompt/model/template/source hash</span>
+        </div>
+        <div
+          id="rerun-comparison-panel"
+          hx-get="/monthly-reports/jobs/{{ job.public_id }}/fragments/rerun-comparison"
+          hx-trigger="load"
+          hx-swap="innerHTML"
+        ></div>
+      </div>
+      <div class="diff-panel">
+        <div class="editor-head">
+          <h3>再生成本文差分</h3>
+          <span class="muted">最新Markdown同士を比較</span>
+        </div>
+        <div
+          id="rerun-diff-panel"
+          hx-get="/monthly-reports/jobs/{{ job.public_id }}/fragments/rerun-diff"
+          hx-trigger="load"
+          hx-swap="innerHTML"
+        ></div>
+      </div>
+        </div>
+      </details>
     </section>
-    <section class="panel">
+    <section id="validation-section" class="panel">
       <h2>検証結果</h2>
       <div
+        id="validation-panel"
         hx-get="/monthly-reports/jobs/{{ job.public_id }}/fragments/validation"
         hx-trigger="load, every 10s"
         hx-swap="innerHTML"
       ></div>
     </section>
-    <section class="panel">
-      <h2>フィードバック</h2>
+    <section id="approval-section" class="panel">
+      <h2>承認・エクスポート</h2>
+      <p class="muted">承認 -> HTMLエクスポート -> 送付用固定の順で進みます。各パネルに現在地と次の操作を表示します。</p>
+      <div class="delivery-rail" aria-label="送付前の進め方">
+        <div class="delivery-step">
+          <b>1. 承認</b>
+          <span class="muted">現在の配布面が送付対象でよいかを確定します。</span>
+        </div>
+        <div class="delivery-step">
+          <b>2. HTMLエクスポート</b>
+          <span class="muted">承認済みの配布面から配布用HTMLを作成します。</span>
+        </div>
+        <div class="delivery-step">
+          <b>3. 送付用固定</b>
+          <span class="muted">実際に配布する版を固定し、手動送付の対象を確定します。</span>
+        </div>
+      </div>
+      <div
+        id="approval-panel"
+        hx-get="/monthly-reports/jobs/{{ job.public_id }}/fragments/approval"
+        hx-trigger="load, monthly-report-refresh from:body"
+        hx-swap="innerHTML"
+      ></div>
+      <div
+        id="export-panel"
+        hx-get="/monthly-reports/jobs/{{ job.public_id }}/fragments/export"
+        hx-trigger="load, monthly-report-refresh from:body"
+        hx-swap="innerHTML"
+        class="subsection"
+      ></div>
+      <details class="subsection">
+        <summary class="subsection-summary">HTMLソース・送付用パッケージを確認する</summary>
+        <div class="subsection-grid">
+      <div
+        id="html-source-panel"
+        hx-get="/monthly-reports/jobs/{{ job.public_id }}/fragments/html-source"
+        hx-trigger="load, monthly-report-refresh from:body"
+        hx-swap="innerHTML"
+      ></div>
+      <div
+        id="distribution-panel"
+        hx-get="/monthly-reports/jobs/{{ job.public_id }}/fragments/distribution"
+        hx-trigger="load, monthly-report-refresh from:body"
+        hx-swap="innerHTML"
+      ></div>
+        </div>
+      </details>
+    </section>
+    <details id="feedback-section" class="panel">
+      <summary>チューニング用フィードバック</summary>
+      <div class="details-body">
       <div id="feedback-panel">
         {% include "monthly_report_workshop/fragments/feedback.html" %}
       </div>
@@ -151,28 +645,32 @@
         hx-post="/monthly-reports/jobs/{{ job.public_id }}/fragments/feedback"
         hx-target="#feedback-panel"
         hx-swap="innerHTML"
-        style="display:grid;gap:10px;margin-top:14px;"
+        class="stack-form"
       >
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="idempotency_key" value="{{ feedback_idempotency_key }}" />
         <label>
           <span class="muted">分類</span><br>
-          <input name="category" value="tone" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;">
+          <input class="input-field" name="category" value="tone">
         </label>
         <label>
           <span class="muted">コメント</span><br>
-          <textarea name="comment" rows="3" style="width:100%;padding:10px;border:1px solid #dce1e7;border-radius:8px;"></textarea>
+          <textarea class="input-field" name="comment" rows="3" required></textarea>
         </label>
-        <button type="submit" style="justify-self:start;padding:10px 14px;border:0;border-radius:8px;background:#0f5959;color:white;">保存</button>
+        <button type="submit" class="btn btn-primary" style="justify-self:start;">保存</button>
       </form>
-    </section>
-    <section class="panel">
-      <h2>再現性メタ</h2>
+      </div>
+    </details>
+    <details id="meta-section" class="panel">
+      <summary>再現性メタ</summary>
+      <div class="details-body">
       <p><strong>prompt_version</strong><br><code>{{ job.prompt_version or "-" }}</code></p>
       <p><strong>template_hash</strong><br><code>{{ job.template_hash or "-" }}</code></p>
       <p><strong>model</strong><br><code>{{ job.model }}</code></p>
       <p><strong>source_bundle_hash</strong><br><code>{{ job.source_bundle_hash or "-" }}</code></p>
-    </section>
+      </div>
+    </details>
   </main>
+  </div>
 </body>
 </html>

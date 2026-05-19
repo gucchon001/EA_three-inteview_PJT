@@ -24,6 +24,25 @@ def monthly_report_mock_auth_env():
         os.environ["EB_AUTH_MODE"] = old
 
 
+def _minimal_pattern_b_markdown(body: str) -> str:
+    return "\n".join(
+        [
+            "# 月次レポート",
+            "## 01 基本情報",
+            "本文",
+            "## 02 塾での様子",
+            "本文",
+            "## 03 授業内容",
+            "本文",
+            "## 04 課題とアドバイス",
+            "本文",
+            "## 05 学習の進捗",
+            "本文",
+            f"## 07 今後の授業計画\n{body}",
+        ]
+    )
+
+
 def test_monthly_report_api_creates_lists_gets_and_cancels_job():
     app = create_app()
     client = TestClient(app)
@@ -107,7 +126,88 @@ def test_monthly_report_api_uses_supabase_user_as_owner_and_filters_other_users(
     assert [job["job_id"] for job in user_a_jobs.json()["jobs"]] == [job_id]
     assert user_b_jobs.json()["jobs"] == []
     assert client.get(f"/api/monthly-reports/jobs/{job_id}", headers=user_b_headers).status_code == 404
-    assert client.post(f"/api/monthly-reports/jobs/{job_id}/cancel", headers=user_b_headers).status_code == 404
+    assert (
+        client.post(
+            f"/api/monthly-reports/jobs/{job_id}/cancel",
+            headers={**user_b_headers, "X-EB-Caller-Intent": "e2e"},
+        ).status_code
+        == 404
+    )
+
+
+def test_monthly_report_api_create_job_stays_service_owned_direct_insert(
+    monkeypatch,
+):
+    monkeypatch.setenv("EB_AUTH_MODE", "supabase")
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+
+    class FakeDirectCreateStore:
+        def __init__(self) -> None:
+            self.calls: list[tuple[str, dict[str, object]]] = []
+
+        def create_job_with_active_limit(self, **kwargs):
+            self.calls.append(("create_job_with_active_limit", kwargs))
+            return monthly_reports_router.MockJob(
+                public_id="mrj_direct_create",
+                target_month=str(kwargs["target_month"]),
+                household_key=str(kwargs["household_key"]),
+                owner_user_id=str(kwargs["owner_user_id"]),
+                status="queued",
+                template_key=kwargs.get("template_key"),
+                prompt_version=kwargs.get("prompt_version"),
+            )
+
+    store = FakeDirectCreateStore()
+    app = create_app()
+    client = TestClient(app)
+
+    monkeypatch.setattr(monthly_reports_router, "_get_store", lambda: store)
+    monkeypatch.setattr(
+        monthly_reports_router,
+        "_get_rls_read_store",
+        lambda current_user: (_ for _ in ()).throw(
+            AssertionError("create_job should not resolve an RLS read/write store")
+        ),
+    )
+
+    headers = {
+        "Authorization": f"Bearer {_supabase_token(sub='user-a', email='user-a@tomonokai-corp.com')}"
+    }
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        headers=headers,
+        json={
+            "target_month": "2026-04",
+            "household_key": "service_owned_direct_create",
+            "owner_user_id": "spoofed-owner",
+            "template_key": "pattern_b",
+            "prompt_version": "monthly-report-vservice-owned.1",
+        },
+    )
+
+    assert created.status_code == 200
+    assert created.json()["job_id"] == "mrj_direct_create"
+    assert created.json()["owner_user_id"] == "user-a"
+    assert store.calls == [
+        (
+            "create_job_with_active_limit",
+            {
+                "target_month": "2026-04",
+                "household_key": "service_owned_direct_create",
+                "owner_user_id": "user-a",
+                "max_active_jobs": monthly_reports_router.MAX_ACTIVE_JOBS_PER_USER,
+                "template_key": "pattern_b",
+                "prompt_version": "monthly-report-vservice-owned.1",
+                "template_hash": None,
+                "model_report": None,
+                "model_light": None,
+                "resolved_model_report": None,
+                "source_bundle_hash": None,
+                "app_version": None,
+                "prompt_scope_notes": None,
+            },
+        )
+    ]
 
 
 def test_monthly_report_api_uses_rls_read_store_for_supabase_user_reads(monkeypatch):
@@ -161,6 +261,146 @@ def test_monthly_report_api_uses_rls_read_store_for_supabase_user_reads(monkeypa
         "get",
         "list_llm_calls",
     ]
+
+
+def test_monthly_report_api_write_actions_use_rls_read_preflight_for_supabase_user(
+    monkeypatch,
+):
+    monkeypatch.setenv("EB_AUTH_MODE", "supabase")
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+    monkeypatch.setenv("SUPABASE_URL", "http://127.0.0.1:56321")
+    monkeypatch.setenv("SUPABASE_ANON_KEY", "anon-key")
+    app = create_app()
+    client = TestClient(app)
+    job = monthly_reports_router._store.create_job(
+        target_month="2026-04",
+        household_key="api_rls_write_household",
+        owner_user_id="user-a",
+    )
+    read_store = _FakeRLSReadStore(job)
+    monkeypatch.setattr(
+        monthly_reports_router,
+        "_get_rls_read_store",
+        lambda current_user: read_store,
+    )
+    headers = {
+        "Authorization": f"Bearer {_supabase_token(sub='user-a', email='user-a@tomonokai-corp.com')}",
+        "Idempotency-Key": "api-rls-write-key",
+    }
+
+    source = client.post(
+        f"/api/monthly-reports/jobs/{job.public_id}/sources",
+        headers=headers,
+        json={
+            "source_type": "doc",
+            "display_name": "RLS API source",
+            "snapshot_text": "RLS read preflight",
+        },
+    )
+    artifact = client.post(
+        f"/api/monthly-reports/jobs/{job.public_id}/artifacts",
+        headers={**headers, "Idempotency-Key": "api-rls-artifact-key"},
+        json={
+            "artifact_type": "draft_markdown",
+            "content": "## 01 基本情報\nRLS API artifact",
+        },
+    )
+    validation = client.post(
+        f"/api/monthly-reports/jobs/{job.public_id}/validations",
+        headers={**headers, "X-EB-Caller-Intent": "e2e"},
+        json={
+            "rule_id": "rls_api_validation",
+            "severity": "info",
+            "message": "ok",
+        },
+    )
+    feedback = client.post(
+        f"/api/monthly-reports/jobs/{job.public_id}/feedback",
+        headers={**headers, "Idempotency-Key": "api-rls-feedback-key"},
+        json={
+            "category": "tone",
+            "comment": "RLS API feedback",
+        },
+    )
+
+    assert source.status_code == 200
+    assert artifact.status_code == 200
+    assert validation.status_code == 200
+    assert feedback.status_code == 200
+    assert read_store.calls == [
+        "get",
+        "record_source",
+        "get",
+        "record_artifact",
+        "get",
+        "record_validation",
+        "get",
+        "record_feedback",
+    ]
+    assert read_store.sources[-1].display_name == "RLS API source"
+    assert validation.json()["validation_id"].startswith("mrv_api_rls_")
+    assert any(item.comment == "RLS API feedback" for item in read_store.job.feedback)
+
+
+def test_monthly_report_api_fetch_google_sources_uses_rls_write_store_for_supabase_user(
+    monkeypatch,
+):
+    monkeypatch.setenv("EB_AUTH_MODE", "supabase")
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+    monkeypatch.setenv("SUPABASE_URL", "http://127.0.0.1:56321")
+    monkeypatch.setenv("SUPABASE_ANON_KEY", "anon-key")
+    monkeypatch.setattr(
+        monthly_reports_router,
+        "_resolve_google_workspace_access_token",
+        lambda current_user: "resolved-access-token",
+    )
+
+    class FakeGoogleWorkspaceClient:
+        def __init__(self, *, access_token):
+            assert access_token == "resolved-access-token"
+
+        def fetch_doc(self, *, document_id, display_name=None):
+            assert document_id == "doc-id"
+            return GoogleWorkspaceSource(
+                source_type="google_doc",
+                display_name=display_name or "RLS API Google Doc",
+                snapshot_text="doc text",
+                content_hash="sha256:api-rls-gdoc",
+            )
+
+    monkeypatch.setattr(
+        monthly_reports_router,
+        "GoogleWorkspaceClient",
+        FakeGoogleWorkspaceClient,
+    )
+    app = create_app()
+    client = TestClient(app)
+    job = monthly_reports_router._store.create_job(
+        target_month="2026-04",
+        household_key="api_rls_google_source_household",
+        owner_user_id="user-a",
+    )
+    read_store = _FakeRLSReadStore(job)
+    monkeypatch.setattr(
+        monthly_reports_router,
+        "_get_rls_read_store",
+        lambda current_user: read_store,
+    )
+    headers = {
+        "Authorization": f"Bearer {_supabase_token(sub='user-a', email='user-a@tomonokai-corp.com')}",
+        "Idempotency-Key": "api-rls-google-fetch-key",
+    }
+
+    fetched = client.post(
+        f"/api/monthly-reports/jobs/{job.public_id}/fetch-google-sources",
+        headers=headers,
+        json={"doc_ids": ["doc-id"], "sheet_ranges": []},
+    )
+
+    assert fetched.status_code == 200
+    assert read_store.calls[:2] == ["get", "record_source"]
+    assert read_store.sources[-1].content_hash == "sha256:api-rls-gdoc"
+    assert monthly_reports_router._store.list_sources(job.public_id) == []
 
 
 def test_monthly_report_api_rejects_invalid_create_payload():
@@ -448,6 +688,52 @@ def test_monthly_report_api_records_source_snapshot_and_artifact():
     assert artifacts.json()["artifacts"] == [artifact.json()]
 
 
+def test_monthly_report_api_record_validation_is_idempotent_with_header_key():
+    app = create_app()
+    client = TestClient(app)
+
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        json={
+            "target_month": "2026-04",
+            "household_key": "demo_validation_idempotent",
+            "owner_user_id": "owner-validation-idempotent-api",
+        },
+    )
+    job_id = created.json()["job_id"]
+
+    first = client.post(
+        f"/api/monthly-reports/jobs/{job_id}/validations",
+        headers={
+            "Idempotency-Key": "validation-demo-idem",
+            "X-EB-Caller-Intent": "e2e",
+        },
+        json={
+            "rule_id": "non_empty_markdown",
+            "severity": "info",
+            "message": "初回validation",
+        },
+    )
+    second = client.post(
+        f"/api/monthly-reports/jobs/{job_id}/validations",
+        headers={
+            "Idempotency-Key": "validation-demo-idem",
+            "X-EB-Caller-Intent": "e2e",
+        },
+        json={
+            "rule_id": "non_empty_markdown",
+            "severity": "error",
+            "message": "二重送信",
+        },
+    )
+
+    assert first.status_code == 200
+    assert second.status_code == 200
+    assert second.json() == first.json()
+    validations = client.get(f"/api/monthly-reports/jobs/{job_id}/validations")
+    assert validations.json()["validations"] == [first.json()]
+
+
 def test_monthly_report_api_record_artifact_is_idempotent_with_header_key():
     app = create_app()
     client = TestClient(app)
@@ -679,7 +965,7 @@ def test_monthly_report_api_fetches_google_workspace_sources_with_resolved_oauth
     monkeypatch.delenv("EB_GOOGLE_WORKSPACE_ACCESS_TOKEN", raising=False)
 
     def fake_resolve_google_workspace_access_token(current_user):
-        assert current_user.user_id == "mock-user@tomonokai-corp.com"
+        assert current_user.email.endswith("@tomonokai-corp.com")
         return "resolved-access-token"
 
     def fake_fetch_doc(self, *, document_id, display_name=None):
@@ -734,6 +1020,7 @@ def test_monthly_report_api_records_validation_result():
 
     validation = client.post(
         f"/api/monthly-reports/jobs/{job_id}/validations",
+        headers={"X-EB-Caller-Intent": "e2e"},
         json={
             "rule_id": "required-heading",
             "severity": "error",
@@ -750,6 +1037,454 @@ def test_monthly_report_api_records_validation_result():
     validations = client.get(f"/api/monthly-reports/jobs/{job_id}/validations")
     assert validations.status_code == 200
     assert validations.json()["validations"] == [validation.json()]
+
+
+def test_monthly_report_api_validation_requires_caller_intent_for_supabase_user(
+    monkeypatch,
+):
+    monkeypatch.setenv("EB_AUTH_MODE", "supabase")
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+    monkeypatch.setattr(monthly_reports_router, "_store", monthly_reports_router.MockJobStore())
+    app = create_app()
+    client = TestClient(app)
+    headers = {
+        "Authorization": f"Bearer {_supabase_token(sub='user-a', email='user-a@tomonokai-corp.com')}"
+    }
+
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        headers=headers,
+        json={
+            "target_month": "2026-04",
+            "household_key": "validation-caller-intent",
+        },
+    )
+    assert created.status_code == 200
+
+    response = client.post(
+        f"/api/monthly-reports/jobs/{created.json()['job_id']}/validations",
+        headers=headers,
+        json={
+            "rule_id": "required-heading",
+            "severity": "error",
+            "message": "missing",
+        },
+    )
+
+    assert response.status_code == 403
+    assert response.json()["detail"] == (
+        "validations requires X-EB-Caller-Intent: admin, e2e"
+    )
+
+
+def test_monthly_report_api_validation_allows_e2e_caller_intent_for_supabase_user(
+    monkeypatch,
+):
+    monkeypatch.setenv("EB_AUTH_MODE", "supabase")
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+    monkeypatch.setattr(monthly_reports_router, "_store", monthly_reports_router.MockJobStore())
+    app = create_app()
+    client = TestClient(app)
+    headers = {
+        "Authorization": f"Bearer {_supabase_token(sub='user-a', email='user-a@tomonokai-corp.com')}",
+        "X-EB-Caller-Intent": "e2e",
+    }
+
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        headers=headers,
+        json={
+            "target_month": "2026-04",
+            "household_key": "validation-caller-e2e",
+        },
+    )
+    assert created.status_code == 200
+
+    response = client.post(
+        f"/api/monthly-reports/jobs/{created.json()['job_id']}/validations",
+        headers=headers,
+        json={
+            "rule_id": "required-heading",
+            "severity": "error",
+            "message": "missing",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.json()["validation_id"].startswith("mrv_")
+
+
+@pytest.mark.parametrize(
+    ("route_suffix", "payload", "extra_headers"),
+    [
+        (
+            "sources",
+            {
+                "source_type": "doc",
+                "display_name": "面談メモ",
+                "snapshot_text": "need owner access",
+            },
+            {"Idempotency-Key": "non-owner-source-idem"},
+        ),
+        (
+            "artifacts",
+            {
+                "artifact_type": "draft_markdown",
+                "content": "## 01 基本情報\nneed owner access",
+            },
+            {"Idempotency-Key": "non-owner-artifact-idem"},
+        ),
+        (
+            "feedback",
+            {
+                "category": "tone",
+                "comment": "need owner access",
+            },
+            {"Idempotency-Key": "non-owner-feedback-idem"},
+        ),
+        (
+            "validations",
+            {
+                "rule_id": "required-heading",
+                "severity": "error",
+                "message": "need owner access",
+            },
+            {
+                "Idempotency-Key": "non-owner-validation-idem",
+                "X-EB-Caller-Intent": "e2e",
+            },
+        ),
+    ],
+)
+def test_monthly_report_api_content_write_routes_return_404_for_non_owner_supabase_user(
+    monkeypatch,
+    route_suffix: str,
+    payload: dict[str, object],
+    extra_headers: dict[str, str],
+):
+    monkeypatch.setenv("EB_AUTH_MODE", "supabase")
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+    monkeypatch.setattr(monthly_reports_router, "_store", monthly_reports_router.MockJobStore())
+    app = create_app()
+    client = TestClient(app)
+
+    owner_headers = {
+        "Authorization": f"Bearer {_supabase_token(sub='user-a', email='user-a@tomonokai-corp.com')}",
+    }
+    other_headers = {
+        "Authorization": f"Bearer {_supabase_token(sub='user-b', email='user-b@tomonokai-corp.com')}",
+    }
+
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        headers=owner_headers,
+        json={
+            "target_month": "2026-04",
+            "household_key": f"non-owner-content-write-{route_suffix}",
+        },
+    )
+    assert created.status_code == 200
+
+    response = client.post(
+        f"/api/monthly-reports/jobs/{created.json()['job_id']}/{route_suffix}",
+        headers={**other_headers, **extra_headers},
+        json=payload,
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Job not found"
+
+
+@pytest.mark.parametrize(
+    ("suffix", "payload"),
+    [
+        ("start", None),
+        ("complete-stage", None),
+        ("fail", {"error_type": "provider_timeout", "error_message": "boom"}),
+        ("cancel", None),
+        ("run-mock", {"content": _minimal_pattern_b_markdown("本文です。")}),
+        ("run-openrouter", None),
+        ("rerun", None),
+    ],
+)
+def test_monthly_report_api_state_mutation_routes_require_caller_intent_for_supabase_user(
+    monkeypatch,
+    suffix: str,
+    payload: dict[str, object] | None,
+):
+    monkeypatch.setenv("EB_AUTH_MODE", "supabase")
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+    monkeypatch.setattr(monthly_reports_router, "_store", monthly_reports_router.MockJobStore())
+    app = create_app()
+    client = TestClient(app)
+    headers = {
+        "Authorization": f"Bearer {_supabase_token(sub='user-a', email='user-a@tomonokai-corp.com')}"
+    }
+
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        headers=headers,
+        json={
+            "target_month": "2026-04",
+            "household_key": f"state-mutation-{suffix}",
+        },
+    )
+    assert created.status_code == 200
+    job_id = created.json()["job_id"]
+
+    if suffix == "run-mock":
+        source = client.post(
+            f"/api/monthly-reports/jobs/{job_id}/sources",
+            headers={**headers, "Idempotency-Key": f"source-{suffix}"},
+            json={
+                "source_type": "doc",
+                "display_name": "面談メモ",
+                "snapshot_text": "4月は需要曲線の読み取りを扱った。",
+            },
+        )
+        assert source.status_code == 200
+
+    response = client.post(
+        f"/api/monthly-reports/jobs/{job_id}/{suffix}",
+        headers=headers,
+        json=payload,
+    )
+
+    assert response.status_code == 403
+    assert response.json()["detail"] == (
+        f"{suffix} requires X-EB-Caller-Intent: admin, e2e"
+    )
+
+
+def test_monthly_report_api_cancel_allows_e2e_caller_intent_for_supabase_user(
+    monkeypatch,
+):
+    monkeypatch.setenv("EB_AUTH_MODE", "supabase")
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+    monkeypatch.setattr(monthly_reports_router, "_store", monthly_reports_router.MockJobStore())
+    app = create_app()
+    client = TestClient(app)
+    headers = {
+        "Authorization": f"Bearer {_supabase_token(sub='user-a', email='user-a@tomonokai-corp.com')}",
+        "X-EB-Caller-Intent": "e2e",
+    }
+
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        headers=headers,
+        json={
+            "target_month": "2026-04",
+            "household_key": "state-mutation-cancel-e2e",
+        },
+    )
+    assert created.status_code == 200
+
+    cancelled = client.post(
+        f"/api/monthly-reports/jobs/{created.json()['job_id']}/cancel",
+        headers=headers,
+    )
+
+    assert cancelled.status_code == 200
+    assert cancelled.json()["status"] == "cancelled"
+
+
+def test_monthly_report_api_admin_caller_intent_requires_admin_role(monkeypatch):
+    monkeypatch.setenv("EB_AUTH_MODE", "supabase")
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+    monkeypatch.setattr(monthly_reports_router, "_store", monthly_reports_router.MockJobStore())
+    app = create_app()
+    client = TestClient(app)
+    user_headers = {
+        "Authorization": f"Bearer {_supabase_token(sub='user-a', email='user-a@tomonokai-corp.com')}"
+    }
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        headers=user_headers,
+        json={
+            "target_month": "2026-04",
+            "household_key": "state-mutation-admin-intent",
+        },
+    )
+    assert created.status_code == 200
+
+    rejected = client.post(
+        f"/api/monthly-reports/jobs/{created.json()['job_id']}/cancel",
+        headers={**user_headers, "X-EB-Caller-Intent": "admin"},
+    )
+
+    assert rejected.status_code == 403
+    assert rejected.json()["detail"] == "admin caller intent requires admin role"
+
+
+def test_monthly_report_api_admin_caller_intent_allows_admin_role(monkeypatch):
+    monkeypatch.setenv("EB_AUTH_MODE", "supabase")
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+    monkeypatch.setattr(monthly_reports_router, "_store", monthly_reports_router.MockJobStore())
+    app = create_app()
+    client = TestClient(app)
+    owner_headers = {
+        "Authorization": f"Bearer {_supabase_token(sub='user-a', email='user-a@tomonokai-corp.com')}"
+    }
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        headers=owner_headers,
+        json={
+            "target_month": "2026-04",
+            "household_key": "state-mutation-admin-role",
+        },
+    )
+    assert created.status_code == 200
+
+    admin_headers = {
+        "Authorization": (
+            f"Bearer {_supabase_token(sub='admin-user', email='admin@tomonokai-corp.com', role='admin')}"
+        ),
+        "X-EB-Caller-Intent": "admin",
+    }
+    cancelled = client.post(
+        f"/api/monthly-reports/jobs/{created.json()['job_id']}/cancel",
+        headers=admin_headers,
+    )
+
+    assert cancelled.status_code == 200
+    assert cancelled.json()["status"] == "cancelled"
+
+
+def test_monthly_report_api_manual_recovery_fail_requires_admin_caller_intent(
+    monkeypatch,
+):
+    monkeypatch.setenv("EB_AUTH_MODE", "supabase")
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+    store = monthly_reports_router.MockJobStore()
+    monkeypatch.setattr(monthly_reports_router, "_store", store)
+    app = create_app()
+    client = TestClient(app)
+    owner_headers = {
+        "Authorization": f"Bearer {_supabase_token(sub='user-a', email='user-a@tomonokai-corp.com')}"
+    }
+    admin_headers = {
+        "Authorization": (
+            f"Bearer {_supabase_token(sub='admin-user', email='admin@tomonokai-corp.com', role='admin')}"
+        ),
+        "X-EB-Caller-Intent": "e2e",
+    }
+
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        headers=owner_headers,
+        json={
+            "target_month": "2026-04",
+            "household_key": "manual-recovery-intent",
+        },
+    )
+    assert created.status_code == 200
+
+    started = client.post(
+        f"/api/monthly-reports/jobs/{created.json()['job_id']}/start",
+        headers=admin_headers,
+    )
+    assert started.status_code == 200
+
+    rejected = client.post(
+        f"/api/monthly-reports/jobs/{created.json()['job_id']}/manual-recovery/fail",
+        headers=admin_headers,
+        json={"error_message": "needs admin intent"},
+    )
+
+    assert rejected.status_code == 403
+    assert rejected.json()["detail"] == "manual-recovery/fail requires X-EB-Caller-Intent: admin"
+
+
+def test_monthly_report_api_admin_manual_recovery_fail_marks_running_job_failed(
+    monkeypatch,
+):
+    monkeypatch.setenv("EB_AUTH_MODE", "supabase")
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+    store = monthly_reports_router.MockJobStore()
+    monkeypatch.setattr(monthly_reports_router, "_store", store)
+    app = create_app()
+    client = TestClient(app)
+    owner_headers = {
+        "Authorization": f"Bearer {_supabase_token(sub='user-a', email='user-a@tomonokai-corp.com')}"
+    }
+    admin_headers = {
+        "Authorization": (
+            f"Bearer {_supabase_token(sub='admin-user', email='admin@tomonokai-corp.com', role='admin')}"
+        ),
+        "X-EB-Caller-Intent": "admin",
+    }
+
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        headers=owner_headers,
+        json={
+            "target_month": "2026-04",
+            "household_key": "manual-recovery-success",
+        },
+    )
+    assert created.status_code == 200
+    job_id = created.json()["job_id"]
+
+    started = client.post(
+        f"/api/monthly-reports/jobs/{job_id}/start",
+        headers=admin_headers,
+    )
+    assert started.status_code == 200
+    assert started.json()["status"] == "running"
+
+    recovered = client.post(
+        f"/api/monthly-reports/jobs/{job_id}/manual-recovery/fail",
+        headers=admin_headers,
+        json={"error_message": "worker heartbeat timed out in staging"},
+    )
+
+    assert recovered.status_code == 200
+    assert recovered.json()["status"] == "failed"
+    assert recovered.json()["error_type"] == "manual_recovery_required"
+    assert recovered.json()["error_message"] == "worker heartbeat timed out in staging"
+    assert recovered.json()["current_stage"] == "fetch_sources"
+
+    audit_logs = store.list_audit_logs(job_id)
+    assert audit_logs[-1].action == "monthly_report_job_manual_recovery_failed"
+    assert audit_logs[-1].metadata["caller_intent"] == "admin"
+    assert audit_logs[-1].metadata["previous_stage"] == "fetch_sources"
+    assert audit_logs[-1].metadata["operator_note_present"] is True
+
+
+def test_monthly_report_api_admin_manual_recovery_fail_rejects_non_running_job(
+    monkeypatch,
+):
+    monkeypatch.setenv("EB_AUTH_MODE", "supabase")
+    monkeypatch.setenv("SUPABASE_JWT_SECRET", "test-supabase-jwt-secret")
+    store = monthly_reports_router.MockJobStore()
+    monkeypatch.setattr(monthly_reports_router, "_store", store)
+    app = create_app()
+    client = TestClient(app)
+    admin_headers = {
+        "Authorization": (
+            f"Bearer {_supabase_token(sub='admin-user', email='admin@tomonokai-corp.com', role='admin')}"
+        ),
+        "X-EB-Caller-Intent": "admin",
+    }
+
+    created = client.post(
+        "/api/monthly-reports/jobs",
+        headers=admin_headers,
+        json={
+            "target_month": "2026-04",
+            "household_key": "manual-recovery-non-running",
+        },
+    )
+    assert created.status_code == 200
+
+    rejected = client.post(
+        f"/api/monthly-reports/jobs/{created.json()['job_id']}/manual-recovery/fail",
+        headers=admin_headers,
+        json={"error_message": "not running"},
+    )
+
+    assert rejected.status_code == 409
+    assert rejected.json()["detail"] == "manual recovery fail requires running job"
 
 
 def test_monthly_report_api_returns_404_when_recording_feedback_for_unknown_job():
@@ -1078,24 +1813,33 @@ def test_monthly_report_api_rerun_respects_owner_active_job_limit():
     assert "active generation jobs" in rejected.json()["detail"]
 
 
-def _minimal_pattern_b_markdown(body: str) -> str:
-    return "\n\n".join(
-        [
-            "# 4月度 月次レポート",
-            "## 01 基本情報\n本文",
-            "## 02 塾での様子\n本文",
-            "## 03 授業内容\n本文",
-            "## 04 課題とアドバイス\n本文",
-            "## 05 学習の進捗\n本文",
-            f"## 07 今後の授業計画\n{body}",
-        ]
-    )
-
-
 class _FakeRLSReadStore:
     def __init__(self, job: monthly_reports_router.MockJob) -> None:
         self.job = job
         self.calls: list[str] = []
+        self.sources = [
+            monthly_reports_router.MockSource(
+                public_id="mrs_rls",
+                job_id=job.public_id,
+                source_type="google_doc",
+            )
+        ]
+        self.artifacts = [
+            monthly_reports_router.MockArtifact(
+                public_id="mra_rls",
+                job_id=job.public_id,
+                artifact_type="draft_markdown",
+            )
+        ]
+        self.validations = [
+            monthly_reports_router.MockValidation(
+                public_id="mrv_rls",
+                job_id=job.public_id,
+                rule_id="non_empty_markdown",
+                severity="info",
+                message="ok",
+            )
+        ]
 
     def list_jobs(self) -> list[monthly_reports_router.MockJob]:
         self.calls.append("list_jobs")
@@ -1109,35 +1853,38 @@ class _FakeRLSReadStore:
 
     def list_sources(self, public_id: str) -> list[monthly_reports_router.MockSource]:
         self.calls.append("list_sources")
-        return [
-            monthly_reports_router.MockSource(
-                public_id="mrs_rls",
-                job_id=public_id,
-                source_type="google_doc",
-            )
-        ]
+        return list(self.sources)
+
+    def record_source(
+        self,
+        public_id: str,
+        *,
+        source_type: str,
+        display_name: str | None = None,
+        snapshot_text: str | None = None,
+        content_hash: str | None = None,
+    ) -> monthly_reports_router.MockSource:
+        self.calls.append("record_source")
+        if public_id != self.job.public_id:
+            raise KeyError(public_id)
+        source = monthly_reports_router.MockSource(
+            public_id=f"mrs_api_rls_{len(self.sources) + 1}",
+            job_id=public_id,
+            source_type=source_type,
+            display_name=display_name,
+            snapshot_text=snapshot_text,
+            content_hash=content_hash,
+        )
+        self.sources.append(source)
+        return source
 
     def list_artifacts(self, public_id: str) -> list[monthly_reports_router.MockArtifact]:
         self.calls.append("list_artifacts")
-        return [
-            monthly_reports_router.MockArtifact(
-                public_id="mra_rls",
-                job_id=public_id,
-                artifact_type="draft_markdown",
-            )
-        ]
+        return list(self.artifacts)
 
     def list_validations(self, public_id: str) -> list[monthly_reports_router.MockValidation]:
         self.calls.append("list_validations")
-        return [
-            monthly_reports_router.MockValidation(
-                public_id="mrv_rls",
-                job_id=public_id,
-                rule_id="non_empty_markdown",
-                severity="info",
-                message="ok",
-            )
-        ]
+        return list(self.validations)
 
     def list_llm_calls(self, public_id: str) -> list[monthly_reports_router.MockLLMCall]:
         self.calls.append("list_llm_calls")
@@ -1150,6 +1897,69 @@ class _FakeRLSReadStore:
             )
         ]
 
+    def record_feedback(
+        self,
+        public_id: str,
+        *,
+        category: str,
+        comment: str,
+    ) -> monthly_reports_router.MockFeedback:
+        self.calls.append("record_feedback")
+        if public_id != self.job.public_id:
+            raise KeyError(public_id)
+        feedback = monthly_reports_router.MockFeedback(
+            public_id=f"mrf_api_rls_{len(self.job.feedback) + 1}",
+            job_id=public_id,
+            category=category,
+            comment=comment,
+        )
+        self.job.feedback.append(feedback)
+        return feedback
+
+    def record_artifact(
+        self,
+        public_id: str,
+        *,
+        artifact_type: str,
+        content: str | None = None,
+        content_hash: str | None = None,
+    ) -> monthly_reports_router.MockArtifact:
+        self.calls.append("record_artifact")
+        if public_id != self.job.public_id:
+            raise KeyError(public_id)
+        artifact = monthly_reports_router.MockArtifact(
+            public_id=f"mra_api_rls_{len(self.artifacts) + 1}",
+            job_id=public_id,
+            artifact_type=artifact_type,
+            content=content,
+            content_hash=content_hash,
+        )
+        self.artifacts.append(artifact)
+        return artifact
+
+    def record_validation(
+        self,
+        public_id: str,
+        *,
+        rule_id: str,
+        severity: str,
+        message: str,
+        path: str | None = None,
+    ) -> monthly_reports_router.MockValidation:
+        self.calls.append("record_validation")
+        if public_id != self.job.public_id:
+            raise KeyError(public_id)
+        validation = monthly_reports_router.MockValidation(
+            public_id=f"mrv_api_rls_{len(self.validations) + 1}",
+            job_id=public_id,
+            rule_id=rule_id,
+            severity=severity,
+            message=message,
+            path=path,
+        )
+        self.validations.append(validation)
+        return validation
+
 
 def _raise_if_direct_store_used():
     raise AssertionError("direct monthly report store should not be used for RLS reads")
@@ -1159,6 +1969,7 @@ def _supabase_token(
     *,
     sub: str,
     email: str,
+    role: str = "authenticated",
     secret: str = "test-supabase-jwt-secret",
 ) -> str:
     now = int(time.time())
@@ -1169,7 +1980,7 @@ def _supabase_token(
             "iat": now,
             "sub": sub,
             "email": email,
-            "role": "authenticated",
+            "role": role,
         },
         secret,
         algorithm="HS256",

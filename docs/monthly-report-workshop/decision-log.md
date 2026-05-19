@@ -5,7 +5,7 @@
 - 正本/補助資料の区分: 月次レポート作成ツールの決定事項・未決事項ログ
 - 起点: `docs/project/月次レポート_プログラム化_LLMワークフロー移行計画.md`
 - 関連文書: `README.md`, `requirements.md`, `development-plan.md`, `AUTOMATION_NORTH_STAR.md`
-- 最終更新: 2026-05-17（D-063・UIコンポーネント方針）
+- 最終更新: 2026-05-19（D-073・Cloud Run worker trigger反映）
 
 ## 決定事項
 
@@ -19,7 +19,7 @@
 | D-006 | 2026-05-13 | 当面のLLMプロバイダはOpenRouter中心 | 移行計画書 |
 | D-007 | 2026-05-13 | 本文生成モデルと軽量モデルを分ける | 移行計画書 |
 | D-008 | 2026-05-13 | 1ユーザー最大3生成ジョブ | 移行計画書 |
-| D-009 | 2026-05-13 | MVPは本番のみ。ステージングはMVPでは切らない | 移行計画書・2026-05-17再確認 |
+| D-009 | 2026-05-13 | 旧決定: MVPは本番のみ。ステージングはMVPでは切らない。2026-05-18のD-067で廃止 | 移行計画書・2026-05-17再確認・2026-05-18方針更新 |
 | D-010 | 2026-05-13 | MVPはチューニング重視。ログ・スナップショット・生成物保存を必須とする | 移行計画書 |
 | D-011 | 2026-05-13 | 推敲・プレビュー画面は現行 `monthly_report_full_editor.html` のHTML全文エディタをベースにする | ユーザー合意 |
 | D-012 | 2026-05-13 | 現行エディタ由来の送付エクスポート、ファイル保存、HTMLソース編集などは後続扱いでもMVP内の必須機能とする | ユーザー合意 |
@@ -48,8 +48,18 @@
 | D-058 | 2026-05-16 | 家庭向け送付・エクスポート前に人間承認ゲートを置き、生成成功・検証OK・編集保存済み・承認済み・送付済みを分けて扱う | 方針レビュー反映 |
 | D-059 | 2026-05-16 | Supabase 発行 access token の検証は **JWKS 経由の ES256/RS256 を本流**とし、`alg` ヘッダで分岐する。HS256 + 対称 `SUPABASE_JWT_SECRET` 経路はテスト互換と内部用途のために残す。ローカル Supabase / Supabase Cloud いずれも新 signing keys（asymmetric）で JWT を発行するため、`<SUPABASE_URL>/auth/v1/.well-known/jwks.json` の公開鍵で検証する | ライブE2E通電時の実機切り分け（ES256 token が HS256-only 検証で 401 になっていた） |
 | D-060 | 2026-05-16 | ローカル Supabase（`supabase/config.toml`）では `[auth.external.google]`（`client_id`/`secret` は env(...) 参照）と `additional_redirect_urls` に `http://127.0.0.1:8000/auth/callback` を設定し、初回 Google ログインが signup 扱いで通るよう `enable_signup = true` にする。ドメイン制限は FastAPI 側 JWT email チェック（`EB_ALLOWED_EMAIL_DOMAIN`）で担保する。Cloud Supabase（本番）に移行する場合も同じ「provider 有効化 + email domain ガードは API 側」の構造を引き継ぐ | ライブE2E通電時の `422: Signups not allowed for this instance` を解消した実機判断 |
-| D-062 | 2026-05-17 | staging / production の2環境分離はMVPでは行わず、本番ポータルへ合流するタイミングで用意する。その時点ではCloud Run service、Supabase project/DB、OAuth redirect URI、Secret、E2Eデータを分離する | ユーザー再確認 |
+| D-062 | 2026-05-17 | 旧決定: staging / production の2環境分離はMVPでは行わず、本番ポータルへ合流するタイミングで用意する。2026-05-18のD-067で廃止 | ユーザー再確認・2026-05-18方針更新 |
+| D-067 | 2026-05-18 | MVPから staging / production の2環境を用意する方針に更新したが、今回プロジェクトの完了判定からproduction昇格はD-068で除外した。Cloud Run service、Supabase project/DB、OAuth redirect URI、Secret、E2Eデータは環境ごとに分離する | ユーザー方針更新・D-068で完了条件を再固定 |
+| D-068 | 2026-05-18 | 今回プロジェクトの完了条件は、指導管理ポータル統合ではなく、レポート工房MVPがstaging環境で動作し、HTTP smoke、worker smoke、RLS、Google OAuth、OpenRouter、HTML UI smoke、ライブE2Eの結果が検証ログに残ることとする。production昇格と指導管理ポータル統合は後続スコープ | ユーザー方針更新 |
 | D-063 | 2026-05-17 | レポート工房のUIコンポーネントはTailwind CSS + DaisyUIを標準にする。Alpine.jsは局所状態に限定し、FlowbiteはMVP標準依存にしない。業務画面はtable/section中心、カードは繰り返し単位に限定する | UI方針レビュー |
+| D-064 | 2026-05-17 | 管理者向けprompt/model tuningは、新規ジョブ作成と再生成フォームのadmin限定overrideから開始する。一般ユーザーには表示せず、直接投稿値も破棄する | P3-03実装反映 |
+| D-065 | 2026-05-17 | 承認/export/html source/distributionなど入力フォームを含むpanelは定期pollingせず、`monthly-report-refresh` イベントで更新する。進捗statusはHTMX pollingを維持する | P3-13実装反映 |
+| D-066 | 2026-05-17 | 既存全文エディタ連携は、同一オリジン互換routeと `export_html` artifactのlocalStorage bridgeを第一弾とし、既存エディタ編集後の工房再取込は後続に回す | P3-11実装反映 |
+| D-069 | 2026-05-19 | 承認/export/HTML source edit/distribution package に加え、通常UIから到達できる workflow request / direct workflow start の監査ログも server-side direct store に記録する。通常Supabaseユーザーの artifact append-only write は user-JWT Supabase client 経由の RLS write store を使い、監査ログは通常ユーザーのクライアント可視境界に置かない | P3-12実装反映・P1-16 direct workflow audit 整合・RLS主境界と監査境界の分離 |
+| D-070 | 2026-05-19 | 通常JSON API の validation 保存は、owner確認のRLS read preflight後、user-JWT Supabase client による `monthly_report_validations` insert を第一候補とする。idempotent response 記録は service-owned/direct store に残し、mock/admin/worker 互換は direct fallback を維持する | P1-16 validation write slice 実装反映 |
+| D-071 | 2026-05-19 | `llm_call_logs` は通常ユーザーの編集データではなく server-owned telemetry として扱い、source-summary や worker generation からの記録は direct store に残す。RLS主境界へ寄せる対象は append-only user content を優先し、idempotency / audit / worker state mutation / llm_call_logs は直ちにRLS writeへ移さない | P1-16 direct store棚卸し・source-summary focused test反映 |
+| D-072 | 2026-05-19 | 通常Supabaseユーザーの HTML `run_mode=stage` と `after_fetch_action=generate_openrouter` は、即時の service-owned workflow 実行ではなく worker-owned workflow request として扱う。`mock/admin` の `run_mode=mock|openrouter` は補助導線として service-owned 即時実行を維持し、通常ユーザー側は queued job のまま worker 待ちメッセージと監査ログで状態を表現する | P1-16 Bトラック実装・通常UIを mock 非依存へ寄せる |
+| D-073 | 2026-05-19 | 通常UIの worker-owned workflow request は、Cloud Run service から Cloud Run Jobs REST API `projects.locations.jobs.run` を呼んで自動起動する。execution ごとに `EB_WORKER_JOB_ID=<job_id>` を override し、worker は対象 job だけを claim する。設定がない環境では queue request だけを受け、設定済み環境では trigger 成功/失敗を server-side audit と HTTP error で扱う | P1-16 Bトラック実装・targeted worker trigger 追加 |
 | D-018 | 2026-05-13 | 長時間生成はMVPではDBジョブ + HTMXポーリングで扱い、Cloud Tasks等は後続検討とする | ユーザー合意 |
 | D-019 | 2026-05-13 | GoogleログインはSupabase AuthのGoogle providerを使う | ユーザー合意 |
 | D-020 | 2026-05-13 | Google API読取に必要なprovider token / provider refresh tokenはサーバ側で安全に保存・更新する | Supabase公式方針を踏まえた設計 |
@@ -70,7 +80,8 @@
 | D-035 | 2026-05-13 | MVPの自動テストはPhase 1でpytest + provider mockを必須、Phase 3でPlaywrightを必須ゲートとして導入する | ユーザー合意 |
 | D-036 | 2026-05-13 | CIはGitHub Actionsを想定し、Phase 1はpytest、Phase 3でPlaywrightを追加する | ユーザー合意 |
 | D-037 | 2026-05-13 | 実案件フィクスチャは氏名・メール・URL・IDを置換し、数値は必要最小限を丸める最低限の匿名化で開始する | ユーザー合意 |
-| D-038 | 2026-05-13 | ローカルモックユーザーは `mock-admin@tomonokai-corp.com` と `mock-user@tomonokai-corp.com` を固定で使う | ユーザー合意 |
+| D-038 | 2026-05-13 | ローカルモックユーザーは互換用に `mock-admin@tomonokai-corp.com` と `mock-user@tomonokai-corp.com` を残す | ユーザー合意 |
+| D-061 | 2026-05-17 | ローカル通常UIの既定mockメールは `y-haraguchi@tomonokai-corp.com` とし、保存済みGoogle OAuth credential利用時は `EB_MOCK_USER_ID` にSupabase Auth user UUIDを設定する | 実機検証でmock emailをUUID列へ渡して500になったため |
 | D-039 | 2026-05-13 | 管理者向けチューニング設定は管理者ロールのみ公開し、一般ユーザーには固定プリセットのみ表示する | ユーザー合意 |
 | D-040 | 2026-05-13 | 保持期間到来時は物理削除を基本とし、集計に必要なメタのみ匿名化して残せる | ユーザー合意 |
 
@@ -97,7 +108,7 @@
 | U-017 | 解決 | Phase 1はpytest + provider mock必須。Phase 3でPlaywrightを必ず導入し、エディタ体験完成の品質ゲートにする | `test-plan.md`, `development-plan.md` |
 | U-018 | 解決 | CIはGitHub Actions想定。Phase 1はpytest、Phase 3でPlaywrightを追加 | `test-plan.md`, `development-plan.md` |
 | U-019 | 解決 | 実案件フィクスチャは最低限の匿名化で開始。氏名・メール・URL・IDを置換し、数値は必要最小限を丸める | `test-plan.md`, `security-operations.md` |
-| U-020 | 解決 | モック認証ユーザーは管理者 `mock-admin@tomonokai-corp.com`、一般 `mock-user@tomonokai-corp.com` | `security-operations.md`, `test-plan.md` |
+| U-020 | 解決 | モック認証ユーザーは既定 `y-haraguchi@tomonokai-corp.com`、互換用 `mock-admin@tomonokai-corp.com` / `mock-user@tomonokai-corp.com`。Google OAuth credential利用時は `EB_MOCK_USER_ID` でUUIDを分ける | `security-operations.md`, `test-plan.md` |
 | U-021 | 解決 | チューニング設定は管理者のみ。一般ユーザーは固定プリセットのみ | `screen-design.md`, `llm-design.md`, `security-operations.md` |
 | U-022 | 解決 | 保持期間到来時は物理削除を基本にし、集計メタのみ匿名化して残せる | `data-design.md`, `security-operations.md` |
 | U-023 | 解決 | ローカルMVPの `owner_user_id` は暫定値。Supabase Auth後は認証ユーザーIDへ差し替える | `api-definition.md`, `security-operations.md` |
@@ -126,3 +137,8 @@
 | 2026-05-16 | D-059（Supabase JWT は ES256/RS256 JWKS 検証を本流とし HS256 はテスト互換用に残す）、D-060（ローカル Supabase config.toml の Google provider 有効化と enable_signup=true、ドメイン制限は API 側）を追加 |
 | 2026-05-17 | D-009を再確認し、MVPは本番のみへ戻した。D-062は本番ポータル合流時のstaging / production分離方針として整理 |
 | 2026-05-17 | D-063を追加し、Tailwind CSS + DaisyUI主軸、Flowbite保留、業務画面table/section中心のUIコンポーネント方針を記録 |
+| 2026-05-18 | D-067を追加し、D-009/D-062を廃止扱いに変更。staging / productionの環境分離を設計対象に戻したうえで、production昇格の完了条件はD-068で再整理 |
+| 2026-05-18 | D-068を追加し、今回プロジェクトの完了条件をレポート工房MVPのstaging環境動作確認へ固定。production昇格と指導管理ポータル統合は後続スコープへ分離 |
+| 2026-05-19 | D-069を追加し、P3-12の監査ログに加えて通常UIから到達できる direct workflow start の監査も direct store とし、通常ユーザーartifact writeは RLS write store とする境界を明文化。あわせて P3-12 完了、P1-16 direct workflow audit、P3-14 の self-contained Playwright 連続UI確認完了を `development-plan.md` と整合 |
+| 2026-05-19 | D-070を追加し、通常JSON API の validation 保存を user-JWT Supabase client 優先の RLS write store へ寄せ、idempotency 記録のみ direct store に残す混成境界を明文化。`api-definition.md` / `development-plan.md` と整合 |
+| 2026-05-19 | D-071を追加し、`llm_call_logs` を server-owned telemetry として分類。`source-summary` HTML action では artifact は RLS write、LLM call記録は direct store のまま維持する境界を focused test と `api-definition.md` / `development-plan.md` に反映 |

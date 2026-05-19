@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, Response
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from eb_app.config import get_settings
@@ -21,9 +21,11 @@ def create_app() -> FastAPI:
 
     from eb_app.routers import auth as auth_router
     from eb_app.routers import auth_pages as auth_pages_router
+    from eb_app.routers import health as health_router
     from eb_app.routers import monthly_reports as monthly_reports_router
 
     app.include_router(auth_pages_router.router, tags=["auth-pages"])
+    app.include_router(health_router.router, tags=["health"])
 
     app.include_router(
         auth_router.router,
@@ -51,6 +53,10 @@ def create_app() -> FastAPI:
         if settings.enable_mock_ui:
             return RedirectResponse(url="/mock/", status_code=307)
         return RedirectResponse(url="/docs", status_code=307)
+
+    @app.get("/favicon.ico", include_in_schema=False)
+    def favicon() -> Response:
+        return Response(status_code=204)
 
     app.state.jinja_env = Environment(
         loader=FileSystemLoader(_TEMPLATES_DIR),

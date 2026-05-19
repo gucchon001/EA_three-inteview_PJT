@@ -70,6 +70,9 @@ def test_mock_enabled_serves_monthly_report_workshop_flow():
     assert home.status_code == 200
     assert "月次レポート生成ツール" in home.text
     assert "単体MVP" in home.text
+    assert "静的モック画面です" in home.text
+    assert "/monthly-reports/jobs" in home.text
+    assert "実装本体を開く" in home.text
     assert "/mock/monthly-report-workshop/jobs/new" in home.text
     assert "/mock/monthly-report-workshop/jobs" in home.text
     assert_monthly_report_standalone_shell(home.text)
@@ -77,6 +80,7 @@ def test_mock_enabled_serves_monthly_report_workshop_flow():
     jobs = client.get("/mock/monthly-report-workshop/jobs")
     assert jobs.status_code == 200
     assert "レポート工房" in jobs.text
+    assert "実装本体で新規読み込み" in jobs.text
     assert "mrj_demo_001" in jobs.text
     assert "高藤 泰次郎" in jobs.text
     assert "鈴木 謙吾" in jobs.text
@@ -87,6 +91,8 @@ def test_mock_enabled_serves_monthly_report_workshop_flow():
     assert new_job.status_code == 200
     assert "ソース指定" in new_job.text
     assert "Spreadsheet URL" in new_job.text
+    assert "Google取得やOpenRouter生成は実行しません" in new_job.text
+    assert "/monthly-reports/jobs/new" in new_job.text
     assert_monthly_report_standalone_shell(new_job.text)
 
     detail = client.get("/mock/monthly-report-workshop/jobs/mrj_demo_001")
@@ -98,6 +104,8 @@ def test_mock_enabled_serves_monthly_report_workshop_flow():
     editor = client.get("/mock/monthly-report-workshop/jobs/mrj_demo_001/edit")
     assert editor.status_code == 200
     assert "HTML全文エディタ" in editor.text
+    assert "サンプルレポートを読み込めませんでした" not in editor.text
+    assert "LLM本文生成を実行中" in editor.text
     assert_monthly_report_standalone_shell(editor.text)
     assert "編集枠直上は" in editor.text
     assert "frame-wrap" in editor.text
@@ -151,6 +159,7 @@ def test_mock_monthly_report_workshop_demo_job_routes(job_id: str, household: st
     assert editor.status_code == 200
     assert household in editor.text
     assert "HTML全文エディタ" in editor.text
+    assert "サンプルレポートを読み込めませんでした" not in editor.text
 
 
 @pytest.mark.parametrize(

@@ -1,8 +1,15 @@
 <article style="border:1px solid #b9c6c6;border-radius:8px;padding:14px;background:#fff;">
-  <p style="margin-top:0;"><strong>ジョブを作成しました。</strong></p>
+  <p style="margin-top:0;"><strong>ジョブを作成しました。次はデータソース登録です。</strong></p>
   <p>
     <a href="{{ job.detail_href }}">{{ job.public_id }}</a>
     <span> · {{ job.status }} · {{ job.target_month }} · {{ job.display_household }}</span>
   </p>
-  <p style="margin-bottom:0;"><a href="{{ job.detail_href }}">進捗を見る</a></p>
+  <ol style="margin:10px 0 14px;padding-left:1.35rem;color:#5C6472;">
+    <li>詳細画面で Google Docs / Sheets URL を投入します。</li>
+    <li>「取得してレポート生成」を押すと、レポートビューへドラフトが反映されます。</li>
+  </ol>
+  <p style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0;">
+    <a href="{{ job.detail_href }}#sources-section" style="display:inline-flex;align-items:center;min-height:42px;padding:8px 14px;border-radius:8px;background:#0f5959;color:white;font-weight:700;">ソース登録へ進む</a>
+    <a href="{{ job.detail_href }}#preview-section" style="display:inline-flex;align-items:center;min-height:42px;padding:8px 14px;border-radius:8px;border:1px solid #0f5959;color:#0f5959;font-weight:700;">レポートビューを確認</a>
+  </p>
 </article>

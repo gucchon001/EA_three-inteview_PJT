@@ -4,15 +4,24 @@ from dataclasses import dataclass
 from hashlib import sha256
 import json
 import re
+from typing import Protocol
 from urllib.parse import parse_qs, quote, urlparse
 
 import httpx
 
-from eb_app.monthly_reports.jobs import MockJobStore, MockSource
-from eb_app.monthly_reports.postgres_store import PostgresJobStore
+from eb_app.monthly_reports.jobs import MockSource
 
 
-JobStore = MockJobStore | PostgresJobStore
+class SourceRecordStore(Protocol):
+    def record_source(
+        self,
+        public_id: str,
+        *,
+        source_type: str,
+        display_name: str | None = None,
+        snapshot_text: str | None = None,
+        content_hash: str | None = None,
+    ) -> MockSource: ...
 
 
 @dataclass(frozen=True)
@@ -28,6 +37,9 @@ class GoogleWorkspaceFetchError(RuntimeError):
 
 
 class GoogleWorkspaceSourceClient:
+    def fetch_sheet_titles(self, *, spreadsheet_id: str) -> list[str]:
+        raise NotImplementedError
+
     def fetch_doc(
         self,
         *,
@@ -95,6 +107,18 @@ class GoogleWorkspaceClient:
             content_hash=_hash_text(snapshot_text),
         )
 
+    def fetch_sheet_titles(self, *, spreadsheet_id: str) -> list[str]:
+        sheet_id = extract_google_file_id(spreadsheet_id)
+        body = self._get_json(
+            f"https://sheets.googleapis.com/v4/spreadsheets/{sheet_id}?fields=sheets.properties.title"
+        )
+        titles = []
+        for sheet in body.get("sheets") or []:
+            title = ((sheet.get("properties") or {}).get("title") or "").strip()
+            if title:
+                titles.append(title)
+        return titles
+
     def _get_json(self, url: str) -> dict:
         try:
             response = self._client.get(
@@ -146,7 +170,7 @@ def _hash_text(text: str) -> str:
 
 
 def fetch_google_workspace_sources_for_job(
-    store: JobStore,
+    store: SourceRecordStore,
     job_id: str,
     *,
     client: GoogleWorkspaceSourceClient,
@@ -168,7 +192,7 @@ def fetch_google_workspace_sources_for_job(
 
 
 def _record_source(
-    store: JobStore,
+    store: SourceRecordStore,
     job_id: str,
     source: GoogleWorkspaceSource,
 ) -> MockSource:

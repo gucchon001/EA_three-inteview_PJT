@@ -7,6 +7,8 @@ from pathlib import Path
 
 from eb_app.monthly_reports.jobs import MockJobStore
 from eb_app.monthly_reports.observability import (
+    DAILY_LLM_COST_SUMMARY_CONTRACT,
+    LOG_BASED_METRIC_DEFINITIONS,
     build_cloud_logging_payload,
     emit_cloud_logging_event,
 )
@@ -57,6 +59,85 @@ def test_cloud_logging_payload_uses_allowlist_and_excludes_pii_and_secrets():
     assert "1//secret" not in encoded
     assert "google-client-secret" not in encoded
     assert "raw body" not in encoded
+
+
+def test_cloud_logging_payload_allows_cost_guardrail_fields_without_secret_fields():
+    payload = build_cloud_logging_payload(
+        event="monthly_report.llm_cost_daily_summary",
+        severity="NOTICE",
+        provider="openrouter",
+        resolved_model="anthropic/claude-sonnet-4.6",
+        prompt_version="monthly-report-v20260517.1",
+        input_tokens=1200,
+        output_tokens=340,
+        total_tokens=1540,
+        estimated_cost_usd=0.42,
+        daily_budget_usd=25.0,
+        api_key="sk-secret",
+        provider_response_body="raw provider body",
+        household_key="household-private",
+    )
+
+    encoded = json.dumps(payload, ensure_ascii=False)
+
+    assert payload["event"] == "monthly_report.llm_cost_daily_summary"
+    assert payload["total_tokens"] == 1540
+    assert payload["estimated_cost_usd"] == 0.42
+    assert payload["daily_budget_usd"] == 25.0
+    assert "api_key" not in payload
+    assert "provider_response_body" not in payload
+    assert "household_key" not in payload
+    assert "sk-secret" not in encoded
+    assert "raw provider body" not in encoded
+    assert "household-private" not in encoded
+
+
+def test_log_based_metric_definitions_are_stable_and_pii_safe():
+    names = {definition["metric_name"] for definition in LOG_BASED_METRIC_DEFINITIONS}
+
+    assert names == {
+        "monthly_report_worker_failed_count",
+        "monthly_report_llm_token_count",
+        "monthly_report_openrouter_error_count",
+        "monthly_report_google_api_error_count",
+        "monthly_report_auth_guardrail_reject_count",
+    }
+    for definition in LOG_BASED_METRIC_DEFINITIONS:
+        serialized = json.dumps(definition, ensure_ascii=False)
+        assert definition["metric_type"].startswith("logging.googleapis.com/user/monthly_report_")
+        assert 'jsonPayload.component="monthly_report_workshop"' in definition["filter"]
+        assert "source_text" not in serialized
+        assert "prompt_text" not in serialized
+        assert "draft_markdown" not in serialized
+        assert "api_key" not in serialized
+        assert "access_token" not in serialized
+        assert "refresh_token" not in serialized
+
+
+def test_daily_llm_cost_summary_contract_excludes_pii_fields():
+    assert DAILY_LLM_COST_SUMMARY_CONTRACT["event"] == "monthly_report.llm_cost_daily_summary"
+    required = set(DAILY_LLM_COST_SUMMARY_CONTRACT["required_fields"])
+    forbidden = set(DAILY_LLM_COST_SUMMARY_CONTRACT["pii_forbidden_fields"])
+
+    assert {
+        "summary_date",
+        "total_tokens",
+        "estimated_cost_usd",
+        "daily_budget_usd",
+        "budget_ratio",
+        "model_breakdown",
+        "top_job_ids_by_tokens",
+    }.issubset(required)
+    assert required.isdisjoint(forbidden)
+    assert {
+        "source_text",
+        "prompt_text",
+        "draft_markdown",
+        "provider_response_body",
+        "api_key",
+        "access_token",
+        "refresh_token",
+    }.issubset(forbidden)
 
 
 def test_cloud_logging_actual_emitted_json_excludes_pii_and_secrets():

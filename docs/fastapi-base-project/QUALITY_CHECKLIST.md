@@ -45,8 +45,7 @@ Use this checklist after copying the scaffold.
 
 ## 6. Quality Gates
 
-- [ ] `python -m compileall src tests`
-- [ ] `pytest`
+- [ ] `python scripts/check.py`
 - [ ] `uvicorn base_app.main:app --app-dir src --host 127.0.0.1 --port 8000`
 - [ ] Manual `GET /healthz`
 - [ ] Manual page and fragment smoke check

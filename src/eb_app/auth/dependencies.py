@@ -40,10 +40,11 @@ def get_current_user(
     settings = get_settings()
     if settings.auth_mode == "mock":
         assert_mock_auth_allowed(settings)
-        email = os.environ.get("EB_MOCK_USER_EMAIL", "mock-user@tomonokai-corp.com")
+        email = os.environ.get("EB_MOCK_USER_EMAIL", "y-haraguchi@tomonokai-corp.com")
         user = get_mock_user(email)
+        user_id = os.environ.get("EB_MOCK_USER_ID", "").strip() or user["email"]
         return CurrentUser(
-            user_id=user["email"],
+            user_id=user_id,
             email=user["email"],
             role=user["role"],
         )

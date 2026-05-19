@@ -30,6 +30,8 @@ def clean_auth_env():
         "SUPABASE_URL",
         "EB_ALLOWED_EMAIL_DOMAIN",
         "EB_AUTH_SESSION_COOKIE_NAME",
+        "EB_MOCK_USER_EMAIL",
+        "EB_MOCK_USER_ID",
     )
     old = {key: os.environ.get(key) for key in keys}
     for key in keys:
@@ -80,9 +82,25 @@ def test_mock_auth_exposes_admin_and_user_accounts():
             "email": "mock-user@tomonokai-corp.com",
             "role": "user",
         },
+        {
+            "email": "y-haraguchi@tomonokai-corp.com",
+            "role": "admin",
+        },
     )
     assert get_mock_user("mock-admin@tomonokai-corp.com")["role"] == "admin"
     assert get_mock_user("mock-user@tomonokai-corp.com")["role"] == "user"
+    assert get_mock_user("y-haraguchi@tomonokai-corp.com")["role"] == "admin"
+
+
+def test_mock_auth_defaults_to_y_haraguchi_and_allows_uuid_override():
+    os.environ["EB_AUTH_MODE"] = "mock"
+    os.environ["EB_ENV"] = "local"
+    os.environ["EB_MOCK_USER_ID"] = "ab8bafb6-f3f9-4208-a84d-2010c57909ac"
+
+    client = TestClient(create_app())
+    response = client.get("/api/monthly-reports/jobs")
+
+    assert response.status_code == 200
 
 
 def test_unknown_mock_user_is_rejected():

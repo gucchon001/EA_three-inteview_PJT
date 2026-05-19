@@ -1,7 +1,8 @@
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
+from time import sleep
 
-from eb_app.monthly_reports.jobs import JobStatus, MockJobStore
+from eb_app.monthly_reports.jobs import JobStatus, MockJobStore, PIPELINE_STAGES
 from eb_app.monthly_reports.worker import (
     WorkerRunStatus,
     run_next_queued_monthly_report_job,
@@ -31,6 +32,23 @@ class FailingProvider:
     def complete(self, *, messages, model=None):
         self.calls += 1
         raise ProviderCallError("temporary provider failure")
+
+
+class WaitForHeartbeatProvider:
+    def __init__(self, store: "TouchCountingStore", minimum_touches: int = 2) -> None:
+        self.store = store
+        self.minimum_touches = minimum_touches
+        self.calls = 0
+
+    def complete(self, *, messages, model=None):
+        self.calls += 1
+        deadline = datetime.now(timezone.utc) + timedelta(seconds=2)
+        while (
+            len(self.store.touched_job_ids) < self.minimum_touches
+            and datetime.now(timezone.utc) < deadline
+        ):
+            sleep(0.01)
+        return LLMCompletion(content="# draft", resolved_model="mock/report-model")
 
 
 class CancelAfterClaimStore(MockJobStore):
@@ -171,6 +189,26 @@ def test_run_next_queued_monthly_report_job_can_filter_by_owner(tmp_path: Path):
     assert store.get(other.public_id).status == JobStatus.QUEUED
 
 
+def test_run_next_queued_monthly_report_job_can_target_specific_job_id(tmp_path: Path):
+    template = tmp_path / "template.md"
+    template.write_text("PATTERN B CONTRACT", encoding="utf-8")
+    store = MockJobStore()
+    first = store.create_job(target_month="2026-04", household_key="first")
+    target = store.create_job(target_month="2026-04", household_key="target")
+
+    result = run_next_queued_monthly_report_job(
+        store,
+        provider=StaticMonthlyReportProvider("# draft"),
+        template_path=template,
+        public_id=target.public_id,
+    )
+
+    assert result is not None
+    assert result.public_id == target.public_id
+    assert result.status == JobStatus.SUCCEEDED
+    assert store.get(first.public_id).status == JobStatus.QUEUED
+
+
 def test_run_next_queued_monthly_report_job_returns_none_when_no_queued_job(
     tmp_path: Path,
 ):
@@ -295,6 +333,27 @@ def test_run_next_queued_monthly_report_job_result_touches_claimed_job(
     assert result.job.worker_last_claimed_at is not None
 
 
+def test_run_next_queued_monthly_report_job_result_heartbeats_during_provider_call(
+    tmp_path: Path,
+):
+    template = tmp_path / "template.md"
+    template.write_text("PATTERN B CONTRACT", encoding="utf-8")
+    store = TouchCountingStore()
+    job = store.create_job(target_month="2026-04", household_key="heartbeat-loop")
+    provider = WaitForHeartbeatProvider(store)
+
+    result = run_next_queued_monthly_report_job_result(
+        store,
+        provider=provider,
+        template_path=template,
+        lease_timeout_seconds=1,
+    )
+
+    assert result.status == WorkerRunStatus.SUCCEEDED
+    assert provider.calls == 1
+    assert store.touched_job_ids.count(job.public_id) >= 2
+
+
 def test_run_next_queued_monthly_report_job_result_reclaims_stale_fetch_sources_job(
     tmp_path: Path,
 ):
@@ -336,6 +395,64 @@ def test_run_next_queued_monthly_report_job_result_does_not_reclaim_fresh_runnin
     )
 
     assert result.status == WorkerRunStatus.NO_JOB
+
+
+def test_run_next_queued_monthly_report_job_result_reports_manual_recovery_for_stale_later_stage_job(
+    tmp_path: Path,
+):
+    template = tmp_path / "template.md"
+    template.write_text("PATTERN B CONTRACT", encoding="utf-8")
+    store = MockJobStore()
+    stale = store.create_job(target_month="2026-04", household_key="stale-call-llm")
+    store.claim_next_queued_job()
+    stale.current_stage = "call_llm"
+    stale.worker_last_claimed_at = datetime.now(timezone.utc) - timedelta(seconds=120)
+
+    result = run_next_queued_monthly_report_job_result(
+        store,
+        provider=StaticMonthlyReportProvider("# draft"),
+        template_path=template,
+        lease_timeout_seconds=60,
+    )
+
+    assert result.status == WorkerRunStatus.MANUAL_RECOVERY_REQUIRED
+    assert result.job is not None
+    assert result.job.public_id == stale.public_id
+    assert result.error_type == "manual_recovery_required"
+    assert result.manual_recovery_job_count == 1
+    assert result.manual_recovery_stages == ("call_llm",)
+    assert stale.worker_attempts == 1
+    assert stale.status == JobStatus.RUNNING
+    assert stale.current_stage == "call_llm"
+    assert PIPELINE_STAGES.index(stale.current_stage) > 0
+
+
+def test_run_next_queued_monthly_report_job_result_filters_manual_recovery_by_owner(
+    tmp_path: Path,
+):
+    template = tmp_path / "template.md"
+    template.write_text("PATTERN B CONTRACT", encoding="utf-8")
+    store = MockJobStore()
+    stale = store.create_job(
+        target_month="2026-04",
+        household_key="other-stale-call-llm",
+        owner_user_id="other-owner",
+    )
+    store.claim_next_queued_job(owner_user_id="other-owner")
+    stale.current_stage = "call_llm"
+    stale.worker_last_claimed_at = datetime.now(timezone.utc) - timedelta(seconds=120)
+
+    result = run_next_queued_monthly_report_job_result(
+        store,
+        provider=StaticMonthlyReportProvider("# draft"),
+        template_path=template,
+        owner_user_id="target-owner",
+        lease_timeout_seconds=60,
+    )
+
+    assert result.status == WorkerRunStatus.NO_JOB
+    assert stale.status == JobStatus.RUNNING
+    assert stale.current_stage == "call_llm"
 
 
 def test_run_next_queued_monthly_report_job_result_requeues_provider_failure_until_limit(

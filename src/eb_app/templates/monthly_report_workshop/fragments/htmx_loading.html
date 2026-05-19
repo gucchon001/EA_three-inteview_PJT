@@ -1,0 +1,99 @@
+<style>
+  .htmx-busy-overlay {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 50;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid #b9c6c6;
+    border-radius: 8px;
+    background: #fff;
+    color: #1f2937;
+    box-shadow: 0 12px 24px rgba(16, 24, 40, 0.12);
+    font-size: 0.92rem;
+  }
+  html.htmx-busy .htmx-busy-overlay { display: inline-flex; }
+  .htmx-busy-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #c7d2d2;
+    border-top-color: #0f5959;
+    border-radius: 999px;
+    animation: htmx-busy-spin 0.8s linear infinite;
+  }
+  @keyframes htmx-busy-spin { to { transform: rotate(360deg); } }
+  .htmx-busy-scope button,
+  button.htmx-busy-scope {
+    cursor: progress;
+    opacity: 0.72;
+  }
+  .htmx-error-banner {
+    position: fixed;
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+    z-index: 51;
+    display: none;
+    padding: 10px 12px;
+    border: 1px solid #f5a3a3;
+    border-radius: 8px;
+    background: #fff5f5;
+    color: #7f1d1d;
+    box-shadow: 0 12px 24px rgba(16, 24, 40, 0.12);
+    font-size: 0.92rem;
+  }
+  .htmx-error-banner.is-visible { display: block; }
+</style>
+<div class="htmx-busy-overlay" role="status" aria-live="polite">
+  <span class="htmx-busy-spinner" aria-hidden="true"></span>
+  <span>処理中です</span>
+</div>
+<div class="htmx-error-banner" role="alert" aria-live="assertive">
+  通信または処理に失敗しました。画面を更新する前に、直前の操作結果を確認してください。
+</div>
+<script>
+  (() => {
+    let activeRequests = 0;
+    const setBusy = (busy) => {
+      document.documentElement.classList.toggle("htmx-busy", busy);
+    };
+    const requestScope = (event) => {
+      const elt = event.detail && event.detail.elt;
+      return elt && elt.closest ? (elt.closest("form") || elt) : null;
+    };
+    const showError = () => {
+      const banner = document.querySelector(".htmx-error-banner");
+      if (!banner) return;
+      banner.classList.add("is-visible");
+      window.setTimeout(() => banner.classList.remove("is-visible"), 9000);
+    };
+    document.body.addEventListener("htmx:beforeSend", (event) => {
+      activeRequests += 1;
+      setBusy(true);
+      const scope = requestScope(event);
+      if (!scope) return;
+      scope.classList.add("htmx-busy-scope");
+      scope.querySelectorAll("button").forEach((button) => {
+        button.dataset.htmxBusyDisabled = button.disabled ? "1" : "0";
+        button.disabled = true;
+      });
+    });
+    document.body.addEventListener("htmx:afterRequest", (event) => {
+      activeRequests = Math.max(0, activeRequests - 1);
+      setBusy(activeRequests > 0);
+      const scope = requestScope(event);
+      if (!scope) return;
+      scope.classList.remove("htmx-busy-scope");
+      scope.querySelectorAll("button").forEach((button) => {
+        if (button.dataset.htmxBusyDisabled === "0") button.disabled = false;
+        delete button.dataset.htmxBusyDisabled;
+      });
+    });
+    document.body.addEventListener("htmx:responseError", showError);
+    document.body.addEventListener("htmx:sendError", showError);
+    document.body.addEventListener("htmx:timeout", showError);
+  })();
+</script>

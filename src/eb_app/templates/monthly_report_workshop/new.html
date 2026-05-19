@@ -8,24 +8,101 @@
   <style>
     body { margin:0; font-family: system-ui, "Noto Sans JP", sans-serif; color:#1f2937; background:#f6f7f9; }
     a { color:#0f5959; text-decoration:none; }
-    .wrap { max-width:900px; margin:0 auto; padding:24px; }
+    .shell { display:grid; grid-template-columns: 240px minmax(0, 1fr); min-height:100vh; }
+    .side { background:#fff; border-right:1px solid #dce1e7; padding:18px; }
+    .brand { font-weight:700; color:#1f2937; display:block; margin-bottom:18px; }
+    .nav { display:grid; gap:8px; }
+    .nav a { padding:10px 12px; border-radius:8px; background:#f2f5f7; }
+    .nav a.primary { background:#eef4f4; color:#0f5959; font-weight:700; }
+    .wrap { max-width:980px; padding:24px; }
     .panel { background:#fff; border:1px solid #dce1e7; border-radius:8px; padding:18px; }
+    .flow { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin:14px 0; }
+    .flow-step { border:1px solid #e4e7ec; border-radius:8px; padding:12px; background:#fff; }
+    .flow-step b { display:block; color:#0f5959; margin-bottom:4px; }
+    .notice { margin:0 0 16px; border:1px solid #b9c6c6; border-radius:8px; padding:12px; background:#f8fbfb; }
+    .hero { display:grid; gap:14px; margin-bottom:16px; }
+    .summary { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; }
+    .summary-item { background:#fff; border:1px solid #dce1e7; border-radius:8px; padding:14px; }
+    .summary-item strong { display:block; margin-top:4px; font-size:1.1rem; }
+    .cta { display:flex; justify-content:space-between; gap:14px; align-items:center; flex-wrap:wrap; border:1px solid #b9c6c6; border-radius:8px; padding:14px; background:#f8fbfb; }
     label { display:grid; gap:6px; margin-bottom:12px; font-weight:600; }
     input, select, textarea { width:100%; min-height:42px; border:1px solid #b9c6c6; border-radius:8px; padding:8px 10px; font:inherit; }
     textarea { min-height:90px; }
     .row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .tuning { margin:12px 0; padding:14px; border:1px dashed #9fb3b3; border-radius:8px; background:#f8fbfb; }
+    .tuning h3 { margin:0 0 10px; font-size:1rem; }
     .btn { min-height:42px; padding:8px 14px; border-radius:8px; border:1px solid #0f5959; background:#0f5959; color:#fff; font-weight:700; cursor:pointer; }
     .muted { color:#667085; }
+    @media (max-width: 920px) { .shell { grid-template-columns:1fr; } .side { border-right:0; border-bottom:1px solid #dce1e7; } }
     @media (max-width: 760px) { .row { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <p><a href="/monthly-reports/jobs">ジョブ一覧へ戻る</a></p>
-    <h1>{{ page_title }}</h1>
-    <section class="panel">
-      <h2>ソース指定</h2>
-      <form hx-post="/monthly-reports/jobs" hx-target="#create-result" hx-swap="innerHTML">
+  {% include "monthly_report_workshop/fragments/htmx_loading.html" %}
+  <div class="shell">
+    <aside class="side">
+      <a class="brand" href="/monthly-reports/jobs">月次レポートMVP</a>
+      <nav class="nav" aria-label="レポート工房">
+        <a href="/monthly-reports/jobs">ジョブ一覧</a>
+        <a class="primary" href="/monthly-reports/jobs/new">新規読み込み</a>
+      </nav>
+      <p class="muted">対象月・世帯を先に決めて、次画面でソース取得へ進みます。</p>
+    </aside>
+    <main class="wrap">
+      <p><a href="/monthly-reports/jobs">ジョブ一覧へ戻る</a></p>
+      <div class="hero">
+        <div>
+          <p class="muted" style="margin:0;">最初に登録すること</p>
+          <h1 style="margin:4px 0 0;">{{ page_title }}</h1>
+        </div>
+        <div class="cta">
+          <div>
+            <strong>この画面の役割</strong>
+            <div class="muted">Google Docs URL / Sheets URL は、作成後に開くジョブ詳細の「データソース登録」で投入します。</div>
+          </div>
+          <a class="btn" href="/monthly-reports/jobs">既存ジョブを見る</a>
+        </div>
+      </div>
+      <section class="panel" aria-label="新規読み込みの流れ">
+        <h2>新規読み込みの流れ</h2>
+        <p class="muted">この画面では対象月と世帯を登録します。作成後はそのまま詳細画面へ移動し、ソース取得から生成へ進みます。</p>
+        <div class="flow">
+          <div class="flow-step">
+            <b>1. ジョブを作成</b>
+            <span class="muted">対象月・世帯・テンプレートを登録</span>
+          </div>
+          <div class="flow-step">
+            <b>2. ソースを投入</b>
+            <span class="muted">Docs URL と Sheets URL を取得</span>
+          </div>
+          <div class="flow-step">
+            <b>3. レポート生成</b>
+            <span class="muted">取得内容を確認してから生成開始</span>
+          </div>
+          <div class="flow-step">
+            <b>4. 編集・承認</b>
+            <span class="muted">プレビューを直して送付前確認</span>
+          </div>
+        </div>
+        <div class="summary" aria-label="作成時に決めること">
+          <div class="summary-item">
+            <span class="muted">必須入力</span>
+            <strong>対象月 / 対象世帯</strong>
+          </div>
+          <div class="summary-item">
+            <span class="muted">次画面で投入</span>
+            <strong>Google Docs / Sheets</strong>
+          </div>
+          <div class="summary-item">
+            <span class="muted">任意補足</span>
+            <strong>スコープ補足</strong>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <h2>ジョブ基本情報</h2>
+        <p class="notice">Google Docs URL / Sheets URL は次画面で入力します。ここでは「どの月の、どの世帯のレポートか」を先に登録してください。</p>
+        <form hx-post="/monthly-reports/jobs" hx-target="#create-result" hx-swap="innerHTML">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="idempotency_key" value="{{ idempotency_key }}" />
         <div class="row">
@@ -44,18 +121,34 @@
               {% endfor %}
             </select>
           </label>
+          {% if can_tune %}
           <label>prompt_version
-            <input name="prompt_version" value="monthly-report-v20260516.1" />
+            <input name="prompt_version" value="{{ default_prompt_version }}" />
           </label>
+          {% endif %}
         </div>
+        {% if can_tune %}
+        <section class="tuning" aria-label="管理者チューニング">
+          <h3>管理者チューニング</h3>
+          <div class="row">
+            <label>本文モデル
+              <input name="model_report" value="{{ default_model_report }}" />
+            </label>
+            <label>軽量モデル
+              <input name="model_light" value="{{ default_model_light }}" />
+            </label>
+          </div>
+        </section>
+        {% endif %}
         <label>スコープ補足
           <textarea name="prompt_scope_notes" placeholder="対象生徒、対象教科、除外する別姓＋様など"></textarea>
         </label>
-        <button class="btn" type="submit">ジョブ作成</button>
-      </form>
-      <div id="create-result" style="margin-top:16px;" aria-live="polite"></div>
-      <p class="muted">画面操作はHTML断片で応答します。</p>
-    </section>
-  </main>
+        <button class="btn" type="submit">ジョブを作成してソース登録へ進む</button>
+        </form>
+        <div id="create-result" style="margin-top:16px;" aria-live="polite"></div>
+        <p class="muted">画面操作はHTML断片で応答します。</p>
+      </section>
+    </main>
+  </div>
 </body>
 </html>

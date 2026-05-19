@@ -1,0 +1,71 @@
+<div class="space-y-3">
+  <div class="alert alert-info">
+    <span>再生成メタ比較</span>
+  </div>
+
+  <form
+    hx-get="/monthly-reports/jobs/{{ base_job.public_id }}/fragments/rerun-comparison"
+    hx-target="#rerun-comparison-panel"
+    hx-swap="innerHTML"
+    class="flex flex-wrap items-end gap-2"
+  >
+    <label class="form-control">
+      <span class="label-text">比較先ジョブID</span>
+      <input
+        class="input input-bordered input-sm"
+        name="compare_job_id"
+        value="{{ compare_job_id }}"
+        placeholder="mrj_..."
+        list="rerun-compare-candidates-{{ base_job.public_id }}"
+      />
+    </label>
+    {% if compare_candidates %}
+    <datalist id="rerun-compare-candidates-{{ base_job.public_id }}">
+      {% for candidate in compare_candidates %}
+      <option value="{{ candidate.job_id }}">{{ candidate.label }}</option>
+      {% endfor %}
+    </datalist>
+    {% endif %}
+    <button class="btn btn-sm btn-outline" type="submit">比較</button>
+  </form>
+
+  {% if compare_candidates %}
+  <div class="text-xs text-base-content/70">
+    <span class="font-semibold">比較候補:</span>
+    {% for candidate in compare_candidates %}
+    <a class="link" href="/monthly-reports/jobs/{{ candidate.job_id }}">{{ candidate.job_id }}</a>{% if not loop.last %}<span>, </span>{% endif %}
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if compare_job %}
+  <div class="overflow-x-auto">
+    <table class="table table-xs table-zebra">
+      <thead>
+        <tr>
+          <th>field</th>
+          <th>base</th>
+          <th>compare</th>
+          <th>state</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in comparison_rows %}
+        <tr>
+          <td><code>{{ row.field }}</code></td>
+          <td><code>{{ row.base }}</code></td>
+          <td><code>{{ row.compare }}</code></td>
+          <td>
+            <span class="badge badge-sm {% if row.state == 'changed' %}badge-warning{% else %}badge-ghost{% endif %}">
+              {{ row.state }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-sm text-base-content/70">比較先ジョブIDを入力すると、prompt/model/template/source hashを横並びで確認できます。</p>
+  {% endif %}
+</div>

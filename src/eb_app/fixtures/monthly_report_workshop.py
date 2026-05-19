@@ -21,6 +21,23 @@ def _sample_report_body(filename: str, fallback: str) -> str:
     return match.group("body").strip() if match else html.strip()
 
 
+def _fallback_report_body(student_name: str, *, status: str) -> str:
+    if status == "running":
+        return (
+            f"<article><h1>{student_name}さま 月次学習レポート</h1>"
+            "<p>現在、LLM本文生成を実行中です。生成が完了すると、このレポートビューにドラフトが表示されます。</p>"
+            "<p>左メニューの「生成ステータス」で call_llm / validate / persist の進行状況を確認してください。</p>"
+            "</article>"
+        )
+    return (
+        f"<article><h1>{student_name}さま 月次学習レポート</h1>"
+        "<section><h2>01 基本情報</h2><p>この表示はモック用のサンプル本文です。</p></section>"
+        "<section><h2>02 塾での様子</h2><p>学習への取り組みは安定しており、次月は演習量を増やして定着を確認します。</p></section>"
+        "<section><h2>05 学習の進捗</h2><p>取得済みソースと生成結果をもとに、ここへレポート本文が表示される想定です。</p></section>"
+        "</article>"
+    )
+
+
 def _base_stages(current_stage: str, status: str) -> list[dict[str, str]]:
     stage_states = {
         "fetch_sources": "done",
@@ -104,10 +121,7 @@ _DEMO_JOB_DATA: dict[str, dict[str, Any]] = {
             {"type": "draft_markdown", "label": "生成Markdown", "hash": "sha256:takafuji-draft-md", "status": "保存済み"},
             {"type": "draft_html", "label": "プレビューHTML", "hash": "sha256:takafuji-draft-html", "status": "保存済み"},
         ],
-        "editor_html": _sample_report_body(
-            "monthly_2026-04_takafuji_report.html",
-            "<article><h1>高藤 泰次郎さま 月次学習レポート</h1><p>サンプルレポートを読み込めませんでした。</p></article>",
-        ),
+        "editor_html": _fallback_report_body("高藤 泰次郎", status="running"),
     },
     "mrj_demo_001": {},
     "mrj_demo_suzuki": {
@@ -140,7 +154,7 @@ _DEMO_JOB_DATA: dict[str, dict[str, Any]] = {
         ],
         "editor_html": _sample_report_body(
             "monthly_2026-04_suzuki_report.html",
-            "<article><h1>鈴木 謙吾さま 月次学習レポート</h1><p>サンプルレポートを読み込めませんでした。</p></article>",
+            _fallback_report_body("鈴木 謙吾", status="succeeded"),
         ),
     },
     "mrj_demo_tokura": {
@@ -173,7 +187,7 @@ _DEMO_JOB_DATA: dict[str, dict[str, Any]] = {
         ],
         "editor_html": _sample_report_body(
             "monthly_2026-04_tokura_v3_report.html",
-            "<article><h1>十倉 未希さま 月次学習レポート</h1><p>サンプルレポートを読み込めませんでした。</p></article>",
+            _fallback_report_body("十倉 未希", status="needs_review"),
         ),
     },
 }

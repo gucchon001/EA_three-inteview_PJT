@@ -5,7 +5,7 @@
 - 正本/補助資料の区分: 月次レポート作成ツールの機能仕様
 - 起点: `docs/project/月次レポート_プログラム化_LLMワークフロー移行計画.md`
 - 関連文書: `requirements.md`, `workflow-spec.md`, `screen-design.md`, `api-definition.md`
-- 最終更新: 2026-05-16
+- 最終更新: 2026-05-17
 
 ## 横断方針
 
@@ -30,6 +30,9 @@
 | F-11 | 管理者チューニング設定 | 後続優先 | FR-15 |
 | F-12 | ジョブキャンセル | 必須 | FR-7 |
 | F-13 | 送付前承認 | 必須 | FR-13 |
+| F-14 | HTMLエクスポート | 必須 | FR-13 |
+| F-15 | 手動送付用distribution package | 後続優先 | FR-13 |
+| F-16 | 既存全文エディタ連携 | 後続優先 | FR-13 |
 
 ## F-01 ログイン・ドメイン制限
 
@@ -73,6 +76,8 @@
 - トランケーション有無
 - エラー有無
 
+通常UIでは、保存済みソースに対して軽量LLMの取得内容サマリーを実行できる。要約は配布本文ではなく確認用artifactとして保存し、対象生徒・対象月・科目・資料種別・不足/ズレの可能性を本文生成前に確認するために使う。要約結果は `source_summary_markdown` として保存し、呼び出しメタは `llm_call_logs.prompt_kind=source_summary` に残す。
+
 ## F-05 ジョブ作成
 
 - 生成ボタン押下時、ユーザーの実行中ジョブ数を確認する。
@@ -114,6 +119,14 @@ MVPでは検証エラーを自動repair loopへ送らない。検証エラーは
 - 検証エラーと警告を同じ画面または隣接パネルに表示する。
 - MVPではMarkdownエディタを優先し、WYSIWYGは後続でよい。
 - 最終編集後Markdownを保存できる設計にする。
+- 通常UIの第一弾では、ジョブ詳細に左プレビュー/右編集Markdownの2ペインを置く。
+- プレビューは `final_markdown` を優先し、存在しない場合のみ `draft_markdown` を表示する。
+- 編集Markdown欄は最新preview artifactでprefillし、入力時に未保存変更を表示する。
+- 保存成功後は `final_markdown` artifactを作成し、preview fragmentを更新する。フォーム側に `base_content_hash` がある場合、最新preview artifact hashと不一致なら409相当のHTML error fragmentで保存を拒否し、同じIdempotency-Key再送は初回結果を優先する。
+- 再生成UIは同一ソース/テンプレート/プロンプト/モデルメタを継承した新しいqueued jobを作成し、新ジョブ詳細リンク付きのHTML断片を返して比較UIへ接続する。
+- 承認、export、HTML source、distributionなど入力フォームを含むpanelは定期pollingせず、編集保存・承認・export成功時の `monthly-report-refresh` イベントで更新する。進捗statusはHTMX pollingを維持する。
+- 共通HTMX error bannerは `htmx:responseError` / `htmx:sendError` / `htmx:timeout` を拾い、画面下部に通信・処理失敗を表示する。
+- `running` のstatus fragmentでは、ページを閉じても処理が継続すること、進捗panelが自動更新されること、再読み込み後も状態が復元されることを表示する。後段stageで長時間heartbeatがない場合は、後段stageを自動再claimしない運用に合わせてworker runbook確認を促す。
 
 ## F-09 フィードバック保存
 
@@ -129,18 +142,62 @@ MVPでは検証エラーを自動repair loopへ送らない。検証エラーは
 - 生成成功、検証OK、編集保存済み、承認済み、送付/エクスポート済みを分けて表示する。
 - 検証エラーまたは未承認の状態では、送付エクスポートを実行できない。
 - 承認操作は監査ログに残す。
+- 承認対象は最新の配布面artifact hashとする。`final_markdown` が存在する場合はそれを優先し、存在しない場合のみ最新 `draft_markdown` を対象にできる。
+- 承認後に新しい `final_markdown` / `draft_markdown` / validation errorが追加された場合、既存承認は表示上「再承認が必要」へ戻す。
+- 通常UIでは `GET/POST /monthly-reports/jobs/{job_id}/fragments/approval` のHTML断片で承認状態、ブロック理由、フォーム、成功/失敗を表示する。
+- `POST /monthly-reports/jobs/{job_id}/fragments/approval` はCSRF、RLS read preflight、Idempotency-Key、対象hashの一致を必須にする。
+- MVPの承認取り消しは管理者運用または再編集による自動失効に寄せ、一般ユーザー向けの明示的な取り消しボタンは後続とする。
+
+### F-13 受け入れ条件
+
+- `succeeded` ではない、validation errorがある、配布面artifactがない、対象hashが古い場合は承認できない。
+- 承認成功後のfragmentには承認者、承認日時、対象artifact hash、承認コメントが表示される。
+- 二重送信は同一Idempotency-Keyで同じ承認結果を返し、監査ログ/承認レコードを重複作成しない。
+
+## F-14 HTMLエクスポート
+
+- HTMLエクスポートは承認済みの配布面artifactから作成する。未承認、validation errorあり、承認対象hashと最新artifact hashが一致しない場合は作成できない。
+- 通常UIでは `GET/POST /monthly-reports/jobs/{job_id}/fragments/export` のHTML断片でエクスポート可能性、最新export artifact、作成結果を表示する。
+- export artifactには、本文HTML、元artifact hash、approval_id、template_hash、prompt_version、source_bundle_hash、app_versionを紐づける。
+- HTMLは家庭向け配布面として独立表示できる最小構造にし、管理メモ、内部エラー、プロンプト、APIキー、OAuth token、service role情報を含めない。
+- ダウンロード/プレビュー導線はHTML fragment内のリンクまたはボタンとして表示する。通常UIからJSONを取得してDOMを組み立てない。
+
+### F-14 受け入れ条件
+
+- 未承認ジョブのexport POSTはHTML error fragmentを返し、export artifactを作成しない。
+- 承認済みジョブのexport POSTは `export_html` artifactを作成し、export fragmentにartifact hashと作成日時を表示する。
+- 同一Idempotency-Keyの再送では同じexport artifactを返し、HTMLを重複作成しない。
+- export fragmentとdetail pageに `/api/monthly-reports/*` をDOM更新目的で呼ぶ記述がない。
 
 ## F-10 再生成
 
 - 同一ソーススナップショットを使い、prompt_versionまたはmodelだけを変えて再実行できる。
 - APIと保存モデルはMVP内で用意する。
-- UIはPhase 3「MVP体験完成」で、生成結果の比較・チューニング導線と合わせて実装する。
+- 通常UI第一弾では、詳細画面の再生成フォームから新しいqueued jobを作成し、作成通知、status fragment、新ジョブ詳細リンクを返す。
+- 管理者は再生成時に `prompt_version`, `model_report`, `model_light` をoverrideできる。一般ユーザーは元ジョブのメタを継承し、フォーム値を直接送られてもoverrideしない。
+- 通常UI第一弾では、再生成元/再生成先の `prompt_version`, `template_key/hash`, `model_report`, `model_light`, `resolved_model_report`, `source_bundle_hash`, `app_version`, `prompt_scope_notes` を `rerun-comparison` fragmentで比較表示する。
+- `rerun-comparison` fragmentでは、同一世帯/同一ユーザーの比較候補をdatalistとリンクで表示し、ジョブID手入力だけに依存しない。
+- `rerun-diff` fragmentでは、再生成元/比較先ジョブの最新 `final_markdown` または `draft_markdown` 同士を行単位で比較する。
+- 次段階では、比較結果の見た目調整とライブE2Eへ接続する。
 
 ## F-11 管理者チューニング設定
 
 - 管理者は検証・比較用途に限り、モデル、テンプレート版、プロンプト版を指定できる。
 - 一般ユーザーには固定プリセットのみ表示する。
 - Auto Router等を利用した場合は、要求モデルと実使用モデルを分けて保存する。
+- 通常UI第一弾では、新規ジョブ作成画面と再生成フォームでadminに限り `prompt_version` / `model_report` / `model_light` を指定できる。一般ユーザーには入力欄を表示せず、フォーム値を直接送られた場合も保存しない。
+
+## F-15 手動送付用distribution package
+
+- 実メール送信はMVPでは行わず、承認済みHTML exportを `distribution_package` artifactとして固定する。
+- 通常UIでは `GET/POST /monthly-reports/jobs/{job_id}/fragments/distribution` のHTML断片で状態、ブロック理由、固定結果を表示する。
+- 同一Idempotency-Keyの再送では同じdistribution packageを返し、重複artifactを作らない。
+
+## F-16 既存全文エディタ連携
+
+- `GET /monthly-reports/legacy-full-editor` で既存 `monthly_report_full_editor.html` を同一オリジンから開ける。
+- `GET /monthly-reports/jobs/{job_id}/legacy-full-editor` は最新 `export_html` artifactを既存全文エディタのlocalStorageキーへ投入してから互換routeへ遷移するbridgeを返す。
+- 既存エディタで編集した後の工房再取込は後続とする。
 
 ## F-12 ジョブキャンセル
 
@@ -173,3 +230,4 @@ MVPでは検証エラーを自動repair loopへ送らない。検証エラーは
 | 2026-05-14 | `multistudent_scope_exclusion` 第一弾を決定的バリデーションへ追加 |
 | 2026-05-14 | `required_headings` 第一弾を決定的バリデーションへ追加 |
 | 2026-05-14 | `forbidden_terms` 第一弾を決定的バリデーションへ追加 |
+| 2026-05-17 | P3-03 admin tuning、P3-02/P3-03 rerun comparison/rerun diff、P3-11 legacy editor bridge、P3-13 refresh/error/conflict/running復帰案内、distribution packageを反映 |

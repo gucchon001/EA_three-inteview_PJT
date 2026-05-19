@@ -466,6 +466,7 @@ def _render_monthly_report_e2e(*, config: dict, missing: list[str]) -> str:
   function bearerHeaders() {{
     return {{
       "Authorization": `Bearer ${{session.access_token}}`,
+      "X-EB-Caller-Intent": "e2e",
       "Content-Type": "application/json"
     }};
   }}

@@ -1,0 +1,165 @@
+<div class="space-y-4">
+  <div class="rounded-box border border-base-200 bg-base-100 p-4">
+    <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+      <div class="space-y-2">
+        <div class="flex flex-wrap items-center gap-2">
+          <h3 class="text-base font-semibold">承認状態</h3>
+          {% if approval_current %}
+            <span class="badge badge-success badge-outline">承認済み</span>
+          {% elif approval %}
+            <span class="badge badge-warning badge-outline">再承認待ち</span>
+          {% else %}
+            <span class="badge badge-ghost">未承認</span>
+          {% endif %}
+        </div>
+        <p class="text-sm text-base-content/70">
+          保存後の流れ: まず現在の配布面を承認し、そのあと下のHTMLエクスポートへ進みます。
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <span class="badge badge-outline">配布面: {{ artifact.artifact_type if artifact else "未作成" }}</span>
+        <span class="badge badge-outline">validation {{ validations|length }}件</span>
+      </div>
+    </div>
+
+    <div class="mt-4 steps steps-vertical lg:steps-horizontal w-full">
+      <div class="step {% if job.status == 'succeeded' %}step-primary{% endif %}">生成成功</div>
+      <div class="step {% if can_approve %}step-primary{% endif %}">検証OK</div>
+      <div class="step {% if artifact and artifact.artifact_type == 'final_markdown' %}step-primary{% endif %}">編集保存</div>
+      <div class="step {% if approval_current %}step-primary{% endif %}">承認</div>
+      <div class="step">エクスポート</div>
+    </div>
+  </div>
+
+  <div class="stats stats-vertical lg:stats-horizontal shadow-sm border border-base-200 w-full bg-base-100">
+    <div class="stat py-4">
+      <div class="stat-title">配布面</div>
+      <div class="stat-value text-lg">
+        {% if artifact %}
+          {{ artifact.artifact_type }}
+        {% else %}
+          未作成
+        {% endif %}
+      </div>
+      <div class="stat-desc">
+        {% if artifact %}
+          <code>{{ artifact.content_hash }}</code>
+        {% else %}
+          まず生成または編集保存が必要です
+        {% endif %}
+      </div>
+    </div>
+    <div class="stat py-4">
+      <div class="stat-title">承認状態</div>
+      <div class="stat-value text-lg">
+        {% if approval_current %}
+          承認済み
+        {% elif approval %}
+          再承認待ち
+        {% else %}
+          未承認
+        {% endif %}
+      </div>
+      <div class="stat-desc">
+        {% if approval_current %}
+          現在の配布面で送付前承認が一致しています
+        {% elif approval %}
+          承認後に本文が更新されたため差し戻し状態です
+        {% else %}
+          送付前確認はまだ保存されていません
+        {% endif %}
+      </div>
+    </div>
+    <div class="stat py-4">
+      <div class="stat-title">次の操作</div>
+      <div class="stat-value text-lg">
+        {% if approval_current %}
+          HTMLエクスポート
+        {% elif blockers %}
+          不足を解消
+        {% else %}
+          承認を保存
+        {% endif %}
+      </div>
+      <div class="stat-desc">
+        {% if approval_current %}
+          このまま下のエクスポートへ進めます
+        {% elif blockers %}
+          検証エラーや生成状態を確認してください
+        {% else %}
+          チェックボックスを入れて現在の配布面を承認します
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% if approval_current %}
+    <div class="alert alert-success">
+      <div>
+        <p class="font-semibold">送付前承認を保存しました。</p>
+        <p>承認済みartifact hash: <code>{{ approval.approved_artifact_hash }}</code></p>
+        <p>次は `HTMLエクスポート` パネルで export を作成し、その後 `送付用固定` へ進めます。</p>
+      </div>
+    </div>
+  {% elif approval %}
+    <div class="alert alert-warning">
+      <span>承認後に配布面artifactが更新されています。最新artifactで再承認してください。</span>
+    </div>
+  {% endif %}
+
+  {% if blockers %}
+    <div class="alert alert-warning">
+      <div>
+        <p class="font-semibold">承認はまだ実行できません。</p>
+        <ul class="list-disc pl-5">
+          {% for blocker in blockers %}
+            <li>{{ blocker }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% else %}
+    <div class="alert alert-info">
+      <span>送付前チェックは通過しています。チェック後に現在の配布面を承認してください。</span>
+    </div>
+  {% endif %}
+
+  <div class="rounded-box border border-base-200 bg-base-100">
+    <div class="border-b border-base-200 px-4 py-3">
+      <h4 class="text-sm font-semibold">承認対象の詳細</h4>
+      <p class="text-xs text-base-content/70">現在の配布面と承認記録の対応を確認できます。</p>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="table table-sm">
+        <tbody>
+          <tr><th>対象artifact</th><td>{{ artifact.artifact_type if artifact else "-" }}</td></tr>
+          <tr><th>artifact hash</th><td><code>{{ artifact.content_hash if artifact else "-" }}</code></td></tr>
+          <tr><th>承認artifact</th><td>{{ approval.artifact_id if approval else "-" }}</td></tr>
+          <tr><th>validation件数</th><td>{{ validations|length }}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <form
+    hx-post="/monthly-reports/jobs/{{ job.public_id }}/fragments/approval"
+    hx-target="#approval-panel"
+    hx-swap="innerHTML"
+    hx-on::after-request="if (event.detail.successful) { document.body.dispatchEvent(new Event('monthly-report-refresh')); }"
+    class="rounded-box border border-base-200 bg-base-100 p-4 grid gap-3"
+  >
+    <div class="space-y-1">
+      <h4 class="text-sm font-semibold">承認を保存</h4>
+      <p class="text-xs text-base-content/70">チェック後に、現在の配布面を承認済みとして保存します。</p>
+    </div>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <input type="hidden" name="idempotency_key" value="{{ approval_idempotency_key }}" />
+    <input type="hidden" name="artifact_hash" value="{{ artifact.content_hash if artifact else '' }}" />
+    <label class="label cursor-pointer justify-start gap-3">
+      <input type="checkbox" name="confirm_ready" value="yes" class="checkbox checkbox-primary" {% if not can_approve %}disabled{% endif %} />
+      <span class="label-text">送付前チェックを確認しました</span>
+    </label>
+    <textarea name="approval_comment" rows="2" class="textarea textarea-bordered" placeholder="承認コメント" {% if not can_approve %}disabled{% endif %}></textarea>
+    <button type="submit" class="btn btn-primary justify-self-start" {% if not can_approve %}disabled{% endif %}>現在の配布面を承認する</button>
+  </form>
+</div>

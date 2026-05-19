@@ -1,0 +1,10 @@
+<div class="card bg-base-100 border border-base-300 rounded-md">
+  <div class="card-body p-4">
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <h3 class="card-title text-base">取得内容サマリー</h3>
+      <span class="badge badge-outline">{{ artifact.artifact_type }}</span>
+    </div>
+    <p class="text-xs text-base-content/60"><code>{{ artifact.content_hash }}</code></p>
+    <pre class="prose max-w-none whitespace-pre-wrap rounded bg-base-200 p-3 text-sm">{{ artifact.content }}</pre>
+  </div>
+</div>
